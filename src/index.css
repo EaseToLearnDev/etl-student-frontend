@@ -1,0 +1,171 @@
+@import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import "tailwindcss";
+
+/* Import Fonts */
+
+:root {
+  /* font sizes */
+  --fs-heading-1: 57px;
+  --fs-heading-2: 45px;
+  --fs-heading-3: 32px;
+  --fs-heading-4: 28px;
+  --fs-heading-5: 22px;
+  --fs-heading-6: 16px;
+  --fs-paragraph: 14px;
+  --fs-paragraph-sm: 12px;
+
+  /* font weights */
+  --fw-bold: 700;
+  --fw-semibold: 600;
+  --fw-medium: 500;
+  --fw-regular: 400;
+
+  /* line heights */
+  --lh-heading-1: 64px;
+  --lh-heading-2: 52px;
+  --lh-heading-3: 40px;
+  --lh-heading-4: 36px;
+  --lh-heading-5: 28px;
+  --lh-heading-6: 24px;
+  --lh-paragraph: 20px;
+  --lh-paragraph-sm: 16px;
+
+  /* letter spacing */
+  --ls-025: 0.25px;
+  --ls-0: 0;
+  --ls-015: 0.15px;
+  --ls-05: 0.5px;
+  --ls-04: 0.4px;
+  --ls-01: 0.1px;
+  --ls-n-025: -0.25px;
+
+  --app-bg: #fafafa;
+
+  --surface-bg-primary: #ffffff;
+  --surface-bg-secondary: #f4f4f5;
+  --surface-bg-tertiary: #e4e4e7;
+
+  --text-primary: #000000;
+  --text-secondary: #27272a;
+  --text-tertiary: #71717a;
+
+  --sb-ocean-bg-active: #0d6fec;
+  --sb-ocean-bg-hover: #1486fc;
+  --sb-ocean-bg-on-press: #1157bc;
+  --sb-ocean-bg-disabled: #d8f1ff;
+
+  --sb-ocean-content-primary: #ffffff;
+  --sb-ocean-content-secondary: #53c3ff;
+}
+
+/* Mobile Headers */
+@media only screen and (max-width: 480px) {
+  :root {
+    /* font sizes */
+    --fs-heading-1: 45px;
+    --fs-heading-2: 32px;
+    --fs-heading-3: 28px;
+    --fs-heading-4: 22px;
+    --fs-heading-5: 16px;
+    --fs-heading-6: 16px;
+    --fs-paragraph: 14px;
+    --fs-paragraph-sm: 12px;
+
+    /* line heights */
+    --lh-heading-1: 52px;
+    --lh-heading-2: 40px;
+    --lh-heading-3: 36px;
+    --lh-heading-4: 28px;
+    --lh-heading-5: 24px;
+    --lh-heading-6: 24px;
+    --lh-paragraph: 20px;
+    --lh-paragraph-sm: 16px;
+  }
+}
+
+/* General Styles */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Urbanist", sans-serif;
+  line-height: 1.5;
+  font-size: 1rem;
+  background: var(--app-bg);
+  color: var(--text-primary);
+  transition: color 300ms ease, background-color 300ms ease;
+}
+body.dark-mode {
+  --app-bg: #000000;
+
+  --surface-bg-primary: #09090b;
+  --surface-bg-secondary: #18181b;
+  --surface-bg-tertiary: #27272a;
+
+  --text-primary: #ffffff;
+  --text-secondary: #d4d4d8;
+  --text-tertiary: #a1a1aa;
+
+  --sb-ocean-bg-disabled: #122f59;
+  
+  --sb-ocean-content-secondary: #1157bc;
+}
+a {
+  color: inherit;
+}
+a, button {
+  cursor: pointer;
+}
+
+h1 {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-heading-1);
+  line-height: var(--lh-heading-1);
+  letter-spacing: var(--ls-025);
+}
+
+h2 {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-heading-2);
+  line-height: var(--lh-heading-2);
+  letter-spacing: var(--ls-0);
+}
+
+h3 {
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-heading-3);
+  line-height: var(--lh-heading-3);
+  letter-spacing: var(--ls-0);
+}
+
+h4 {
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-heading-4);
+  line-height: var(--lh-heading-4);
+  letter-spacing: var(--ls-0);
+}
+
+h5 {
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-heading-5);
+  line-height: var(--lh-heading-5);
+  letter-spacing: var(--ls-0);
+}
+
+h6 {
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-heading-6);
+  line-height: var(--lh-heading-6);
+  letter-spacing: var(--ls-015);
+}
+
+p {
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-paragraph);
+  line-height: var(--lh-paragraph);
+  letter-spacing: var(--ls-025);
+}
+
+/* Utilities */
+.debug {
+  border: 1px solid red;
+}
