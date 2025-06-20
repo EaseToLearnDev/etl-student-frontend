@@ -49,6 +49,8 @@
   --text-secondary: #27272a;
   --text-tertiary: #71717a;
 
+  --border-primary: #d4d4d8;
+
   --sb-ocean-bg-active: #0d6fec;
   --sb-ocean-bg-hover: #1486fc;
   --sb-ocean-bg-on-press: #1157bc;
@@ -105,14 +107,17 @@ body.dark-mode {
   --text-secondary: #d4d4d8;
   --text-tertiary: #a1a1aa;
 
+  --border-primary: #3f3f46;
+
   --sb-ocean-bg-disabled: #122f59;
-  
+
   --sb-ocean-content-secondary: #1157bc;
 }
 a {
   color: inherit;
 }
-a, button {
+a,
+button {
   cursor: pointer;
 }
 
@@ -163,6 +168,9 @@ p {
   font-size: var(--fs-paragraph);
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
+}
+.card-shadow {
+  box-shadow: 0px 1px 0 rgba(0, 0, 0, 0.02), 0px 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 /* Utilities */
