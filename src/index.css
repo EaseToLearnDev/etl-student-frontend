@@ -50,6 +50,7 @@
   --text-tertiary: #71717a;
 
   --border-primary: #d4d4d8;
+  --border-secondary: #e4e4e7;
 
   --sb-ocean-bg-active: #0d6fec;
   --sb-ocean-bg-hover: #1486fc;
@@ -108,13 +109,11 @@ body.dark-mode {
   --text-tertiary: #a1a1aa;
 
   --border-primary: #3f3f46;
+  --border-secondary: #27272a;
 
   --sb-ocean-bg-disabled: #122f59;
 
   --sb-ocean-content-secondary: #1157bc;
-}
-a {
-  color: inherit;
 }
 a,
 button {
@@ -176,4 +175,19 @@ p {
 /* Utilities */
 .debug {
   border: 1px solid red;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-extra-bold {
+  font-weight: 800;
+}
+.font-black {
+  font-weight: 900;
 }

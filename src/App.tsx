@@ -14,11 +14,10 @@ function App() {
     // Example Code
     <HydrogenLayout>
       <div>
-        <div className="flex flex-col items-center gap-4">
-          <h1>Hello There</h1>
+        <div className="min-h-[800px] grid items-center place-items-center">
           <button
-            className="bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]
-           hover:bg-[var(--sb-ocean-bg-hover)] active:bg-[var(--sb-ocean-bg-on-press)] px-6
+            className="text-[var(--text-primary)] border-1 border-[var(--border-primary)]
+           hover:bg-[var(--surface-bg-tertiary)] px-6
            py-2 rounded-md"
             onClick={toggleDarkMode}
           >

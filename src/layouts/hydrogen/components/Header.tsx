@@ -4,8 +4,9 @@ import cn from "../../../utils/classNames";
 // Components
 import HamburgerButton from "./HamburgerButton";
 import Sidebar from "./Sidebar";
+import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
-
+import Logo from "../../../components/logo";
 
 export default function Header({ className }: { className?: string }) {
   return (
@@ -21,11 +22,11 @@ export default function Header({ className }: { className?: string }) {
           aria-label="Site Logo"
           className="me-4 w-9 shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
         >
-          <img />
+          <Logo className="max-w-[48px] h-fit text-[var(--text-primary)]" />
         </a>
       </div>
 
-      {/* <HeaderMenuRight /> */}
+      <HeaderMenuRight />
     </StickyHeader>
   );
 }
