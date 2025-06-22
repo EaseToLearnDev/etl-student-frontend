@@ -16,7 +16,7 @@ export default function Sidebar({ className }: { className?: string }) {
         </a>
       </div>
 
-      <div className="custom-scrollbar h-[calc(100%-80px)] overflow-y-auto --text-[var(--text-primary)]">
+      <div className="custom-scrollbar h-[calc(100%-80px)] overflow-hidden --text-[var(--text-primary)]">
         <SidebarMenu />
       </div>
     </aside>

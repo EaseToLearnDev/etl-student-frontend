@@ -1,6 +1,5 @@
 import {
   PiChartLineFill,
-  PiGearFill,
   PiHouseFill,
   PiNotebookFill,
   PiTimerFill,
@@ -50,10 +49,5 @@ export const menuItems = [
     name: "Reports & Analytics",
     href: "/report",
     icon: <PiChartLineFill />,
-  },
-  {
-    name: "Settings",
-    href: "/settings",
-    icon: <PiGearFill />,
   },
 ];

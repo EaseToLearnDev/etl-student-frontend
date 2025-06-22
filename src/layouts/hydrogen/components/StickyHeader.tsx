@@ -1,6 +1,6 @@
 // Utils
 import cn from "../../../utils/classNames";
-import useWindowScroll from '../../../utils/useWindowScroll';
+import useWindowScroll from '../../../hooks/useWindowScroll';
 
 type StickyHeaderProps = {
   className?: string;
