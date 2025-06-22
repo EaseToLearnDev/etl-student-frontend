@@ -3,6 +3,7 @@ import PrivateRoute from "./PrivateRoute";
 import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 import NotFound from "../shared/NotFound";
 import PublicRoute from "./PublicRoute";
+import Settings from "../features/settings";
 
 const Router = () => {
   return (
@@ -33,7 +34,7 @@ const Router = () => {
         <Route path="selectmocktest" element={<>Exam Test</>} />
         <Route path="selectclasstest" element={<>Class Test</>} />
         <Route path="report" element={<>Reports & Analytics</>} />
-        <Route path="settings" element={<>Settings</>} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

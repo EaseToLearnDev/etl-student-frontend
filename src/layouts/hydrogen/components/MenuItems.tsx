@@ -8,7 +8,7 @@ import {
 export const menuItems = [
   {
     name: "Dashboard",
-    href: "/",
+    href: "/dashboard",
     icon: <PiHouseFill />,
   },
   {
@@ -46,7 +46,7 @@ export const menuItems = [
     ],
   },
   {
-    name: "Reports & Analytics",
+    name: "Reports",
     href: "/report",
     icon: <PiChartLineFill />,
   },

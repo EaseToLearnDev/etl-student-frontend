@@ -42,7 +42,7 @@ export function SidebarMenu() {
                           className={cn(
                             "group relative mx-3 flex cursor-pointer items-center justify-between rounded-md px-3 py-4 font-medium lg:my-1 2xl:mx-5 2xl:my-2 hover:bg-[var(--surface-bg-secondary)]",
                             isDropdownOpen
-                              ? "before:top-2/5 text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
+                              ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
                               : "text-[var(--text-primary)] transition-colors duration-200"
                           )}
                         >
@@ -110,7 +110,7 @@ export function SidebarMenu() {
                       className={cn(
                         "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-4 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2 hover:bg-[var(--surface-bg-secondary)]",
                         isActive
-                          ? "before:top-2/5 text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
+                          ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
                           : "transition-colors duration-200 text-[var(--text-secondary)]"
                       )}
                     >
@@ -154,7 +154,7 @@ export function SidebarMenu() {
           className={cn(
             "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-4 font-medium capitalize 2xl:mx-5 hover:bg-[var(--surface-bg-secondary)]",
             location.pathname === "/settings"
-              ? "before:top-2/5 text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
+              ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
               : "transition-colors duration-200 text-[var(--text-secondary)]"
           )}
         >

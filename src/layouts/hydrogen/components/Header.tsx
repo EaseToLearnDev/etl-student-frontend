@@ -7,6 +7,7 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Logo from "../../../components/logo";
+import { Link } from "react-router";
 
 export default function Header({ className }: { className?: string }) {
   return (
@@ -17,13 +18,13 @@ export default function Header({ className }: { className?: string }) {
         <HamburgerButton
           view={<Sidebar className="static w-full 2xl:w-full border-none" />}
         />
-        <a
-          href={"/"}
+        <Link
+          to={"/"}
           aria-label="Site Logo"
           className="me-4 w-9 shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
         >
           <Logo className="max-w-[40px] h-fit text-[var(--text-primary)]" />
-        </a>
+        </Link>
       </div>
 
       <HeaderMenuRight />

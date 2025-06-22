@@ -12,6 +12,9 @@ import { BiSolidVideos } from "react-icons/bi";
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
 
+// Utils
+import logout from "../../../utils/logout";
+
 export default function ProfileMenuDropDown({
   children,
 }: {
@@ -93,10 +96,11 @@ function DropdownMenu() {
       </div>
       <div className="border-t border-[var(--border-primary)] px-6 pb-6 pt-5">
         <Button
+          onClick={logout}
           className="h-auto w-full flex gap-2 text-base text-start justify-start p-0 font-medium text-[var(--text-primary)] outline-none focus-visible:ring-0"
           variant="text"
         >
-          Sign Out
+          Log Out
         </Button>
       </div>
     </div>
