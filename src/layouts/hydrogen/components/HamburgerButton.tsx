@@ -19,13 +19,14 @@ export default function HamburgerButton({
   return (
     <div
       aria-label="Open Sidebar Menu"
-      className={cn('me-3 h-auto w-auto p-0 sm:me-4 xl:hidden', className)}
-      onClick={() =>
+      className={cn('me-3 h-auto w-auto p-0 sm:me-4 xl:hidden cursor-pointer', className)}
+      onClick={() => {
         openDrawer({
           view,
           placement,
           containerClassName,
-        })
+        });
+      }
       }
     >
       <svg

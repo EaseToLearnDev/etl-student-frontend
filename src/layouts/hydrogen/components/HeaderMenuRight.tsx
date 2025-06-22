@@ -6,7 +6,7 @@ import { Avatar } from "rizzui/avatar";
 // Components
 import RingBellSolidIcon from "../../../components/icons/ring-bell-solid-icon";
 import NotificationDropdown from "./notification-dropdown";
-import ProfileMenuDropDown from "./profile-menu";
+import ProfileMenuDropDown from "./ProfileMenu";
 
 const HeaderMenuRight = () => {
   return (

@@ -45,7 +45,7 @@ function NotificationsList({
           {notificationsData.map((item) => (
             <div
               key={item.name + item.id}
-              className="group grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-primary)] dark:hover:var(--surface--bg-primary)]"
+              className="group grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-primary)]"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded bg-[var(--surface-bg-primary)] p-1 [&>svg]:h-auto [&>svg]:w-5">
                 <AiFillNotification className="text-[var(--text-secondary)]" />
