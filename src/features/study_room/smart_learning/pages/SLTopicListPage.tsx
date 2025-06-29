@@ -2,15 +2,15 @@
 import { useEffect } from "react";
 
 // Types
-import type { TopicType } from "../../../types";
+import type { TopicType } from "../../../shared/types";
 
 // Store
-import useTopicStore from "../store/useTopicStore";
+import useTopicStore from "../../../shared/store/useTopicStore"
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
-import TopicContentPanel from "../components/TopicContentPanel";
-import TopicList from "../components/TopicList";
+import TopicModeSelector from "../components/TopicModeSelector";
+import TopicList from "../../../shared/components/TopicList";
 import { MdArrowBack } from "react-icons/md";
 import cn from "../../../../utils/classNames";
 import { useNavigate } from "react-router";
@@ -181,7 +181,20 @@ export const dummyData: TopicType[] = [
   },
 ];
 
-const SubjectDetail = () => {
+/**
+ * SLTopicListPage component displays a hierarchical list of study topics for selection.
+ *
+ * - Utilizes a topic store to manage the selected topic state.
+ * - Resets the topic selection on component unmount.
+ * - Renders a back button for navigation.
+ * - Shows a list of topics using sample `dummyData`.
+ * - Integrates `ChildLayout` to display the topic list and a mode selector.
+ * - Hides the secondary content (mode selector) if no topic is selected.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered topic selection page.
+ */
+const SLTopicListPage = () => {
   const topic = useTopicStore((state) => state.topic);
   const reset = useTopicStore((state) => state.reset);
   const navigate = useNavigate();
@@ -209,7 +222,7 @@ const SubjectDetail = () => {
       <div className="mt-5 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={<TopicList topics={dummyData} />}
-          secondaryContent={<TopicContentPanel />}
+          secondaryContent={<TopicModeSelector />}
           hideSecondary={topic === null}
           onSecondaryHide={reset}
         />
@@ -218,4 +231,4 @@ const SubjectDetail = () => {
   );
 };
 
-export default SubjectDetail;
+export default SLTopicListPage;

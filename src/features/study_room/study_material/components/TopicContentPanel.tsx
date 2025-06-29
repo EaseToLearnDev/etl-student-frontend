@@ -1,7 +1,13 @@
-import useTopicStore from "../store/useTopicStore";
-import TopicContentItem from "./TopicContentItem";
+// Icons
 import {FiFilter, FiLock} from "react-icons/fi";
 
+// Hooks
+import useTopicStore from "../../../shared/store/useTopicStore";
+
+// Components
+import TopicContentItem from "./TopicContentItem";
+
+// Sample data
 const dummyData = {
   obj: {
     list: [
@@ -91,6 +97,10 @@ const dummyData = {
   },
 };
 
+/**
+ * TopicContentPanel displays a list of study materials for a selected topic.
+ * The panel header shows the topic name and filter/lock icons.
+ */
 const TopicContentPanel = () => {
   const topic = useTopicStore((state) => state.topic);
   return (

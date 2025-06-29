@@ -1,6 +1,9 @@
+// React
+import { Link } from "react-router";
+
+// Icons
 import { BiSolidBook } from "react-icons/bi";
 import { MdTimer } from "react-icons/md";
-import { Link } from "react-router";
 
 type SubjectCardProps = {
   item: Item;
@@ -14,11 +17,20 @@ type Item = {
   url: string;
 };
 
+/**
+ * Renders a card component displaying information about a subject.
+ *
+ * @remarks
+ * The `SubjectCard` component presents a subject's image, name, description, topic count,
+ * and last studied date. It is clickable and navigates to the subject's detail page using the provided URL.
+ * 
+ * @param props - The props for the SubjectCard component.
+ * @param props.item - The subject item containing details to display.
+ */
 const SubjectCard = ({ item }: SubjectCardProps) => {
-
   return (
     <Link
-      to={`/studymaterial/${item?.url}`}
+      to={`${item?.url}`}
       className="cursor-pointer border-1 border-[var(--border-secondary)] rounded-xl overflow-hidden p-[2px] pb-6 bg-[var(--surface-bg-primary)] hover:scale-[102%] transition-transform"
     >
       <img

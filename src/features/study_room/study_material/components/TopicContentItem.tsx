@@ -1,11 +1,23 @@
+// Icons
 import { PiStarFill } from "react-icons/pi";
 import PDFIcon from "../../../../components/icons/pdf-solid-icon";
-import type { ContentType } from "../../../types";
+
+// Types
+import type { ContentType } from "../../../shared/types";
 
 type TopicContentItemProps = {
     content: ContentType;
 }
 
+/**
+ * Renders a single topic content item displaying its title, description, PDF icon, and rating.
+ *
+ * @component
+ * @param {TopicContentItemProps} props - The props for the component.
+ * @param {ContentType} props.content - The content data to display, including title, description, and rating.
+ * @returns {JSX.Element} The rendered topic content item component.
+ *
+ */
 const TopicContentItem = ({ content }: TopicContentItemProps) => {
   return (
     <div className="flex gap-5 p-3 items-center border-1 border-[var(--border-secondary)] rounded-[8px] cursor-pointer hover:bg-[var(--surface-bg-secondary)]">

@@ -10,9 +10,10 @@ import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 // Features
 import NotFound from "../shared/NotFound";
 import Settings from "../features/settings";
-import StudyMaterial from "../features/study_room/study_material/pages/SubjectsList";
-import SubjectDetail from "../features/study_room/study_material/pages/SubjectDetail";
+import SubjectListPage from "../features/shared/pages/SubjectListPage";
 import ChildLayout from "../layouts/child-layout/ChildLayout";
+import SMTopicListPage from "../features/study_room/study_material/pages/SMTopicListPage";
+import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 
 const Router = () => {
   return (
@@ -37,9 +38,10 @@ const Router = () => {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<ChildLayout />} />
-        <Route path="studymaterial" element={<StudyMaterial />} />
-        <Route path="studymaterial/:subject" element={<SubjectDetail />} />
-        <Route path="smartlearning" element={<>Smart Learning</>} />
+        <Route path="studymaterial" element={<SubjectListPage />} />
+        <Route path="studymaterial/:subject" element={<SMTopicListPage />} />
+        <Route path="smartlearning" element={<SubjectListPage />} />
+        <Route path="smartlearning/:subject" element={<SLTopicListPage />} />
         <Route path="selecttopictest" element={<>Topic Test</>} />
         <Route path="selectmocktest" element={<>Exam Test</>} />
         <Route path="selectclasstest" element={<>Class Test</>} />

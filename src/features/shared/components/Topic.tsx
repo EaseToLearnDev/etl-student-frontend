@@ -2,23 +2,31 @@
 import { useState } from "react";
 
 // Types
-import type { TopicType } from "../../../types";
+import type { TopicType } from "../types";
 
 // Icons
 import { PiCaretUpBold } from "react-icons/pi";
 
 // Utils
-import cn from "../../../../utils/classNames";
+import cn from "../../../utils/classNames";
 
 // Store
 import useTopicStore from "../store/useTopicStore";
-import useIsMobile from "../../../../hooks/useIsMobile";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 type TopicProps = {
   topic: TopicType | null;
   isRoot?: boolean;
 };
 
+/**
+ * Renders a single topic node with expand/collapse functionality and selection state.
+ *
+ * @param topic - The topic data to render. If `null`, renders nothing.
+ * @param isRoot - Optional flag to indicate if this is a root topic (affects styling).
+ *
+ * @returns A React element representing the topic and its children, or `null` if no topic is provided.
+ */
 const Topic = ({ topic, isRoot = false }: TopicProps) => {
   // Hooks
   const setTopic = useTopicStore((state) => state.setTopic);

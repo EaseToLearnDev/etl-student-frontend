@@ -1,6 +1,8 @@
-import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
+// Layout and Components
+import ChildLayout from "../../../layouts/child-layout/ChildLayout";
 import SubjectCard from "../components/SubjectCard";
 
+// Sample data
 const dummyData = [
   {
     subjectName: "Chemistry",
@@ -88,24 +90,30 @@ const dummyData = [
   },
 ];
 
-const SubjectsList = () => {
+/**
+ * Renders the Subject List Page where users can select a subject to study.
+ * */
+const SubjectListPage = () => {
   return (
     <div className="grid gap-5 h-full">
       <h3 className="!font-bold">Select Your Subject</h3>
       <div className="h-full overflow-y-auto">
-      <ChildLayout
-        primaryContent={
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] 2xl:grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-6 items-center">
-            {dummyData?.map((item, index) => (
-              <SubjectCard item={item} key={`${item?.subjectName}-${index}`} />
-            ))}
-          </div>
-        }
-        hideSecondary={true}
-      />
+        <ChildLayout
+          primaryContent={
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] 2xl:grid-cols-[repeat(auto-fit,minmax(350px,1fr))] gap-6 items-center">
+              {dummyData?.map((item, index) => (
+                <SubjectCard
+                  item={item}
+                  key={`${item?.subjectName}-${index}`}
+                />
+              ))}
+            </div>
+          }
+          hideSecondary={true}
+        />
       </div>
     </div>
   );
 };
 
-export default SubjectsList;
+export default SubjectListPage;

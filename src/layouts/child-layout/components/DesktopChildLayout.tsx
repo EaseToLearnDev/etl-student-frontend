@@ -23,7 +23,7 @@ const DesktopChildLayout = ({
       {/* Primary content (always visible, takes 75% width if secondary is shown) */}
       <div
         className={cn(
-          "w-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)]",
+          "w-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-thin",
           !isSecondaryHidden ? "lg:w-[75%]" : ""
         )}
       >
