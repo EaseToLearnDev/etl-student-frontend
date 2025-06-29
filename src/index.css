@@ -51,6 +51,7 @@
 
   --border-primary: #d4d4d8;
   --border-secondary: #e4e4e7;
+  --border-tertiary: #f4f4f5;
 
   --sb-ocean-bg-active: #0d6fec;
   --sb-ocean-bg-hover: #1486fc;
@@ -110,6 +111,7 @@ body.dark-mode {
 
   --border-primary: #3f3f46;
   --border-secondary: #27272a;
+  --border-tertiary: #18181b;
 
   --sb-ocean-bg-disabled: #122f59;
 
@@ -194,4 +196,13 @@ p {
 }
 .font-black {
   font-weight: 900;
+}
+.scrollbar-hide {
+  --webkit-scrollbar-width: none; /* Chrome, Safari, and Opera */
+  --webkit-scrollbar: none; /* Chrome, Safari, and Opera */ 
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+} 
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
 }

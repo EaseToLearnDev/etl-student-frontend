@@ -20,10 +20,10 @@ export function SidebarMenu() {
   const location = useLocation();
 
   return (
-    <div className="flex flex-col h-full mt-4 pb-16 3xl:mt-6">
+    <div className="flex flex-col h-full mt-4 pb-4 3xl:mt-6">
       <div className="flex-1">
         {menuItems.map((item, index) => {
-          const isActive = location.pathname === (item?.href as string);
+          const isActive = location.pathname.includes(item?.href as string);
           const pathnameExistInDropdowns: any = item?.dropdownItems?.filter(
             (dropdownItem) => dropdownItem.href === location.pathname
           );
@@ -74,7 +74,7 @@ export function SidebarMenu() {
                     >
                       {item?.dropdownItems?.map((dropdownItem, index) => {
                         const isChildActive =
-                          location.pathname === (dropdownItem?.href as string);
+                          location.pathname.includes(dropdownItem?.href as string);
 
                         return (
                           <Link
@@ -148,7 +148,7 @@ export function SidebarMenu() {
         })}
       </div>
       {/* Bottom section for Settings and Logout */}
-      <div className="mt-auto pb-3">
+      <div className="mt-auto">
         <Link
           to="/settings"
           className={cn(

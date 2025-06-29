@@ -1,5 +1,3 @@
-"use client";
-
 import { useState, type ReactElement, type RefObject } from "react";
 import { AiFillNotification } from "react-icons/ai";
 import { Popover, Text } from "rizzui";
