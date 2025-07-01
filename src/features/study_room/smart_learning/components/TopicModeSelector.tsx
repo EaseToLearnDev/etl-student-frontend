@@ -49,7 +49,7 @@ const TopicModeSelector = () => {
       </div>
 
       {/* Progress section */}
-      <div className="relative mt-[30px]">
+      <div className="relative mt-[30px] grid items-center">
         <h6 className="text-center font-semibold">Topic Progress</h6>
         <div className="absolute top-0 left-0 w-full mt-5 -z-50">
           <TopicProgressChart progress={progressValue} />
@@ -59,9 +59,9 @@ const TopicModeSelector = () => {
         </h6>
       </div>
       {/* Mode selection section */}
-      <div className="mt-5 flex items-center gap-3">
+      <div className="mt-5 flex flex-wrap items-center gap-[12px]">
         <Button
-          className="w-full"
+          className="flex-1 min-w-[150px]"
           style={isLearning ? "primary" : "secondary"}
           onClick={() => {
             setLearningMode("learning");
@@ -70,7 +70,7 @@ const TopicModeSelector = () => {
           Learning Mode
         </Button>
         <Button
-          className="w-full"
+          className="flex-1 min-w-[150px]"
           style={!isLearning ? "primary" : "secondary"}
           onClick={() => {
             setLearningMode("competitive");
@@ -80,7 +80,7 @@ const TopicModeSelector = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3 mt-6 overflow-y-auto max-h-[300px]">
+      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[300px] scrollbar-thin">
         <SmartLearningInstructions learningMode={learningMode} />
       </div>
       <div className="self-end px-[10px] py-[20px]">

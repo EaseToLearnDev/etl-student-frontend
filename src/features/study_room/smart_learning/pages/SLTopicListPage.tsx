@@ -225,6 +225,7 @@ const SLTopicListPage = () => {
           secondaryContent={<TopicModeSelector />}
           hideSecondary={topic === null}
           onSecondaryHide={reset}
+          secondaryInitialHeight={1}
         />
       </div>
     </div>

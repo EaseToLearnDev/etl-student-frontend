@@ -17,6 +17,7 @@ type ChildLayoutProps = {
   secondaryContent?: ReactNode;
   hideSecondary?: boolean;
   onSecondaryHide?: () => void;
+  secondaryInitialHeight?: number;
 };
 
 /**
@@ -30,6 +31,7 @@ const ChildLayout = ({
   secondaryContent,
   hideSecondary = false,
   onSecondaryHide,
+  secondaryInitialHeight = 0.6,
 }: ChildLayoutProps) => {
   const isMobile = useIsMobile();
 
@@ -40,7 +42,7 @@ const ChildLayout = ({
     dragging,
     onDragStart,
     handleSecondaryHide,
-  } = useChildLayout(hideSecondary, onSecondaryHide);
+  } = useChildLayout(hideSecondary, onSecondaryHide, secondaryInitialHeight);
 
   // Desktop layout: side-by-side panels
   return isMobile ? (

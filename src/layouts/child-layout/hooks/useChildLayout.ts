@@ -7,14 +7,16 @@ import { MIN_HEIGHT, MAX_HEIGHT } from "../constants";
  */
 export function useChildLayout(
   hideSecondary: boolean,
-  onSecondaryHide?: () => void
+  onSecondaryHide?: () => void,
+  initialHeight?: number,
 ) {
+  
   // Controls visibility of the secondary (bottom sheet) panel
   const [isSecondaryHidden, setIsSecondaryHidden] = useState(hideSecondary);
 
   // Current height of the bottom sheet in pixels
   const [sheetHeight, setSheetHeight] = useState<number>(
-    window.innerHeight * 0.5 // Default to 50% of viewport height
+    initialHeight !== undefined ? Math.min(initialHeight, MAX_HEIGHT) : 0.6
   );
 
   // Whether the user is currently dragging the sheet
@@ -119,8 +121,11 @@ export function useChildLayout(
    * When the sheet is shown, reset its height to 60% of viewport.
    */
   useEffect(() => {
-    if (!isSecondaryHidden) setSheetHeight(window.innerHeight * 0.6);
-  }, [isSecondaryHidden]);
+    if (!isSecondaryHidden) {
+      const heightPercent = initialHeight !== undefined ? Math.min(initialHeight, MAX_HEIGHT) : 0.6;
+      setSheetHeight(window.innerHeight * heightPercent);
+    }
+  }, [isSecondaryHidden, initialHeight]);
 
   return {
     isSecondaryHidden,

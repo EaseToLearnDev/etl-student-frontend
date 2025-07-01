@@ -93,7 +93,7 @@ export default function NotificationDropdown({
       placement={isMobile ? "bottom" : "bottom-end"}
     >
       <Popover.Trigger>{children}</Popover.Trigger>
-      <Popover.Content className="z-[9999] px-0 pb-4 pe-6 pt-5 dark:bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
+      <Popover.Content className="z-[9999] px-0 pb-4 pe-6 pt-5 bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
         <NotificationsList setIsOpen={setIsOpen} />
       </Popover.Content>
     </Popover>

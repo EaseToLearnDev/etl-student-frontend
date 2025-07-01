@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import cn from "../../../utils/classNames";
 
 type MobileChildLayoutProps = {
@@ -23,16 +24,12 @@ const MobileChildLayout = ({
   MAX_HEIGHT,
   MIN_HEIGHT,
 }: MobileChildLayoutProps) => {
-  return (
-    <div className="w-full h-full">
-      {/* Primary content fills the background */}
-      <div className="w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)]">
-        {primaryContent}
-      </div>
-      {/* Overlay and bottom sheet */}
+  
+  // Overlay and bottom sheet 
+  const sheet = (
       <div
         className={cn(
-          "fixed top-0 left-0 w-full h-full flex flex-col justify-end items-center transition-all duration-100 ease-linear",
+          "fixed top-0 left-0 w-full h-full flex flex-col justify-end items-center transition-all duration-100 ease-linear  z-[9999999]",
           isSecondaryHidden
             ? "pointer-events-none opacity-0"
             : "pointer-events-auto opacity-100"
@@ -41,7 +38,7 @@ const MobileChildLayout = ({
         {/* Overlay: clicking it hides the sheet */}
         <div
           onClick={handleSecondaryHide}
-          className="fixed top-0 left-0 w-full h-full bg-[var(--surface-bg-secondary)] opacity-70 z-[999]"
+          className="fixed top-0 left-0 w-full h-full bg-[var(--surface-bg-secondary)] opacity-70 z-[99999]"
         />
         {/* Bottom sheet: draggable and resizable */}
         <div
@@ -55,7 +52,7 @@ const MobileChildLayout = ({
             position: "absolute",
             bottom: isSecondaryHidden ? `-${sheetHeight}px` : 0,
           }}
-          className="bg-[var(--surface-bg-primary)] py-6 px-7 w-full rounded-t-[20px] z-[9999] transition-all duration-300 ease-in-out"
+          className="bg-[var(--surface-bg-primary)] py-6 px-7 w-full rounded-t-[20px] z-[999999] transition-all duration-300 ease-in-out"
         >
           {/* Drag handle */}
           <div
@@ -74,7 +71,16 @@ const MobileChildLayout = ({
           </div>
         </div>
       </div>
-    </div>
+
+  )
+  return (
+    <div className="w-full h-full">
+      {/* Primary content fills the background */}
+      <div className="w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)]">
+        {primaryContent}
+      </div>
+      {createPortal(sheet, document.body)}
+       </div>
   );
 };
 
