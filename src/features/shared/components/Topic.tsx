@@ -67,7 +67,7 @@ const Topic = ({ topic, isRoot = false }: TopicProps) => {
           />
           <h6
             className={cn(
-              "text-ellipsis line-clamp-1",
+              "text-ellipsis line-clamp-2",
               isActive ? "font-semibold" : ""
             )}
           >
