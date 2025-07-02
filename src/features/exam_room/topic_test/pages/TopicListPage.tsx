@@ -1,19 +1,22 @@
-// Reset
+// React
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 // Types
 import type { TopicType } from "../../../shared/types";
 
 // Store
-import useTopicStore from "../../../shared/store/useTopicStore"
+import useTopicStore from "../../../shared/store/useTopicStore";
 
-// Layout and Components
-import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
-import TopicModeSelector from "../components/TopicModeSelector";
-import TopicList from "../../../shared/components/TopicList";
-import { MdArrowBack } from "react-icons/md";
+// Utils
 import cn from "../../../../utils/classNames";
-import { useNavigate } from "react-router";
+
+// Icons
+import { MdArrowBack } from "react-icons/md";
+
+// Layouts and Components
+import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
+import TopicList from "../../../shared/components/TopicList";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -192,55 +195,56 @@ export const dummyData: TopicType[] = [
 
 
 /**
- * SLTopicListPage component displays a hierarchical list of study topics for selection.
+ * TopicListPage component displays a list of topics for the user to select from.
  *
- * - Utilizes a topic store to manage the selected topic state.
- * - Resets the topic selection on component unmount.
- * - Renders a back button for navigation.
- * - Shows a list of topics using sample `dummyData`.
- * - Integrates `ChildLayout` to display the topic list and a mode selector.
- * - Hides the secondary content (mode selector) if no topic is selected.
+ * - Fetches and resets the topic state using the `useTopicStore` hook.
+ * - Navigates to the selected topic's URL when a topic is chosen.
+ * - Renders a header with a back button and a title.
+ * - Uses the `ChildLayout` component to display the `TopicList` with sample data.
  *
  * @component
- * @returns {JSX.Element} The rendered topic selection page.
+ * @returns {JSX.Element} The rendered TopicListPage component.
  */
-const SLTopicListPage = () => {
-  const topic = useTopicStore((state) => state.topic);
-  const reset = useTopicStore((state) => state.reset);
-  const navigate = useNavigate();
+const TopicListPage = () => {
+    const topic = useTopicStore((state) => state.topic);
+    const reset = useTopicStore((state) => state.reset);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, []);
+    useEffect(() => {
+        return () => {
+            reset();
+        };
+    }, []);
 
-  return (
-    <div className="h-full flex flex-col flex-grow">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <div
-          onClick={() => navigate(-1)}
-          className={cn(
-            "w-[34px] h-[34px] aspect-square flex justify-center items-center cursor-pointer",
-            "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
-          )}
-        >
-          <MdArrowBack size={20} className="text-[var(--text-primary)]" />
+    useEffect(() => {
+        if (!topic) return;
+        navigate(`${topic.topicUrl}`);
+    }, [topic]);
+
+    return (
+        <div className="h-full flex flex-col flex-grow">
+            {/* Header */}
+            <div className="flex items-center gap-4">
+                <div
+                    onClick={() => navigate(-1)}
+                    className={cn(
+                        "w-[34px] h-[34px] aspect-square flex justify-center items-center cursor-pointer",
+                        "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
+                    )}
+                >
+                    <MdArrowBack size={20} className="text-[var(--text-primary)]" />
+                </div>
+                <h3 className="!font-bold items-end">Select Your Topic</h3>
+            </div>
+            {/* TopicList */}
+            <div className="mt-5 h-full overflow-y-auto">
+                <ChildLayout
+                    primaryContent={<TopicList topics={dummyData} />}
+                    hideSecondary={true}
+                />
+            </div>
         </div>
-        <h3 className="!font-bold items-end">Select Your Topic</h3>
-      </div>
-      <div className="mt-5 h-full overflow-y-auto">
-        <ChildLayout
-          primaryContent={<TopicList topics={dummyData} />}
-          secondaryContent={<TopicModeSelector />}
-          hideSecondary={topic === null}
-          onSecondaryHide={reset}
-          secondaryInitialHeight={1}
-        />
-      </div>
-    </div>
-  );
-};
+    )
+}
 
-export default SLTopicListPage;
+export default TopicListPage

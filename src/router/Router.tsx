@@ -14,6 +14,8 @@ import SubjectListPage from "../features/shared/pages/SubjectListPage";
 import ChildLayout from "../layouts/child-layout/ChildLayout";
 import SMTopicListPage from "../features/study_room/study_material/pages/SMTopicListPage";
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
+import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
+import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
 
 const Router = () => {
   return (
@@ -42,7 +44,9 @@ const Router = () => {
         <Route path="studymaterial/:subject" element={<SMTopicListPage />} />
         <Route path="smartlearning" element={<SubjectListPage />} />
         <Route path="smartlearning/:subject" element={<SLTopicListPage />} />
-        <Route path="selecttopictest" element={<>Topic Test</>} />
+        <Route path="topictest" element={<SubjectListPage />} />
+        <Route path="topictest/:subject" element={<TopicListPage />} />
+        <Route path="topictest/:subject/:topic" element={<TopicTestListPage />} />
         <Route path="selectmocktest" element={<>Exam Test</>} />
         <Route path="selectclasstest" element={<>Class Test</>} />
         <Route path="report" element={<>Reports & Analytics</>} />

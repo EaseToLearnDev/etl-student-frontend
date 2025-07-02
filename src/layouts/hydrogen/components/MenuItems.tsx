@@ -33,15 +33,15 @@ export const menuItems = [
     dropdownItems: [
       {
         name: "Topic Test",
-        href: "/selecttopictest",
+        href: "/topictest",
       },
       {
         name: "Exam Test",
-        href: "/selectmocktest",
+        href: "/mocktest",
       },
       {
         name: "Class Test",
-        href: "/selectclasstest",
+        href: "/classtest",
       },
     ],
   },
