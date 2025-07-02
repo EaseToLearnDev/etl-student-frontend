@@ -40,15 +40,15 @@ const Router = () => {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<ChildLayout />} />
-        <Route path="studymaterial" element={<SubjectListPage />} />
-        <Route path="studymaterial/:subject" element={<SMTopicListPage />} />
-        <Route path="smartlearning" element={<SubjectListPage />} />
-        <Route path="smartlearning/:subject" element={<SLTopicListPage />} />
-        <Route path="topictest" element={<SubjectListPage />} />
-        <Route path="topictest/:subject" element={<TopicListPage />} />
-        <Route path="topictest/:subject/:topic" element={<TopicTestListPage />} />
-        <Route path="selectmocktest" element={<>Exam Test</>} />
-        <Route path="selectclasstest" element={<>Class Test</>} />
+        <Route path="study-material" element={<SubjectListPage />} />
+        <Route path="study-material/:subject" element={<SMTopicListPage />} />
+        <Route path="smart-learning" element={<SubjectListPage />} />
+        <Route path="smart-learning/:subject" element={<SLTopicListPage />} />
+        <Route path="topic-test" element={<SubjectListPage />} />
+        <Route path="topic-test/:subject" element={<TopicListPage />} />
+        <Route path="topic-test/:subject/:topic" element={<TopicTestListPage />} />
+        <Route path="select-mocktest" element={<>Exam Test</>} />
+        <Route path="select-classtest" element={<>Class Test</>} />
         <Route path="report" element={<>Reports & Analytics</>} />
         <Route path="settings" element={<Settings />} />
       </Route>

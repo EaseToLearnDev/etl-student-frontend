@@ -18,11 +18,11 @@ export const menuItems = [
     dropdownItems: [
       {
         name: "Study Material",
-        href: "/studymaterial",
+        href: "/study-material",
       },
       {
         name: "Smart Learning",
-        href: "/smartlearning",
+        href: "/smart-learning",
       },
     ],
   },
@@ -33,15 +33,15 @@ export const menuItems = [
     dropdownItems: [
       {
         name: "Topic Test",
-        href: "/topictest",
+        href: "/topic-test",
       },
       {
         name: "Exam Test",
-        href: "/mocktest",
+        href: "/mock-test",
       },
       {
         name: "Class Test",
-        href: "/classtest",
+        href: "/class-test",
       },
     ],
   },
