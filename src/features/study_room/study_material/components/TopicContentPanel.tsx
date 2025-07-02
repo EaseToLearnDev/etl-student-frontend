@@ -115,7 +115,7 @@ const TopicContentPanel = () => {
         </div>
       </div>
       <div
-        className="grid gap-4 overflow-y-auto pr-2 scrollbar-thin"
+        className="grid gap-4 overflow-y-auto overflow-x-hidden pr-2 scrollbar-thin"
       >
         {dummyData?.obj?.list?.length ? (
           dummyData?.obj?.list?.map((content, index) => (

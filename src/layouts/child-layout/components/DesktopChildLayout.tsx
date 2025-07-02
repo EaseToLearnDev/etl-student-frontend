@@ -24,7 +24,7 @@ const DesktopChildLayout = ({
       <div
         className={cn(
           "w-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-thin",
-          !isSecondaryHidden ? "md:w-[60%] lg:w-[70%] 2xl:w-[75%]" : ""
+          !isSecondaryHidden ? "md:w-[60%] lg:w-[70%]" : ""
         )}
       >
         {primaryContent}
@@ -32,7 +32,7 @@ const DesktopChildLayout = ({
       {/* Secondary content (conditionally visible, takes 25% width on large screens) */}
       <div
         className={cn(
-          "overflow-y-auto rounded-[20px] bg-[var(--surface-bg-primary)] transition-all duration-300 ease-in-out md:w-[40%] lg:w-[30%] 2xl:w-[25%] overflow-x-hidden scrollbar-hide",
+          "overflow-y-auto rounded-[20px] bg-[var(--surface-bg-primary)] transition-all duration-300 ease-in-out md:w-[40%] lg:w-[30%] overflow-x-hidden scrollbar-hide",
           isSecondaryHidden
             ? "translate-x-full opacity-0 pointer-events-none absolute right-0 top-0 h-full w-0"
             : "translate-x-0 opacity-100 relative p-5"
