@@ -59,9 +59,9 @@ const TopicModeSelector = () => {
         </h6>
       </div>
       {/* Mode selection section */}
-      <div className="mt-5 flex flex-wrap items-center gap-[12px]">
+      <div className="mt-5 flex flex-col md:flex-row md:flex-wrap items-center gap-[12px]">
         <Button
-          className="flex-1 min-w-[150px]"
+          className="flex-1 w-full md:min-w-[150px]"
           style={isLearning ? "primary" : "secondary"}
           onClick={() => {
             setLearningMode("learning");
@@ -70,7 +70,7 @@ const TopicModeSelector = () => {
           Learning Mode
         </Button>
         <Button
-          className="flex-1 min-w-[150px]"
+          className="flex-1 w-full md:min-w-[150px]"
           style={!isLearning ? "primary" : "secondary"}
           onClick={() => {
             setLearningMode("competitive");
