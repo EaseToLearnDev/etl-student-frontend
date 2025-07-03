@@ -18,7 +18,7 @@ import cn from "../../../../utils/classNames";
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicContentPanel from "../components/TopicContentPanel";
 import TopicList from "../../../shared/components/TopicList";
-import BreadCrums from "../../../shared/components/BreadCrums";
+import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 // Sample Data
@@ -225,7 +225,7 @@ const SMTopicListPage = () => {
 
   return (
     <div className="h-full flex flex-col flex-grow">
-        <BreadCrums/>
+        <BreadCrumbs/>
       <div className="flex items-center gap-4">
         <div
           onClick={() => navigate(-1)}

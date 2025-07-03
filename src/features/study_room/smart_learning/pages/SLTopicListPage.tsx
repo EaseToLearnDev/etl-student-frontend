@@ -14,7 +14,7 @@ import TopicList from "../../../shared/components/TopicList";
 import { MdArrowBack } from "react-icons/md";
 import cn from "../../../../utils/classNames";
 import { useNavigate } from "react-router";
-import BreadCrums from "../../../shared/components/BreadCrums";
+import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -219,7 +219,7 @@ const SLTopicListPage = () => {
   return (
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
-      <BreadCrums />
+      <BreadCrumbs />
       <div className="flex items-center gap-4">
         <div
           onClick={() => navigate(-1)}
