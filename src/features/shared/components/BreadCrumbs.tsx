@@ -14,7 +14,6 @@ interface BreadCrumbsProps {
  * Provides clickable navigation to parent routes and highlights the current page.
  * 
  * @param {BreadCrumbsProps} props - Component props
- * @param {string} [props.append] - Optional string to add as the final breadcrumb
  * @returns {JSX.Element} Navigation breadcrumb component
  */
 const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
@@ -23,7 +22,6 @@ const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
     return (
         <nav className="flex items-center space-x-1 mb-4 ml-13 flex-wrap">
             {breadcrumbItems?.map((item, index) => {
-                // Determine if this is the last (current) breadcrumb
                 const isLast = index === breadcrumbItems.length - 1;
 
                 return (
@@ -32,7 +30,7 @@ const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
                         <button
                             onClick={() => handleBreadcrumbClick(item.path)}
                             className={`font-medium transition-colors duration-200 hover:opacity-80`}
-                            disabled={isLast} // Disable click for current page
+                            disabled={isLast}
                             style={{
                                 color: isLast ? 'var(--sb-ocean-bg-active)' : '',
                                 cursor: isLast ? 'default' : 'pointer'
@@ -41,7 +39,6 @@ const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
                             {item.name}
                         </button>
 
-                        {/* Chevron separator - only show between items, not after last */}
                         {!isLast ? (
                             <FiChevronRight className="w-4 h-4 mx-2 text-gray-400" />
                         ) : <></>}

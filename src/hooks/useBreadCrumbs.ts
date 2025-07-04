@@ -14,20 +14,13 @@ interface UseBreadcrumbsProps {
  * Custom hook for breadcrumb navigation
  * 
  * @param {UseBreadcrumbsProps} options - Hook options
- * @param {string} [options.append] - Optional string to add as the final breadcrumb
- * @param {boolean} [options.pop] - Optional boolean to remove the last breadcrumb
  * @returns {Object} Breadcrumb items and navigation handler
  */
 export const useBreadcrumbs = ({ append, pop }: UseBreadcrumbsProps = {}) => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    /**
-     * Formats a URL segment into a human-readable display name
-     * 
-     * @param {string} segment - URL segment to format
-     * @returns {string} Formatted display name
-     */
+    //  Formats a URL segment into a human-readable display name
     const formatSegmentName = (segment: string): string => {
         return segment
             .replace(/[-]/g, ' ')
