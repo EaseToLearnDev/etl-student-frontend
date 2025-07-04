@@ -219,7 +219,7 @@ const TopicListPage = () => {
 
     useEffect(() => {
         if (!topic) return;
-        navigate(`${topic.topicUrl}-${topic.topicId}`);
+        navigate(`${topic.topicUrl}?id=${topic.topicId}`);
     }, [topic]);
 
     return (

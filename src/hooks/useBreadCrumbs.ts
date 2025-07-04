@@ -1,11 +1,11 @@
 import { useLocation, useNavigate } from "react-router"
 
-interface BreadcrumbItem {
+type BreadcrumbItem = {
     name: string;
     path: string;
 }
 
-interface UseBreadcrumbsProps {
+type UseBreadcrumbsProps = {
     append?: string;
     pop?: boolean;
 }
@@ -24,7 +24,6 @@ export const useBreadcrumbs = ({ append, pop }: UseBreadcrumbsProps = {}) => {
     const formatSegmentName = (segment: string): string => {
         return segment
             .replace(/[-]/g, ' ')
-            .replace(/(?<= )\d+$/, '')
             .split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
             .join(' ');

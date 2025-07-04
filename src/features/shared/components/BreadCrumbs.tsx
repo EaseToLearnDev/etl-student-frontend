@@ -2,7 +2,7 @@ import { FiChevronRight } from "react-icons/fi"
 import { useBreadcrumbs } from "../../../hooks/useBreadCrumbs";
 
 // Props interface for BreadCrumbs component
-interface BreadCrumbsProps {
+type BreadCrumbsProps = {
     append?: string;
     pop?: boolean;
 }
@@ -16,7 +16,7 @@ interface BreadCrumbsProps {
  * @param {BreadCrumbsProps} props - Component props
  * @returns {JSX.Element} Navigation breadcrumb component
  */
-const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
+const BreadCrumbs = ({ append, pop }: BreadCrumbsProps) => {
     const { breadcrumbItems, handleBreadcrumbClick } = useBreadcrumbs({ append, pop });
 
     return (
@@ -29,14 +29,16 @@ const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
                         {/* Breadcrumb button */}
                         <button
                             onClick={() => handleBreadcrumbClick(item.path)}
-                            className={`font-medium transition-colors duration-200 hover:opacity-80`}
+                            className={`font-medium transition-colors duration-200 hover:opacity-85`}
                             disabled={isLast}
                             style={{
                                 color: isLast ? 'var(--sb-ocean-bg-active)' : '',
-                                cursor: isLast ? 'default' : 'pointer'
+                                cursor: isLast ? 'default' : 'pointer',
                             }}
                         >
-                            {item.name}
+                            <p>
+                                {item.name}
+                            </p>
                         </button>
 
                         {!isLast ? (

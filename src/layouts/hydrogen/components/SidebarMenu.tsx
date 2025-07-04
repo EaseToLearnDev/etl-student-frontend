@@ -46,9 +46,9 @@ export function SidebarMenu() {
                               : "text-[var(--text-primary)] transition-colors duration-200"
                           )}
                         >
-                          <span className="flex items-center">
+                          <p className="flex items-center">
                             {item?.icon && (
-                              <span
+                              <p
                                 className={cn(
                                   "me-2 inline-flex h-5 w-5 items-center justify-center rounded-md [&>svg]:h-[20px] [&>svg]:w-[20px]",
                                   isDropdownOpen
@@ -57,10 +57,10 @@ export function SidebarMenu() {
                                 )}
                               >
                                 {item?.icon}
-                              </span>
+                              </p>
                             )}
                             {item.name}
-                          </span>
+                          </p>
 
                           <PiCaretDownBold
                             strokeWidth={3}
@@ -88,7 +88,7 @@ export function SidebarMenu() {
                             )}
                           >
                             <div className="flex items-center truncate">
-                              <span
+                              <p
                                 className={cn(
                                   "me-[18px] ms-1 inline-flex h-1 w-1 rounded-full bg-current transition-all duration-200",
                                   isChildActive
@@ -96,9 +96,9 @@ export function SidebarMenu() {
                                     : "opacity-40"
                                 )}
                               />{" "}
-                              <span className="truncate">
+                              <p className="truncate">
                                 {dropdownItem?.name}
-                              </span>
+                              </p>
                             </div>
                           </Link>
                         );
@@ -116,7 +116,7 @@ export function SidebarMenu() {
                     >
                       <div className="flex items-center truncate">
                         {item?.icon && (
-                          <span
+                          <p
                             className={cn(
                               "me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5",
                               isActive
@@ -125,9 +125,9 @@ export function SidebarMenu() {
                             )}
                           >
                             {item?.icon}
-                          </span>
+                          </p>
                         )}
-                        <span className="truncate">{item.name}</span>
+                        <p className="truncate">{item.name}</p>
                       </div>
                     </Link>
                   )}
@@ -159,7 +159,7 @@ export function SidebarMenu() {
           )}
         >
           <div className="flex items-center truncate">
-            <span
+            <p
               className={cn(
                 "me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5",
                 location.pathname === "/settings"
@@ -168,8 +168,8 @@ export function SidebarMenu() {
               )}
             >
               <PiGearFill />
-            </span>
-            <span className="truncate">Settings</span>
+            </p>
+            <p className="truncate">Settings</p>
           </div>
         </Link>
         <div
@@ -179,10 +179,10 @@ export function SidebarMenu() {
           )}
         >
           <div className="flex items-center truncate">
-            <span className="me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5 text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]">
+            <p className="me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5 text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]">
               <PiSignOutBold />
-            </span>
-            <span className="truncate">Logout</span>
+            </p>
+            <p className="truncate">Logout</p>
           </div>
         </div>
       </div>
