@@ -16,3 +16,14 @@ export type ContentType = {
   rating: number;
   language?: string;
 };
+
+export type TopicTestType = {
+  testName: string;
+  testUrl: string;
+  testTime: number;
+  questions: number;
+  totalMarks: number;
+  difficulty: string;
+  progress: "not_started" | "in_progress";
+  marks?: number;
+};

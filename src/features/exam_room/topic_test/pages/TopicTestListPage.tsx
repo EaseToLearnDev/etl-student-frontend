@@ -1,6 +1,7 @@
+// React
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
 
-<<<<<<< Updated upstream
-=======
 // Types
 import type { TopicTestType } from "../../../shared/types";
 
@@ -18,7 +19,6 @@ import { MdArrowBack } from "react-icons/md";
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicTestList from "../components/TopicTestList";
 import TopicTestInstructions from "../components/TopicTestInstructions";
-import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 const dummyData: TopicTestType[] = [
@@ -130,16 +130,21 @@ const dummyData: TopicTestType[] = [
  * @component
  * @returns {JSX.Element} The rendered TopicTestListPage component.
  */
->>>>>>> Stashed changes
 const TopicTestListPage = () => {
+  // Hooks
+  const navigate = useNavigate();
+  const { topic } = useParams();
+  const isMobile = useIsMobile();
+  // States
+  const [hideSecondary, setHideSecondary] = useState<boolean>(
+    isMobile ? true : false
+  );
+  // Replace with api data
+  const topicName: string =
+    topic?.split("-").join(" ").replace(/\d+/g, "").trim() || "";
+
   return (
-<<<<<<< Updated upstream
-    <div>TopicTestListPage</div>
-  )
-}
-=======
     <div className="h-full flex flex-col flex-grow">
-      <BreadCrumbs/>
       {/* Header */}
       <div className="flex items-center gap-4">
         <div
@@ -170,6 +175,5 @@ const TopicTestListPage = () => {
     </div>
   );
 };
->>>>>>> Stashed changes
 
-export default TopicTestListPage
+export default TopicTestListPage;

@@ -70,7 +70,7 @@
     --fs-heading-2: 32px;
     --fs-heading-3: 28px;
     --fs-heading-4: 22px;
-    --fs-heading-5: 16px;
+    --fs-heading-5: 20px;
     --fs-heading-6: 16px;
     --fs-paragraph: 14px;
     --fs-paragraph-sm: 12px;
@@ -170,6 +170,13 @@ p {
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
 }
+span {
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-paragraph-sm);
+  line-height: var(--lh-paragraph-sm);
+  letter-spacing: var(--ls-05);
+}
+
 .card-shadow {
   box-shadow: 0px 1px 0 rgba(0, 0, 0, 0.02), 0px 2px 6px rgba(0, 0, 0, 0.05);
 }

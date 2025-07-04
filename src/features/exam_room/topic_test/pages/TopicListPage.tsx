@@ -214,12 +214,12 @@ const TopicListPage = () => {
     useEffect(() => {
         return () => {
             reset();
-        };
+        }
     }, []);
 
     useEffect(() => {
         if (!topic) return;
-        navigate(`${topic.topicUrl}`);
+        navigate(`${topic.topicUrl}-${topic.topicId}`);
     }, [topic]);
 
     return (
