@@ -170,7 +170,7 @@ p {
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
 }
-span {
+button, label, span, select, a {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph-sm);
   line-height: var(--lh-paragraph-sm);
