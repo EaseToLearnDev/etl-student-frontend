@@ -1,9 +1,10 @@
-import { useLocation, useNavigate } from "react-router"
 import { FiChevronRight } from "react-icons/fi"
+import { useBreadcrumbs } from "../../../hooks/useBreadCrumbs";
 
 // Props interface for BreadCrumbs component
 interface BreadCrumbsProps {
     append?: string;
+    pop?: boolean;
 }
 
 /**
@@ -16,46 +17,8 @@ interface BreadCrumbsProps {
  * @param {string} [props.append] - Optional string to add as the final breadcrumb
  * @returns {JSX.Element} Navigation breadcrumb component
  */
-const BreadCrumbs = ({ append }: BreadCrumbsProps) => {
-    // Hooks for navigation and location access
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    // Split the current path into segments, filtering out empty strings
-    const pathSegments = location.pathname.split('/').filter(segment => segment !== '');
-
-    // Formats a URL segment into a human-readable display name
-    const formatSegmentName = (segment: string): string => {
-        return segment
-            .replace(/[-]/g, ' ')
-            .replace(/(?<= )\d+$/, '')
-            .split(' ')
-            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join(' ');
-    };
-
-    // Generate breadcrumb items from URL path segments
-    const breadcrumbItems = pathSegments?.map((segment, index) => {
-        // Build the cumulative path up to the current segment
-        const path = "/" + pathSegments?.slice(0, index + 1).join("/");
-        return {
-            name: formatSegmentName(segment),
-            path: path,
-        }
-    });
-
-    // Add append item if provided - this becomes the "current" page
-    if (append) {
-        breadcrumbItems.push({
-            name: formatSegmentName(append),
-            path: location.pathname,
-        });
-    }
-
-    //   Handles breadcrumb click navigation
-    const handleBreadcrumbClick = (path: string) => {
-        navigate(path);
-    };
+const BreadCrumbs = ({ append , pop }: BreadCrumbsProps) => {
+    const { breadcrumbItems, handleBreadcrumbClick } = useBreadcrumbs({ append, pop });
 
     return (
         <nav className="flex items-center space-x-1 mb-4 ml-13 flex-wrap">
