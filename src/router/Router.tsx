@@ -16,6 +16,7 @@ import SMTopicListPage from "../features/study_room/study_material/pages/SMTopic
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
 import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
+import ScoreCards from "../features/reports_and_analytics/components/ScoreCards";
 
 const Router = () => {
   return (
@@ -49,7 +50,7 @@ const Router = () => {
         <Route path="topic-test/:subject/:topic" element={<TopicTestListPage />} />
         <Route path="select-mocktest" element={<>Exam Test</>} />
         <Route path="select-classtest" element={<>Class Test</>} />
-        <Route path="report" element={<>Reports & Analytics</>} />
+        <Route path="report" element={<ScoreCards />} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<NotFound />} />
