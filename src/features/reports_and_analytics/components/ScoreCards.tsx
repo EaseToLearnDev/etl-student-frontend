@@ -1,4 +1,23 @@
-const ScoreCards = ({colorPrefix = "sb-ocean", title = "Average Score", value = 80, description = "out of 100%"}) => {
+type ThemeType = "primary" | "secondary" | "tertiary" | "Quaternary" | "default";
+
+interface ScoreCardsProps {
+  type?: ThemeType;
+  title?: string;
+  value?: string | number;
+  description?: string;
+}
+
+
+const Theme = {
+  primary: "sb-ocean",
+  secondary: "sb-sunglow",
+  tertiary: "sb-sage",
+  Quaternary: "sb-valencia",
+  default: "sb-neutral"
+}
+
+const ScoreCards = ({type , title, value, description}: ScoreCardsProps) => {
+  const colorPrefix = Theme[type] || Theme["default"]
   const bgColor = `var(--${colorPrefix}-bg-disabled)`;
   const borderColor = `var(--${colorPrefix}-bg-active)`;
   return (
