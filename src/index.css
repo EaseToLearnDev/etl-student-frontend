@@ -213,7 +213,7 @@ p, a {
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
 }
-button, label, span, select {
+label, span, select {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph-sm);
   line-height: var(--lh-paragraph-sm);

@@ -17,7 +17,6 @@ import { MdArrowBack } from "react-icons/md";
 // Layouts and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicList from "../../../shared/components/TopicList";
-import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -224,7 +223,6 @@ const TopicListPage = () => {
 
     return (
         <div className="h-full flex flex-col flex-grow">
-            <BreadCrumbs/>
             {/* Header */}
             <div className="flex items-center gap-4">
                 <div

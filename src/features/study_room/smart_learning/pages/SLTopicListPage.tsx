@@ -1,20 +1,21 @@
 // Reset
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 // Types
 import type { TopicType } from "../../../shared/types";
 
 // Store
-import useTopicStore from "../../../shared/store/useTopicStore"
+import useTopicStore from "../../../shared/store/useTopicStore";
+
+// Utils
+import cn from "../../../../utils/classNames";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicModeSelector from "../components/TopicModeSelector";
 import TopicList from "../../../shared/components/TopicList";
 import { MdArrowBack } from "react-icons/md";
-import cn from "../../../../utils/classNames";
-import { useNavigate } from "react-router";
-import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -191,7 +192,6 @@ export const dummyData: TopicType[] = [
   },
 ];
 
-
 /**
  * SLTopicListPage component displays a hierarchical list of study topics for selection.
  *
@@ -219,7 +219,6 @@ const SLTopicListPage = () => {
   return (
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
-      <BreadCrumbs />
       <div className="flex items-center gap-4">
         <div
           onClick={() => navigate(-1)}

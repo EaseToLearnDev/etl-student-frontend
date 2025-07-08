@@ -80,10 +80,10 @@ const TopicModeSelector = () => {
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[300px] scrollbar-thin">
+      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] scrollbar-thin">
         <SmartLearningInstructions learningMode={learningMode} />
       </div>
-      <div className="self-end px-[10px] py-[20px]">
+      <div className="px-[10px] py-[20px]">
         <Button className="w-full" style="primary">
           Continue
         </Button>
