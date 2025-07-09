@@ -41,16 +41,21 @@ const Router = () => {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<ChildLayout />} />
-        <Route path="study-material" element={<SubjectListPage />} />
-        <Route path="study-material/:subject" element={<SMTopicListPage />} />
-        <Route path="smart-learning" element={<SubjectListPage />} />
-        <Route path="smart-learning/:subject" element={<SLTopicListPage />} />
-        <Route path="topic-test" element={<SubjectListPage />} />
-        <Route path="topic-test/:subject" element={<TopicListPage />} />
-        <Route path="topic-test/:subject/:topic" element={<TopicTestListPage />} />
-        <Route path="select-mocktest" element={<>Exam Test</>} />
-        <Route path="select-classtest" element={<>Class Test</>} />
-        <Route path="report" element={<SubjectReport />} />
+  
+        <Route path="study-room" element={ <Navigate to="/study-room/study-material" replace /> } />
+        <Route path="study-room/study-material" element={<SubjectListPage />} />
+        <Route path="study-room/study-material/:subject" element={<SMTopicListPage />} />
+        <Route path="study-room/smart-learning" element={<SubjectListPage />} />
+        <Route path="study-room/smart-learning/:subject" element={<SLTopicListPage />} />
+
+        <Route path="exam-room" element={ <Navigate to="/exam-room/topic-test" replace /> } />
+        <Route path="exam-room/topic-test" element={<SubjectListPage />} />
+        <Route path="exam-room/topic-test/:subject" element={<TopicListPage />} />
+        <Route path="exam-room/topic-test/:subject/:topic" element={<TopicTestListPage />} />
+        <Route path="exam-room/mock-test" element={<>Exam Test</>} />
+        <Route path="exam-room/class-test" element={<>Class Test</>} />
+        
+        <Route path="report" element={<>Reports & Analytics</>} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<NotFound />} />

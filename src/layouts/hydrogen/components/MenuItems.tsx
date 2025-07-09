@@ -1,7 +1,11 @@
 import {
+  PiBooksFill,
+  PiBrainFill,
   PiChartLineFill,
+  PiClipboardTextFill,
   PiHouseFill,
   PiNotebookFill,
+  PiPencilSimpleFill,
   PiTimerFill,
 } from "react-icons/pi";
 
@@ -13,35 +17,40 @@ export const menuItems = [
   },
   {
     name: "Study Room",
-    href: "#",
+    href: "/study-room",
     icon: <PiNotebookFill />,
-    dropdownItems: [
+    menuItems: [
       {
         name: "Study Material",
         href: "/study-material",
+        icon: <PiBooksFill />
       },
       {
         name: "Smart Learning",
         href: "/smart-learning",
+        icon: <PiBrainFill />
       },
     ],
   },
   {
     name: "Exam Room",
-    href: "#",
+    href: "/exam-room",
     icon: <PiTimerFill />,
-    dropdownItems: [
+    menuItems: [
       {
         name: "Topic Test",
         href: "/topic-test",
+        icon: <PiClipboardTextFill />
       },
       {
         name: "Exam Test",
         href: "/mock-test",
+        icon: <PiTimerFill />
       },
       {
         name: "Class Test",
         href: "/class-test",
+        icon: <PiPencilSimpleFill />
       },
     ],
   },

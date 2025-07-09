@@ -19,7 +19,6 @@ import { MdArrowBack } from "react-icons/md";
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicTestList from "../components/TopicTestList";
 import TopicTestInstructions from "../components/TopicTestInstructions";
-import BreadCrumbs from "../../../shared/components/BreadCrumbs";
 
 // Sample Data
 const dummyData: TopicTestType[] = [
@@ -146,7 +145,6 @@ const TopicTestListPage = () => {
 
   return (
     <div className="h-full flex flex-col flex-grow">
-       <BreadCrumbs/>
       {/* Header */}
       <div className="flex items-center gap-4">
         <div
