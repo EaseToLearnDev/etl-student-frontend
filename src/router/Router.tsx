@@ -16,6 +16,7 @@ import SMTopicListPage from "../features/study_room/study_material/pages/SMTopic
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
 import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
+import SubjectReport from "../features/reports_and_analytics/components/SubjectReport";
 
 const Router = () => {
   return (
@@ -40,7 +41,7 @@ const Router = () => {
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<ChildLayout />} />
-        
+  
         <Route path="study-room" element={ <Navigate to="/study-room/study-material" replace /> } />
         <Route path="study-room/study-material" element={<SubjectListPage />} />
         <Route path="study-room/study-material/:subject" element={<SMTopicListPage />} />
