@@ -8,7 +8,7 @@ type ThemeType =
 interface ScoreCardsProps {
   type?: ThemeType;
   title?: string;
-  value?: string | number;
+  value?: number | string;
   description?: string;
 }
 

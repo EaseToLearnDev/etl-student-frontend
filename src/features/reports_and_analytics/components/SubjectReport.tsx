@@ -64,10 +64,10 @@ const SubjectReport = ({
         {/* Strengths */}
         <div>
           <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
-            Strengths
+            {strengths ? "Strengths" : null}
           </h6>
           <div className="flex items-center gap-[12px]">
-            {strengths?.map((strength, index) => (
+            {(Array.isArray(strengths) && strengths.length > 0) && strengths?.map((strength, index) => (
               <p
                 key={index}
                 className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDE6F0] py-[4px] font-medium text-[#FC6AA1] text-ellipsis line-clamp-2"
@@ -82,10 +82,10 @@ const SubjectReport = ({
         {/* Areas of Improvements */}
         <div>
           <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
-            Areas of Improvements
+            {areas_of_improvement && areas_of_improvement? "Areas of Improvements" : null}
           </h6>
           <div className="flex items-center gap-[12px]">
-            {areas_of_improvement?.map((area, index) => (
+            {(Array.isArray(areas_of_improvement) && areas_of_improvement.length > 0) && areas_of_improvement?.map((area, index) => (
               <p
                 key={index}
                 className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDECD7] py-[4px] font-medium text-[#F07225] text-ellipsis line-clamp-2"
