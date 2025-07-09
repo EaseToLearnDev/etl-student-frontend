@@ -30,9 +30,9 @@ const Button = ({
 }: ButtonProps) => {
   const styleMap = {
     primary:
-      "bg-[var(--sb-ocean-bg-active)] text-[var(--text-primary)] hover:bg-[var(--sb-ocean-bg-hover)] active:bg-[var(--sb-ocean-bg-active)]",
+      "bg-[var(--sb-ocean-bg-active)] text-white hover:bg-[var(--sb-ocean-bg-hover)] active:bg-[var(--sb-ocean-bg-active)]",
     secondary:
-      "border-1 border-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-bg-active)] hover:border-[var(--sb-ocean-bg-hover)] hover:text-[var(--sb-ocean-bg-hover)] active:border-[var(--sb-ocean-bg-active)] active:text-[var(--sb-ocean-bg-active)]",
+      "border-1 border-[var(--sb-ocean-bg-active)] text-[var(--text-primary)] hover:border-[var(--sb-ocean-bg-hover)] hover:text-[var(--sb-ocean-bg-hover)] active:border-[var(--sb-ocean-bg-active)] active:text-[var(--sb-ocean-bg-active)]",
   };
   return (
     <button
