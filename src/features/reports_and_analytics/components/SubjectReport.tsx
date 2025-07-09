@@ -25,17 +25,17 @@ type SubjectReportProps = {
 const SubjectReport = ({
   subject,
   description,
-  progress,
+  progress=0,
   strengths,
   areas_of_improvement,
 }: SubjectReportProps) => {
   return (
     <>
-      <div className="flex w-[415px] flex-col items-start gap-[20px]">
+      <div className="flex max-w-[400px] flex-col items-start gap-[20px]">
         {/* Title Section */}
         <div>
-          <h3 className="font-bold leading-[40px] mb-2">{subject}</h3>
-          <h6 className="text-[var(--text-tertiary)] font-semibold leading-[24px]">
+          <h3 className="font-bold leading-[40px] mb-2 text-ellipsis line-clamp-1">{subject}</h3>
+          <h6 className="text-[var(--text-tertiary)] font-semibold text-ellipsis line-clamp-2">
             {description}
           </h6>
         </div>
@@ -43,19 +43,19 @@ const SubjectReport = ({
         {/* Progress Status */}
         <div className="w-full">
           <div className="flex justify-between items-center w-full mb-2">
-            <h6 className="leading-[24px] tracking-[var(--ls-015)] font-semibold">
+            <h6 className="font-semibold text-ellipsis line-clamp-2">
               Subject Progress
             </h6>
             <p
-              className="text-[var(--sb-ocean-bg-active)] text-right font-bold"
+              className="text-[var(--sb-ocean-bg-active)] text-right font-bold text-ellipsis line-clamp-2"
               style={{ fontSize: "18px" }}
             >
               {progress}%
             </p>
           </div>
-          <div className="relative h-[12px] rounded-full bg-[var(--surface-bg-secondary)] overflow-hidden">
+          <div className="relative h-[12px] w-full max-w-[400px] rounded-full bg-[var(--surface-bg-secondary)]">
             <div
-              className="absolute left-0 top-0 h-full rounded-full bg-[var(--sb-ocean-bg-active)] transition-all duration-500 ease-in-out"
+              className="absolute left-0 rounded-full bg-[var(--sb-ocean-bg-active)] transition-all duration-500 ease-in-out h-full"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -63,14 +63,14 @@ const SubjectReport = ({
 
         {/* Strengths */}
         <div>
-          <h6 className="leading-[24px] tracking-[0.15px] font-semibold mb-2">
+          <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
             Strengths
           </h6>
           <div className="flex items-center gap-[12px]">
             {strengths?.map((strength, index) => (
               <p
                 key={index}
-                className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDE6F0] py-[4px] font-medium text-[#FC6AA1] leading-[16px] tracking-[var(--ls-05)]"
+                className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDE6F0] py-[4px] font-medium text-[#FC6AA1] text-ellipsis line-clamp-2"
                 style={{ fontSize: "11px" }}
               >
                 {strength}
@@ -81,14 +81,14 @@ const SubjectReport = ({
 
         {/* Areas of Improvements */}
         <div>
-          <h6 className="leading-[24px] tracking-[0.15px] font-semibold mb-2">
+          <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
             Areas of Improvements
           </h6>
           <div className="flex items-center gap-[12px]">
             {areas_of_improvement?.map((area, index) => (
               <p
                 key={index}
-                className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDECD7] py-[4px] font-medium text-[#F07225] leading-[16px] tracking-[var(--ls-05)]"
+                className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[#FDECD7] py-[4px] font-medium text-[#F07225] text-ellipsis line-clamp-2"
                 style={{ fontSize: "11px" }}
               >
                 {area}

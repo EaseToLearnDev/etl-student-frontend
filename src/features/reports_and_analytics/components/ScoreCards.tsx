@@ -22,11 +22,11 @@ const Theme = {
 
 /**
  * ScoreCards Component
- * 
+ *
  * A UI component used to display key metrics or scores in a visually distinct card format.
  * Each card can be styled using predefined theme types (e.g., primary, secondary).
  * Includes a title, a main value, and an optional description.
- * 
+ *
  * Props:
  * @param {ThemeType} [type] - Theme type for the card, which affects background and border colors.
  *   Accepted values: "primary", "secondary", "tertiary", "Quaternary", "default"
@@ -35,8 +35,13 @@ const Theme = {
  * @param {string} [description] - A short description or unit label for the value.
  */
 
-const ScoreCards = ({ type, title, value, description }: ScoreCardsProps) => {
-  const colorPrefix = Theme[type] || Theme["default"];
+const ScoreCards = ({
+  type = "default",
+  title,
+  value,
+  description,
+}: ScoreCardsProps) => {
+  const colorPrefix = Theme[type];
   const bgColor = `var(--${colorPrefix}-bg-disabled)`;
   const borderColor = `var(--${colorPrefix}-bg-active)`;
   return (
@@ -46,17 +51,15 @@ const ScoreCards = ({ type, title, value, description }: ScoreCardsProps) => {
         style={{ backgroundColor: bgColor, borderColor: borderColor }}
       >
         {/* Heading */}
-        <p className="text-[14px] font-semibold leading-[20px] tracking-[0.1px]">
-          {title}
-        </p>
+        <p className=" font-semibold text-ellipsis line-clamp-2">{title}</p>
 
         <div className="flex items-end gap-y-[20px] w-full justify-between">
           {/* Value */}
-          <h3 className="font-bold leading-[40px]">{value}</h3>
+          <h3 className="font-bold text-ellipsis line-clamp-1">{value}</h3>
 
           {/* Accent Value */}
           <p
-            className="text-[#0D6FEC] text-[14px] font-medium leading-[20px] tracking-[0.1px]"
+            className="font-medium text-ellipsis line-clamp-1"
             style={{ color: borderColor }}
           >
             {description}
