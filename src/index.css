@@ -240,6 +240,8 @@ a {
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
 }
+
+button,
 label,
 span,
 select {
