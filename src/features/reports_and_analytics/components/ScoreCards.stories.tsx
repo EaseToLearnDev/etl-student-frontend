@@ -1,17 +1,17 @@
-import { type Meta, type StoryObj } from "@storybook/react-vite"
-import ScoreCards from "../components/ScoreCards"
+import { type Meta, type StoryObj } from "@storybook/react-vite";
+import ScoreCards from "../components/ScoreCards";
 
 const meta: Meta<typeof ScoreCards> = {
-    component: ScoreCards,
-    // tags: ["autodocs"],
-    argTypes: {
-        type: {
-            options :["primary","secondary", "tertiary", "Quaternary", "default"],
-            control: {
-                type: "select"
-            }
-        }
-    }
+  component: ScoreCards,
+  // tags: ["autodocs"],
+  argTypes: {
+    type: {
+      options: ["primary", "secondary", "tertiary", "Quaternary", "default"],
+      control: {
+        type: "select",
+      },
+    },
+  },
 };
 
 export default meta;
@@ -19,18 +19,19 @@ export default meta;
 type Story = StoryObj<typeof ScoreCards>;
 
 export const Default: Story = {
-    args: {
-        type: "primary",
-        title: "Total use",
-        value: 1204,
-        description: "Last 7 days"
-    }
+  args: {
+    type: "primary",
+    title: "Total use",
+    value: 1204,
+    description: "Last 7 days",
+  },
 };
 
 export const TertiaryWithLongTitle: Story = {
   args: {
     type: "tertiary",
-    title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, non?",
+    title:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, non?",
     value: 84,
     description: "Completion Rate",
   },
