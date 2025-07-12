@@ -1,8 +1,10 @@
 type ThemeType = "primary" | "success" | "error" | "neutral" | "default";
+
 interface ThemeValueType {
   bg: string;
   color: string;
 }
+
 interface ScoreCardsProps {
   type?: ThemeType;
   title?: string;

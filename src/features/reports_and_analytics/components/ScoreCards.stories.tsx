@@ -6,7 +6,7 @@ const meta: Meta<typeof ScoreCards> = {
   // tags: ["autodocs"],
   argTypes: {
     type: {
-      options: ["primary", "secondary", "tertiary", "Quaternary", "default"],
+      options: ["primary", "success", "error", "neutral", "default"],
       control: {
         type: "select",
       },
@@ -29,7 +29,7 @@ export const Default: Story = {
 
 export const TertiaryWithLongTitle: Story = {
   args: {
-    type: "tertiary",
+    type: "success",
     title:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, non?",
     value: 84,
