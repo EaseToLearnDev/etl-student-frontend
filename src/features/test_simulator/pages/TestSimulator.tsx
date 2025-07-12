@@ -17,6 +17,7 @@ const TestSimulator = () => {
         <ChildLayout
           primaryContent={<ActiveQuestionPanel />}
           secondaryContent={<TestSidePanel />}
+          secondaryInitialHeight={1}
         />
       </div>
     </div>
