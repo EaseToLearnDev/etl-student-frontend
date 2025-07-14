@@ -1,12 +1,13 @@
 import { type Meta, type StoryObj } from "@storybook/react-vite"
 import ScoreCards from "../components/ScoreCards"
+import { Theme } from "../../../utils/colors";
 
 const meta: Meta<typeof ScoreCards> = {
     component: ScoreCards,
     // tags: ["autodocs"],
     argTypes: {
-        type: {
-            options :["primary","secondary", "tertiary", "Quaternary", "default"],
+        theme: {
+            options : Object.values(Theme),
             control: {
                 type: "select"
             }
@@ -20,7 +21,7 @@ type Story = StoryObj<typeof ScoreCards>;
 
 export const Default: Story = {
     args: {
-        type: "primary",
+        theme: Theme.Ocean,
         title: "Total use",
         value: 1204,
         description: "Last 7 days"
@@ -29,7 +30,7 @@ export const Default: Story = {
 
 export const TertiaryWithLongTitle: Story = {
   args: {
-    type: "tertiary",
+    theme: Theme.Sakura,
     title: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, non?",
     value: 84,
     description: "Completion Rate",
