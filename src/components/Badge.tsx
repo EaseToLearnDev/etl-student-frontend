@@ -1,33 +1,37 @@
-import type React from "react"
-import cn from "../utils/classNames"
+import type { ReactNode } from "react";
 
-type ThemeType = "ocean" | "sunglow" | "sakura" | "pumpkin" | "valencia" | "greenHaze" | "neutral"
+// Utils
+import cn from "../utils/classNames";
+import { colors, Theme } from "../utils/colors";
+
 interface BadgeProps {
-    icon?: React.ReactNode,
-    text: string,
-    className?: string,
-    style: ThemeType
+  children: ReactNode;
+  className?: string;
+  theme: Theme;
+  onClickHandler?: () => void;
 }
 
-const Badge = ({ icon, text, className, style = "neutral" }: BadgeProps) => {
-    const themeMap: Record<ThemeType, string> = {
-        ocean: "--sb-ocean-bg-active",
-        sunglow: "--sb-sunglow-bg-active",
-        sakura: "--sb-sakura-bg-active",
-        pumpkin: "--sb-pumpkin-bg-active",
-        valencia: "--sb-valencia-bg-active",
-        greenHaze: "--sb-green-haze-bg-active",
-        neutral: "--sb-neutral-bg-active",
-    };
+/**
+ * Renders a stylized badge component with customizable theme and click handler.
+ */
+const Badge = ({ children, className, onClickHandler, theme = Theme.Ocean }: BadgeProps) => {
+  const currentTheme = colors[theme];
 
-    const theme = themeMap[style];
+  return (
+    <div
+      className={cn(
+        "cursor-pointer flex justify-center items-center py-2 px-4 gap-1 border-1 rounded-full",
+        className
+      )}
+      style={{
+        borderColor: currentTheme.bg.active,
+        color: currentTheme.bg.active,
+      }}
+      onClick={onClickHandler ? onClickHandler : undefined}
+    >
+      {children}
+    </div>
+  );
+};
 
-    return (
-        <div className={cn("cursor-pointer flex justify-center items-center py-2 px-4 gap-1 border-1 rounded-full", className,)} style={{ borderColor: `var(${theme})`, color: `var(${theme})` }}>
-            {icon ? icon : null}
-            <h6>{text}</h6>
-        </div>
-    )
-}
-
-export default Badge
+export default Badge;

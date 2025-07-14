@@ -1,10 +1,7 @@
-type ThemeType = "primary" | "success" | "error" | "neutral" | "default";
-interface ThemeValueType {
-  bg: string;
-  color: string;
-}
+import { colors, Theme } from "../../../utils/colors";
+
 interface ScoreCardsProps {
-  type?: ThemeType;
+  theme?: Theme;
   title?: string;
   value?: number | string;
   description?: string;
@@ -18,44 +15,21 @@ interface ScoreCardsProps {
  * Includes a title, a main value, and an optional description.
  */
 const ScoreCards = ({
-  type = "neutral",
+  theme = Theme.Neutral,
   title,
   value,
   description,
 }: ScoreCardsProps) => {
-  
-  const themeMap: Record<ThemeType, ThemeValueType> = {
-    primary: {
-      bg: "--sb-ocean-bg-disabled",
-      color: "--sb-ocean-bg-active",
-    },
-    success: {
-      bg: "--sb-green-haze-bg-disabled",
-      color: "--sb-green-haze-bg-active",
-    },
-    error: {
-      bg: "--sb-valencia-bg-disabled",
-      color: "--sb-valencia-bg-active",
-    },
-    neutral: {
-      bg: "--sb-neutral-bg-disabled",
-      color: "--sb-neutral-bg-active",
-    },
-    default: {
-      bg: "--surface-bg-primary",
-      color: "--sb-ocean-bg-active",
-    },
-  };
 
-  const theme: ThemeValueType = themeMap[type];
+  const currentTheme = colors[theme];
 
   return (
     <>
       <div
         className="flex flex-col items-start gap-5 rounded border-l-[8px] p-5 w-[24%] min-w-[250px] overflow-x-hidden transition-colors"
         style={{
-          backgroundColor: `var(${theme.bg})`,
-          borderColor: `var(${theme.color})`,
+          backgroundColor: `var(${currentTheme.bg.disabled})`,
+          borderColor: `var(${currentTheme.bg.active})`,
         }}
       >
         {/* Heading */}
@@ -68,7 +42,7 @@ const ScoreCards = ({
           {/* Accent Value */}
           <p
             className="font-medium text-ellipsis line-clamp-1"
-            style={{ color: `var(${theme.color})` }}
+            style={{ color: `var(${currentTheme.bg.active})` }}
           >
             {description}
           </p>
