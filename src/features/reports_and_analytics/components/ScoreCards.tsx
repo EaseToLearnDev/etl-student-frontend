@@ -22,14 +22,15 @@ const ScoreCards = ({
 }: ScoreCardsProps) => {
 
   const currentTheme = colors[theme];
+  console.log("theme:",currentTheme)
 
   return (
     <>
       <div
         className="flex flex-col items-start gap-5 rounded border-l-[8px] p-5 w-[24%] min-w-[250px] overflow-x-hidden transition-colors"
         style={{
-          backgroundColor: `var(${currentTheme.bg.disabled})`,
-          borderColor: `var(${currentTheme.bg.active})`,
+          backgroundColor: currentTheme.bg.disabled,
+          borderColor: currentTheme.bg.active,
         }}
       >
         {/* Heading */}
@@ -42,7 +43,7 @@ const ScoreCards = ({
           {/* Accent Value */}
           <p
             className="font-medium text-ellipsis line-clamp-1"
-            style={{ color: `var(${currentTheme.bg.active})` }}
+            style={{ color: currentTheme.bg.active }}
           >
             {description}
           </p>
