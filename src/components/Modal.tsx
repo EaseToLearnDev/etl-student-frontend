@@ -1,5 +1,4 @@
-import React from "react";
-import { Dialog, DialogBackdrop, DialogPanel } from "@headlessui/react";
+import React, { type ReactNode } from "react";
 import cn from "../utils/classNames";
 
 const modalStyles = {
@@ -29,6 +28,7 @@ const modalStyles = {
 export type ModalSize = keyof typeof modalStyles.size;
 
 export type ModalProps = {
+  children: ReactNode;
   /** Whether the Modal is open or not */
   isOpen: boolean;
   /** Called when modal is closed (Escape key and click outside, depending on options) */
@@ -53,9 +53,9 @@ export type ModalProps = {
  * A fully-managed render-less Modal component. When requiring users to interact with the application, but without jumping to a new page and interrupting the user's workflow, you can use Modal to create a new floating layer over the current page to get user feedback or display information.
  */
 export function Modal({
+  children,
   isOpen,
   onClose,
-  children,
   noGutter,
   className,
   size = "md",
@@ -64,40 +64,37 @@ export function Modal({
   overlayClassName,
   containerClassName,
 }: React.PropsWithChildren<ModalProps>) {
+  if (!isOpen) return null;
+
   return (
-    <Dialog
-      open={isOpen}
-      onClose={onClose}
-      className={cn(modalStyles.root, className)}
+    <div
+      className={cn(
+        "fixed z-[9999] inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto",
+        className
+      )}
     >
+      {/* Overlay */}
+      <div
+        onClick={onClose}
+        className={cn(
+          "fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-10",
+          overlayClassName
+        )}
+      />
+      {/* Panel */}
       <div
         className={cn(
-          modalStyles.area,
-          size !== "full" && [!noGutter && "p-4 sm:p-5"]
+          "relative z-20 w-full bg-[var(--surface-bg-secondary)] shadow-xl transition-all",
+          !customSize && modalStyles.size[size],
+          modalStyles.rounded[rounded],
+          size !== "full" && !noGutter && "p-4 sm:p-5",
+          containerClassName
         )}
+        style={customSize ? { maxWidth: `${customSize}px` } : undefined}
       >
-        <DialogBackdrop
-          transition
-          className={cn(modalStyles.overlay, overlayClassName)}
-        />
-        <DialogPanel
-          transition
-          className={cn(
-            modalStyles.panel,
-            size !== "full" && modalStyles.rounded[rounded],
-            !customSize && customSize !== 0 && modalStyles.size[size],
-            containerClassName
-          )}
-          {...((customSize || customSize === 0) && {
-            style: {
-              maxWidth: `${customSize}px` || "inherit",
-            },
-          })}
-        >
-          {children}
-        </DialogPanel>
+        {children}
       </div>
-    </Dialog>
+    </div>
   );
 }
 
