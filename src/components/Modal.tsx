@@ -1,4 +1,4 @@
-import React, { type ReactNode } from "react";
+import React, { useEffect, useState, type ReactNode } from "react";
 import cn from "../utils/classNames";
 
 const modalStyles = {
@@ -64,12 +64,30 @@ export function Modal({
   overlayClassName,
   containerClassName,
 }: React.PropsWithChildren<ModalProps>) {
+  const [show, setShow] = useState(true);
+
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
+  }, [onClose]);
+
+  useEffect(() => {
+    if (isOpen) {
+      requestAnimationFrame(() => setShow(true));
+    } else {
+      setShow(false);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className={cn(
-        "fixed z-[9999] inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto",
+        "fixed z-[9999] inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto transition-opacity duration-300",
         className
       )}
     >
@@ -78,6 +96,7 @@ export function Modal({
         onClick={onClose}
         className={cn(
           "fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-10",
+          show ? "opacity-100" : "opacity-0",
           overlayClassName
         )}
       />
@@ -85,6 +104,7 @@ export function Modal({
       <div
         className={cn(
           "relative z-20 w-full bg-[var(--surface-bg-secondary)] shadow-xl transition-all",
+          show ? "opacity-100 scale-100" : "opacity-0 scale-95",
           !customSize && modalStyles.size[size],
           modalStyles.rounded[rounded],
           size !== "full" && !noGutter && "p-4 sm:p-5",
