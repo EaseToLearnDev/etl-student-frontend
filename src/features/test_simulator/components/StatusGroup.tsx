@@ -28,15 +28,9 @@ const StatusGroup = () => {
       count: 0,
     },
     {
-      id: "review",
-      text: "Review",
+      id: "marked-for-review",
+      text: "Marked for Review",
       theme: Theme.Sunglow,
-      count: 0,
-    },
-    {
-      id: "answered-review",
-      text: "Answered & Review",
-      theme: Theme.Valencia,
       count: 0,
     },
   ];

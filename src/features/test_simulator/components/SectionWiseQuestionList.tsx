@@ -1,0 +1,33 @@
+import cn from "../../../utils/classNames";
+import useTestStore from "../store/useTestStore";
+import Question from "./Question";
+
+interface SectionWiseQuestionListProps {
+  className?: string;
+}
+
+const SectionWiseQuestionList = ({className}: SectionWiseQuestionListProps) => {
+  const sections = useTestStore((state) => state.sectionsUI);
+
+  return (
+    <div className={cn("flex flex-col gap-5 overflow-y-auto scrollbar-hide", className)}>
+      {sections?.map((section, index) => {
+        return (
+          <div
+            className="w-full flex  flex-col gap-5"
+            key={`${section.sectionName}-${index}`}
+          >
+            <h6 className="text-center">{section.sectionName}</h6>
+            <div className="flex flex-wrap gap-3">
+              {section.questionList.map((q: any, i: number) => (
+                <Question question={q} questionNumber={i+1} />
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+export default SectionWiseQuestionList;

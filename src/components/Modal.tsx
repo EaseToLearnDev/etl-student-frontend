@@ -100,5 +100,3 @@ export function Modal({
     </Dialog>
   );
 }
-
-Modal.displayName = "Modal";
