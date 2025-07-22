@@ -32,10 +32,10 @@ export const getHiddenTransformClass = (placement: DrawerPlacements | undefined)
 
 export function getDrawerSizeClass(placement: DrawerPlacements | undefined) {
   if (placement === "left" || placement === "right") {
-    return "min-w-[280px] max-w-[420px] h-full";
+    return "w-[280px] max-w-[420px] h-full";
   }
   if (placement === "top" || placement === "bottom") {
-    return "min-h-[320px] w-full";
+    return "h-[320px] w-full";
   }
   return "";
 }
