@@ -1,7 +1,9 @@
 import { QuestionStatus, type QuestionType, type TestDataType } from "../types";
 
 // Convert raw test data into UI-friendly section structure
-export const convertDataToSections = (data: TestDataType | null | undefined) => {
+export const convertDataToSections = (
+  data: TestDataType | null | undefined
+) => {
   if (!data) return [];
   return data.sectionSet.map((section) => ({
     sectionName: section.sectionName,
@@ -11,7 +13,6 @@ export const convertDataToSections = (data: TestDataType | null | undefined) => 
   }));
 };
 
-
 export const updateStatusOnVisit = (
   statusMap: Record<number, QuestionStatus>,
   questionId: number
@@ -19,4 +20,14 @@ export const updateStatusOnVisit = (
   return statusMap[questionId] === QuestionStatus.NOT_VISITED
     ? { ...statusMap, [questionId]: QuestionStatus.VISITED }
     : statusMap;
+};
+
+export const getTimeFromSeconds = (seconds: number) => {
+  const hh = Math.floor(seconds / 3600);
+  const mm = Math.floor((seconds % 3600) / 60);
+  const ss = seconds % 60;
+
+  return `${hh.toString().padStart(2, "0")}:${mm
+    .toString()
+    .padStart(2, "0")}:${ss.toString().padStart(2, "0")}`;
 };

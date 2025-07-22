@@ -8,6 +8,7 @@ import useIsMobile from "../../../hooks/useIsMobile";
 import MobileTestSimulator from "../components/mobile/MobileTestSimulator";
 import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
 import useTestStore from "../store/useTestStore";
+import useTestTimerStore from "../store/useTestTimerStore";
 
 // Sample Data
 const dummyData = {
@@ -592,23 +593,23 @@ const TestSimulator = () => {
 
   const setTestData = useTestStore((state) => state.setTestData);
   const reset = useTestStore((state) => state.reset);
-  const startTimer = useTestStore((state) => state.startTimer);
-  const stopTimer = useTestStore((state) => state.stopTimer);
+  const startQuestionTimer = useTestStore((state) => state.startQuestionTimer);
+  const stopQuestionTimer = useTestStore((state) => state.stopQuestionTimer);
+  const startTestTimer = useTestTimerStore((state) => state.startTestTimer);
+  const stopTestTimer = useTestTimerStore((state) => state.stopTestTimer);
 
   useEffect(() => {
     reset();
     setTestData(dummyData?.obj?.[0]);
-    startTimer();
-    return () => stopTimer();
+    startQuestionTimer();
+    startTestTimer(dummyData?.obj?.[0]?.remainingTime);
+    return () => {
+      stopQuestionTimer();
+      stopTestTimer();
+    };
   }, []);
 
-  return !isMobile ? (
-    <DesktopTestSimulator
-    />
-  ) : (
-    <MobileTestSimulator
-    />
-  );
+  return !isMobile ? <DesktopTestSimulator /> : <MobileTestSimulator />;
 };
 
 export default TestSimulator;

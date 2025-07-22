@@ -49,9 +49,9 @@ export interface TestStore {
 
   markCurrentForReview: () => void;
 
-  __timerId: any;
-  startTimer: () => void;
-  stopTimer: () => void;
+  _questionTimerId: any;
+  startQuestionTimer: () => void;
+  stopQuestionTimer: () => void;
 
   reset: () => void;
 }
@@ -71,7 +71,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   questionTimeMap: {},
   questionStatusMap: {},
-  __timerId: null,
+  _questionTimerId: null,
 
   // Initialize test data
   setTestData: (data) =>
@@ -125,7 +125,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   // Next Handler
   goToNext: () => {
-    const { testData, currentPointer, questionResponseMap, questionStatusMap, startTimer, stopTimer } =
+    const { testData, currentPointer, questionResponseMap, questionStatusMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
       get();
     if (!testData) return;
 
@@ -198,7 +198,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   // Prev Handler
   goToPrev: () => {
-    const { testData, currentPointer, questionStatusMap, questionResponseMap, startTimer, stopTimer } =
+    const { testData, currentPointer, questionStatusMap, questionResponseMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
       get();
     if (!testData) return;
 
@@ -287,7 +287,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setCurrentQuestion: (question) => {
-    const { testData, currentPointer, questionStatusMap, questionResponseMap, startTimer, stopTimer } =
+    const { testData, currentPointer, questionStatusMap, questionResponseMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
       get();
     if (!testData || !question) return;
 
@@ -441,8 +441,8 @@ const useTestStore = create<TestStore>((set, get) => ({
     }));
   },
 
-  startTimer: () => {
-    const { __timerId, getCurrentQuestion } = get();
+  startQuestionTimer: () => {
+    const { _questionTimerId: __timerId, getCurrentQuestion } = get();
     const question = getCurrentQuestion();
     if (!question) return;
 
@@ -458,19 +458,19 @@ const useTestStore = create<TestStore>((set, get) => ({
       }));
     }, 1000);
 
-    set({ __timerId: interval });
+    set({ _questionTimerId: interval });
   },
-  stopTimer: () => {
-    const { __timerId } = get();
+  stopQuestionTimer: () => {
+    const { _questionTimerId: __timerId } = get();
     if (__timerId) {
       clearTimeout(__timerId);
-      set({ __timerId: null });
+      set({ _questionTimerId: null });
     }
   },
 
   // Reset state
   reset: () => {
-    const { stopTimer } = get();
+    const { stopQuestionTimer: stopTimer } = get();
     stopTimer();
     set({
       testData: null,

@@ -13,6 +13,9 @@ import {
 // Store
 import useDrawerStore from "../../../../store/useDrawerStore";
 
+// Services & Utils
+import { getTimeFromSeconds } from "../../services/TestSimulator.services";
+
 // Layouts & Components
 import { useChildLayout } from "../../../../layouts/child-layout/hooks/useChildLayout";
 import BottomNavigationSheet from "../../../../layouts/child-layout/components/BottomNavigationSheet";
@@ -23,7 +26,7 @@ import AiChatPanel from "../AiChatPanel";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "./ActiveQuestionPanel";
-
+import useTestTimerStore from "../../store/useTestTimerStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
@@ -32,8 +35,10 @@ const MobileTestSimulator = () => {
   // States
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
 
-  // Drawer Store
+  // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
+  const remainingSec = useTestTimerStore((state) => state.remainingSec);
+  const isExpired = useTestTimerStore((state) => state.isExpired);
 
   // Hooks
   const {
@@ -44,6 +49,8 @@ const MobileTestSimulator = () => {
     handleSecondaryHide,
   } = useChildLayout(!isAiChatOpen, () => setIsAiChatOpen(false), 0.9);
 
+  const formattedTime = getTimeFromSeconds(remainingSec);
+
   return (
     <div className="relative flex flex-col h-[100dvh]">
       {/* Header */}
@@ -51,7 +58,9 @@ const MobileTestSimulator = () => {
       {/* Timer */}
       <div className="flex flex-col items-center mt-4">
         <span className="text-center">Time Remaining</span>
-        <h2 className="text-center">{"03:00:00"}</h2>
+        <h2 className="text-center">
+          {isExpired ? "Time's Up" : formattedTime}
+        </h2>
       </div>
 
       <div className="flex flex-col w-full h-full justify-between gap-2 p-2">
