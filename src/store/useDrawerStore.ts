@@ -22,19 +22,10 @@ type DrawerStore = DrawerTypes & {
 const useDrawerStore = create<DrawerStore>((set) => ({
   isOpen: false,
   view: null,
-<<<<<<< Updated upstream
-  placement: 'right',
-  containerClassName: '',
-  openDrawer: ({ view, placement, containerClassName }) =>
-    set((state) => ({
-      ...state,
-=======
   placement: "right",
   containerClassName: "",
   openDrawer: ({ view, placement, containerClassName }) => {
-    console.log("placement passed in drawer store: ", placement);
     return set({
->>>>>>> Stashed changes
       isOpen: true,
       view: view,
       placement: placement,

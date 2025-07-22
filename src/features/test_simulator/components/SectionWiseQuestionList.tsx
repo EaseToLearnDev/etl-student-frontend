@@ -19,8 +19,8 @@ const SectionWiseQuestionList = ({className}: SectionWiseQuestionListProps) => {
           >
             <h6 className="text-center">{section.sectionName}</h6>
             <div className="flex flex-wrap gap-3">
-              {section.questionList.map((q: any, i: number) => (
-                <Question question={q} questionNumber={i+1} />
+              {section.questionList.map((q, i: number) => (
+                <Question key={q.questionId} question={q} questionNumber={i+1} />
               ))}
             </div>
           </div>

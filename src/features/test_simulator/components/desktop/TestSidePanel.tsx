@@ -5,12 +5,12 @@ import { useState } from "react";
 import { MdChevronLeft } from "react-icons/md";
 
 // Utils
-import cn from "../../../utils/classNames";
+import cn from "../../../../utils/classNames";
 
 // Components
-import AiIcon from "../../../components/icons/ai-icon";
+import AiIcon from "../../../../components/icons/ai-icon";
 import QuestionNavigator from "./QuestionNavigator";
-import AiChatPanel from "./AiChatPanel";
+import AiChatPanel from "../AiChatPanel";
 
 const TestSidePanel = () => {
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);

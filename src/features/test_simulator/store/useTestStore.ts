@@ -30,14 +30,9 @@ export interface TestStore {
   setCurrentQuestion: (question: QuestionType | null | undefined) => void;
 
   questionResponseMap: Record<number, ResponseType | null | undefined>;
-  getResponseByQuestionId: (
-    questionId: number
-  ) => ResponseType | null | undefined;
-  setResponseByQuestionId: (
-    questionId: number,
-    response: ResponseType | null | undefined
-  ) => void;
-  clearResponseByQuestionId: (questionId: number) => void;
+  getCurrentResponse: () => ResponseType | null | undefined;
+  setCurrentResponse: (response: ResponseType | null | undefined) => void;
+  clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
   getTimeByQuestionId: (questionId: number) => number;
@@ -50,9 +45,13 @@ export interface TestStore {
     questionId: number,
     status: QuestionStatus
   ) => void;
-  getQuestionsByStatus: (status: QuestionStatus) => QuestionType[];
+  getQuestionCountByStatus: (status: QuestionStatus) => number;
 
-  markForReview: (questionId: number) => void;
+  markCurrentForReview: () => void;
+
+  __timerId: any;
+  startTimer: () => void;
+  stopTimer: () => void;
 
   reset: () => void;
 }
@@ -63,6 +62,16 @@ export interface TestStore {
 const useTestStore = create<TestStore>((set, get) => ({
   testData: null,
   sectionsUI: [],
+  // Question Pointer
+  currentPointer: {
+    currentSectionPos: -1,
+    currentQuestionPos: -1,
+  },
+  questionResponseMap: {},
+
+  questionTimeMap: {},
+  questionStatusMap: {},
+  __timerId: null,
 
   // Initialize test data
   setTestData: (data) =>
@@ -91,6 +100,16 @@ const useTestStore = create<TestStore>((set, get) => ({
       });
 
       const sectionsUI = convertDataToSections(data);
+
+      // Mark first question as visited by default
+      const firstSection = data.sectionSet.find(
+        (sec) => sec.questionNumbers.length > 0
+      );
+      if (firstSection) {
+        const firstQId = firstSection.questionNumbers[0].questionId;
+        statusMap[firstQId] = QuestionStatus.VISITED;
+      }
+
       return {
         testData: data,
         sectionsUI: sectionsUI,
@@ -104,23 +123,36 @@ const useTestStore = create<TestStore>((set, get) => ({
       };
     }),
 
-  // Question Pointer
-  currentPointer: {
-    currentSectionPos: -1,
-    currentQuestionPos: -1,
-  },
-
   // Next Handler
   goToNext: () => {
-    const { testData, currentPointer } = get();
+    const { testData, currentPointer, questionResponseMap, questionStatusMap, startTimer, stopTimer } =
+      get();
     if (!testData) return;
 
+    
     const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
     if (si < 0 || qi < 0) return;
-
+    
     const sectionSet = testData?.sectionSet;
     const section = sectionSet[si];
     if (!section) return;
+
+    const currQId = section?.questionNumbers[qi]?.questionId;
+    if (!currQId) return;
+    
+    stopTimer();
+    // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
+    if (
+      questionStatusMap[currQId] === QuestionStatus.VISITED &&
+      !questionResponseMap[currQId]
+    ) {
+      set((state) => ({
+        questionStatusMap: {
+          ...state.questionStatusMap,
+          [currQId]: QuestionStatus.NOT_ATTEMPTED,
+        },
+      }));
+    }
 
     // next question in same section?
     if (qi + 1 < section.questionNumbers.length) {
@@ -135,6 +167,7 @@ const useTestStore = create<TestStore>((set, get) => ({
           nextQId
         ),
       }));
+      startTimer();
       return;
     }
 
@@ -154,6 +187,7 @@ const useTestStore = create<TestStore>((set, get) => ({
             nextQId
           ),
         }));
+        startTimer();
         return;
       }
     }
@@ -164,7 +198,8 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   // Prev Handler
   goToPrev: () => {
-    const { testData, currentPointer } = get();
+    const { testData, currentPointer, questionStatusMap, questionResponseMap, startTimer, stopTimer } =
+      get();
     if (!testData) return;
 
     const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
@@ -173,6 +208,24 @@ const useTestStore = create<TestStore>((set, get) => ({
     const sectionSet = testData?.sectionSet;
     const section = sectionSet[si];
     if (!section) return;
+
+    const currQId = section?.questionNumbers[qi]?.questionId;
+    if (!currQId) return;
+
+    stopTimer();
+
+    // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
+    if (
+      questionStatusMap[currQId] === QuestionStatus.VISITED &&
+      !questionResponseMap[currQId]
+    ) {
+      set((state) => ({
+        questionStatusMap: {
+          ...state.questionStatusMap,
+          [currQId]: QuestionStatus.NOT_ATTEMPTED,
+        },
+      }));
+    }
 
     // Prev question in same section?
     if (qi > 0) {
@@ -187,6 +240,7 @@ const useTestStore = create<TestStore>((set, get) => ({
           prevQId
         ),
       }));
+      startTimer();
       return;
     }
 
@@ -207,6 +261,7 @@ const useTestStore = create<TestStore>((set, get) => ({
             prevQId
           ),
         }));
+        startTimer();
         return;
       }
     }
@@ -232,36 +287,67 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setCurrentQuestion: (question) => {
-    const { testData } = get();
+    const { testData, currentPointer, questionStatusMap, questionResponseMap, startTimer, stopTimer } =
+      get();
     if (!testData || !question) return;
 
-    const si = testData.sectionSet?.findIndex(
+    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+    if (si < 0 || qi < 0) return;
+
+    const currQId = testData?.sectionSet[si]?.questionNumbers[qi]?.questionId;
+    if (!currQId) return;
+
+    stopTimer();
+
+    if (
+      questionStatusMap[currQId] === QuestionStatus.VISITED &&
+      !questionResponseMap[currQId]
+    ) {
+      set((state) => ({
+        questionStatusMap: {
+          ...state.questionStatusMap,
+          [currQId]: QuestionStatus.NOT_ATTEMPTED,
+        },
+      }));
+    }
+
+    const nextSectionIndex = testData.sectionSet?.findIndex(
       (sec) => sec.sectionName === question.sectionName
     );
-    if (si < 0) return;
+    if (nextSectionIndex < 0) return;
 
-    const qi = testData.sectionSet[si]?.questionNumbers?.findIndex(
-      (q) => q.questionId === question.questionId
-    );
-    if (qi < 0) return;
+    const nextQuestionIndex = testData.sectionSet[
+      nextSectionIndex
+    ]?.questionNumbers?.findIndex((q) => q.questionId === question.questionId);
+    if (nextQuestionIndex < 0) return;
 
     set((state) => ({
       currentPointer: {
-        currentSectionPos: si,
-        currentQuestionPos: qi,
+        currentSectionPos: nextSectionIndex,
+        currentQuestionPos: nextQuestionIndex,
       },
       questionStatusMap: updateStatusOnVisit(
         state.questionStatusMap,
         question.questionId
       ),
     }));
+    startTimer();
   },
 
   // Responses
-  questionResponseMap: {},
-  getResponseByQuestionId: (questionId) =>
-    get().questionResponseMap[questionId],
-  setResponseByQuestionId: (questionId, response) =>
+  getCurrentResponse: () => {
+    const { getCurrentQuestion, questionResponseMap } = get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
+    return questionResponseMap[question.questionId] ?? null;
+  },
+
+  setCurrentResponse: (response) => {
+    const { getCurrentQuestion } = get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
     set((state) => {
       const newStatus = response
         ? QuestionStatus.ATTEMPTED
@@ -269,29 +355,34 @@ const useTestStore = create<TestStore>((set, get) => ({
       return {
         questionResponseMap: {
           ...state.questionResponseMap,
-          [questionId]: response,
+          [question.questionId]: response,
         },
         questionStatusMap: {
           ...state.questionStatusMap,
-          [questionId]: newStatus,
+          [question.questionId]: newStatus,
         },
       };
-    }),
-  clearResponseByQuestionId: (questionId) => {
+    });
+  },
+
+  clearCurrentResponse: () => {
+    const { getCurrentQuestion } = get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
     set((state) => ({
       questionResponseMap: {
         ...state.questionResponseMap,
-        [questionId]: null,
+        [question.questionId]: null,
       },
       questionStatusMap: {
         ...state.questionStatusMap,
-        [questionId]: QuestionStatus.NOT_ATTEMPTED,
+        [question.questionId]: QuestionStatus.NOT_ATTEMPTED,
       },
     }));
   },
 
   // Time tracking
-  questionTimeMap: {},
   getTimeByQuestionId: (questionId) => get().questionTimeMap[questionId] ?? 0,
 
   incrementTimeByQuestionId: (questionId) =>
@@ -311,7 +402,6 @@ const useTestStore = create<TestStore>((set, get) => ({
     })),
 
   // Question status
-  questionStatusMap: {},
   getStatusByQuestionId: (questionId) =>
     get().questionStatusMap[questionId] ?? QuestionStatus.NOT_VISITED,
   changeStatusByQuestionId: (questionId, status) =>
@@ -322,26 +412,66 @@ const useTestStore = create<TestStore>((set, get) => ({
       },
     })),
 
-  getQuestionsByStatus: (status: QuestionStatus) => {
+  getQuestionCountByStatus: (status: QuestionStatus) => {
     const { testData, questionStatusMap } = get();
-    if (!testData) return [];
-    return testData.questionSet.filter(
-      (q) => questionStatusMap[q.questionId] === status
+    if (!testData) return 0;
+    return (
+      testData.questionSet.filter(
+        (q) => questionStatusMap[q.questionId] === status
+      ).length ?? 0
     );
   },
 
   // Status Related
-  markForReview: (questionId) => {
+  markCurrentForReview: () => {
+    const { testData, currentPointer } = get();
+    if (!testData) return;
+
+    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+    if (si < 0 || qi < 0) return;
+
+    const currQId = testData.sectionSet[si]?.questionNumbers[qi]?.questionId;
+    if (!currQId) return;
+
     set((state) => ({
       questionStatusMap: {
         ...state.questionStatusMap,
-        [questionId]: QuestionStatus.MARKED_FOR_REVIEW,
+        [currQId]: QuestionStatus.MARKED_FOR_REVIEW,
       },
     }));
   },
 
+  startTimer: () => {
+    const { __timerId, getCurrentQuestion } = get();
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    if (__timerId) clearInterval(__timerId);
+
+    const interval = setInterval(() => {
+      set((state) => ({
+        questionTimeMap: {
+          ...state.questionTimeMap,
+          [question.questionId]:
+            (state.questionTimeMap[question.questionId] ?? 0) + 1,
+        },
+      }));
+    }, 1000);
+
+    set({ __timerId: interval });
+  },
+  stopTimer: () => {
+    const { __timerId } = get();
+    if (__timerId) {
+      clearTimeout(__timerId);
+      set({ __timerId: null });
+    }
+  },
+
   // Reset state
-  reset: () =>
+  reset: () => {
+    const { stopTimer } = get();
+    stopTimer();
     set({
       testData: null,
       sectionsUI: [],
@@ -352,7 +482,8 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap: {},
       questionResponseMap: {},
       questionTimeMap: {},
-    }),
+    });
+  },
 }));
 
 export default useTestStore;

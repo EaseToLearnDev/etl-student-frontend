@@ -54,8 +54,8 @@ export interface TestDataType {
 }
 
 export interface CurrentPointerType {
-  currentSectionPos: number;
-  currentQuestionPos: number;
+  currentSectionPos: number | -1;
+  currentQuestionPos: number | -1;
 }
 
 export enum QuestionStatus {

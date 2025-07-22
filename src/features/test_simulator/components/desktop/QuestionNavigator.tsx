@@ -1,8 +1,8 @@
 // Components
-import Button from "../../../components/Button";
-import StatusGroup from "./StatusGroup";
-import SectionWiseQuestionList from "./SectionWiseQuestionList";
-import cn from "../../../utils/classNames";
+import Button from "../../../../components/Button";
+import SectionWiseQuestionList from "../SectionWiseQuestionList";
+import cn from "../../../../utils/classNames";
+import StatusGroup from "../StatusGroup";
 
 const QuestionNavigator = ({ className }: any) => {
   return (

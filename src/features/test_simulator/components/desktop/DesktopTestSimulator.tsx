@@ -1,4 +1,4 @@
-import DesktopChildLayout from "../../../layouts/child-layout/components/DesktopChildLayout";
+import DesktopChildLayout from "../../../../layouts/child-layout/components/DesktopChildLayout";
 import ActiveQuestionPanel from "./ActiveQuestionPanel";
 import TestSidePanel from "./TestSidePanel";
 
