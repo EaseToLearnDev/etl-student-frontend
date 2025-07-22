@@ -22,16 +22,16 @@ type DrawerStore = DrawerTypes & {
 const useDrawerStore = create<DrawerStore>((set) => ({
   isOpen: false,
   view: null,
-  placement: "left",
+  placement: "right",
   containerClassName: "",
-  openDrawer: ({ view, placement, containerClassName }) =>
-    set((state) => ({
-      ...state,
+  openDrawer: ({ view, placement, containerClassName }) => {
+    return set({
       isOpen: true,
       view: view,
       placement: placement,
       containerClassName: containerClassName,
-    })),
+    });
+  },
   closeDrawer: () =>
     set((state) => ({
       ...state,

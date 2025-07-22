@@ -6,7 +6,7 @@ import type { DrawerPlacements } from "../../store/useDrawerStore";
 
 // Utils
 import cn from "../../utils/classNames";
-import { getDrawerSizeClass, getHiddenTransformClass, getPlacementClass } from "./drawer.utils";
+import { getDrawerSizeClass, getPlacementClass } from "./drawer.utils";
 
 // Interfaces
 interface DrawerProps {
@@ -29,22 +29,19 @@ const Drawer = ({
   overlayClassName,
   containerClassName,
 }: DrawerProps) => {
+  if (!isOpen) return null;
+
   return (
     <>
-      {isOpen && (
-        <div
-          onClick={onClose}
-          className={cn("fixed inset-0 z-[999] backdrop-blur-md bg-black/40 dark:bg-black/60", overlayClassName)}
-        />
-      )}
+      <div
+        onClick={onClose}
+        className={cn("fixed inset-0 z-[999] backdrop-blur-md bg-black/40 dark:bg-black/60", overlayClassName)}
+      />
       <div
         className={cn(
-          "fixed z-[9999] transition-transform duration-300 ease-in-out",
+          "fixed z-[9999]",
           getPlacementClass(placement),
           getDrawerSizeClass(placement),
-          isOpen
-            ? "translate-x-0 translate-y-0"
-            : getHiddenTransformClass(placement),
           containerClassName
         )}
       >

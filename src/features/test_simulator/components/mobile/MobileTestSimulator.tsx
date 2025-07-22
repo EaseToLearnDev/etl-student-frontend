@@ -91,7 +91,7 @@ const MobileTestSimulator = () => {
 
       {/* Bottom Navigation for tony AI Chat Window */}
       <BottomNavigationSheet
-        sheetContent={<AiChatPanel />}
+        sheetContent={<AiChatPanel onClose={handleSecondaryHide}/>}
         sheetHeight={sheetHeight}
         MAX_HEIGHT={MAX_HEIGHT}
         MIN_HEIGHT={MIN_HEIGHT}
@@ -107,14 +107,13 @@ const MobileTestSimulator = () => {
         onClick={() =>
           openDrawer({
             view: (
-              <div className="fixed w-full h-full flex flex-col py-5 gap-5 items-center bg-[var(--surface-bg-secondary)]">
+              <div className="w-full h-full flex flex-col p-4 gap-5 items-center bg-[var(--surface-bg-secondary)]">
                 <h3 className="text-center">Questions</h3>
                 <SectionWiseQuestionList />
                 <StatusGroup />
               </div>
             ),
             placement: "right",
-            containerClassName: "!w-[350px]",
           })
         }
       >
