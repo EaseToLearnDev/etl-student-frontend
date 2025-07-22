@@ -1,9 +1,24 @@
+// React
 import { useEffect } from "react";
-import { Drawer } from "rizzui";
 import { useLocation } from "react-router";
-import cn from "../utils/classNames";
+
+// Stores
 import useDrawerStore from "../store/useDrawerStore";
 
+// Utils
+import cn from "../utils/classNames";
+
+// Components
+import Drawer from "./Drawer/Drawer";
+
+
+/**
+ * GlobalDrawer is a wrapper component that manages the global drawer state and rendering.
+ *
+ * It listens to route changes using `useLocation` from react-router and automatically closes the drawer
+ * whenever the pathname changes. The drawer's state (open/close, view, placement, and container class)
+ * is managed via a custom store (`useDrawerStore`).
+ */
 export default function GlobalDrawer() {
   const { isOpen, view, placement, containerClassName, closeDrawer } =
     useDrawerStore();
@@ -19,12 +34,7 @@ export default function GlobalDrawer() {
       isOpen={isOpen}
       onClose={closeDrawer}
       placement={placement}
-      overlayClassName="bg-black/40 dark:bg-black/60 backdrop-blur-md"
-      containerClassName={cn(
-        "min-w-[320px] max-w-[420px] bg-[var(--app-bg)]",
-        containerClassName
-      )}
-      className="z-[9999]"
+      containerClassName={cn(containerClassName)}
     >
       {view}
     </Drawer>

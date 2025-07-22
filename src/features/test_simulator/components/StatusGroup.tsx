@@ -1,3 +1,13 @@
+// React
+import { useShallow } from "zustand/react/shallow";
+
+// Types
+import { QuestionStatus } from "../types";
+
+// Stores
+import useTestStore from "../store/useTestStore";
+
+// Utils
 import { colors, Theme } from "../../../utils/colors";
 
 interface Status {
@@ -7,37 +17,46 @@ interface Status {
   count: number;
 }
 
+/**
+ * Renders a group of status indicators for test questions, displaying the count of questions
+ * in each status category (Not Visited, Not Attempted, Attempted, Marked for Review).
+ *
+ * Uses Zustand store to retrieve the counts for each status and displays them with themed
+ * colors and labels.
+ */
 const StatusGroup = () => {
+  const counts = useTestStore(
+    useShallow((s) => ({
+      notVisited: s.getQuestionCountByStatus(QuestionStatus.NOT_VISITED),
+      notAttempted: s.getQuestionCountByStatus(QuestionStatus.NOT_ATTEMPTED),
+      attempted: s.getQuestionCountByStatus(QuestionStatus.ATTEMPTED),
+      markedForReview: s.getQuestionCountByStatus(QuestionStatus.MARKED_FOR_REVIEW),
+    }))
+  );
   const statusList: Status[] = [
     {
       id: "not-visited",
       text: "Not Visited",
       theme: Theme.Sakura,
-      count: 0,
+      count: counts.notVisited,
     },
     {
       id: "not-attempted",
       text: "Not Attempted",
       theme: Theme.Pumpkin,
-      count: 0,
+      count: counts.notAttempted,
     },
     {
       id: "attempted",
       text: "Attempted",
       theme: Theme.Ocean,
-      count: 0,
+      count: counts.attempted,
     },
     {
-      id: "review",
-      text: "Review",
+      id: "marked-for-review",
+      text: "Marked for Review",
       theme: Theme.Sunglow,
-      count: 0,
-    },
-    {
-      id: "answered-review",
-      text: "Answered & Review",
-      theme: Theme.Valencia,
-      count: 0,
+      count: counts.markedForReview,
     },
   ];
   return (
@@ -48,7 +67,10 @@ const StatusGroup = () => {
           <div key={status.id} className="flex gap-2 items-center">
             <div
               className="size-[24px] aspect-square flex justify-center items-center rounded-full"
-              style={{ background: statusTheme.bg.active, color: statusTheme.content.primary }}
+              style={{
+                background: statusTheme.bg.active,
+                color: statusTheme.content.primary,
+              }}
             >
               {status.count}
             </div>

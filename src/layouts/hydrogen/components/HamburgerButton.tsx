@@ -12,7 +12,7 @@ interface Props {
 export default function HamburgerButton({
   view,
   placement = 'left',
-  containerClassName = 'max-w-[320px]',
+  containerClassName,
   className,
 }: Props) {
   const openDrawer = useDrawerStore(state => state.openDrawer);
