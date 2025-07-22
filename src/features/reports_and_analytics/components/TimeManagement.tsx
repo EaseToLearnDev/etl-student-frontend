@@ -39,8 +39,8 @@ export function formatNumber(
 export function CustomTooltip({ active, payload, label }: any) {
   if (active && payload && payload.length) {
     return (
-      <div className="overflow-hidden rounded-md border border-gray-300 bg-gray-0 shadow-2xl dark:bg-gray-100 dark:border-gray-200">
-        <p className="label p-2 text-sm font-semibold text-gray-900 dark:text-gray-900">{`${label}`}</p>
+      <div className="overflow-hidden rounded-md border border-[--border-secondary] shadow-2xl ">
+        <p className="label p-2 text-[--text-primary]">{`${label}`}</p>
         <div className="p-2 text-xs">
           {payload.map((p: any) => (
             <div
@@ -52,11 +52,11 @@ export function CustomTooltip({ active, payload, label }: any) {
                   className="h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: p.fill }}
                 />
-                <span className="text-gray-700 dark:text-gray-700">
+                <span className="text-[--text-tertiary]">
                   {p.name}:
                 </span>
               </div>
-              <span className="font-medium text-gray-900 dark:text-gray-900">
+              <span className="text-[--text-primary]">
                 {p.value}
               </span>
             </div>
@@ -81,7 +81,7 @@ function CustomizedLabel(props: any) {
         width={width - 6}
         height={20}
         rx={radius}
-        fill="var(--text-primary)"
+        fill="#ffffff"
       />
       <text
         x={x + width / 2}
@@ -113,49 +113,52 @@ export default function TimeManagement({ className }: { className?: string }) {
       className={`custom-scrollbar -mb-3 overflow-x-auto pb-3 ${className || ''
         }`}
     >
-      <h6 className=''> Time Taken in Question Attempts</h6>
-      <div className="h-[18rem] w-full pt-1 flex">
-        <ResponsiveContainer width="100%" height="100%" minWidth={800}>
-          <ComposedChart
-            barGap={8}
-            data={data}
-            margin={{
-              left: -5,
-              top: 20,
-            }}
-            className="[&_.recharts-tooltip-cursor]:fill-opacity-20 dark:[&_.recharts-tooltip-cursor]:fill-opacity-10 [&_.recharts-cartesian-axis-tick-value]:fill-gray-500 rtl:[&_.recharts-cartesian-axis.yAxis]:-translate-x-12 [&_.recharts-xAxis.xAxis]:translate-y-2.5 [&_path.recharts-rectangle]:!stroke-none"
-          >
-            <XAxis dataKey="questions" axisLine={false} tickLine={false} />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tickFormatter={(time) => `${time} min`}
-            />
-            <Bar
-              dataKey="time"
-              fill={COLORS}
-              stroke={COLORS}
-              barSize={40}
-              radius={10}
+      <h4 className="font-semibold text-[var(--text-primary)] mb-5">Time Management</h4>
+      <div>
+        <h6 className=''> Time Taken in Question Attempts</h6>
+        <div className="h-[18rem] w-full pt-1 flex">
+          <ResponsiveContainer width="100%" height="100%" minWidth={800}>
+            <ComposedChart
+              barGap={8}
+              data={data}
+              margin={{
+                left: -5,
+                top: 20,
+              }}
+              className="[&_.recharts-tooltip-cursor]:fill-opacity-20 dark:[&_.recharts-tooltip-cursor]:fill-opacity-10 [&_.recharts-cartesian-axis-tick-value]:fill-gray-500 rtl:[&_.recharts-cartesian-axis.yAxis]:-translate-x-12 [&_.recharts-xAxis.xAxis]:translate-y-2.5 [&_path.recharts-rectangle]:!stroke-none"
             >
-              <LabelList
-                dataKey="time"
-                content={<CustomizedLabel />}
+              <XAxis dataKey="questions" axisLine={false} tickLine={false} />
+              <YAxis
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(time) => `${time} min`}
               />
-            </Bar>
-          </ComposedChart>
-        </ResponsiveContainer>
-        <div className="flex flex-col justify-around">
-          {timeStats?.map((stat) => (
-            <div key={stat.label}>
-              <div className="text-md text-[var(--text-)]">
-                {stat.label}
+              <Bar
+                dataKey="time"
+                fill={COLORS}
+                stroke={COLORS}
+                barSize={40}
+                radius={10}
+              >
+                <LabelList
+                  dataKey="time"
+                  content={<CustomizedLabel />}
+                />
+              </Bar>
+            </ComposedChart>
+          </ResponsiveContainer>
+          <div className="flex flex-col justify-around">
+            {timeStats?.map((stat) => (
+              <div key={stat.label}>
+                <div className="text-md text-[var(--text-)]">
+                  {stat.label}
+                </div>
+                <div className="text-2xl text-[var(--text-primary)]">
+                  {stat.value}
+                </div>
               </div>
-              <div className="text-2xl text-[var(--text-primary)]">
-                {stat.value}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

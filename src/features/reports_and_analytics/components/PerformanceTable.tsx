@@ -40,7 +40,7 @@ const performanceData: PerformanceData[] = [
 
 const PerformanceTable = () => {
   return (
-    <div className="font-sans bg-[var( --sb-sunglow-content-primary)] rounded-2xl border-[var( --border-primary)] border-1 p-6 my-10">
+    <div className="font-sans border-1 rounded-2xl border-[var(--border-primary)] p-6 my-10">
       <h4 className="font-semibold text-[var(--text-primary)] mb-5">In Detail Performance</h4>
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
@@ -60,7 +60,7 @@ const PerformanceTable = () => {
           {/* Table Body */}
           <tbody>
             {performanceData.map((item, index) => (
-              <tr key={index} className="border-b border-[var(--border-primary)]last:border-b-0 hover:bg-[var(--surface-bg-secondary)] ">
+              <tr key={index} className="border-b-1 border-[var(--border-primary)] last:border-b-0 hover:bg-[var(--surface-bg-secondary)] ">
                 <td className="p-4 text-sm text-[var(--text-primary)] font-semibold">{item.subject}</td>
                 <td className="p-4 text-sm text-[var(--text-primary)">{item.totalQuestions}</td>
                 <td className="p-4 text-sm text-[var(--text-primary)">{item.correct}</td>
