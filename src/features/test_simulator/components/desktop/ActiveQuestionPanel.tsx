@@ -1,8 +1,17 @@
-import Button from "../../../../components/Button";
+// Store
 import useDarkModeStore from "../../../../store/useDarkModeStore";
-import cn from "../../../../utils/classNames";
 import useTestStore from "../../store/useTestStore";
 
+// Components
+import Button from "../../../../components/Button";
+import Radio from "../../../../components/Radio";
+
+/**
+ * ActiveQuestionPanel component for desktop view.
+ *
+ * Renders the currently active question, its options, and navigation controls.
+ * Allows users to select an answer, mark for review, clear response, and navigate between questions.
+ */
 const ActiveQuestionPanel = () => {
   const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
   const goToPrev = useTestStore((state) => state.goToPrev);
@@ -21,37 +30,32 @@ const ActiveQuestionPanel = () => {
 
   return (
     <div className="h-full flex flex-col justify-between">
+      {/* Active Question Panel */}
       <div className="flex flex-col gap-10">
+        {/* Question Title & Body  */}
         <div className="h-full flex flex-col gap-4">
           <h5 className="text-[24px]">{currentQuestion?.sectionName}</h5>
           <h5>{currentQuestion?.questionBody}</h5>
         </div>
+        {/* Response Choices */}
         <div className="flex flex-col gap-5">
-          {currentQuestion?.responseChoice.map((option) => (
-            <div key={option.responseId} className="flex items-center gap-4">
-              <label className="flex items-center gap-4 cursor-pointer w-full">
-                <input
-                  name="option"
-                  type="radio"
-                  value={option.responseText}
-                  checked={currentResponse?.responseId === option.responseId}
-                  onChange={(e) => {
-                    const response = currentQuestion?.responseChoice?.find(
-                      (r) => r.responseText === e.target.value
-                    );
-                    setCurrentResponse(response ?? null);
-                  }}
-                  className={cn(
-                    "appearance-none w-[14px] h-[14px] border-1 border-[var(--border-primary)] rounded-full outline-none transition-all duration-200 ease-in-out",
-                    "checked:bg-[var(--sb-ocean-bg-active)] checked:border-none checked:w-[16px] checked:h-[16px]"
-                  )}
-                />
-                <h6 className="select-none">{option.responseText}</h6>
-              </label>
+          {currentQuestion?.responseChoice.map((response) => (
+            <div key={response.responseId} className="flex items-center gap-4">
+              <Radio
+                text={response.responseText}
+                checked={currentResponse?.responseId === response.responseId}
+                onChange={(e) => {
+                  const response = currentQuestion?.responseChoice?.find(
+                    (r) => r.responseText === e.target.value
+                  );
+                  setCurrentResponse(response ?? null);
+                }}
+              />
             </div>
           ))}
         </div>
       </div>
+      {/* Navigation Buttons */}
       <div className="flex flex-wrap gap-y-4 justify-center lg:justify-between items-center">
         <div className="flex items-center gap-3">
           <Button style="secondary" onClick={goToPrev}>

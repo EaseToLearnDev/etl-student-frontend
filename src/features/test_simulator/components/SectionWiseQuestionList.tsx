@@ -1,11 +1,21 @@
-import cn from "../../../utils/classNames";
+
+// Store
 import useTestStore from "../store/useTestStore";
+
+// Utils
+import cn from "../../../utils/classNames";
+
+// Components
 import Question from "./Question";
 
 interface SectionWiseQuestionListProps {
   className?: string;
 }
 
+/**
+ * Renders a list of questions grouped by section.
+ * Accepts an optional className for custom styling.
+ */
 const SectionWiseQuestionList = ({className}: SectionWiseQuestionListProps) => {
   const sections = useTestStore((state) => state.sectionsUI);
 

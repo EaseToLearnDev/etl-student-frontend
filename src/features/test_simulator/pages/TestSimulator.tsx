@@ -604,13 +604,9 @@ const TestSimulator = () => {
 
   return !isMobile ? (
     <DesktopTestSimulator
-      title={dummyData?.obj?.[0]?.testName}
-      timer={"03:00:00"}
     />
   ) : (
     <MobileTestSimulator
-      title={dummyData?.obj?.[0]?.testName}
-      timer={"03:00:00"}
     />
   );
 };

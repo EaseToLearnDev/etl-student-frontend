@@ -12,6 +12,10 @@ import AiIcon from "../../../../components/icons/ai-icon";
 import QuestionNavigator from "./QuestionNavigator";
 import AiChatPanel from "../AiChatPanel";
 
+/**
+ * TestSidePanel component renders a side panel for the test simulator interface.
+ * 
+ */
 const TestSidePanel = () => {
   const [isAiChatOpen, setIsAiChatOpen] = useState(false);
   return (

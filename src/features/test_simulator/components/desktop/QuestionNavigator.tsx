@@ -1,9 +1,15 @@
+// Utils
+import cn from "../../../../utils/classNames";
+
 // Components
 import Button from "../../../../components/Button";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
-import cn from "../../../../utils/classNames";
 import StatusGroup from "../StatusGroup";
 
+/**
+ * Desktop-only question navigator sidebar component.
+ * Displays section-wise question list with submit/end session controls and status indicators.
+ */
 const QuestionNavigator = ({ className }: any) => {
   return (
     <div

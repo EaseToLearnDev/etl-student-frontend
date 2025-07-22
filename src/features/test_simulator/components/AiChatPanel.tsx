@@ -1,14 +1,24 @@
+
+// Icons
 import { MdAddAPhoto } from "react-icons/md";
 import { HiMiniMicrophone } from "react-icons/hi2";
+
+// Utils
+import { Theme } from "../../../utils/colors";
+
+// Components
 import AiIcon from "../../../components/icons/ai-icon";
 import Badge from "../../../components/Badge";
-import { Theme } from "../../../utils/colors";
 
 interface BadgeListItem {
   text: string;
   theme: Theme;
 }
 
+/**
+ * Renders the AI chat panel with quick action badges and chat input.
+ * Includes Tony AI avatar, greeting, and controls for photo and microphone input.
+ */
 const AiChatPanel = () => {
   const badgesList: BadgeListItem[] = [
     { text: "Ask Explanation", theme: Theme.Ocean },
@@ -24,6 +34,7 @@ const AiChatPanel = () => {
         className="flex flex-col overflow-y-auto"
         style={{ maxHeight: "calc(100% - 140px)" }}
       >
+        {/* Tony Image and Greeting */}
         <div className="flex flex-col justify-center items-center gap-2 p-5">
           <img
             src="/tony-logo.svg"
@@ -34,6 +45,7 @@ const AiChatPanel = () => {
           />
           <h3 className="text-center">How can I help you today?</h3>
         </div>
+        {/* Clickable Badges To Ask Quick Questions */}
         <div className="w-full flex flex-wrap justify-center gap-4">
           {badgesList.map((badgeItem: BadgeListItem, idx: number) => (
             <Badge key={idx} theme={badgeItem.theme}>
@@ -47,6 +59,8 @@ const AiChatPanel = () => {
           ))}
         </div>
       </div>
+
+      {/* Chat Box */}
       <div className="h-[140px] bottom-0 fixed left-0 right-0 rounded-t-xl resize-none p-5 bg-[var(--surface-bg-secondary)]">
         <input
           type="text"

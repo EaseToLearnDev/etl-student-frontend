@@ -1,12 +1,22 @@
-import cn from "../../../utils/classNames";
-import useTestStore from "../store/useTestStore";
+// Types
 import { type QuestionType } from "../types";
+
+// Store
+import useTestStore from "../store/useTestStore";
+
+// Utils
+import cn from "../../../utils/classNames";
+
 
 interface QuestionProps {
   question: QuestionType;
   questionNumber: number;
 }
 
+/**
+ * Renders a button for a single question in the test simulator.
+ * Handles setting the current question when clicked.
+ */
 const Question = ({ question, questionNumber }: QuestionProps) => {
   const setCurrentQuestion = useTestStore((state) => state.setCurrentQuestion);
   return (
