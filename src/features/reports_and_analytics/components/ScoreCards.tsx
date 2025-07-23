@@ -5,6 +5,7 @@ interface ScoreCardsProps {
   title?: string;
   value?: number | string;
   description?: string;
+  bg?: boolean
 }
 
 /**
@@ -19,6 +20,7 @@ const ScoreCards = ({
   title,
   value,
   description,
+  bg = true,
 }: ScoreCardsProps) => {
 
   const currentTheme = colors[theme];
@@ -29,7 +31,7 @@ const ScoreCards = ({
       <div
         className="flex flex-col items-start gap-5 rounded border-l-[8px] p-5 w-[24%] min-w-[250px] overflow-x-hidden transition-colors"
         style={{
-          backgroundColor: currentTheme.bg.disabled,
+          backgroundColor: bg ? currentTheme.bg.disabled : "  ",
           borderColor: currentTheme.bg.active,
         }}
       >

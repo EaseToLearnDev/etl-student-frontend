@@ -1,7 +1,7 @@
 // src/store/useDrawerStore.ts
-import { create } from 'zustand';
+import { create } from "zustand";
 
-export type DrawerPlacements = 'left' | 'right' | 'top' | 'bottom';
+export type DrawerPlacements = "left" | "right" | "top" | "bottom";
 
 type DrawerTypes = {
   view: React.ReactNode;
@@ -22,16 +22,16 @@ type DrawerStore = DrawerTypes & {
 const useDrawerStore = create<DrawerStore>((set) => ({
   isOpen: false,
   view: null,
-  placement: 'right',
-  containerClassName: '',
-  openDrawer: ({ view, placement, containerClassName }) =>
-    set((state) => ({
-      ...state,
+  placement: "right",
+  containerClassName: "",
+  openDrawer: ({ view, placement, containerClassName }) => {
+    return set({
       isOpen: true,
-      view,
-      placement,
-      containerClassName,
-    })),
+      view: view,
+      placement: placement,
+      containerClassName: containerClassName,
+    });
+  },
   closeDrawer: () =>
     set((state) => ({
       ...state,

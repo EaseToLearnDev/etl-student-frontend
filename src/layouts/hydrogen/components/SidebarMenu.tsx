@@ -19,8 +19,6 @@ export function SidebarMenu() {
     <div className="flex flex-col h-full mt-4 pb-4 3xl:mt-6">
       <div className="flex-1">
         {menuItems.map((item, index) => {
-          console.log("location:",location?.pathname);
-          console.log("item-href:",item?.href);
           const isActive = location.pathname.includes(item?.href as string);
 
           return (

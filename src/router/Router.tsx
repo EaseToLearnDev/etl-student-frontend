@@ -16,6 +16,7 @@ import SMTopicListPage from "../features/study_room/study_material/pages/SMTopic
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
 import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
+import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
 
 const Router = () => {
@@ -73,7 +74,7 @@ const Router = () => {
         <Route path="exam-room/mock-test" element={<>Exam Test</>} />
         <Route path="exam-room/class-test" element={<>Class Test</>} />
 
-        <Route path="report" element={<>Reports & Analytics</>} />
+        <Route path="report" element={<MockTestAnalytics/>} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulator />} />
