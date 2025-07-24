@@ -4,6 +4,19 @@ import type { TopicTestType } from "../../../shared/types";
 
 const meta: Meta<typeof TopicTest> = {
   component: TopicTest,
+  title: "Exam Room/Topic Test",
+  argTypes: { 
+    test: {
+      control: { type: "object" },
+      description:
+        "The topic test object containing details like name, URL, time, questions, marks, difficulty, and progress.",
+    },
+    infoClickHandler: {
+      action: "infoClicked",
+      description:
+        "Function to handle clicks on the info icon in mobile view. Alerts the user when clicked.",
+    },
+  },
 };
 
 export default meta;

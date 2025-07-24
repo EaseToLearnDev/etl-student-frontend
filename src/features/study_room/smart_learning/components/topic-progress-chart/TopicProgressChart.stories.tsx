@@ -3,10 +3,11 @@ import TopicProgressChart from "./TopicProgressChart";
 
 const meta: Meta<typeof TopicProgressChart> = {
   component: TopicProgressChart,
+  title: "Study Room/Smart Learning/Topic Progress Chart",
   argTypes: {
     progress: {
       control: { type: "range", min: 0, max: 100, step: 1 },
-      description: "Progress Percentage (0-100)",
+      description: "Progress Percentage (0-100). Determines the filled section of the chart.",
     },
   },
 };

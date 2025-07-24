@@ -1,12 +1,34 @@
 import { type Meta, type StoryObj } from "@storybook/react-vite";
-import SubjectReport from "../components/SubjectReport";
+import SubjectReport from "./SubjectReport";
 import type { ComponentProps } from "react";
 
 type SubjectReportProps = ComponentProps<typeof SubjectReport>;
 
 const meta: Meta<SubjectReportProps> = {
   component: SubjectReport,
-//   tags: ["autodocs"],
+  title: "Reports and Analytics/Subject Report",
+  argTypes: {
+    subject: {
+      control: { type: "text" },
+      description: "The name of the subject (e.g., 'Mathematics').",
+    },
+    description: {
+      control: { type: "text" },
+      description: "A brief description of the subject report.",
+    },
+    progress: {
+      control: { type: "range", min: 0, max: 100, step: 1 },
+      description: "The progress percentage in the subject.",
+    },
+    strengths: {
+      control: { type: "object" },
+      description: "List of strengths in the subject.",
+    },
+    areas_of_improvement: {
+      control: { type: "object" },
+      description: "List of areas needing improvement in the subject.",
+    },
+  },
 };
 
 export default meta;

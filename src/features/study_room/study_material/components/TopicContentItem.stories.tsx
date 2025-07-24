@@ -3,6 +3,13 @@ import TopicContentItem from "./TopicContentItem";
 
 const meta: Meta <typeof TopicContentItem> = {
     component: TopicContentItem,
+    title: "Study Room/Study Material/Topic Content Item",
+    argTypes: {
+        content: {
+            control: { type: "object" },
+            description: "The content object containing details like title, description, type, and rating.",
+        }
+    },
 }
 
 export default meta;

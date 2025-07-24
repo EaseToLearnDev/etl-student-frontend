@@ -6,7 +6,8 @@ const meta: Meta<typeof Button> = {
     argTypes: {
         style: {
             control: {type: "select"},
-            options: ["primary", "secondary", "neutral"]
+            options: ["primary", "secondary", "neutral"],
+            description: "The style of the button, which affects its appearance.",
         },
         onClick: {
             action: {type: "clicked"}

@@ -9,8 +9,12 @@ const meta: Meta<typeof Badge> = {
     theme: {
       control: { type: "select" },
       options: Object.values(Theme),
+      description: "The theme of the badge, which affects its appearance.",
     },
-    onClickHandler: { action: "clicked" },
+    onClickHandler: {
+      action: "clicked",
+      description: "Function to handle click events on the badge.",
+    },
   },
 };
 
