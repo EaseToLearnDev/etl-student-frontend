@@ -10,14 +10,13 @@ import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 // Features
 import NotFound from "../shared/NotFound";
 import Settings from "../features/settings";
-import SubjectListPage from "../features/shared/pages/SubjectListPage";
 import ChildLayout from "../layouts/child-layout/ChildLayout";
 import SMTopicListPage from "../features/study_room/study_material/pages/SMTopicListPage";
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
-import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
-import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
+import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
+import MockTestListPage from "../features/exam_room/mock_test/pages/MockTestListPage";
 
 const Router = () => {
   return (
@@ -47,22 +46,14 @@ const Router = () => {
           path="study-room"
           element={<Navigate to="/study-room/study-material" replace />}
         />
-        <Route path="study-room/study-material" element={<SubjectListPage />} />
-        <Route
-          path="study-room/study-material/:subject"
-          element={<SMTopicListPage />}
-        />
-        <Route path="study-room/smart-learning" element={<SubjectListPage />} />
-        <Route
-          path="study-room/smart-learning/:subject"
-          element={<SLTopicListPage />}
-        />
+        <Route path="study-room/study-material" element={<SMTopicListPage />} />
+        <Route path="study-room/smart-learning" element={<SLTopicListPage />} />
 
         <Route
           path="exam-room"
           element={<Navigate to="/exam-room/topic-test" replace />}
         />
-        <Route path="exam-room/topic-test" element={<SubjectListPage />} />
+        <Route path="exam-room/topic-test" element={<TopicListPage />} />
         <Route
           path="exam-room/topic-test/:subject"
           element={<TopicListPage />}
@@ -71,10 +62,10 @@ const Router = () => {
           path="exam-room/topic-test/:subject/:topic"
           element={<TopicTestListPage />}
         />
-        <Route path="exam-room/mock-test" element={<>Exam Test</>} />
+        <Route path="exam-room/mock-test" element={<MockTestListPage />} />
         <Route path="exam-room/class-test" element={<>Class Test</>} />
 
-        <Route path="report" element={<MockTestAnalytics/>} />
+        <Route path="report" element={<>Reports & Analytics</>} />
         <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulator />} />

@@ -6,22 +6,17 @@ import { capitalizeWords } from "../../../../utils";
 
 
 type TopicTestInstructionsProps = {
-  topicName: string;
+  title?: string;
 };
 
 /**
  * Renders the instructions for a topic test, including the topic name,
  * a general instruction about the timer, and a list of competitive rules.
- *
- * @param {TopicTestInstructionsProps} props - The props for the component.
- * @param {string} props.topicName - The name of the topic for which the test instructions are displayed.
- *
- * @returns {JSX.Element} The rendered TopicTestInstructions component.
  */
-const TopicTestInstructions = ({ topicName }: TopicTestInstructionsProps) => {
+const TopicTestInstructions = ({ title }: TopicTestInstructionsProps) => {
   return (
     <div>
-      <h5>{capitalizeWords(topicName)}</h5>
+      {title && <h5>{capitalizeWords(title)}</h5>}
       <div className="mt-[30px] flex flex-col gap-3">
         <p className="font-semibold">Topic Test Instruction</p>
         <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">

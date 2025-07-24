@@ -16,18 +16,12 @@ import useIsMobile from "../../../hooks/useIsMobile";
 
 type TopicProps = {
   topic: TopicType | null;
-  isRoot?: boolean;
 };
 
 /**
  * Renders a single topic node with expand/collapse functionality and selection state.
- *
- * @param topic - The topic data to render. If `null`, renders nothing.
- * @param isRoot - Optional flag to indicate if this is a root topic (affects styling).
- *
- * @returns A React element representing the topic and its children, or `null` if no topic is provided.
  */
-const Topic = ({ topic, isRoot = false }: TopicProps) => {
+const Topic = ({ topic }: TopicProps) => {
   // Hooks
   const setTopic = useTopicStore((state) => state.setTopic);
   const _topic = useTopicStore((state) => state.topic);
@@ -49,14 +43,32 @@ const Topic = ({ topic, isRoot = false }: TopicProps) => {
       <div
         onClick={handleSelect}
         className={cn(
-          "flex justify-between items-center p-2",
-          !isRoot ? "border-l-[1px] border-[var(--border-secondary)]" : "",
+          "flex items-center gap-3 p-2",
           isActive
-            ? "bg-[var(--surface-bg-secondary)] rounded-sm"
+            ? "bg-[var(--surface-bg-secondary)] rounded-md"
             : "bg-[var(--surface-bg-primary)]"
         )}
       >
-        <div className="flex items-center gap-2">
+        <div
+          onClick={handleExpand}
+          className={cn(
+            "w-[24px] h-[24px] flex justify-center items-center rounded-md  cursor-pointer",
+            topic?.children?.length ? "visible" : "invisible",
+            isActive
+              ? "border-1 border-[var(--sb-ocean-bg-active)]"
+              : "border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)]"
+          )}
+        >
+          <PiCaretUpBold
+            size={18}
+            className={cn(
+              "h-3.5 w-3.5 rotate-90 text-[var(--text-tertiary)] transition-transform duration-200 rtl:-rotate-90",
+              expanded && "rotate-180 rtl:-rotate-180",
+              isActive && "font-semibold text-[var(--sb-ocean-bg-active)]"
+            )}
+          />
+        </div>
+        {topic?.children.length === 0 && (
           <div
             className={cn(
               "w-[8px] h-[8px] rounded-full",
@@ -65,42 +77,32 @@ const Topic = ({ topic, isRoot = false }: TopicProps) => {
                 : "bg-[var(--text-tertiary)]"
             )}
           />
-          <h6
-            className={cn(
-              "text-ellipsis line-clamp-2",
-              isActive ? "font-semibold" : ""
-            )}
-          >
-            {topic?.topicName}
-          </h6>
-        </div>
-        <div
-          onClick={handleExpand}
+        )}
+        <h6
           className={cn(
-            "w-[24px] h-[24px] flex justify-center items-center border-1 border-[var(--border-secondary)] cursor-pointer hover:bg-[var(--surface-bg-secondary)] rounded-md",
-            topic?.children?.length ? "visible" : "invisible"
+            "text-ellipsis line-clamp-2 select-none",
+            isActive ? "font-semibold" : ""
           )}
         >
-          <PiCaretUpBold
-            size={18}
-            className={cn(
-              "h-3.5 w-3.5 -rotate-180 text-[var(--text-tertiary)] transition-transform duration-200 rtl:rotate-90",
-              expanded && "rotate-0 rtl:rotate-0"
-            )}
-          />
-        </div>
+          {topic?.topicName}
+        </h6>
       </div>
-      {expanded && topic?.children?.length ? (
-        topic?.children?.map((topic: any, index: number) => (
-          <Topic key={index} topic={topic} />
-        ))
-      ) : (
-        <></>
-      )}
+
+      {/* children Topic container */}
+      <div
+        className={cn(
+          "overflow-hidden transition-all duration-300 ease-in-out",
+          expanded ? "max-h-[1000px]" : "max-h-0"
+        )}
+      >
+        {topic?.children?.length
+          ? topic?.children?.map((childTopic: any, index: number) => (
+              <Topic key={index} topic={childTopic} />
+            ))
+          : null}
+      </div>
     </div>
-  ) : (
-    <></>
-  );
+  ) : null;
 };
 
 export default Topic;

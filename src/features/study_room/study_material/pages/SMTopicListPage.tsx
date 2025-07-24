@@ -1,18 +1,11 @@
 // Reset
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
-
-// Icons
-import { MdArrowBack } from "react-icons/md";
 
 // Types
 import type { TopicType } from "../../../shared/types";
 
 // Store
 import useTopicStore from "../../../shared/store/useTopicStore";
-
-// Utils
-import cn from "../../../../utils/classNames";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -196,23 +189,13 @@ export const dummyData: TopicType[] = [
 
 /**
  * SMTopicListPage component displays a hierarchical list of study topics for selection.
- *
- * - Utilizes a dummy data structure (`dummyData`) representing topics and subtopics.
- * - Integrates with a global topic store (`useTopicStore`) to manage the selected topic state.
- * - Resets the topic state on component unmount.
- * - Provides navigation to the previous page using React Router's `useNavigate`.
  * - Renders a back button, a heading, and a two-panel layout:
  *   - Primary panel: TopicList for browsing/selecting topics.
  *   - Secondary panel: TopicContentPanel for displaying topic details, shown only if a topic is selected.
- * - Uses utility functions and shared components for consistent styling and layout.
- *
- * @component
- * @returns {JSX.Element} The rendered topic selection page.
  */
 const SMTopicListPage = () => {
   const topic = useTopicStore((state) => state.topic);
   const reset = useTopicStore((state) => state.reset);
-  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -223,15 +206,6 @@ const SMTopicListPage = () => {
   return (
     <div className="h-full flex flex-col flex-grow">
       <div className="flex items-center gap-4">
-        <div
-          onClick={() => navigate(-1)}
-          className={cn(
-            "w-[34px] h-[34px] aspect-square flex justify-center items-center cursor-pointer",
-            "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
-          )}
-        >
-          <MdArrowBack size={20} className="text-[var(--text-primary)]" />
-        </div>
         <h3 className="!font-bold items-end">Select Your Topic</h3>
       </div>
       <div className="mt-5 h-full overflow-y-auto">
@@ -240,6 +214,7 @@ const SMTopicListPage = () => {
           secondaryContent={<TopicContentPanel />}
           hideSecondary={topic === null}
           onSecondaryHide={reset}
+          secondaryInitialHeight={1}
         />
       </div>
     </div>

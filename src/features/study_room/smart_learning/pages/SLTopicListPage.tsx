@@ -1,6 +1,5 @@
 // Reset
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
 
 // Types
 import type { TopicType } from "../../../shared/types";
@@ -8,14 +7,10 @@ import type { TopicType } from "../../../shared/types";
 // Store
 import useTopicStore from "../../../shared/store/useTopicStore";
 
-// Utils
-import cn from "../../../../utils/classNames";
-
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicModeSelector from "../components/TopicModeSelector";
 import TopicList from "../../../shared/components/TopicList";
-import { MdArrowBack } from "react-icons/md";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -201,14 +196,10 @@ export const dummyData: TopicType[] = [
  * - Shows a list of topics using sample `dummyData`.
  * - Integrates `ChildLayout` to display the topic list and a mode selector.
  * - Hides the secondary content (mode selector) if no topic is selected.
- *
- * @component
- * @returns {JSX.Element} The rendered topic selection page.
  */
 const SLTopicListPage = () => {
   const topic = useTopicStore((state) => state.topic);
   const reset = useTopicStore((state) => state.reset);
-  const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
@@ -220,15 +211,6 @@ const SLTopicListPage = () => {
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <div
-          onClick={() => navigate(-1)}
-          className={cn(
-            "w-[34px] h-[34px] aspect-square flex justify-center items-center cursor-pointer",
-            "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
-          )}
-        >
-          <MdArrowBack size={20} className="text-[var(--text-primary)]" />
-        </div>
         <h3 className="!font-bold items-end">Select Your Topic</h3>
       </div>
       <div className="mt-5 h-full overflow-y-auto">

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
 // Types
-import type { TopicTestType } from "../../../shared/types";
+import type { TopicTestResponseType } from "../../../shared/types";
 
 // Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
@@ -17,118 +17,159 @@ import { MdArrowBack } from "react-icons/md";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
-import TopicTestList from "../components/TopicTestList";
+import TestCardList from "../../../shared/components/TestCardList";
 import TopicTestInstructions from "../components/TopicTestInstructions";
 
 // Sample Data
-const dummyData: TopicTestType[] = [
-  {
-    testName: "Chemistry Topic Test 1",
-    testUrl: "chemistry-topic-test-1",
-    testTime: 180,
-    questions: 50,
-    marks: 87,
-    totalMarks: 100,
-    difficulty: "hard",
-    progress: "not_started",
-  },
-  {
-    testName: "Physics Topic Test 1",
-    testUrl: "physics-topic-test-1",
-    testTime: 120,
-    questions: 40,
-    totalMarks: 100,
-    difficulty: "medium",
-    progress: "in_progress",
-  },
-  {
-    testName: "Mathematics Topic Test 1",
-    testUrl: "mathematics-topic-test-1",
-    testTime: 150,
-    questions: 45,
-    marks: 100,
-    totalMarks: 100,
-    difficulty: "easy",
-    progress: "not_started",
-  },
-  {
-    testName: "Biology Topic Test 1",
-    testUrl: "biology-topic-test-1",
-    testTime: 100,
-    questions: 30,
-    totalMarks: 100,
-    difficulty: "medium",
-    progress: "not_started",
-  },
-  {
-    testName: "English Topic Test 1",
-    testUrl: "english-topic-test-1",
-    testTime: 90,
-    questions: 25,
-    totalMarks: 50,
-    difficulty: "easy",
-    progress: "not_started",
-  },
-  {
-    testName: "Chemistry Topic Test 2",
-    testUrl: "chemistry-topic-test-2",
-    testTime: 160,
-    questions: 35,
-    totalMarks: 100,
-    difficulty: "medium",
-    progress: "in_progress",
-  },
-  {
-    testName: "Physics Topic Test 2",
-    testUrl: "physics-topic-test-2",
-    testTime: 140,
-    questions: 38,
-    totalMarks: 100,
-    difficulty: "hard",
-    progress: "not_started",
-  },
-  {
-    testName: "Mathematics Topic Test 2",
-    testUrl: "mathematics-topic-test-2",
-    testTime: 130,
-    questions: 32,
-    totalMarks: 100,
-    difficulty: "easy",
-    progress: "not_started",
-  },
-  {
-    testName: "Biology Topic Test 2",
-    testUrl: "biology-topic-test-2",
-    testTime: 110,
-    questions: 28,
-    totalMarks: 100,
-    difficulty: "medium",
-    progress: "in_progress",
-  },
-  {
-    testName: "English Topic Test 2",
-    testUrl: "english-topic-test-2",
-    testTime: 95,
-    questions: 22,
-    totalMarks: 44,
-    marks: 44,
-    difficulty: "hard",
-    progress: "not_started",
-  },
-];
+const dummyData: TopicTestResponseType = {
+  responseTxt: "success",
+  message: "Total Found: 10",
+  obj: [
+    {
+      mockTestTitle: "NEET UG CHARACTERISTIC OF LIVING ORGANISMS Test 1",
+      mockTestId: 1,
+      topicId: 3428,
+      patternDetails: {
+        totalQuestion: 10,
+        totalTime: 10,
+        totalMark: 40,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG CELL STRUCTURE Test 1",
+      mockTestId: 2,
+      topicId: 123,
+      patternDetails: {
+        totalQuestion: 15,
+        totalTime: 15,
+        totalMark: 60,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG DNA REPLICATION Test 1",
+      mockTestId: 3,
+      topicId: 2729,
+      patternDetails: {
+        totalQuestion: 12,
+        totalTime: 12,
+        totalMark: 48,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG BIOMOLECULES Test 1",
+      mockTestId: 4,
+      topicId: 124,
+      patternDetails: {
+        totalQuestion: 20,
+        totalTime: 20,
+        totalMark: 80,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG ANIMAL KINGDOM Test 1",
+      mockTestId: 5,
+      topicId: 274,
+      patternDetails: {
+        totalQuestion: 18,
+        totalTime: 18,
+        totalMark: 72,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG PLANT PHYSIOLOGY Test 1",
+      mockTestId: 6,
+      topicId: 2171,
+      patternDetails: {
+        totalQuestion: 10,
+        totalTime: 10,
+        totalMark: 40,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG HUMAN REPRODUCTION Test 1",
+      mockTestId: 7,
+      topicId: 2307,
+      patternDetails: {
+        totalQuestion: 25,
+        totalTime: 25,
+        totalMark: 100,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG GENETICS AND HEREDITY Test 1",
+      mockTestId: 8,
+      topicId: 177,
+      patternDetails: {
+        totalQuestion: 14,
+        totalTime: 14,
+        totalMark: 56,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG EVOLUTION Test 1",
+      mockTestId: 9,
+      topicId: 1191,
+      patternDetails: {
+        totalQuestion: 16,
+        totalTime: 16,
+        totalMark: 64,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+    {
+      mockTestTitle: "NEET UG HUMAN PHYSIOLOGY Test 1",
+      mockTestId: 10,
+      topicId: 1516,
+      patternDetails: {
+        totalQuestion: 22,
+        totalTime: 22,
+        totalMark: 88,
+        markCorrectAns: 4,
+        markIncorrectAns: -1,
+        markNotAttempt: 0,
+        questionType: "Multiple Choice",
+      },
+    },
+  ],
+};
 
 /**
  * TopicTestListPage displays a list of topic tests for a selected topic.
- *
- * This component:
- * - Uses dummy data to render a list of topic tests.
- * - Retrieves the topic name from the URL parameters.
- * - Manages the visibility of the instructions panel based on device type (mobile/desktop) and user interaction.
- * - Provides navigation back to the previous page.
- * - Utilizes the ChildLayout component to display the test list and instructions side by side (or toggled on mobile).
- *
- * @component
- * @returns {JSX.Element} The rendered TopicTestListPage component.
  */
 const TopicTestListPage = () => {
   // Hooks
@@ -162,12 +203,12 @@ const TopicTestListPage = () => {
       <div className="mt-5 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            <TopicTestList
-              tests={dummyData}
+            <TestCardList
+              tests={dummyData.obj}
               infoClickHandler={() => setHideSecondary(false)}
             />
           }
-          secondaryContent={<TopicTestInstructions topicName={topicName} />}
+          secondaryContent={<TopicTestInstructions title={topicName} />}
           hideSecondary={hideSecondary}
           onSecondaryHide={() => setHideSecondary(true)}
         />

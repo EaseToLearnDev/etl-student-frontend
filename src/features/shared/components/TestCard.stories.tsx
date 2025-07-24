@@ -1,29 +1,16 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import TopicTest from "./TopicTest";
-import type { TopicTestType } from "../../../shared/types";
+import TestCard from "./TestCard";
+import type { TestType } from "../types";
 
-const meta: Meta<typeof TopicTest> = {
-  component: TopicTest,
-  title: "Exam Room/Topic Test",
-  argTypes: { 
-    test: {
-      control: { type: "object" },
-      description:
-        "The topic test object containing details like name, URL, time, questions, marks, difficulty, and progress.",
-    },
-    infoClickHandler: {
-      action: "infoClicked",
-      description:
-        "Function to handle clicks on the info icon in mobile view. Alerts the user when clicked.",
-    },
-  },
+const meta: Meta<typeof TestCard> = {
+  component: TestCard,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof TopicTest>;
+type Story = StoryObj<typeof TestCard>;
 
-const baseTest: TopicTestType = {
+const baseTest: TestType = {
   testName: "Physical Chemistry",
   testUrl: "physical-chemistry",
   testTime: 180,
