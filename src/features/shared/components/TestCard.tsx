@@ -7,7 +7,7 @@ import {
 } from "react-icons/pi";
 
 // Types
-import type { MockTestType, TopicTestType } from "../types";
+import { type NormalizedTest } from "../utils/normalizeTestData";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -17,10 +17,9 @@ import { capitalizeWords } from "../../../utils";
 
 // Components
 import Button from "../../../components/Button";
-import { normalizeTestData } from "../utils/normalizeTestData";
 
 type TestCardProps = {
-  test: MockTestType | TopicTestType;
+  test: NormalizedTest;
   infoClickHandler?: () => void;
 };
 /**
@@ -33,14 +32,12 @@ type TestCardProps = {
  */
 const TestCard = ({ test, infoClickHandler }: TestCardProps) => {
   const isMobile = useIsMobile();
-  const normalized = normalizeTestData(test);
-
   return (
     <div className="flex flex-wrap items-center justify-center gap-4 p-5 lg:justify-between">
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
-            <h5>{normalized?.title}</h5>
+            <h5>{test?.title}</h5>
             {isMobile ? (
               <div
                 className="cursor-pointer w-[24px] h-[24px] flex justify-center items-center"
@@ -55,26 +52,26 @@ const TestCard = ({ test, infoClickHandler }: TestCardProps) => {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1">
               <PiTimerFill size={16} />
-              <span>Time : {normalized?.time}min</span>
+              <span>Time : {test?.time}min</span>
             </div>
             <div className="flex items-center gap-1">
               <PiNoteFill size={16} />
-              <span>Questions : {normalized?.questions}</span>
+              <span>Questions : {test?.questions}</span>
             </div>
             <div className="flex items-center gap-1">
               <PiChartBarFill size={16} />
-              <span>Marks : {normalized?.marks}</span>
+              <span>Marks : {test?.marks}</span>
             </div>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {[
-            { heading: "Difficulty Level", value: normalized?.difficulty },
+            { heading: "Difficulty Level", value: test?.difficulty },
             {
               heading: "Your progress",
               value: capitalizeWords(
-                normalized?.progress
-                  ? normalized?.progress?.split("_").join(" ")
+                test?.progress
+                  ? test?.progress?.split("_").join(" ")
                   : ""
               ),
             },
@@ -91,14 +88,14 @@ const TestCard = ({ test, infoClickHandler }: TestCardProps) => {
           ))}
         </div>
       </div>
-      {normalized?.progress === "not_started" && normalized?.marks ? (
+      {test?.progress === "not_started" && test?.marks ? (
         <div className="flex flex-col gap-2 justify-center items-center">
           <h5>
-            {normalized?.score}/{normalized?.marks}
+            {test?.score}/{test?.marks}
           </h5>
           <Button className="min-w-[120px]">View Result</Button>
         </div>
-      ) : normalized?.progress === "not_started" && !normalized?.marks ? (
+      ) : test?.progress === "not_started" && !test?.marks ? (
         <div>
           <Button className="min-w-[120px]">Start Now</Button>
         </div>
