@@ -17,6 +17,7 @@ import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage"
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
 import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
 import MockTestListPage from "../features/exam_room/mock_test/pages/MockTestListPage";
+import ClassTestPage from "../features/exam_room/class_test/ClassTestPage";
 
 const Router = () => {
   return (
@@ -63,7 +64,7 @@ const Router = () => {
           element={<TopicTestListPage />}
         />
         <Route path="exam-room/mock-test" element={<MockTestListPage />} />
-        <Route path="exam-room/class-test" element={<>Class Test</>} />
+        <Route path="exam-room/class-test" element={<ClassTestPage />} />
 
         <Route path="report" element={<>Reports & Analytics</>} />
         <Route path="settings" element={<Settings />} />

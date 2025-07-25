@@ -234,17 +234,19 @@ h6 {
 }
 
 p,
-a {
+a,
+th,
+td,
+button,
+select {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph);
   line-height: var(--lh-paragraph);
   letter-spacing: var(--ls-025);
 }
 
-button,
 label,
-span,
-select {
+span {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph-sm);
   line-height: var(--lh-paragraph-sm);
