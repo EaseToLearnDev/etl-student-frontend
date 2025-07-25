@@ -97,7 +97,7 @@ function CustomizedLabel(props: any) {
   );
 }
 
-export default function TimeManagement({ className }: { className?: string }) {
+export default function TimeManagement() {
 
 
   const timeStats = [
@@ -110,13 +110,13 @@ export default function TimeManagement({ className }: { className?: string }) {
   return (
 
     <div
-      className={`custom-scrollbar -mb-3 overflow-x-auto pb-3 ${className || ''
-        }`}
+      className="p-5"
     >
-      <h4 className="font-semibold text-[var(--text-primary)] mb-5">Time Management</h4>
+      <h3 className="text-[var(--text-primary)] mb-5">Time Management</h3>
       <div>
-        <h6 className=''> Time Taken in Question Attempts</h6>
-        <div className="h-[18rem] w-full pt-1 flex">
+        <h5 className=''> Time Taken in Question Attempts</h5>
+        <div className="w-full pt-1 grid grid-cols-1 lg:grid-cols-5 gap-x-4">
+          <div className='bg-[var(--surface-bg-secondary)] p-5 rounded-2xl lg:col-span-4 overflow-x-auto scrollbar-hide'>
           <ResponsiveContainer width="100%" height="100%" minWidth={800}>
             <ComposedChart
               barGap={8}
@@ -127,11 +127,12 @@ export default function TimeManagement({ className }: { className?: string }) {
               }}
               className="[&_.recharts-tooltip-cursor]:fill-opacity-20 dark:[&_.recharts-tooltip-cursor]:fill-opacity-10 [&_.recharts-cartesian-axis-tick-value]:fill-gray-500 rtl:[&_.recharts-cartesian-axis.yAxis]:-translate-x-12 [&_.recharts-xAxis.xAxis]:translate-y-2.5 [&_path.recharts-rectangle]:!stroke-none"
             >
-              <XAxis dataKey="questions" axisLine={false} tickLine={false} />
+              <XAxis dataKey="questions" axisLine={false} tickLine={false}  tick={{ fill: 'var(--text-primary)' }} />
               <YAxis
                 axisLine={false}
                 tickLine={false}
                 tickFormatter={(time) => `${time} min`}
+                 tick={{ fill: 'var(--text-primary)' }} 
               />
               <Bar
                 dataKey="time"
@@ -147,13 +148,14 @@ export default function TimeManagement({ className }: { className?: string }) {
               </Bar>
             </ComposedChart>
           </ResponsiveContainer>
-          <div className="flex flex-col justify-around">
-            {timeStats?.map((stat) => (
-              <div key={stat.label}>
-                <div className="text-md text-[var(--text-)]">
+          </div>
+          <div className="flex flex-col justify-center items-end gap-5 lg:col-span-1">
+            {timeStats?.map((stat ,idx) => (
+              <div key={idx}>
+                <div className="text-lg font-normal text-[var(--text-primary)]">
                   {stat.label}
                 </div>
-                <div className="text-2xl text-[var(--text-primary)]">
+                <div className="text-3xl font-medium text-[var(--text-primary)] text-end">
                   {stat.value}
                 </div>
               </div>

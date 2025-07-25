@@ -41,8 +41,8 @@ const performanceData: PerformanceData[] = [
 const PerformanceTable = () => {
   return (
     <div className="font-sans border-1 rounded-2xl border-[var(--border-primary)] p-6 my-10">
-      <h4 className="font-semibold text-[var(--text-primary)] mb-5">In Detail Performance</h4>
-      <div className="overflow-x-auto">
+      <h3 className="font-semibold text-[var(--text-primary)] mb-5">In Detail Performance</h3>
+      <div className="overflow-x-auto scrollbar-hide">
         <table className="w-full text-left border-collapse">
           {/* Table Head */}
           <thead>

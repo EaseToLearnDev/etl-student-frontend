@@ -75,7 +75,7 @@ export function CustomTooltip({ active, payload, label, prefix = '' }: any) {
 function Legend({ className }: { className?: string }) {
   return (
     <div
-      className={`flex flex-wrap items-center justify-center gap-3 lg:gap-4 ${
+      className={`flex flex-wrap items-center justify-center gap-3 lg:gap-14 ${
         className || ''
       }`}
     >
@@ -98,87 +98,100 @@ function Legend({ className }: { className?: string }) {
 // --- Main Chart Component ---
 export default function Comparison({ className }: { className?: string }) {
   return (
-    <div
-      className={`rounded-lg border-[var(--border-primary)] grid grid-cols-1 lg:grid-cols-3  ${
-        className || ''
-      }`}
-    >
-      <div className="lg:col-span-2">
-        <div className="custom-scrollbar -mb-3 overflow-x-auto pb-3">
-          <div className="h-96 w-full pt-9">
-            <ResponsiveContainer width="100%" height="100%" minWidth={500}>
-              <AreaChart
-                data={dailyData}
-                className="[&_.recharts-cartesian-axis-tick-value]:fill-[var(--text-tertiary)] [&_.recharts-cartesian-grid-vertical]:opacity-0"
-                margin={{ left: -10 }}
-              >
-                <defs>
-                  <linearGradient id="you" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#eab308" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#eab308" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="topper" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#00D1FF" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#00D1FF" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="average" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#07dd00" stopOpacity={0.1} />
-                    <stop offset="95%" stopColor="#07dd00" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <XAxis
-                  dataKey="question"
-                  axisLine={false}
-                  tickLine={false}
-                  padding={{ left: 20, right: 20 }}
-                />
-                <YAxis
-                  tickLine={false}
-                  axisLine={false}
-                  tick={({ payload, ...rest }) => (
-                    <CustomYAxisTick
-                      payload={{
-                        ...payload,
-                        value: formatNumber(Number(payload.value)),
-                      }}
-                      {...rest}
-                    />
-                  )}
-                />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey="you"
-                  stroke="#00D1FF"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#topper)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="topper"
-                  stroke="#eab308"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#you)"
-                />
-                <Area
-                  type="monotone"
-                  dataKey="average"
-                  stroke="#07dd00"
-                  strokeWidth={2}
-                  fillOpacity={1}
-                  fill="url(#average)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
+    <section>
+      <h3>Comparative Study</h3>
+      <div
+        className={`rounded-lg border-[var(--border-primary)] grid grid-cols-1 lg:grid-cols-4  ${
+          className || ''
+        }`}
+      >
+        <div className="lg:col-span-3 bg-[var(--surface-bg-secondary)] rounded-2xl p-4">
+          <div className="flex justify-start gap-8">
+            <button className=" text-[var(--text-tertiary)] border-b-2 border-[var(--border-primary)]">
+              Score Comparison
+            </button>
+            <button className="text-[var(--text-tertiary)]">
+              Time Comparison
+            </button>
           </div>
+
+          <div className="custom-scrollbar overflow-x-auto pb-3 scrollbar-hide">
+            <div className="h-96 w-full pt-5">
+              <ResponsiveContainer width="100%" height="100%" minWidth={500}>
+                <AreaChart
+                  data={dailyData}
+                  className="[&_.recharts-cartesian-axis-tick-value]:fill-[var(--text-tertiary)] [&_.recharts-cartesian-grid-vertical]:opacity-0"
+                  margin={{ left: -10 }}
+                >
+                  <defs>
+                    <linearGradient id="you" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#eab308" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#eab308" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="topper" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#00D1FF" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#00D1FF" stopOpacity={0} />
+                    </linearGradient>
+                    <linearGradient id="average" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#07dd00" stopOpacity={0.1} />
+                      <stop offset="95%" stopColor="#07dd00" stopOpacity={0} />
+                    </linearGradient>
+                  </defs>
+                  <XAxis
+                    dataKey="question"
+                    axisLine={false}
+                    tickLine={false}
+                    padding={{ left: 20, right: 20 }}
+                    tick={{ fill: 'var(--text-primary)' }}
+                  />
+                  <YAxis
+                    tickLine={false}
+                    axisLine={false}
+                    tick={({ payload, ...rest }) => (
+                      <CustomYAxisTick
+                        payload={{
+                          ...payload,
+                          value: formatNumber(Number(payload.value)),
+                        }}
+                        {...rest}
+                      />
+                    )}
+                  />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="you"
+                    stroke="#00D1FF"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#topper)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="topper"
+                    stroke="#eab308"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#you)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="average"
+                    stroke="#07dd00"
+                    strokeWidth={2}
+                    fillOpacity={1}
+                    fill="url(#average)"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <Legend className="mt-4" />
         </div>
-        <Legend className="mt-4" />
+        <div className="lg:col-span-1">
+          <MarksScored yourScore={76} topperScore={92} averageScore={70} />
+        </div>
       </div>
-      <div className="lg:col-span-1">
-        <MarksScored yourScore={76} topperScore={92} averageScore={70} />
-      </div>
-    </div>
+    </section>
   );
 }
