@@ -11,6 +11,8 @@ interface SelectProps {
   isOpen: boolean;
   onToggle: () => void;
   onSelect: (index: number) => void;
+  className?: string;
+  dropdownClassName?: string;
 }
 
 /**
@@ -23,6 +25,8 @@ const Select = ({
   isOpen,
   onToggle,
   onSelect,
+  className = "",
+  dropdownClassName = "",
 }: SelectProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
@@ -40,7 +44,7 @@ const Select = ({
   }, [isOpen]);
 
   const dropdown = (
-    <div style={dropdownStyle} className="flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2">
+    <div style={dropdownStyle} className={cn("flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2", dropdownClassName)}>
       {type && (
         <span className="px-4 text-[var(--text-tertiary)] !font-medium">
           {type}
@@ -70,7 +74,7 @@ const Select = ({
   );
   
   return (
-    <div className="relative inline-block text-left max-w-[250px]">
+    <div className={cn("relative inline-block text-left max-w-[250px]", className)}>
       {/* Trigger button */}
       <button
         ref={buttonRef}

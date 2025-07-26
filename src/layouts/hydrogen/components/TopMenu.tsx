@@ -10,18 +10,34 @@ const TopMenu = () => {
 
   return (
     <div className="flex gap-4 items-center">
-      {match?.menuItems?.map((item) => (
-        <Link
-          to={page + item?.href}
-          className={cn(
-            "flex gap-2 items-center px-3 py-2 cursor-pointer",
-            url.includes(item?.href) ? "text-[var(--sb-ocean-bg-active)]" : null
-          )}
-        >
-          {item.icon}
-          {item?.name}
-        </Link>
-      ))}
+      {match?.menuItems?.map((item) => {
+        const isActive = url.includes(item?.href);
+
+        if (isActive) {
+          return (
+            <div
+              key={item?.href}
+              className={cn(
+                "flex gap-2 items-center px-3 py-2 cursor-pointer",
+                "text-[var(--sb-ocean-bg-active)]"
+              )}
+            >
+              {item.icon}
+              {item?.name}
+            </div>
+          );
+        }
+        return (
+          <Link
+            key={item?.href}
+            to={page + item?.href}
+            className="flex gap-2 items-center px-3 py-2 cursor-pointer"
+          >
+            {item.icon}
+            {item?.name}
+          </Link>
+        );
+      })}
     </div>
   );
 };

@@ -7,13 +7,13 @@ import BottomNavigationSheet from "./BottomNavigationSheet";
 type MobileChildLayoutProps = {
   primaryContent?: React.ReactNode;
   secondaryContent?: React.ReactNode;
-  isSecondaryHidden: boolean;
-  sheetHeight: number;
-  dragging: boolean;
-  onDragStart: (e: React.MouseEvent | React.TouchEvent) => void;
-  handleSecondaryHide: () => void;
-  MAX_HEIGHT: number;
-  MIN_HEIGHT: number;
+  isSecondaryHidden?: boolean;
+  sheetHeight?: number;
+  dragging?: boolean;
+  onDragStart?: (e: React.MouseEvent | React.TouchEvent) => void;
+  handleSecondaryHide?: () => void;
+  MAX_HEIGHT?: number;
+  MIN_HEIGHT?: number;
 };
 
 const MobileChildLayout = ({

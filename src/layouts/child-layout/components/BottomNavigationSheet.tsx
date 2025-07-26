@@ -3,13 +3,13 @@ import cn from "../../../utils/classNames";
 
 export interface BottomNavigationSheetProps {
   sheetContent?: React.ReactNode;
-  isSheetHidden: boolean;
-  sheetHeight: number;
-  dragging: boolean;
-  onDragStart: (e: React.MouseEvent | React.TouchEvent) => void;
-  handleSheetHidden: () => void;
-  MAX_HEIGHT: number;
-  MIN_HEIGHT: number;
+  isSheetHidden?: boolean;
+  sheetHeight?: number;
+  dragging?: boolean;
+  onDragStart?: (e: React.MouseEvent | React.TouchEvent) => void;
+  handleSheetHidden?: () => void;
+  MAX_HEIGHT?: number;
+  MIN_HEIGHT?: number;
 }
 
 const BottomNavigationSheet = ({
@@ -40,7 +40,7 @@ const BottomNavigationSheet = ({
       <div
         style={{
           height: `${sheetHeight}px`,
-          maxHeight: `${window.innerHeight * MAX_HEIGHT}px`,
+          maxHeight: `${window.innerHeight * (MAX_HEIGHT || 0)}px`,
           minHeight: `${MIN_HEIGHT}px`,
           transition: dragging ? "none" : "height 0.3s, bottom 0.3s",
           left: 0,

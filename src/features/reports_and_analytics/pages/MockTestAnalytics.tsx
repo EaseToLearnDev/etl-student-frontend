@@ -1,8 +1,8 @@
 import { Theme } from "../../../utils/colors";
-import Comparison from "../components/Comparison"
+import Comparison from "../components/LineChart"
 import PerformanceTable from "../components/PerformanceTable"
 import ScoreCards from "../components/ScoreCards"
-import TimeManagement from "../components/TimeManagement"
+import TimeManagement from "../components/BarChart"
 
 interface PerformanceStats {
   title: string;

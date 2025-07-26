@@ -1,11 +1,15 @@
+import type { ReactNode } from "react";
 import { colors, Theme } from "../../../utils/colors";
+import cn from "../../../utils/classNames";
 
 interface ScoreCardsProps {
   theme?: Theme;
   title?: string;
   value?: number | string;
-  description?: string;
-  bg?: boolean
+  description?: string | ReactNode;
+  showBgColor?: boolean;
+  showBorder?: boolean;
+  className?: string;
 }
 
 /**
@@ -20,19 +24,27 @@ const ScoreCards = ({
   title,
   value,
   description,
-  bg = true,
+  showBgColor = true,
+  showBorder = true,
+  className = "",
 }: ScoreCardsProps) => {
-
   const currentTheme = colors[theme];
-  console.log("theme:",currentTheme)
 
   return (
     <>
       <div
-        className="flex flex-col items-start gap-5 rounded border-l-[8px] p-5 w-[24%] min-w-[250px] overflow-x-hidden transition-colors"
+        className={cn(
+          "flex flex-col items-start gap-5 rounded p-5 w-[24%] min-w-[250px] overflow-x-hidden transition-colors",
+          !showBgColor && !showBorder
+            ? "hover:bg-[var(--surface-bg-secondary)] rounded-lg"
+            : "",
+          className
+        )}
         style={{
-          backgroundColor: bg ? currentTheme.bg.disabled : "  ",
-          borderColor: currentTheme.bg.active,
+          backgroundColor: showBgColor ? currentTheme.bg.disabled : "  ",
+          borderLeft: showBorder
+            ? `8px solid ${currentTheme.bg.active}`
+            : "none",
         }}
       >
         {/* Heading */}

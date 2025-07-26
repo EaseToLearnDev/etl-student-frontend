@@ -1,4 +1,6 @@
 import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import Button from "../../../components/Button";
+import { Link } from "react-router";
 
 // Props for the PerformanceReport component
 type PerformanceReportProps = {
@@ -11,25 +13,6 @@ type PerformanceReportProps = {
  *
  * Renders a circular pie chart to visualize a percentage-based performance metric,
  * accompanied by a description and an optional button.
- *
- * ## Props:
- * @param {number} [percentage=0] - The performance percentage to display (0 to 100). Determines the filled section of the chart.
- * @param {string} [description] - Optional descriptive text displayed beside the chart. Defaults to a fallback message if not provided.
- *
- * ## Features:
- * - Responsive layout with chart and content stacked on small screens and side-by-side on medium+ screens.
- * - Uses `recharts` to render a pie chart with a vertical blue gradient for the filled section.
- * - Includes centered percentage text within the chart.
- * - Conditional rendering of description and button based on props.
- * - Graceful fallback if no description is provided.
- *
- * ## Example Usage:
- * ```tsx
- * <PerformanceReport 
- *   percentage={80}
- *   description="You have completed 80% of your objectives."
- * />
- * ```
  */
 
 const PerformanceReport = ({
@@ -43,11 +26,11 @@ const PerformanceReport = ({
   ];
   return (
     <>
-      <div className="flex flex-col justify-start p-6 gap-[20px]">
+      <div className="flex flex-col justify-start p-5 gap-5">
         {/* Title */}
-        <h4 className="text-2xl font-semibold">Overall Performance Report</h4>
+        <h5 className="text-2xl font-semibold text-center md:text-left">Overall Performance Report</h5>
 
-        <div className="flex flex-col md:flex-row gap-[40px]">
+        <div className="flex flex-col lg:flex-row gap-10">
           {/* Chart Section */}
           <div className="flex justify-center items-center">
             {/* Round Progress Chart */}
@@ -64,10 +47,10 @@ const PerformanceReport = ({
                       x2="0%"
                       y2="100%"
                     >
-                      <stop offset="0%" stopColor="#007bff" stopOpacity={1} />
+                      <stop offset="0%" stopColor="#0d6fec" stopOpacity={1} />
                       <stop
                         offset="50%"
-                        stopColor="#007bff"
+                        stopColor="#0d6fec"
                         stopOpacity={0.5}
                       />
                     </linearGradient>
@@ -91,21 +74,19 @@ const PerformanceReport = ({
               </ResponsiveContainer>
 
               {/* Percentage Text in the center of the chart */}
-              <h3 className="absolute inset-0 flex items-center justify-center text-blue-600">
+              <h4 className="absolute inset-0 flex items-center justify-center !font-bold text-blue-600">
                 {percentage}%
-              </h3>
+              </h4>
             </div>
           </div>
 
           {/* Description and button section */}
-          <div className="w-md p-6 flex flex-col justify-center items-start gap-[20px]">
+          <div className="flex flex-col justify-center items-center lg:items-start gap-6">
             {/* Description text or fallback */}
             <p>{description}</p>
             {/* Show button only if percentage is greater than 0 */}
             {percentage > 0 && (
-              <button className="bg-blue-600 text-white px-[20px] py-[8px] rounded-md w-fit">
-                View In Detail
-              </button>
+              <Button><Link to="overall-performance">View in Detail</Link></Button>
             )}
           </div>
         </div>

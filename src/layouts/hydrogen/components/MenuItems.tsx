@@ -23,12 +23,12 @@ export const menuItems = [
       {
         name: "Study Material",
         href: "/study-material",
-        icon: <PiBooksFill />
+        icon: <PiBooksFill />,
       },
       {
         name: "Smart Learning",
         href: "/smart-learning",
-        icon: <PiBrainFill />
+        icon: <PiBrainFill />,
       },
     ],
   },
@@ -40,17 +40,17 @@ export const menuItems = [
       {
         name: "Topic Test",
         href: "/topic-test",
-        icon: <PiClipboardTextFill />
+        icon: <PiClipboardTextFill />,
       },
       {
         name: "Exam Test",
         href: "/mock-test",
-        icon: <PiTimerFill />
+        icon: <PiTimerFill />,
       },
       {
         name: "Class Test",
         href: "/class-test",
-        icon: <PiPencilSimpleFill />
+        icon: <PiPencilSimpleFill />,
       },
     ],
   },
@@ -58,5 +58,17 @@ export const menuItems = [
     name: "Reports",
     href: "/report",
     icon: <PiChartLineFill />,
+    menuItems: [
+      {
+        name: "Reports & Analytics",
+        href: "/report",
+        icon: <PiClipboardTextFill />,
+      },
+      {
+        name: "Exam Test",
+        href: "/exam-test",
+        icon: <PiTimerFill />,
+      },
+    ],
   },
 ];

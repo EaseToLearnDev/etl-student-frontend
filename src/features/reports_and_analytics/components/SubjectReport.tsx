@@ -1,3 +1,6 @@
+import Badge from "../../../components/Badge";
+import { Theme } from "../../../utils/colors";
+
 interface SubjectReportProps {
   subject?: string;
   description?: string;
@@ -22,13 +25,13 @@ const SubjectReport = ({
 }: SubjectReportProps) => {
   return (
     <>
-      <div className="flex max-w-[400px] flex-col items-start gap-[20px]">
+      <div className="flex max-w-[550px] flex-col items-start gap-[20px] p-5 bg-[var(--surface-bg-primary)] hover:bg-[var(--surface-bg-secondary)] rounded-xl transition-colors duration-200 ease-in-out">
         {/* Title Section */}
         <div>
-          <h3 className="font-bold leading-[40px] mb-2 text-ellipsis line-clamp-1">
+          <h5 className="font-bold leading-[40px] mb-2 text-ellipsis line-clamp-1">
             {subject}
-          </h3>
-          <h6 className="text-[var(--text-tertiary)] font-semibold text-ellipsis line-clamp-2">
+          </h5>
+          <h6 className="text-[var(--text-tertiary)] font-semibold">
             {description}
           </h6>
         </div>
@@ -46,9 +49,9 @@ const SubjectReport = ({
               {progress}%
             </p>
           </div>
-          <div className="relative h-[12px] w-full max-w-[400px] rounded-full bg-[var(--surface-bg-secondary)]">
+          <div className="relative h-[12px] w-full max-w-[550px] rounded-full bg-[var(--surface-bg-secondary)]">
             <div
-              className="absolute left-0 rounded-full bg-[var(--sb-ocean-bg-active)] transition-all duration-500 ease-in-out h-full"
+              className="absolute left-0 rounded-full bg-[var(--sb-ocean-bg-active)] transition-all duration-550 ease-in-out h-full"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
@@ -60,15 +63,11 @@ const SubjectReport = ({
             <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
               Strengths
             </h6>
-            <div className="flex items-center gap-[12px]">
+            <div className="flex flex-wrap items-center gap-[12px]">
               {strengths?.map((strength, index) => (
-                <p
-                  key={index}
-                  className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[var(--sb-sakura-bg-disabled)] text-[var(--sb-sakura-bg-active)] py-[4px] font-medium text-ellipsis line-clamp-2"
-                  style={{ fontSize: "11px" }}
-                >
-                  {strength}
-                </p>
+                <Badge key={index} theme={Theme.Sakura} style="filled">
+                  <span>{strength}</span>
+                </Badge>
               ))}
             </div>
           </div>
@@ -82,15 +81,11 @@ const SubjectReport = ({
             <h6 className="font-semibold mb-2 text-ellipsis line-clamp-2">
               Areas of Improvements
             </h6>
-            <div className="flex items-center gap-[12px]">
+            <div className="flex flex-wrap items-center gap-[12px]">
               {areas_of_improvement?.map((item, index) => (
-                <p
-                  key={index}
-                  className="flex px-[8px] justify-center items-center gap-[10px] rounded-[100px] bg-[var(--sb-pumpkin-bg-disabled)] text-[var(--sb-pumpkin-bg-active)] py-[4px] font-medium = text-ellipsis line-clamp-2"
-                  style={{ fontSize: "11px" }}
-                >
-                  {item}
-                </p>
+                <Badge key={index} theme={Theme.Pumpkin} style="filled">
+                  <span>{item}</span>
+                </Badge>
               ))}
             </div>
           </div>
