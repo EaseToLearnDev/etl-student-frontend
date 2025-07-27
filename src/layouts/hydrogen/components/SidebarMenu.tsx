@@ -3,14 +3,14 @@ import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // Icons
-import { PiGearFill, PiSignOutBold } from "react-icons/pi";
-
-// Components
-import { menuItems } from "./MenuItems";
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
 // Utils
 import cn from "../../../utils/classNames";
-import logout from "../../../utils/logout";
+
+// Components
+import { menuItems } from "./MenuItems";
+import SidebarDropdown from "./SidebarDropdown";
 
 export function SidebarMenu() {
   const location = useLocation();
@@ -65,41 +65,25 @@ export function SidebarMenu() {
       </div>
       {/* Bottom section for Settings and Logout */}
       <div className="mt-auto">
-        <Link
-          to="/settings"
-          className={cn(
-            "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-4 font-medium capitalize 2xl:mx-5 hover:bg-[var(--surface-bg-secondary)]",
-            location.pathname === "/settings"
-              ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
-              : "transition-colors duration-200 text-[var(--text-secondary)]"
-          )}
-        >
-          <div className="flex items-center truncate">
-            <p
-              className={cn(
-                "me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5",
-                location.pathname === "/settings"
-                  ? "text-[var(--sb-ocean-bg-active)]"
-                  : "text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]"
-              )}
-            >
-              <PiGearFill />
-            </p>
-            <p className="truncate">Settings</p>
+        <div className="flex w-full items-center justify-between px-4 py-2">
+          <div className="flex gap-4">
+            <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
+              <h6 className="!font-bold">RS</h6>
+            </div>
+            <div className="flex flex-col gap-1">
+              <p className="!font-semibold block w-[140px] overflow-hidden text-ellipsis  whitespace-nowrap line-clamp-1">
+                Rohit Sahu
+              </p>
+              <span className="block w-[140px] overflow-hidden text-[var(--text-tertiary)] text-ellipsis whitespace-nowrap line-clamp-1">
+                rohit.roshan@easetolearn.comdakdjsakldjaskl
+              </span>
+            </div>
           </div>
-        </Link>
-        <div
-          onClick={logout}
-          className={cn(
-            "cursor-pointer group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-4 font-medium capitalize 2xl:mx-5 hover:bg-[var(--surface-bg-secondary)] text-[var(--text-secondary)]"
-          )}
-        >
-          <div className="flex items-center truncate">
-            <p className="me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5 text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]">
-              <PiSignOutBold />
-            </p>
-            <p className="truncate">Logout</p>
-          </div>
+          <SidebarDropdown>
+            <div className="w-8 h-8 aspect-square rounded-full hover:bg-[var(--surface-bg-tertiary)] flex justify-center items-center cursor-pointer">
+              <PiDotsThreeOutlineVerticalFill size={18} />
+            </div>
+          </SidebarDropdown>
         </div>
       </div>
     </div>

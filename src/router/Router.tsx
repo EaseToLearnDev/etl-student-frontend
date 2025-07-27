@@ -7,10 +7,9 @@ import PublicRoute from "./PublicRoute";
 // Layout
 import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 
-// Features
+// Pages
 import NotFound from "../shared/NotFound";
 import Settings from "../features/settings";
-import ChildLayout from "../layouts/child-layout/ChildLayout";
 import SMTopicListPage from "../features/study_room/study_material/pages/SMTopicListPage";
 import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
@@ -21,6 +20,8 @@ import ClassTestPage from "../features/exam_room/class_test/ClassTestPage";
 import ReportAnalytics from "../features/reports_and_analytics/pages/ReportAnalytics";
 import OverallPerformanceReport from "../features/reports_and_analytics/pages/OverallPerformanceReport";
 import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
+import Login from "../features/auth/pages/Login";
+import Signup from "../features/auth/pages/Signup";
 
 const Router = () => {
   return (
@@ -29,9 +30,15 @@ const Router = () => {
         path="/login"
         element={
           <PublicRoute>
-            <>
-              <h1>Login Page</h1>
-            </>
+            <Login />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <PublicRoute>
+            <Signup />
           </PublicRoute>
         }
       />
@@ -44,7 +51,7 @@ const Router = () => {
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<ChildLayout />} />
+        <Route path="dashboard" element={<>Dashboard</>} />
 
         <Route
           path="study-room"

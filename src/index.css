@@ -238,6 +238,7 @@ a,
 th,
 td,
 button,
+label,
 select {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph);
@@ -245,7 +246,6 @@ select {
   letter-spacing: var(--ls-025);
 }
 
-label,
 span {
   font-weight: var(--fw-regular);
   font-size: var(--fs-paragraph-sm);
