@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { colors, Theme } from "../../../utils/colors";
 import cn from "../../../utils/classNames";
 
-interface ScoreCardsProps {
+interface ScoreCardProps {
   theme?: Theme;
   title?: string;
   value?: number | string;
@@ -13,13 +13,13 @@ interface ScoreCardsProps {
 }
 
 /**
- * ScoreCards Component
+ * ScoreCard Component
  *
  * A UI component used to display key metrics or scores in a visually distinct card format.
  * Each card can be styled using predefined theme types: "primary", "success", "error", or "neutral".
  * Includes a title, a main value, and an optional description.
  */
-const ScoreCards = ({
+const ScoreCard = ({
   theme = Theme.Neutral,
   title,
   value,
@@ -27,7 +27,7 @@ const ScoreCards = ({
   showBgColor = true,
   showBorder = true,
   className = "",
-}: ScoreCardsProps) => {
+}: ScoreCardProps) => {
   const currentTheme = colors[theme];
 
   return (
@@ -67,4 +67,4 @@ const ScoreCards = ({
   );
 };
 
-export default ScoreCards;
+export default ScoreCard;

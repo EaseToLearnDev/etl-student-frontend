@@ -1,109 +1,97 @@
 import { useState } from "react";
 import Select from "../../../components/Select";
 import DesktopChildLayout from "../../../layouts/child-layout/components/DesktopChildLayout";
-import ScoreCards from "../components/ScoreCards";
-import { MdArrowBack, MdTrendingDown, MdTrendingUp } from "react-icons/md";
+import ScoreCard from "../components/ScoreCard";
+import { MdArrowBack } from "react-icons/md";
 import { colors, Theme } from "../../../utils/colors";
 import { useNavigate } from "react-router";
 import cn from "../../../utils/classNames";
 import BarChart from "../components/BarChart";
 import LineChart from "../components/LineChart";
+import TopicProgress from "../components/TopicProgress";
+import SubjectProgress from "../components/SubjectProgress";
+import Badge from "../../../components/Badge";
 
 // Base data structure
-const baseData = {
-  overallCards: [
-    {
-      title: "Average Score",
-      value: 73,
-      description: (
-        <div>
-          <p>5%</p>
-          <MdTrendingUp size={16} />
-        </div>
-      ),
-    },
-    {
-      title: "Test Completed",
-      value: 36,
-      description: <p>Out of 50</p>,
-    },
-    {
-      title: "Hour Studied",
-      value: "48h",
-      description: (
-        <div>
-          <p>2%</p>
-          <MdTrendingUp size={16} />
-        </div>
-      ),
-    },
-    {
-      title: "Courses Attempted",
-      value: 3,
-      description: (
-        <div>
-          <p>50%</p>
-          <MdTrendingUp size={16} />
-        </div>
-      ),
-    },
-  ],
-  testTypes: [
-    {
-      title: "Topic Test",
-      dataKey: "topictest",
-      currentScore: 85,
-      trend: 8,
-      weeklyData: [99, 70, 40, 80, 85],
-    },
-    {
-      title: "Mock Test",
-      dataKey: "mockTest", 
-      currentScore: 20,
-      trend: -5,
-      weeklyData: [60, 75, 30, 99, 20],
-    },
-    {
-      title: "Learning Mode",
-      dataKey: "learningMode",
-      currentScore: 70,
-      trend: -9,
-      weeklyData: [60, 55, 50, 65, 70],
-    },
-    {
-      title: "Competitive Mode",
-      dataKey: "compMode",
-      currentScore: 89,
-      trend: 10,
-      weeklyData: [70, 65, 95, 75, 89],
-    },
-  ],
-};
-
-// Generate derived data
 const dummyData = {
-  overallCards: baseData.overallCards,
-  // Generate average scores for bar chart and cards
-  averageScores: baseData.testTypes.map(test => ({
-    title: test.title,
-    marks: test.currentScore,
-    trend: test.trend,
-  })),
-  // Generate trends data
-  trends: {
-    chartData: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"].map((week, index) => ({
-      week,
-      ...baseData.testTypes.reduce((acc, test) => ({
-        ...acc,
-        [test.dataKey]: test.weeklyData[index]
-      }), {})
-    })),
-    cards: baseData.testTypes.map(test => ({
-      title: test.title,
-      marks: test.currentScore,
-      trend: test.trend,
-    })),
-  },
+  latestReport: [
+    {
+      title: "Total Questions",
+      value: 90,
+    },
+    {
+      title: "Correct Answers",
+      value: 60,
+      trend: 4,
+    },
+    {
+      title: "In-Correct Answers",
+      value: 20,
+      trend: -2,
+    },
+    {
+      title: "Un Attempted",
+      value: 10,
+      trend: 10,
+    },
+  ],
+  weekly: [
+    {
+      week: "Week 1",
+      timeSpend: 30,
+      avg: 60,
+      classAvg: 50,
+    },
+    {
+      week: "Week 2",
+      timeSpend: 40,
+      avg: 50,
+      classAvg: 70,
+    },
+    {
+      week: "Week 3",
+      timeSpend: 35,
+      avg: 55,
+      classAvg: 65,
+    },
+    {
+      week: "Week 4",
+      timeSpend: 45,
+      avg: 62,
+      classAvg: 68,
+    },
+    {
+      week: "Week 5",
+      timeSpend: 38,
+      avg: 58,
+      classAvg: 60,
+    },
+  ],
+  strengths: [
+    "Human Physiology",
+    "Ecology",
+    "Genetics",
+    "Cell Biology",
+    "Evolution",
+  ],
+  weakness: [
+    "Molecular Biology",
+    "Genetics",
+    "Biochemistry",
+    "Microbiology",
+    "Immunology",
+  ],
+  subjectProgress: 76,
+  topicProgressList: [
+    { topicName: "Human Physiology", total: 70, completed: 55 },
+    { topicName: "Ecology", total: 100, completed: 85 },
+    { topicName: "Genetics", total: 100, completed: 60 },
+    { topicName: "Cell Biology", total: 100, completed: 75 },
+    { topicName: "Evolution", total: 100, completed: 80 },
+    { topicName: "Molecular Biology", total: 100, completed: 55 },
+    { topicName: "Biochemistry", total: 100, completed: 65 },
+    { topicName: "Microbiology", total: 100, completed: 50 },
+  ],
 };
 
 const OverallPerformanceReport = () => {
@@ -112,7 +100,7 @@ const OverallPerformanceReport = () => {
   const mockSubjectsList = ["Chemistry", "Biology", "Physics"];
 
   const navigate = useNavigate();
-  
+
   // Define color palette for charts
   const chartColors = [
     colors.ocean.bg.active,
@@ -120,19 +108,30 @@ const OverallPerformanceReport = () => {
     colors.sunglow.bg.active,
     colors.sakura.bg.active,
   ];
-  
-  // Generate lines and legends from base data with assigned colors
-  const lines = baseData.testTypes.map((test, index) => ({
-    dataKey: test.dataKey,
-    stroke: chartColors[index % chartColors.length],
-    strokeWidth: 2,
+
+  // Generate lines and legends for the performance trends chart
+  const lines = [
+    { dataKey: "avg", stroke: chartColors[0], strokeWidth: 2 },
+    { dataKey: "classAvg", stroke: chartColors[1], strokeWidth: 2 },
+  ];
+
+  const legends = [
+    { color: chartColors[0], label: "Your Average Score", dataKey: "avg" },
+    { color: chartColors[1], label: "Class Average", dataKey: "classAvg" },
+  ];
+
+  const weeklyChartData = dummyData.weekly.map((item, index) => ({
+    week: `Week ${index + 1}`,
+    avg: item.avg,
+    classAvg: item.classAvg,
   }));
-  
-  const legends = baseData.testTypes.map((test, index) => ({
-    color: chartColors[index % chartColors.length],
-    label: test.title,
-    dataKey: test.dataKey,
-  }));
+
+  const latestCardsThemes = [
+    Theme.Ocean,
+    Theme.GreenHaze,
+    Theme.Valencia,
+    Theme.Neutral,
+  ];
   return (
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
@@ -173,113 +172,96 @@ const OverallPerformanceReport = () => {
                 {/* Overall Performance Cards */}
                 <h5 className="!font-semibold">Key Notes</h5>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-3">
-                  {dummyData.overallCards.map((item, index) => (
-                    <ScoreCards
-                      key={index}
-                      title={item.title}
-                      value={item.value}
-                      description={item.description}
-                      theme={Theme.Ocean}
-                      showBgColor={false}
-                      className="w-full"
-                    />
-                  ))}
+                  {dummyData.latestReport.map((item, index) => {
+                    const sign = (item.trend || 0) > 0 ? "+" : "";
+                    const trend = item?.trend ? `${sign}${item.trend}%` : "";
+                    const theme = latestCardsThemes[index];
+                    return (
+                      <ScoreCard
+                        key={index}
+                        title={item.title}
+                        value={item.value}
+                        description={trend}
+                        theme={theme}
+                        showBgColor={false}
+                        className="w-full"
+                      />
+                    );
+                  })}
                 </div>
               </div>
               {/* Average Score In Tests Sections */}
               <div className="mt-5">
-                <div className="flex flex-col items-start gap-5 min-w-0">
-                  {/* Bar Chart Section */}
-                  <div className="w-full flex flex-col lg:flex-row gap-5 min-w-0">
-                    <div className="w-full lg:flex-[0.7] xl:flex-[0.8]">
-                      <h5 className="!font-semibold">
-                        Average Scores in Tests
-                      </h5>
-                      <div className="min-w-0">
-                        <BarChart
-                          data={dummyData.averageScores}
-                          xDataKey="title"
-                          yDataKey="marks"
-                          xAxisLabel="Test Types"
-                          yAxisLabel="Marks"
-                          barSize={70}
-                          className="w-full"
-                        />
-                      </div>
+                {/* Bar Chart Section */}
+                <div className="flex flex-col lg:flex-row gap-8">
+                  <div className="lg:flex-[0.7] xl:flex-[0.75]">
+                    <h5 className="!font-semibold">Average Scores in Tests</h5>
+                    <div className="min-w-0">
+                      <BarChart
+                        data={dummyData.weekly}
+                        xDataKey="week"
+                        yDataKey="timeSpend"
+                        xAxisLabel="Weeks"
+                        yAxisLabel="Time"
+                        barSize={70}
+                        className="w-full"
+                        height="350px"
+                      />
                     </div>
-                    <div className="w-full lg:flex-[0.3] xl:flex-[0.2] lg:max-h-[280px] overflow-x-auto lg:overflow-y-auto lg:pr-2 snap-x snap-mandatory">
-                      <div className="flex lg:flex-col gap-4 min-w-max pb-2">
-                        {dummyData.averageScores.map((item, index) => {
-                          const sign = item.trend > 0 ? "+" : "";
-                          return (
-                            <div className="min-w-[300px] lg:min-w-full max-w-[350px] lg:max-w-full border-1 border-[var(--border-secondary)] rounded-lg snap-center flex-shrink-0">
-                              <ScoreCards
-                                key={index}
-                                title={item.title}
-                                description={
-                                  <p className="flex gap-1 items-center">
-                                    {`${sign}${item.trend}%`}
-                                    {sign === "+" ? (
-                                      <MdTrendingUp size={16} />
-                                    ) : (
-                                      <MdTrendingDown size={16} />
-                                    )}
-                                  </p>
-                                }
-                                value={item.marks}
-                                showBgColor={false}
-                                showBorder={false}
-                                className="w-full"
-                              />
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
+                  </div>
+                  <div className="flex lg:flex-[0.3] xl:flex-[0.25] flex-col gap-5 max-h-[350px]">
+                    <SubjectProgress progress={dummyData.subjectProgress} />
+                    <TopicProgress topics={dummyData.topicProgressList} />
                   </div>
                 </div>
               </div>
 
               {/* Performance Trends Section */}
               <div className="mt-5">
-                <div className="flex flex-col items-start gap-5 min-w-0">
-                  {/* Bar Chart Section */}
-                  <div className="w-full flex flex-col lg:flex-row gap-5 min-w-0">
-                    <div className="w-full lg:flex-[0.7] xl:flex-[0.8]">
-                      <h5 className="!font-semibold">Performance Trends</h5>
-                      <div className="min-w-0">
-                        <LineChart
-                          data={dummyData.trends.chartData}
-                          lines={lines}
-                          legends={legends}
-                          xDataKey="week"
-                          className="w-full"
-                        />
+                {/* Bar Chart Section */}
+                <div className="flex flex-col lg:flex-row gap-8">
+                  <div className="lg:flex-[0.7] xl:flex-[0.75]">
+                    <h5 className="!font-semibold">Average Scores in Tests</h5>
+                    <div className="min-w-0">
+                      <LineChart
+                        data={weeklyChartData}
+                        lines={lines}
+                        legends={legends}
+                        xDataKey="week"
+                        xAxisLabel="Weeks"
+                        yAxisLabel="Time"
+                        height="350px"
+                        className="w-full"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex lg:flex-[0.3] xl:flex-[0.25] flex-col gap-5 max-h-[350px]">
+                    <div className="flex flex-col gap-5">
+                      <h6>Strengths</h6>
+                      <div className="flex flex-wrap gap-2">
+                        {dummyData.strengths.map((strength, index) => (
+                          <Badge
+                            key={index}
+                            theme={Theme.Sakura}
+                            style="filled"
+                          >
+                            <span>{strength}</span>
+                          </Badge>
+                        ))}
                       </div>
                     </div>
-                    <div className="w-full lg:flex-[0.3] xl:flex-[0.2] lg:max-h-[280px] overflow-x-auto lg:overflow-y-auto lg:pr-2 snap-x snap-mandatory">
-                      <div className="flex lg:flex-col gap-4 min-w-max pb-2">
-                        {dummyData.trends.cards.map((item, index) => {
-                          const sign = item.trend > 0 ? "+" : "";
-                          const trend = `${sign}${item.trend}%`
-                          return (
-                            <div className="min-w-[300px] lg:min-w-full max-w-[350px] lg:max-w-full border-1 border-[var(--border-secondary)] rounded-lg snap-center flex-shrink-0">
-                              <ScoreCards
-                                key={index}
-                                title={item.title}
-                                description={
-                                  <p className="flex gap-1 items-center">
-                                    Since last 30 days
-                                  </p>
-                                }
-                                value={trend}
-                                showBgColor={false}
-                                showBorder={false}
-                                className="w-full"
-                              />
-                            </div>
-                          );
-                        })}
+                    <div className="flex flex-col gap-5">
+                      <h6>Areas for Improvement</h6>
+                      <div className="flex flex-wrap gap-2">
+                        {dummyData.weakness.map((weakness, index) => (
+                          <Badge
+                            key={index}
+                            theme={Theme.Pumpkin}
+                            style="filled"
+                          >
+                            <span>{weakness}</span>
+                          </Badge>
+                        ))}
                       </div>
                     </div>
                   </div>

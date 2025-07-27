@@ -1,9 +1,9 @@
 import { type Meta, type StoryObj } from "@storybook/react-vite";
-import ScoreCards from "../components/ScoreCards";
+import ScoreCard from "./ScoreCard";
 import { Theme } from "../../../utils/colors";
 
-const meta: Meta<typeof ScoreCards> = {
-  component: ScoreCards,
+const meta: Meta<typeof ScoreCard> = {
+  component: ScoreCard,
   title: "Reports and Analytics/Score Cards",
   argTypes: {
     theme: {
@@ -30,7 +30,7 @@ const meta: Meta<typeof ScoreCards> = {
 
 export default meta;
 
-type Story = StoryObj<typeof ScoreCards>;
+type Story = StoryObj<typeof ScoreCard>;
 
 export const Default: Story = {
   args: {

@@ -83,10 +83,10 @@ const PerformanceReport = ({
           {/* Description and button section */}
           <div className="flex flex-col justify-center items-center lg:items-start gap-6">
             {/* Description text or fallback */}
-            <p>{description}</p>
+            <h6 className="text-[var(--text-tertiary)]">{description}</h6>
             {/* Show button only if percentage is greater than 0 */}
             {percentage > 0 && (
-              <Button><Link to="overall-performance">View in Detail</Link></Button>
+              <Button><Link to="/report/overview/performance">View in Detail</Link></Button>
             )}
           </div>
         </div>

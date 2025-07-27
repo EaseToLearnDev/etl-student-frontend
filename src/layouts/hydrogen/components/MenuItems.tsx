@@ -1,6 +1,7 @@
 import {
   PiBooksFill,
   PiBrainFill,
+  PiChartBarFill,
   PiChartLineFill,
   PiClipboardTextFill,
   PiHouseFill,
@@ -60,13 +61,13 @@ export const menuItems = [
     icon: <PiChartLineFill />,
     menuItems: [
       {
-        name: "Reports & Analytics",
-        href: "/report",
-        icon: <PiClipboardTextFill />,
+        name: "Overview",
+        href: "/overview",
+        icon: <PiChartBarFill />,
       },
       {
         name: "Exam Test",
-        href: "/exam-test",
+        href: "/mock-test",
         icon: <PiTimerFill />,
       },
     ],

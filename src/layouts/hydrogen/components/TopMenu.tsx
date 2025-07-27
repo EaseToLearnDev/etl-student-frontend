@@ -8,30 +8,33 @@ const TopMenu = () => {
   const page = url.split("/").filter(Boolean)[0];
   const match = menuItems.find((item) => item.href.includes(page));
 
-  return (
-    <div className="flex gap-4 items-center">
-      {match?.menuItems?.map((item) => {
-        const isActive = url.includes(item?.href);
+  // Find the most specific menu item that matches the current URL
+  let activeItemHref: string | null = null;
+  let longestMatch = 0;
 
-        if (isActive) {
-          return (
-            <div
-              key={item?.href}
-              className={cn(
-                "flex gap-2 items-center px-3 py-2 cursor-pointer",
-                "text-[var(--sb-ocean-bg-active)]"
-              )}
-            >
-              {item.icon}
-              {item?.name}
-            </div>
-          );
-        }
+  match?.menuItems?.forEach((item) => {
+    const fullPath = `/${page}${item.href}`;
+    if (
+      (url === fullPath || url.startsWith(fullPath + "/")) &&
+      fullPath.length > longestMatch
+    ) {
+      activeItemHref = item.href;
+      longestMatch = fullPath.length;
+    }
+  });
+
+  return (
+    <div className="flex gap-3 items-center">
+      {match?.menuItems?.map((item) => {
+        const isActive = activeItemHref === item.href;
         return (
           <Link
             key={item?.href}
             to={page + item?.href}
-            className="flex gap-2 items-center px-3 py-2 cursor-pointer"
+            className={cn(
+              "flex gap-2 items-center px-3 py-2 cursor-pointer",
+              isActive ? "text-[var(--sb-ocean-bg-active)]" : ""
+            )}
           >
             {item.icon}
             {item?.name}

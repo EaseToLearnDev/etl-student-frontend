@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 
@@ -24,7 +25,7 @@ const SubjectReport = ({
   areas_of_improvement,
 }: SubjectReportProps) => {
   return (
-    <>
+    <Link to={`/report/overview/performance/${subject?.toLowerCase()}`}>
       <div className="flex max-w-[550px] flex-col items-start gap-[20px] p-5 bg-[var(--surface-bg-primary)] hover:bg-[var(--surface-bg-secondary)] rounded-xl transition-colors duration-200 ease-in-out">
         {/* Title Section */}
         <div>
@@ -91,7 +92,7 @@ const SubjectReport = ({
           </div>
         ) : null}
       </div>
-    </>
+    </Link>
   );
 };
 
