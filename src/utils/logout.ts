@@ -1,5 +1,8 @@
+import { useStudentStore } from "../features/shared/store/useStudentStore";
+
 const logout = () => {
-  localStorage.removeItem("token");
+  const { reset } = useStudentStore.getState();
+  reset();
   window.location.href = "/student";
 };
 

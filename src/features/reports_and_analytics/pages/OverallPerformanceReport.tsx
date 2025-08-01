@@ -195,7 +195,7 @@ const OverallPerformanceReport = () => {
                 {/* Bar Chart Section */}
                 <div className="flex flex-col lg:flex-row gap-8">
                   <div className="lg:flex-[0.7] xl:flex-[0.75]">
-                    <h5 className="!font-semibold">Average Scores in Tests</h5>
+                    <h5 className="!font-semibold">Time Spend This Month</h5>
                     <div className="min-w-0">
                       <BarChart
                         data={dummyData.weekly}
@@ -221,7 +221,7 @@ const OverallPerformanceReport = () => {
                 {/* Bar Chart Section */}
                 <div className="flex flex-col lg:flex-row gap-8">
                   <div className="lg:flex-[0.7] xl:flex-[0.75]">
-                    <h5 className="!font-semibold">Average Scores in Tests</h5>
+                    <h5 className="!font-semibold">Performance Trends</h5>
                     <div className="min-w-0">
                       <LineChart
                         data={weeklyChartData}

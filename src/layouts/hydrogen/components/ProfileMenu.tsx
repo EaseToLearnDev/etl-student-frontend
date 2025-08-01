@@ -2,12 +2,15 @@
 import { useState, type ReactElement, type RefObject } from "react";
 
 // Rizz UI
-import { Text, Avatar, Button, Popover } from "rizzui";
+import { Avatar, Popover } from "rizzui";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
 import { MdFeedback, MdPayments } from "react-icons/md";
 import { BiSolidVideos } from "react-icons/bi";
+
+// Store
+import { useStudentStore } from "../../../features/shared/store/useStudentStore";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -71,15 +74,25 @@ const menuItems = [
 ];
 
 function DropdownMenu() {
+  const studentName = useStudentStore(
+    (state) => state.studentData?.studentName
+  );
+  const emailId = useStudentStore((state) => state.studentData?.emailId);
+
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-[var(--border-primary)] px-6 pb-5 pt-6">
         <Avatar src="/avatar.webp" name="Albert Flores" />
         <div className="ms-3">
           <h6 className="font-semibold --text-[var(--text-primary)]">
-            Albert Flores
+            {studentName}
           </h6>
-          <Text className="text-[var(--text-secondary)]">flores@doe.io</Text>
+          <p
+            className="text-[var(--text-secondary)] w-40 overflow-hidden text-ellipsis whitespace-nowrap"
+            title={emailId}
+          >
+            {emailId}
+          </p>
         </div>
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-[var(--text-primary)] text-base">
@@ -95,13 +108,12 @@ function DropdownMenu() {
         ))}
       </div>
       <div className="border-t border-[var(--border-primary)] px-6 pb-6 pt-5">
-        <Button
+        <button
           onClick={logout}
           className="h-auto w-full flex gap-2 text-base text-start justify-start p-0 font-medium text-[var(--text-primary)] outline-none focus-visible:ring-0"
-          variant="text"
         >
           Log Out
-        </Button>
+        </button>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
+import { useStudentStore } from "../features/shared/store/useStudentStore";
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  // const token = localStorage.getItem("token");
-  const token = "abc"
+  const {studentData} = useStudentStore.getState();
 
-  return token ? children : <Navigate to="/login" replace />;
+  return studentData?.token ? children : <Navigate to="/login" replace />;
 };
 
 export default PrivateRoute;

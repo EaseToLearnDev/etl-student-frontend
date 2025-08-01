@@ -10,7 +10,7 @@ import useTopicStore from "../../../shared/store/useTopicStore";
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicModeSelector from "../components/TopicModeSelector";
-import TopicList from "../../../shared/components/TopicList";
+import TopicTreeView from "../../../shared/components/TopicTreeView";
 
 // Sample Data
 export const dummyData: TopicType[] = [
@@ -215,7 +215,7 @@ const SLTopicListPage = () => {
       </div>
       <div className="mt-5 h-full overflow-y-auto">
         <ChildLayout
-          primaryContent={<TopicList topics={dummyData} />}
+          primaryContent={<TopicTreeView topics={dummyData} />}
           secondaryContent={<TopicModeSelector />}
           hideSecondary={topic === null}
           onSecondaryHide={reset}

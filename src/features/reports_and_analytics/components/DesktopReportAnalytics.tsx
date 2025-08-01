@@ -9,7 +9,7 @@ const DesktopReportAnalytics = ({ data }: any) => {
       {/* Header */}
       <div className="flex w-full gap-5 overflow-x-hidden">
         <h3 className="!font-bold p-5 md:w-[60%] lg:w-[70%] xl:w-[75%]">
-          Overall Report
+          Overview
         </h3>
         <h3 className="!font-bold p-5 md:w-[40%] lg:w-[30%] xl:w-[25%]">
           Subjects

@@ -20,8 +20,9 @@ import ClassTestPage from "../features/exam_room/class_test/ClassTestPage";
 import ReportAnalytics from "../features/reports_and_analytics/pages/ReportAnalytics";
 import OverallPerformanceReport from "../features/reports_and_analytics/pages/OverallPerformanceReport";
 import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
-import Login from "../features/auth/pages/Login";
-import Signup from "../features/auth/pages/Signup";
+import Login from "../features/auth/login/pages/Login";
+import Signup from "../features/auth/signup/pages/Signup";
+import Onboarding from "../features/onboarding/pages/Onboarding";
 
 const Router = () => {
   return (
@@ -40,6 +41,14 @@ const Router = () => {
           <PublicRoute>
             <Signup />
           </PublicRoute>
+        }
+      />
+      <Route
+        path="/onboarding"
+        element={
+          <PrivateRoute>
+            <Onboarding />
+          </PrivateRoute>
         }
       />
       <Route

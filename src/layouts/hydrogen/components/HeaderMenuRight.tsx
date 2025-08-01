@@ -3,8 +3,12 @@ import RingBellSolidIcon from "../../../components/icons/ring-bell-solid-icon";
 import NotificationDropdown from "./notification-dropdown";
 import ProfileMenuDropDown from "./ProfileMenu";
 import cn from "../../../utils/classNames";
+import { useStudentStore } from "../../../features/shared/store/useStudentStore";
 
 const HeaderMenuRight = () => {
+  const studentName = useStudentStore(
+    (state) => state.studentData?.studentName
+  );
   return (
     <div className="relative ms-auto flex items-center gap-2 text-[var(--text-primary)] xs:gap-3 xl:gap-4 justify-end">
       <NotificationDropdown>
@@ -24,11 +28,9 @@ const HeaderMenuRight = () => {
             "w-9 shrink-0 overflow-hidden rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px sm:w-10"
           }
         >
-          <img
-            src="/avatar.webp"
-            alt="John Doe"
-            className="!h-9 w-9 sm:!h-10 sm:!w-10"
-          />
+          <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
+            <h6 className="!font-bold"> {studentName?.split(" ")?.map((w) => w[0] || "")}</h6>
+          </div>
         </button>
       </ProfileMenuDropDown>
     </div>

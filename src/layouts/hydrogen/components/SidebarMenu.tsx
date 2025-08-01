@@ -5,6 +5,9 @@ import { Link, useLocation } from "react-router-dom";
 // Icons
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
+// Store
+import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+
 // Utils
 import cn from "../../../utils/classNames";
 
@@ -14,6 +17,8 @@ import SidebarDropdown from "./SidebarDropdown";
 
 export function SidebarMenu() {
   const location = useLocation();
+  const studentName = useStudentStore((state) => state.studentData?.studentName);
+  const emailId = useStudentStore((state) => state.studentData?.emailId);
 
   return (
     <div className="flex flex-col h-full mt-4 pb-4 3xl:mt-6">
@@ -68,14 +73,14 @@ export function SidebarMenu() {
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex gap-4">
             <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-              <h6 className="!font-bold">RS</h6>
+              <h6 className="!font-bold">{studentName?.split(' ')?.map((w) => w[0] || '')}</h6>
             </div>
             <div className="flex flex-col gap-1">
               <p className="!font-semibold block w-[140px] overflow-hidden text-ellipsis  whitespace-nowrap line-clamp-1">
-                Rohit Sahu
+                {studentName}
               </p>
               <span className="block w-[140px] overflow-hidden text-[var(--text-tertiary)] text-ellipsis whitespace-nowrap line-clamp-1">
-                rohit.roshan@easetolearn.comdakdjsakldjaskl
+                {emailId}
               </span>
             </div>
           </div>

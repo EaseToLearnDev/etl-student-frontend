@@ -1,40 +1,45 @@
 // Icons
-import { PiStarFill } from "react-icons/pi";
+import type { ReactNode } from "react";
+import DocIcon from "../../../../components/icons/doc-solid-icon";
 import PDFIcon from "../../../../components/icons/pdf-solid-icon";
+import PPTIcon from "../../../../components/icons/ppt-solid-icon";
+import VideoIcon from "../../../../components/icons/video-solid-icon";
 
 // Types
-import type { ContentType } from "../../../shared/types";
+import type { TopicContentType as TopicContentType } from "../sm.types";
 
 type TopicContentItemProps = {
-    content: ContentType;
-}
+  content: TopicContentType;
+};
 
 /**
  * Renders a single topic content item displaying its title, description, PDF icon, and rating.
  *
- * @component
- * @param {TopicContentItemProps} props - The props for the component.
- * @param {ContentType} props.content - The content data to display, including title, description, and rating.
- * @returns {JSX.Element} The rendered topic content item component.
- *
  */
 const TopicContentItem = ({ content }: TopicContentItemProps) => {
+  const iconMap: Record<string, ReactNode> = {
+    Text: <DocIcon height={74} />,
+    PPT: <PPTIcon height={74} />,
+    PDF: <PDFIcon height={74} />,
+    Video: <VideoIcon height={74} />,
+  };
+
+  const icon = iconMap[content?.contentType || "Text"];
+
   return (
     <div className="flex gap-5 p-3 items-center border-1 border-[var(--border-secondary)] rounded-[8px] cursor-pointer hover:bg-[var(--surface-bg-secondary)]">
-      <PDFIcon height={74} />
+      {icon}
       <div className="w-full flex flex-col gap-1">
-        <div className="w-full flex justify-between">
+        <div className="w-full">
           <h6 className="!font-semibold text-ellipsis line-clamp-2">
             {content?.contentTitle}
           </h6>
-          <div className="flex items-center gap-1">
-            <PiStarFill className="w-4 fill-yellow-400 text-yellow-400" />
-            <p>{content?.rating}</p>
-          </div>
         </div>
-        <p className="w-full text-ellipsis line-clamp-2">
-          {content?.contentDescription}
-        </p>
+        <div className="w-full flex gap-2 items-center">
+          <p className="text-ellipsis line-clamp-2">{content?.contentType}</p>
+          <div className="w-1 h-1 rounded-full bg-[var(--text-primary)]" />
+          <p className="text-ellipsis line-clamp-2">{content?.language}</p>
+        </div>
       </div>
     </div>
   );

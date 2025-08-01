@@ -13,7 +13,7 @@ const SubjectProgress = ({ progress }: SubjectProgressProps) => {
   if (!progress) return null;
   return (
     <div className="flex flex-col gap-5">
-      <h5>Subject Report</h5>
+      <h5 className="!font-semibold">Subject Report</h5>
       <div className="flex flex-col gap-2">
         <h5 className="!font-semibold">{progress || 0}%</h5>
         <div className="w-full h-3 rounded-full overflow-hidden bg-[var(--surface-bg-secondary)]">

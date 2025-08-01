@@ -6,7 +6,7 @@ import SubjectReport from "./SubjectReport";
 const MobileReportAnalytics = ({ data }: any) => {
   return (
     <div className="w-full flex flex-col gap-4">
-      <h3 className="!font-bold">Overall Report</h3>
+      <h3 className="!font-bold">Overview</h3>
       <div className="mt-2">
         <MobileChildLayout
           primaryContent={

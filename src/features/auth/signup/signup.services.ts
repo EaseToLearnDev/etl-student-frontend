@@ -1,0 +1,15 @@
+import { SignupPhase } from "./signup.types";
+import useSignupStore from "./store/useSignupStore";
+
+export const handleSignup = () => {
+
+  // Validate fields
+
+  // Move to next phase
+  switchPhase(SignupPhase.Otp);
+};
+
+export const switchPhase = (p: SignupPhase) => {
+  const { setCurrentPhase } = useSignupStore.getState();
+  setCurrentPhase(p);
+};

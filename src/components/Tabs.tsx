@@ -5,13 +5,16 @@ interface TabsProps {
   tabs: string[];
   selectedIndex: number;
   onSelect: (index: number) => void;
+  containerClassName?: string;
+  tabClassName?: string;
+  activeTabClassName?: string;
 }
 
 /**
  * Renders a tabbed navigation component with a sliding indicator.
  * Allows selection of tabs and highlights the active tab.
  */
-const Tabs = ({ tabs, selectedIndex, onSelect }: TabsProps) => {
+const Tabs = ({ tabs, selectedIndex, onSelect, containerClassName, tabClassName, activeTabClassName }: TabsProps) => {
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const indicatorRef = useRef<HTMLDivElement | null>(null);
   const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
@@ -25,7 +28,7 @@ const Tabs = ({ tabs, selectedIndex, onSelect }: TabsProps) => {
   }, [selectedIndex, tabs]);
 
   return (
-    <div className="relative max-w-fit bg-[var(--surface-bg-secondary)] rounded-xl p-2">
+    <div className={cn("relative max-w-fit bg-[var(--surface-bg-secondary)] rounded-xl p-2", containerClassName)}>
       <div className="flex items-center gap-4 relative">
         {/* Sliding indicator */}
         <div
@@ -44,8 +47,9 @@ const Tabs = ({ tabs, selectedIndex, onSelect }: TabsProps) => {
             className={cn(
               "relative z-10 outline-none border-none cursor-pointer rounded-lg px-3 py-2 transition-colors duration-200",
               selectedIndex === index
-                ? "text-[var(--sb-ocean-content-primary)] !font-medium"
-                : "text-[var(--text-primary)]"
+                ? cn("text-[var(--sb-ocean-content-primary)] !font-medium", activeTabClassName)
+                : "text-[var(--text-primary)]",
+              tabClassName
             )}
             onClick={() => onSelect(index)}
           >

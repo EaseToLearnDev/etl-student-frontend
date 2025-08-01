@@ -3,18 +3,8 @@ export type TopicType = {
   questionCount: number;
   subjectiveCount: number;
   topicName: string;
-  topicUrl: string;
   pathIds: string;
   children: TopicType[];
-};
-
-export type ContentType = {
-  id: number;
-  contentTitle: string;
-  contentDescription: string;
-  contentType: string;
-  rating: number;
-  language?: string;
 };
 
 export type TestType = {
@@ -83,3 +73,88 @@ export interface PatternDetailsType {
   markNotAttempt: number;
   questionType: string;
 }
+
+export interface StudentDataResponseType {
+  openedCourse: number;
+  firstTimeUser: number;
+  websiteId: number;
+  studentId: number;
+  token: string;
+  studentName: string;
+  emailId: string;
+  phoneNo: string;
+  status: string;
+  loginId: string;
+  schools: SchoolType[];
+  courses: CourseResponseType[];
+}
+
+export interface StudentDataType {
+  openedCourse: number;
+  firstTimeUser: number;
+  websiteId: number;
+  studentId: number;
+  token: string;
+  studentName: string;
+  emailId: string;
+  phoneNo: string;
+  status: string;
+  loginId: string;
+  schools: SchoolType[];
+  courses: CourseType[];
+}
+
+export interface SchoolType {
+  schoolName: string;
+  className: string;
+  schoolId: number;
+  classId: number;
+}
+
+export interface CourseResponseType {
+  templateId: number;
+  validityId: number;
+  courseId: number;
+  packTypeId: number;
+  benchmark: number;
+  organisationName: string;
+  validTillDate: string;
+  packTypeTitle: string;
+  dashboard: number;
+  report: number;
+  studyMaterial: number;
+  selfTest: number;
+  topicTest: number;
+  mockTest: number;
+  dynamicMockTest: number;
+  classTest: number;
+  teacherHelp: number;
+  tonyHelp: number;
+  otherCourses: number;
+}
+
+export interface CourseType {
+  templateId: number;
+  validityId: number;
+  courseId: number;
+  packTypeId: number;
+  benchmark: number;
+  organisationName: string;
+  validTillDate: string;
+  packTypeTitle: string;
+  tabs: Record<string, boolean>;
+}
+
+export enum Severity {
+  None = "none",
+  Normal = "normal",
+  Warning = "warning",
+  Alert = "alert",
+}
+export interface ErrorType {
+  severity: Severity;
+  message: string;
+}
+
+
+export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";

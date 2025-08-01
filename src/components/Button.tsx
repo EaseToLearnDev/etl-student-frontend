@@ -6,6 +6,7 @@ import cn from "../utils/classNames";
 
 interface ButtonProps {
   children: ReactNode;
+  type?: "button" | "reset" | "submit";
   style?: "primary" | "secondary" | "neutral";
   className?: string;
   onClick?: () => void;
@@ -16,6 +17,7 @@ interface ButtonProps {
  */
 const Button = ({
   children,
+  type = "button",
   style = "primary",
   className,
   onClick,
@@ -30,9 +32,11 @@ const Button = ({
   };
   return (
     <button
+      type={type}
       onClick={onClick}
       className={cn(
         "flex py-3 px-5 justify-center items-center gap-3 rounded-[4px] font-semibold text-nowrap transition-all duration-200 ease-in-out",
+        "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
         styleMap[style],
         className
       )}
