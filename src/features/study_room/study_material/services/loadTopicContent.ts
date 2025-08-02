@@ -30,6 +30,7 @@ export const loadTopicContent = async () => {
 
     if (!list) {
       setTopicContentList(null);
+      return;
     }
     setTopicContentList(list);
   } catch (error) {

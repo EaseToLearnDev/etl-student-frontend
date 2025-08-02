@@ -12,17 +12,16 @@ import NotFound from "../shared/NotFound";
 import Settings from "../features/settings";
 import StudyMaterials from "../features/study_room/study_material/pages/StudyMaterials";
 import SmartLearning from "../features/study_room/smart_learning/pages/SmartLearning";
-import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
-import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
-import MockTestListPage from "../features/exam_room/mock_test/pages/MockTestListPage";
-import ClassTestPage from "../features/exam_room/class_test/ClassTestPage";
+import MockTestList from "../features/exam_room/mock_test/pages/MockTestList";
+import ClassTestPage from "../features/exam_room/class_test/ClassTest";
 import ReportAnalytics from "../features/reports_and_analytics/pages/ReportAnalytics";
 import OverallPerformanceReport from "../features/reports_and_analytics/pages/OverallPerformanceReport";
 import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
 import Login from "../features/auth/login/pages/Login";
 import Signup from "../features/auth/signup/pages/Signup";
 import Onboarding from "../features/onboarding/pages/Onboarding";
+import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
 
 const Router = () => {
   return (
@@ -73,16 +72,8 @@ const Router = () => {
           path="exam-room"
           element={<Navigate to="/exam-room/topic-test" replace />}
         />
-        <Route path="exam-room/topic-test" element={<TopicListPage />} />
-        <Route
-          path="exam-room/topic-test/:subject"
-          element={<TopicListPage />}
-        />
-        <Route
-          path="exam-room/topic-test/:subject/:topic"
-          element={<TopicTestListPage />}
-        />
-        <Route path="exam-room/mock-test" element={<MockTestListPage />} />
+        <Route path="exam-room/topic-test" element={<TopicTestTreeView />} />
+        <Route path="exam-room/mock-test" element={<MockTestList />} />
         <Route path="exam-room/class-test" element={<ClassTestPage />} />
 
         <Route

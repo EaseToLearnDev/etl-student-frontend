@@ -44,7 +44,7 @@ export const menuItems = [
         icon: <PiClipboardTextFill />,
       },
       {
-        name: "Exam Test",
+        name: "Mock Test",
         href: "/mock-test",
         icon: <PiTimerFill />,
       },
@@ -66,7 +66,7 @@ export const menuItems = [
         icon: <PiChartBarFill />,
       },
       {
-        name: "Exam Test",
+        name: "Mock Test",
         href: "/mock-test",
         icon: <PiTimerFill />,
       },
