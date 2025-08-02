@@ -2,7 +2,6 @@
 import { useEffect } from "react";
 
 // Store
-import useTopicStore from "../../../shared/store/useTopicStore";
 import { useSMStore } from "../store/useSMStore";
 
 // Services
@@ -14,22 +13,20 @@ import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicContentPanel from "../components/TopicContentPanel";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 
-
 /**
  * SMTopicListPage displays a list of study material topics and their content.
  * Handles topic selection, content loading, and layout rendering.
  */
-const SMTopicListPage = () => {
-  const reset = useTopicStore((state) => state.reset);
+const StudyMaterials = () => {
+  const reset = useSMStore((state) => state.reset);
+  const resetSelectedTopic = useSMStore((state) => state.resetSelectedTopic);
   const topicTree = useSMStore((state) => state.topicTree);
   const selectedTopic = useSMStore((state) => state.selectedTopic);
   const setSelectedTopic = useSMStore((state) => state.setSelectedTopic);
 
   useEffect(() => {
     loadStudyMaterialTopicTree();
-    return () => {
-      reset();
-    };
+    return reset;
   }, []);
 
   useEffect(() => {
@@ -48,7 +45,6 @@ const SMTopicListPage = () => {
           primaryContent={
             <TopicTreeView
               topics={topicTree || []}
-              activeTopic={selectedTopic}
               onClickHandler={setSelectedTopic}
               getId={(t) => t.topicId}
               getLabel={(t) => t.topicName}
@@ -57,7 +53,7 @@ const SMTopicListPage = () => {
           }
           secondaryContent={<TopicContentPanel />}
           hideSecondary={!selectedTopic}
-          onSecondaryHide={reset}
+          onSecondaryHide={resetSelectedTopic}
           secondaryInitialHeight={1}
         />
       </div>
@@ -65,4 +61,4 @@ const SMTopicListPage = () => {
   );
 };
 
-export default SMTopicListPage;
+export default StudyMaterials;

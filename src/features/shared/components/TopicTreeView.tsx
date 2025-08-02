@@ -1,10 +1,10 @@
 // Components
+import { useState } from "react";
 import Topic from "./Topic";
 
 interface TopicListProps<T> {
   topics: T[];
-  activeTopic: T | null;
-  onClickHandler: (topic: T) => void;
+  onClickHandler?: (topic: T) => void;
   getId: (topic: T) => number;
   getLabel: (topic: T) => string;
   getChildren?: (topic: T) => T[] | undefined;
@@ -16,13 +16,17 @@ interface TopicListProps<T> {
  */
 const TopicTreeView = <T,>({
   topics,
-  activeTopic,
   onClickHandler,
   getId,
   getLabel,
   getChildren,
   renderRightSection,
 }: TopicListProps<T>) => {
+  const [activeTopic, setActiveTopic] = useState<T | null>(null);
+  const handleSelect = (topic: T) => {
+    setActiveTopic(topic);
+    onClickHandler?.(topic);
+  } 
   return (
     <div>
       {topics?.map((topic) => (
@@ -30,7 +34,7 @@ const TopicTreeView = <T,>({
           key={getId(topic)}
           topic={topic}
           activeTopic={activeTopic}
-          onClickHandler={onClickHandler}
+          onClickHandler={handleSelect}
           getId={getId}
           getLabel={getLabel}
           getChildren={getChildren}

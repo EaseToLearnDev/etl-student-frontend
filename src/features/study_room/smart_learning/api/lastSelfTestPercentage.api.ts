@@ -23,5 +23,5 @@ export const getLastSelfTestPercentage = async ({
     headers: { loginId, token, device: "web" },
   });
 
-  return res?.data?.percentage ?? null;
+  return res?.data?.obj?.percentage ?? null;
 };

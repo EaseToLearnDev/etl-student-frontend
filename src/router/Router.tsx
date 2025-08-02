@@ -10,8 +10,8 @@ import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 // Pages
 import NotFound from "../shared/NotFound";
 import Settings from "../features/settings";
-import SMTopicListPage from "../features/study_room/study_material/pages/SMTopicListPage";
-import SLTopicListPage from "../features/study_room/smart_learning/pages/SLTopicListPage";
+import StudyMaterials from "../features/study_room/study_material/pages/StudyMaterials";
+import SmartLearning from "../features/study_room/smart_learning/pages/SmartLearning";
 import TopicListPage from "../features/exam_room/topic_test/pages/TopicListPage";
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
 import TopicTestListPage from "../features/exam_room/topic_test/pages/TopicTestListPage";
@@ -66,8 +66,8 @@ const Router = () => {
           path="study-room"
           element={<Navigate to="/study-room/study-material" replace />}
         />
-        <Route path="study-room/study-material" element={<SMTopicListPage />} />
-        <Route path="study-room/smart-learning" element={<SLTopicListPage />} />
+        <Route path="study-room/study-material" element={<StudyMaterials />} />
+        <Route path="study-room/smart-learning" element={<SmartLearning />} />
 
         <Route
           path="exam-room"

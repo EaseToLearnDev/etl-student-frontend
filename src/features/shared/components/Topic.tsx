@@ -31,14 +31,16 @@ const Topic = <T,>({
   const isMobile = useIsMobile();
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const handleSelect = () => onClickHandler?.(topic);
+  const handleSelect = () => {
+    onClickHandler?.(topic);
+  };
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExpanded((prev) => !prev);
   };
 
-  const children = getChildren?.(topic);
   const isActive = activeTopic ? getId(activeTopic as T) === getId(topic) : false;
+  const children = getChildren?.(topic);
 
   return (
     <div className={cn("mt-2", isMobile ? "ml-[20px]" : "ml-[40px]")}>
@@ -56,7 +58,7 @@ const Topic = <T,>({
           <div
             onClick={handleExpand}
             className={cn(
-              "w-[24px] h-[24px] flex justify-center items-center rounded-md cursor-pointer",
+              "w-[24px] h-[24px] aspect-square flex justify-center items-center rounded-md cursor-pointer",
               children?.length ? "visible" : "invisible",
               isActive
                 ? "border-1 border-[var(--sb-ocean-bg-active)]"
@@ -77,7 +79,7 @@ const Topic = <T,>({
           {!children?.length && (
             <div
               className={cn(
-                "w-[8px] h-[8px] rounded-full",
+                "w-[8px] h-[8px] aspect-square rounded-full",
                 isActive
                   ? "bg-[var(--sb-ocean-bg-active)]"
                   : "bg-[var(--text-tertiary)]"

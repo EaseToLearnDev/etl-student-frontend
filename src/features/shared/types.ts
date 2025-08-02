@@ -1,7 +1,7 @@
 export type TopicType = {
   topicId: number;
-  questionCount: number;
-  subjectiveCount: number;
+  questionCount?: number;
+  subjectiveCount?: number;
   topicName: string;
   pathIds: string;
   children: TopicType[];

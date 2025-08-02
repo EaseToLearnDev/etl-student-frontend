@@ -1,10 +1,10 @@
 import { useStudentStore } from "../../../shared/store/useStudentStore";
 import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";
-import { useSMStore } from "../../study_material/store/useSMStore";
+import { useSLStore } from "../store/useSLStore";
 
 export const loadLastSelfTestPercentage = async () => {
   const { studentData } = useStudentStore.getState();
-  const { selectedTopic, setLastSelfTestPercentage } = useSMStore.getState();
+  const { selectedTopic, setLastSelfTestPercentage } = useSLStore.getState();
 
   if (!studentData || !selectedTopic) {
     setLastSelfTestPercentage(null);
