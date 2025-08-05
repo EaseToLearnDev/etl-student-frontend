@@ -13,7 +13,7 @@ interface TopicProps<T> {
   topic: T;
   activeTopic?: T | null;
   onClickHandler?: (topic: T) => void;
-  getId: (topic: T) => string | number;
+  getId: (topic: T) => number;
   getLabel: (topic: T) => string;
   getChildren?: (topic: T) => T[] | undefined;
   renderRightSection?: (topic: T, isActive: boolean) => React.ReactNode;

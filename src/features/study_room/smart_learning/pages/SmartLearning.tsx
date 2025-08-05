@@ -1,8 +1,11 @@
-// Reset
+// React
 import { useEffect } from "react";
 
-// Store
-// import { useSLStore } from "../store/useSLStore";
+// Utils
+import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
+
+// Hooks
+import useSmartLearning from "../hooks/useSmartLearning";
 
 // Services
 import { loadSmartLearningTopictree } from "../services/loadSmartLearningTopicTree";
@@ -10,18 +13,18 @@ import { loadLastSelfTestPercentage } from "../services/loadLastSelfTestPercenta
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
-import TopicModeSelector from "../components/TopicModeSelector";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
+import TopicModeSelector from "../components/TopicModeSelector";
 import { Modal } from "../../../../components/Modal";
-import useSmartLearning from "../hooks/useSmartLearning";
 
 const SmartLearning = () => {
   const {
     reset,
-    selectedTopic,
+    getSelectedTopic,
     topicTree,
     setTopicTree,
-    setSelectedTopic,
+    setTopicFlatList,
+    setSelectedTopicId,
     mode,
     setMode,
     lastSelfTestPercentage,
@@ -30,14 +33,18 @@ const SmartLearning = () => {
     setShowModal,
   } = useSmartLearning();
 
+  const selectedTopic = getSelectedTopic();
   useEffect(() => {
-    const getTreeView = async () => {
+    const getTopicTree = async () => {
       const data = await loadSmartLearningTopictree();
-      console.log('treeview', data);
-      setTopicTree(data);
-    }
-    getTreeView();
-    // return reset;
+      if (data) {
+        setTopicTree(data);
+        const flatList = flattenTopics(data);
+        setTopicFlatList(flatList);
+      }
+    };
+    getTopicTree();
+    return reset;
   }, []);
 
   useEffect(() => {
@@ -59,10 +66,11 @@ const SmartLearning = () => {
           primaryContent={
             <TopicTreeView
               topics={topicTree || []}
-              onClickHandler={setSelectedTopic}
-              getId={(t) => t.topicId}
-              getLabel={(t) => t.topicName}
-              getChildren={(t) => t.children}
+              selectedTopic={selectedTopic}
+              onClickHandler={(t) => setSelectedTopicId(t ? t?.topicId : null)}
+              getId={(t) => t?.topicId}
+              getLabel={(t) => t?.topicName}
+              getChildren={(t) => t?.children}
               renderRightSection={(_, isActive) =>
                 isActive && (
                   <div className="w-7 h-7 rounded-full p-1 overflow-hidden border-2 border-dashed border-[var(--border-primary)]">
@@ -91,7 +99,7 @@ const SmartLearning = () => {
             )
           }
           hideSecondary={!selectedTopic}
-          onSecondaryHide={() => setSelectedTopic(null)}
+          onSecondaryHide={() => setSelectedTopicId(null)}
           secondaryInitialHeight={1}
         />
       </div>

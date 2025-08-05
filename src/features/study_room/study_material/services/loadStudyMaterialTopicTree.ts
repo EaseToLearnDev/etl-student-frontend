@@ -1,29 +1,24 @@
 // Types
 import type { TopicType } from "../../../shared/types";
 
-// Store
-import { useSMStore } from "../store/useSMStore";
+
 import { useStudentStore } from "../../../shared/store/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
-
 export const loadStudyMaterialTopicTree = async () => {
   const { studentData } = useStudentStore.getState();
-  const { setTopicTree } = useSMStore.getState();
 
   if (!studentData) {
-    setTopicTree(null);
-    return;
+    return null;
   }
 
   const { loginId, token, openedCourse, courses } = studentData;
   const templateId = courses?.[openedCourse]?.templateId;
 
   if (!loginId || !token || !templateId) {
-    setTopicTree(null);
-    return;
+    return null;
   }
 
   try {
@@ -36,13 +31,12 @@ export const loadStudyMaterialTopicTree = async () => {
     })) as TopicType[];
 
     if (!data) {
-      setTopicTree(null);
-      return;
+      return null;
     }
 
-    setTopicTree(data);
+    return data;
   } catch (error) {
     console.error("Failed to load topic tree:", error);
-    setTopicTree(null);
+    return null;
   }
 };

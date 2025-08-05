@@ -1,22 +1,30 @@
+// Types
+import type { TopicType } from "../../../shared/types";
+import type { FilterType, TopicContentType } from "../sm.types";
+
 // Icons
 import { FiFilter } from "react-icons/fi";
-
-// Store
-import { useSMStore } from "../store/useSMStore";
 
 // Components
 import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
 
+interface TopicContentPanelProps {
+  selectedTopic: TopicType;
+  setSelectedContent: (contentType: TopicContentType) => void;
+  topicContentList: TopicContentType[];
+  contentFilterType: FilterType;
+}
+
 /**
  * TopicContentPanel displays a list of study materials for a selected topic.
- * The panel header shows the topic name and filter/lock icons.
  */
-const TopicContentPanel = () => {
-  const selectedTopic = useSMStore((state) => state.selectedTopic);
-  const topicContentList = useSMStore((state) => state.topicContentList);
-  const contentFilterType = useSMStore((state) => state.contentFilterType);
-
+const TopicContentPanel = ({
+  selectedTopic,
+  setSelectedContent,
+  topicContentList,
+  contentFilterType,
+}: TopicContentPanelProps) => {
   const filteredContentList =
     contentFilterType === "All"
       ? topicContentList
@@ -39,7 +47,11 @@ const TopicContentPanel = () => {
       <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-thin">
         {filteredContentList?.length && filteredContentList?.length > 0 ? (
           filteredContentList?.map((content, index) => (
-            <TopicContentItem key={index} content={content} />
+            <TopicContentItem
+              key={index}
+              content={content}
+              setSelectedContent={setSelectedContent}
+            />
           ))
         ) : (
           <></>

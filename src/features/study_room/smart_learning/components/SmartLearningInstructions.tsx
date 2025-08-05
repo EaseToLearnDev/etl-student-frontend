@@ -7,13 +7,6 @@ type SmartLearningInstructionsProps = {
 
 /**
  * SmartLearningInstructions component displays instructions based on the selected learning mode.
- * 
- * Props:
- * - learningMode: string - Determines whether to show "learning" or "competitive" instructions.
- * 
- * The component renders a set of instructions tailored for either Learning Mode or Competitive Mode.
- * - Learning Mode: Focuses on self-paced learning, hints, and study support.
- * - Competitive Mode: Focuses on exam rules, navigation, and answer submission.
  */
 const SmartLearningInstructions = ({
   learningMode,

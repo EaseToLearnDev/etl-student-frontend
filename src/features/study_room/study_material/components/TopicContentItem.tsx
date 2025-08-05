@@ -1,3 +1,6 @@
+// Types
+import type { TopicContentType as TopicContentType } from "../sm.types";
+
 // Icons
 import type { ReactNode } from "react";
 import DocIcon from "../../../../components/icons/doc-solid-icon";
@@ -5,20 +8,20 @@ import PDFIcon from "../../../../components/icons/pdf-solid-icon";
 import PPTIcon from "../../../../components/icons/ppt-solid-icon";
 import VideoIcon from "../../../../components/icons/video-solid-icon";
 
-// Types
-import type { TopicContentType as TopicContentType } from "../sm.types";
-import { useSMStore } from "../store/useSMStore";
 
 type TopicContentItemProps = {
   content: TopicContentType;
+  setSelectedContent: (content: TopicContentType) => void;
 };
 
 /**
  * Renders a single topic content item displaying its title, description, PDF icon, and rating.
  *
  */
-const TopicContentItem = ({ content }: TopicContentItemProps) => {
-  const setSelectedContent = useSMStore((state) => state.setSelectedContent);
+const TopicContentItem = ({
+  content,
+  setSelectedContent,
+}: TopicContentItemProps) => {
   const iconMap: Record<string, ReactNode> = {
     Text: <DocIcon height={74} />,
     PPT: <PPTIcon height={74} />,

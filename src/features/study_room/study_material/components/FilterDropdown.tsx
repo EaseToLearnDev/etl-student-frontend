@@ -1,17 +1,16 @@
 import { useState, type ReactElement, type RefObject } from "react";
 import { Popover } from "rizzui/popover";
 import useIsMobile from "../../../../hooks/useIsMobile";
-import { useSMStore } from "../store/useSMStore";
 import type { FilterType } from "../sm.types";
+import useStudyMaterial from "../hooks/useStudyMaterial";
 
 const FilterList = ({
   setIsOpen,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const setContentFilterType = useSMStore(
-    (state) => state.setContentFilterType
-  );
+   const {setContentFilterType} = useStudyMaterial();
+
   const handleClick = (filter: FilterType) => {
     setContentFilterType(filter);
     setIsOpen(false);

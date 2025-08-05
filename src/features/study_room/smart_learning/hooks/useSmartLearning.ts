@@ -1,27 +1,38 @@
-import { useState } from "react"
+import { useState } from "react";
 import { type TopicType } from "../../../shared/types";
 import type { ModeType } from "../sl.types";
 
 const useSmartLearning = () => {
   const [topicTree, setTopicTree] = useState<TopicType[] | null>(null);
-  const [selectedTopic, setSelectedTopic] = useState<TopicType | null>(null);
-  const [lastSelfTestPercentage, setLastSelfTestPercentage] = useState<number | null>(null);
-  const [mode, setMode] = useState<ModeType>('learning');
+  const [topicFlatList, setTopicFlatList] = useState<TopicType[] | null>(null);
+  const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
+  const [lastSelfTestPercentage, setLastSelfTestPercentage] = useState<
+    number | null
+  >(null);
+  const [mode, setMode] = useState<ModeType>("learning");
   const [showModal, setShowModal] = useState<boolean>(false);
-  
-const reset = () => {
-    setTopicTree(null);
-    setSelectedTopic(null);
-    setLastSelfTestPercentage(null);
-    setMode('learning');
-    setShowModal(false);
-};
 
-return {
+  const reset = () => {
+    setTopicTree(null);
+    setTopicFlatList(null);
+    setSelectedTopicId(null);
+    setLastSelfTestPercentage(null);
+    setMode("learning");
+    setShowModal(false);
+  };
+
+  const getSelectedTopic = () => {
+    if (!selectedTopicId || !topicFlatList) return null;
+    else return topicFlatList?.find((t) => t.topicId === selectedTopicId) ?? null;
+  };
+
+  return {
     topicTree,
     setTopicTree,
-    selectedTopic,
-    setSelectedTopic,
+    topicFlatList,
+    setTopicFlatList,
+    getSelectedTopic,
+    setSelectedTopicId,
     lastSelfTestPercentage,
     setLastSelfTestPercentage,
     mode,
@@ -29,7 +40,7 @@ return {
     showModal,
     setShowModal,
     reset,
+  };
 };
-}
 
 export default useSmartLearning;

@@ -22,7 +22,6 @@ import Login from "../features/auth/login/pages/Login";
 import Signup from "../features/auth/signup/pages/Signup";
 import Onboarding from "../features/onboarding/pages/Onboarding";
 import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
-import SmartLearningLocal from "../features/study_room/smart_learning/pages/SmartLearningLocal";
 
 const Router = () => {
   return (

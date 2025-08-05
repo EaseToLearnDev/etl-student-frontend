@@ -1,22 +1,18 @@
 import { useStudentStore } from "../../../shared/store/useStudentStore";
 import { getTextContent } from "../api/textContent.api";
-import type { TextContentType } from "../sm.types";
-import { useSMStore } from "../store/useSMStore";
+import type { TextContentType, TopicContentType } from "../sm.types";
 
-export const loadTextContent = async () => {
+export const loadTextContent = async (selectedContent: TopicContentType) => {
   const { studentData } = useStudentStore.getState();
-  const { selectedContent, setTextContent } = useSMStore.getState();
 
   if (!studentData || !selectedContent) {
-    setTextContent(null);
-    return;
+    return null;
   }
 
   const { id } = selectedContent;
   const { loginId, token } = studentData;
   if (!loginId || !token || !id) {
-    setTextContent(null);
-    return;
+    return null;
   }
 
   try {
@@ -27,13 +23,12 @@ export const loadTextContent = async () => {
     })) as TextContentType;
 
     if (!data) {
-      setTextContent(null);
-      return;
+      return null;
     }
 
-    setTextContent(data);
+    return data;
   } catch (error) {
     console.log("Failed to load text content: ", error);
-    setTextContent(null);
+    return null;
   }
 };

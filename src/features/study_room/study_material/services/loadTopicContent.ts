@@ -1,22 +1,20 @@
 import { useStudentStore } from "../../../shared/store/useStudentStore";
+import type { TopicType } from "../../../shared/types";
 import { getTopicContent } from "../api/topicContent.api";
-import { useSMStore } from "../store/useSMStore";
+import type { TopicContentType } from "../sm.types";
 
-export const loadTopicContent = async () => {
+export const loadTopicContent = async (topic: TopicType) => {
   const { studentData } = useStudentStore.getState();
-  const { selectedTopic, setTopicContentList } = useSMStore.getState();
 
-  if (!studentData || !selectedTopic) {
-    setTopicContentList(null);
-    return;
+  if (!studentData || !topic) {
+    return null;
   }
 
   const { loginId, token, openedCourse, courses } = studentData;
   const templateId = courses?.[openedCourse]?.templateId;
 
   if (!loginId || !token || !templateId) {
-    setTopicContentList(null);
-    return;
+    return null;
   }
 
   try {
@@ -24,17 +22,16 @@ export const loadTopicContent = async () => {
       loginId,
       token,
       templateId,
-      topicId: selectedTopic.topicId,
-      topicName: selectedTopic.topicName,
-    });
+      topicId: topic?.topicId,
+      topicName: topic?.topicName,
+    }) as TopicContentType[];
 
     if (!list) {
-      setTopicContentList(null);
-      return;
+      return null;
     }
-    setTopicContentList(list);
+    return list;
   } catch (error) {
     console.error("Failed to load topic content:", error);
-    setTopicContentList(null);
+    return null;
   }
 };

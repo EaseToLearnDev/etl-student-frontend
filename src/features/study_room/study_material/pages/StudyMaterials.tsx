@@ -1,8 +1,15 @@
 // React
 import { useEffect } from "react";
 
-// Store
-import { useSMStore } from "../store/useSMStore";
+// Icons
+import { MdClose } from "react-icons/md";
+
+// Utils
+import cn from "../../../../utils/classNames";
+import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
+
+// Hooks
+import useStudyMaterial from "../hooks/useStudyMaterial";
 
 // Services
 import { loadStudyMaterialTopicTree } from "../services/loadStudyMaterialTopicTree";
@@ -11,50 +18,75 @@ import { loadTextContent } from "../services/loadTextContent";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
+import TopicTreeView from "../../../shared/components/TopicTreeView";
 import { Modal } from "../../../../components/Modal";
 import TopicContentPanel from "../components/TopicContentPanel";
-import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TextContentModalView from "../components/TextContentModalView";
 import MediaContentModalView from "../components/MediaContentModalVIew";
-import { MdClose } from "react-icons/md";
-import cn from "../../../../utils/classNames";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
- * Handles topic selection, content loading, and layout rendering.
  */
 const StudyMaterials = () => {
-  const reset = useSMStore((state) => state.reset);
-  const resetSelectedTopic = useSMStore((state) => state.resetSelectedTopic);
-  const topicTree = useSMStore((state) => state.topicTree);
-  const selectedTopic = useSMStore((state) => state.selectedTopic);
-  const setSelectedTopic = useSMStore((state) => state.setSelectedTopic);
-  const selectedContent = useSMStore((state) => state.selectedContent);
-  const setSelectedContent = useSMStore((state) => state.setSelectedContent);
-  const textContent = useSMStore((state) => state.textContent);
+  const {
+    reset,
+    topicTree,
+    setTopicTree,
+    setTopicFlatList,
+    contentFilterType,
+    topicContentList,
+    setTopicContentList,
+    getSelectedTopic,
+    setSelectedTopicId,
+    selectedContent,
+    setSelectedContent,
+    textContent,
+    setTextContent,
+  } = useStudyMaterial();
+
+  const selectedTopic = getSelectedTopic();
 
   // ========== Initial Load ==========
   useEffect(() => {
-    loadStudyMaterialTopicTree();
+    const getTopicTree = async () => {
+      const data = await loadStudyMaterialTopicTree();
+      if (data) {
+        setTopicTree(data);
+        const flatList = flattenTopics(data);
+        setTopicFlatList(flatList);
+      }
+    };
+    getTopicTree();
     return reset;
   }, []);
 
   // ========== Load Topic Content on Topic Select ==========
   useEffect(() => {
-    if (selectedTopic?.topicId) {
-      loadTopicContent();
-    }
+    const getContentList = async () => {
+      if (selectedTopic?.topicId) {
+        const contentList = await loadTopicContent(selectedTopic);
+        setTopicContentList(contentList);
+      }
+    };
+    getContentList();
   }, [selectedTopic?.topicId]);
 
   // ========== Load Text Content on Content Select ==========
   useEffect(() => {
-    if (
-      selectedContent?.id &&
-      selectedContent.contentType === "Text" &&
-      textContent?.id !== selectedContent?.id
-    ) {
-      loadTextContent();
-    }
+    const getTextContent = async () => {
+      if (
+        selectedContent?.id &&
+        selectedContent.contentType === "Text" &&
+        textContent?.id !== selectedContent?.id
+      ) {
+        const data = await loadTextContent(selectedContent);
+        if (data) {
+          setTextContent(data);
+        }
+      }
+    };
+
+    getTextContent();
   }, [selectedContent?.id]);
 
   // ========== Render ==========
@@ -71,15 +103,27 @@ const StudyMaterials = () => {
           primaryContent={
             <TopicTreeView
               topics={topicTree || []}
-              onClickHandler={setSelectedTopic}
+              selectedTopic={selectedTopic}
+              onClickHandler={(t) => setSelectedTopicId(t ? t?.topicId : null)}
               getId={(t) => t.topicId}
               getLabel={(t) => t.topicName}
               getChildren={(t) => t.children}
             />
           }
-          secondaryContent={<TopicContentPanel />}
+          secondaryContent={
+            topicContentList && selectedTopic ? (
+              <TopicContentPanel
+                setSelectedContent={setSelectedContent}
+                topicContentList={topicContentList}
+                selectedTopic={selectedTopic}
+                contentFilterType={contentFilterType}
+              />
+            ) : (
+              <></>
+            )
+          }
           hideSecondary={!selectedTopic || selectedContent !== null}
-          onSecondaryHide={resetSelectedTopic}
+          onSecondaryHide={() => setSelectedTopicId(null)}
           secondaryInitialHeight={1}
         />
       </div>
