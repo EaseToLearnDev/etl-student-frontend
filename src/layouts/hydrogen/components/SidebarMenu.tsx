@@ -73,7 +73,7 @@ export function SidebarMenu() {
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex gap-4">
             <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-              <h6 className="!font-bold">{studentName?.split(' ')?.map((w) => w[0] || '')}</h6>
+              <p className="!font-bold">{studentName?.split(' ')?.map((w) => w[0] || '')}</p>
             </div>
             <div className="flex flex-col gap-1">
               <p className="!font-semibold block w-[140px] overflow-hidden text-ellipsis  whitespace-nowrap line-clamp-1">

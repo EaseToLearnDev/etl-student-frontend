@@ -29,7 +29,7 @@ const HeaderMenuRight = () => {
           }
         >
           <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-            <h6 className="!font-bold"> {studentName?.split(" ")?.map((w) => w[0] || "")}</h6>
+            <p className="!font-bold"> {studentName?.split(" ")?.map((w) => w[0] || "")}</p>
           </div>
         </button>
       </ProfileMenuDropDown>

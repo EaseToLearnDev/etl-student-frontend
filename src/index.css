@@ -261,6 +261,116 @@ span {
   --scrollbar-height: 8px;
 }
 
+/* Text Content Start */
+.text_content {
+  --fs-heading-2: 32px;
+  --fs-heading-3: 28px;
+  --fs-heading-4: 22px;
+  --fs-heading-5: 16px;
+  --fs-heading-6: 14px;
+  --fs-paragraph: 16px;
+  --fs-paragraph-sm: 14px;
+}
+.text_content_heading {
+  --fs-heading-1: 45px;
+}
+
+@media only screen and (max-width: 480px) {
+  .text_content h1,
+  .text_content h2,
+  .text_content h3,
+  .text_content h4,
+  .text_content h5,
+  .text_content h6 {
+    margin-block: 10px;
+  }
+  .text_content_heading {
+    --fs-heading-1: 40px;
+  }
+  .text_content img {
+    width: 100%;
+  }
+}
+
+.text_content ul {
+  list-style: disc;
+}
+.text_content ul,
+.text_content ol {
+  margin-left: 30px;
+  margin-bottom: 16px;
+}
+.text_content ul ul,
+.text_content ol ul {
+  margin-bottom: 0;
+}
+.text_content p,
+.text_content * p {
+  margin-bottom: 8px;
+}
+.text_content p,
+.text_content li,
+.text_content a,
+.text_content span {
+  line-height: 1.6;
+  max-width: 120ch;
+}
+.text_content img {
+  margin-block: 20px;
+  border-radius: 12px;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+}
+.text_content * a {
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  color: var(--sb-ocean-bg-active) !important;
+}
+/* Text Content End */
+
+/* Table Response Begin */
+.table_responsive {
+  /* width: fit-content; */
+  max-width: 100%;
+  overflow: hidden;
+  overflow-x: auto;
+  margin: 15px 0;
+  border: 2px solid var(--border-primary);
+  border-radius: 12px;
+}
+
+.table_responsive table {
+  width: 100%;
+  background: var(--surface-bg-tertiary);
+  border-collapse: collapse;
+  border-spacing: 0;
+  overflow: hidden;
+}
+
+/* If <thead> exists, apply styles to the first row in the <thead> */
+.table_responsive table thead > tr {
+  background-color: var(--surface-bg-tertiary);
+}
+
+.table_responsive > table > tbody > tr > td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border-primary);
+}
+
+.table_responsive p {
+  margin: 0;
+}
+
+/* If <thead> does not exist, apply styles to the first <tr> in the tbody */
+.table_responsive table tbody:has(thead) tr:first-child,
+.table_responsive table:not(:has(thead)) tr:first-child {
+  background-color: var(--surface-bg-secondary);
+}
+
+/* Table Response End */
+
 /* Utilities */
 .debug {
   border: 1px solid red;

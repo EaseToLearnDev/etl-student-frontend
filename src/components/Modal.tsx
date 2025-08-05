@@ -103,11 +103,11 @@ export function Modal({
       {/* Panel */}
       <div
         className={cn(
-          "relative z-20 w-full bg-[var(--surface-bg-secondary)] shadow-xl transition-all",
+          "relative z-20 w-full bg-[var(--surface-bg-secondary)] shadow-xl transition-all overflow-y-auto",
           show ? "opacity-100 scale-100" : "opacity-0 scale-95",
           !customSize && modalStyles.size[size],
           modalStyles.rounded[rounded],
-          size !== "full" && !noGutter && "p-4 sm:p-5",
+          !noGutter && "p-4 sm:p-5",
           containerClassName
         )}
         style={customSize ? { maxWidth: `${customSize}px` } : undefined}

@@ -1,12 +1,18 @@
+// React
+import { useEffect } from "react";
+
 // Types
 import type { Column } from "../../../components/types";
+
+// Store
+import { useCTStore } from "./store/useCTStore";
+
+// Services
+import { loadClassTestList } from "./services/loadClassTestList";
 
 // Components
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
 import Button from "../../../components/Button";
-import { useEffect } from "react";
-import { loadClassTestList } from "./services/loadClassTestList";
-import { useCTStore } from "./store/useCTStore";
 
 const columns: Column<any>[] = [
   {

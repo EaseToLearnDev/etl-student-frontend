@@ -3,7 +3,7 @@ import type { TopicType } from "../../../shared/types";
 
 // Store
 import { useStudentStore } from "../../../shared/store/useStudentStore";
-import { useSLStore } from "../store/useSLStore";
+// import { useSLStore } from "../store/useSLStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
@@ -11,19 +11,16 @@ import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
 export const loadSmartLearningTopictree = async () => {
   const { studentData } = useStudentStore.getState();
-  const { setTopicTree } = useSLStore.getState();
 
   if (!studentData) {
-    setTopicTree(null);
-    return;
+    return null;
   }
 
   const { loginId, token, openedCourse, courses } = studentData;
   const templateId = courses?.[openedCourse]?.templateId;
 
   if (!loginId || !token || !templateId) {
-    setTopicTree(null);
-    return;
+    return null;
   }
 
   try {
@@ -34,15 +31,15 @@ export const loadSmartLearningTopictree = async () => {
       token,
       templateId,
     })) as TopicType[];
+    console.log('data from service', data);
 
     if (!data) {
-      setTopicTree(null);
-      return;
+     return null;
     }
 
-    setTopicTree(data);
+    return data;
   } catch (error) {
     console.error("Failed to load topic tree:", error);
-    setTopicTree(null);
+    return null;
   }
 };

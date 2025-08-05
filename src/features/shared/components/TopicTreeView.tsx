@@ -1,5 +1,5 @@
 // Components
-import { useState } from "react";
+import { startTransition, useState } from "react";
 import Topic from "./Topic";
 
 interface TopicListProps<T> {
@@ -25,7 +25,7 @@ const TopicTreeView = <T,>({
   const [activeTopic, setActiveTopic] = useState<T | null>(null);
   const handleSelect = (topic: T) => {
     setActiveTopic(topic);
-    onClickHandler?.(topic);
+    startTransition(() => onClickHandler?.(topic));
   } 
   return (
     <div>

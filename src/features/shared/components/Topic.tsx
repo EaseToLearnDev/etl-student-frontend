@@ -17,7 +17,7 @@ interface TopicProps<T> {
   getLabel: (topic: T) => string;
   getChildren?: (topic: T) => T[] | undefined;
   renderRightSection?: (topic: T, isActive: boolean) => React.ReactNode;
-};
+}
 
 const Topic = <T,>({
   topic,
@@ -39,7 +39,9 @@ const Topic = <T,>({
     setExpanded((prev) => !prev);
   };
 
-  const isActive = activeTopic ? getId(activeTopic as T) === getId(topic) : false;
+  const isActive = activeTopic
+    ? getId(activeTopic as T) === getId(topic)
+    : false;
   const children = getChildren?.(topic);
 
   return (

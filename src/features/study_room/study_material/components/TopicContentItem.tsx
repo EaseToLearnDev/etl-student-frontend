@@ -7,6 +7,7 @@ import VideoIcon from "../../../../components/icons/video-solid-icon";
 
 // Types
 import type { TopicContentType as TopicContentType } from "../sm.types";
+import { useSMStore } from "../store/useSMStore";
 
 type TopicContentItemProps = {
   content: TopicContentType;
@@ -17,6 +18,7 @@ type TopicContentItemProps = {
  *
  */
 const TopicContentItem = ({ content }: TopicContentItemProps) => {
+  const setSelectedContent = useSMStore((state) => state.setSelectedContent);
   const iconMap: Record<string, ReactNode> = {
     Text: <DocIcon height={74} />,
     PPT: <PPTIcon height={74} />,
@@ -27,7 +29,10 @@ const TopicContentItem = ({ content }: TopicContentItemProps) => {
   const icon = iconMap[content?.contentType || "Text"];
 
   return (
-    <div className="flex gap-5 p-3 items-center border-1 border-[var(--border-secondary)] rounded-[8px] cursor-pointer hover:bg-[var(--surface-bg-secondary)]">
+    <div
+      onClick={() => setSelectedContent(content)}
+      className="flex gap-5 p-3 items-center border-1 border-[var(--border-secondary)] rounded-[8px] cursor-pointer hover:bg-[var(--surface-bg-secondary)]"
+    >
       {icon}
       <div className="w-full flex flex-col gap-1">
         <div className="w-full">

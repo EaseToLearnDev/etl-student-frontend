@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 // Store
-// import { useSLStore } from "../store/useSLStore";
+import { useSLStore } from "../store/useSLStore";
 
 // Services
 import { loadSmartLearningTopictree } from "../services/loadSmartLearningTopicTree";
@@ -13,38 +13,28 @@ import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicModeSelector from "../components/TopicModeSelector";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 import { Modal } from "../../../../components/Modal";
-import useSmartLearning from "../hooks/useSmartLearning";
 
-const SmartLearning = () => {
-  const {
-    reset,
-    selectedTopic,
-    topicTree,
-    setTopicTree,
-    setSelectedTopic,
-    mode,
-    setMode,
-    lastSelfTestPercentage,
-    setLastSelfTestPercentage,
-    showModal,
-    setShowModal,
-  } = useSmartLearning();
+const SmartLearningLocal = () => {
+  const reset = useSLStore((state) => state.reset);
+  const resetSelectedTopic = useSLStore((state) => state.resetSelectedTopic);
+  const topicTree = useSLStore((state) => state.topicTree);
+  const selectedTopic = useSLStore((state) => state.selectedTopic);
+  const setSelectedTopic = useSLStore((state) => state.setSelectedTopic);
+  const lastSelfTestPercentage = useSLStore(
+    (state) => state.lastSelfTestPercentage
+  );
+  const mode = useSLStore((state) => state.mode);
+  const showModal = useSLStore((state) => state.showModal);
+  const setShowModal = useSLStore((state) => state.setShowModal);
 
   useEffect(() => {
-    const getTreeView = async () => {
-      const data = await loadSmartLearningTopictree();
-      console.log('treeview', data);
-      setTopicTree(data);
-    }
-    getTreeView();
-    // return reset;
+    loadSmartLearningTopictree();
+    return reset;
   }, []);
 
   useEffect(() => {
     if (selectedTopic?.topicId) {
-      loadLastSelfTestPercentage(selectedTopic?.topicName).then((percentage) =>
-        setLastSelfTestPercentage(percentage)
-      );
+      loadLastSelfTestPercentage();
     }
   }, [selectedTopic?.topicId]);
 
@@ -77,21 +67,9 @@ const SmartLearning = () => {
               }
             />
           }
-          secondaryContent={
-            selectedTopic ? (
-              <TopicModeSelector
-                selectedTopic={selectedTopic}
-                mode={mode}
-                setMode={setMode}
-                lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
-                setShowModal={setShowModal}
-              />
-            ) : (
-              <></>
-            )
-          }
+          secondaryContent={<TopicModeSelector />}
           hideSecondary={!selectedTopic}
-          onSecondaryHide={() => setSelectedTopic(null)}
+          onSecondaryHide={resetSelectedTopic}
           secondaryInitialHeight={1}
         />
       </div>
@@ -102,4 +80,4 @@ const SmartLearning = () => {
   );
 };
 
-export default SmartLearning;
+export default SmartLearningLocal;

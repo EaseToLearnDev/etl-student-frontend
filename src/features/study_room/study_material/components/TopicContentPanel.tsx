@@ -1,11 +1,12 @@
 // Icons
-import {FiFilter, FiLock} from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 
 // Store
 import { useSMStore } from "../store/useSMStore";
 
 // Components
 import TopicContentItem from "./TopicContentItem";
+import FilterDropdown from "./FilterDropdown";
 
 /**
  * TopicContentPanel displays a list of study materials for a selected topic.
@@ -14,7 +15,15 @@ import TopicContentItem from "./TopicContentItem";
 const TopicContentPanel = () => {
   const selectedTopic = useSMStore((state) => state.selectedTopic);
   const topicContentList = useSMStore((state) => state.topicContentList);
-  
+  const contentFilterType = useSMStore((state) => state.contentFilterType);
+
+  const filteredContentList =
+    contentFilterType === "All"
+      ? topicContentList
+      : topicContentList?.filter(
+          (content) => content.contentType === contentFilterType
+        );
+
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="flex items-center justify-between">
@@ -22,15 +31,14 @@ const TopicContentPanel = () => {
           {selectedTopic?.topicName}
         </h5>
         <div className="flex gap-4">
-          <FiFilter size={20} className="cursor-pointer" />
-          <FiLock size={20} className="cursor-pointer" />
+          <FilterDropdown>
+            <FiFilter size={20} className="cursor-pointer" />
+          </FilterDropdown>
         </div>
       </div>
-      <div
-        className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-thin"
-      >
-        {topicContentList?.length && topicContentList?.length > 0 ? (
-          topicContentList?.map((content, index) => (
+      <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-thin">
+        {filteredContentList?.length && filteredContentList?.length > 0 ? (
+          filteredContentList?.map((content, index) => (
             <TopicContentItem key={index} content={content} />
           ))
         ) : (

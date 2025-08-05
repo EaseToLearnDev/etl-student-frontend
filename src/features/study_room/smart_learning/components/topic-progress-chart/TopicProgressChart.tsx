@@ -1,78 +1,75 @@
-// React
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  type ChartOptions,
+  type ChartData,
+  type Plugin,
+} from "chart.js";
+import { Doughnut } from "react-chartjs-2";
+import { useMemo } from "react";
+import useDarkModeStore from "../../../../../store/useDarkModeStore";
 
-// Constants
-import { COLORS } from "./constants";
-
-// Service imports
-import renderHandle from "./renderHandle";
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 type TopicProgressChartProps = {
-  progress: number; // percentage 0-100
+  progress: number; // 0 to 100
 };
 
-/**
- * TopicProgressChart
- * Renders a semicircular progress chart using Recharts to visualize topic progress.
- *
- * Props:
- * - progress: number (percentage from 0 to 100)
- *
- * The chart consists of:
- * - A gray background arc representing the total (100%)
- * - A colored arc representing the current progress
- * - A percentage label in the center
- */
 const TopicProgressChart = ({ progress }: TopicProgressChartProps) => {
-  const progressData = [{ name: "Progress", value: progress }];
-  const bgData = [{ name: "Remaining", value: 100 }];
+  const darkMode = useDarkModeStore((state) => state.darkMode);
+  const remainingColor = darkMode ? "#18181b" : "#f4f4f5";
+
+  // Get CSS variable value
+  const progressColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--sb-ocean-bg-active")
+    .trim() || "#007BFF";
+
+  // Custom plugin to draw the progress text in center
+  const centerTextPlugin: Plugin<"doughnut"> = {
+    id: "centerText",
+    afterDraw: (chart) => {
+      const { ctx, width, height } = chart;
+      ctx.save();
+      ctx.font = "bold 32px sans-serif";
+      ctx.fillStyle = progressColor;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`${progress}%`, width / 2, height / 1.15);
+      ctx.restore();
+    },
+  };
+
+  const data: ChartData<"doughnut", number[], string> = useMemo(
+    () => ({
+      labels: ["Progress", "Remaining"],
+      datasets: [
+        {
+          data: [progress, 100 - progress],
+          backgroundColor: [progressColor, remainingColor],
+          borderWidth: 0,
+        },
+      ],
+    }),
+    [progress, progressColor, remainingColor]
+  );
+
+  const options: ChartOptions<"doughnut"> = {
+    rotation: -90,
+    circumference: 180,
+    cutout: "80%",
+    plugins: {
+      legend: { display: false },
+      tooltip: { enabled: false },
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+  };
 
   return (
-    <div className="mx-auto size-[290px] @sm:size-[340px] flex flex-col items-center">
-      <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
-          {/* Gray background arc */}
-          <Pie
-            data={bgData}
-            cx="50%"
-            cy="50%"
-            dataKey="value"
-            innerRadius="54%"
-            outerRadius="60%"
-            startAngle={180}
-            endAngle={0}
-            fill={COLORS[1]}
-            isAnimationActive={false}
-            stroke="none"
-          >
-            <Cell fill={COLORS[1]} stroke={COLORS[1]} />
-          </Pie>
-          {/* Blue progress arc */}
-          <Pie
-            data={progressData}
-            cx="50%"
-            cy="50%"
-            dataKey="value"
-            innerRadius="42%"
-            outerRadius="70%"
-            startAngle={180}
-            endAngle={180 - (progress / 100) * 180}
-            fill={COLORS[0]}
-            cornerRadius={0}
-            stroke="none"
-            labelLine={false}
-            label={renderHandle}
-            isAnimationActive={false}
-          >
-            <Cell fill={COLORS[0]} stroke={COLORS[0]} />
-          </Pie>
-        </PieChart>
-      </ResponsiveContainer>
-      <div className="mt-[-175px] flex flex-col items-center justify-center rounded-full">
-        <h3 className="!font-bold text-[var(--sb-ocean-bg-active)]">
-          {progress}%
-        </h3>
-      </div>
+    <div className="w-full max-w-[290px] mx-auto aspect-[2/1] relative">
+      <Doughnut key={progress} data={data} options={options} plugins={[centerTextPlugin]} />
     </div>
   );
 };
