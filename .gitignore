@@ -12,13 +12,29 @@ dist
 dist-ssr
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+# Environment variables
+.env
+.env.local
+.env.development.localdevelopment.local
+.env.test.local.local
+.env.production.localproduction.local
+.env.*.locallocal
+
+# Editor directories and filestor directories and files
+.vscode/*de/*
+!.vscode/extensions.json!.vscode/extensions.json
 .idea
 .DS_Store
-*.suo
-*.ntvs*
+*.suo*.suo
+
+
+
+
+
+
+
+
+storybook-static*storybook.log*.sw?*.sln*.njsproj*.ntvs**.ntvs*
 *.njsproj
 *.sln
 *.sw?

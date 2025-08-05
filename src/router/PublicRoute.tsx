@@ -1,9 +1,10 @@
 import { Navigate } from "react-router-dom";
+import { useStudentStore } from "../features/shared/store/useStudentStore";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
-  const token = localStorage.getItem("token");
+  const studentData = useStudentStore(state => state.studentData);
 
-  return token ? <Navigate to="/" replace /> : children;
+  return studentData?.token ? <Navigate to="/" replace /> : children;
 };
 
 export default PublicRoute;
