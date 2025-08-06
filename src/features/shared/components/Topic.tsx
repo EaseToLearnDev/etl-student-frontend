@@ -93,7 +93,7 @@ const Topic = <T,>({
           <h6
             className={cn(
               "text-ellipsis line-clamp-2 select-none",
-              isActive ? "font-semibold" : ""
+              isActive ? "font-semibold text-[var(--sb-ocean-bg-active)]" : ""
             )}
           >
             {getLabel(topic)}

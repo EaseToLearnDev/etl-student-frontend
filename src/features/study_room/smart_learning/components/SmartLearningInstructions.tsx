@@ -3,6 +3,7 @@ import { learningRules, competitiveRules } from "../../../shared/constants";
 
 type SmartLearningInstructionsProps = {
   learningMode: string;
+  hideTitle?: boolean;
 };
 
 /**
@@ -10,11 +11,12 @@ type SmartLearningInstructionsProps = {
  */
 const SmartLearningInstructions = ({
   learningMode,
+  hideTitle = false,
 }: SmartLearningInstructionsProps) => {
 
   return learningMode === "learning" ? (
     <div className="flex flex-col gap-3">
-      <h5 className="font-semibold">Learning Mode Instruction</h5>
+      {!hideTitle && <h5 className="font-semibold">Learning Mode Instruction</h5>}
       <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
         <p>
           Welcome to Learning Mode, your dedicated practice space designed to
@@ -38,7 +40,7 @@ const SmartLearningInstructions = ({
     </div>
   ) : (
     <div className="flex flex-col gap-3">
-      <h5 className="font-semibold">Competitive Mode Instruction</h5>
+      {!hideTitle && <h5 className="font-semibold">Competitive Mode Instruction</h5>}
       <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
         <p>
           The clock has been set at server and count down timer at the top right

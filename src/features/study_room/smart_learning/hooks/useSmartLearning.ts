@@ -9,7 +9,7 @@ const useSmartLearning = () => {
   const [lastSelfTestPercentage, setLastSelfTestPercentage] = useState<
     number | null
   >(null);
-  const [mode, setMode] = useState<ModeType>("learning");
+  const [mode, setMode] = useState<ModeType>("competitive");
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const reset = () => {
@@ -17,7 +17,7 @@ const useSmartLearning = () => {
     setTopicFlatList(null);
     setSelectedTopicId(null);
     setLastSelfTestPercentage(null);
-    setMode("learning");
+    setMode("competitive");
     setShowModal(false);
   };
 

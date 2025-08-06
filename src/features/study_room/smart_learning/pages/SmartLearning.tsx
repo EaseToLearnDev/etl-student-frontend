@@ -16,6 +16,7 @@ import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TopicModeSelector from "../components/TopicModeSelector";
 import { Modal } from "../../../../components/Modal";
+import SLTestModalContent from "../components/SLTestModalContent";
 
 const SmartLearning = () => {
   const {
@@ -44,7 +45,7 @@ const SmartLearning = () => {
       }
     };
     getTopicTree();
-    return reset;
+    return () => reset();
   }, []);
 
   useEffect(() => {
@@ -98,13 +99,22 @@ const SmartLearning = () => {
               <></>
             )
           }
-          hideSecondary={!selectedTopic}
+          hideSecondary={!selectedTopic || showModal}
           onSecondaryHide={() => setSelectedTopicId(null)}
           secondaryInitialHeight={1}
         />
       </div>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)} size="lg">
-        <h5>Hello</h5>
+      <Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        size="lg"
+        className="p-4"
+      >
+        <SLTestModalContent
+          mode={mode}
+          onClose={() => setShowModal(false)}
+          topicName={selectedTopic?.topicName || ""}
+        />
       </Modal>
     </div>
   );
