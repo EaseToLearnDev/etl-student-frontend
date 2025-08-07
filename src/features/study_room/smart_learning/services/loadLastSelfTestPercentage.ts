@@ -1,7 +1,12 @@
+// Store
 import { useStudentStore } from "../../../shared/store/useStudentStore";
-import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";
-// import { useSLStore } from "../store/useSLStore";
 
+// Api
+import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";
+
+/**
+ * Loads the last self-test percentage for a given topic for the current student.
+ */
 export const loadLastSelfTestPercentage = async (topicName: string) => {
   const { studentData } = useStudentStore.getState();
 

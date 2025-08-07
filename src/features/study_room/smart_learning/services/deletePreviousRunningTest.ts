@@ -1,23 +1,18 @@
-// Types
-import type { TopicType } from "../../../shared/types";
-
 // Store
 import { useStudentStore } from "../../../shared/store/useStudentStore";
 
 // Apis
-import { getTopicTreeView } from "../../../shared/apis/treeview.api";
-
+import { testRunningDelete } from "../api/testRunningDelete";
 
 /**
- * Loads the smart learning topic tree for the current student.
+ * Deletes the previous running test for the current student, if available.
  */
-export const loadSmartLearningTopictree = async () => {
+export const deletePreviousRunningTest = async () => {
   const { studentData } = useStudentStore.getState();
 
   if (!studentData) {
     return null;
   }
-
   const { loginId, token, openedCourse, courses } = studentData;
   const templateId = courses?.[openedCourse]?.templateId;
 
@@ -26,21 +21,14 @@ export const loadSmartLearningTopictree = async () => {
   }
 
   try {
-    const data = (await getTopicTreeView({
-      type: "learning",
-      mode: 0,
+    const data = await testRunningDelete({
       loginId,
       token,
       templateId,
-    })) as TopicType[];
-
-    if (!data) {
-     return null;
-    }
-
+    });
     return data;
   } catch (error) {
-    console.error("Failed to load topic tree:", error);
+    console.error("Failed to load test current running:", error);
     return null;
   }
 };

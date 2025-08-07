@@ -46,7 +46,7 @@ const StudyMaterials = () => {
 
   const selectedTopic = getSelectedTopic();
 
-  // ========== Initial Load ==========
+  // ========== Initial Topic Tree ==========
   useEffect(() => {
     const getTopicTree = async () => {
       const data = await loadStudyMaterialTopicTree();

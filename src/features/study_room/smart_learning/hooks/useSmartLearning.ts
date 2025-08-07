@@ -1,29 +1,58 @@
+// React
 import { useState } from "react";
-import { type TopicType } from "../../../shared/types";
-import type { ModeType } from "../sl.types";
 
+// Types
+import { type TopicType } from "../../../shared/types";
+import { type PreviousRunningTestType, type ModeType } from "../sl.types";
+
+/**
+ * Custom hook for managing smart learning session state in study room feature.
+ */
 const useSmartLearning = () => {
+  // Topic data structures
   const [topicTree, setTopicTree] = useState<TopicType[] | null>(null);
   const [topicFlatList, setTopicFlatList] = useState<TopicType[] | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
+
+  // Session state
   const [lastSelfTestPercentage, setLastSelfTestPercentage] = useState<
     number | null
   >(null);
-  const [mode, setMode] = useState<ModeType>("competitive");
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [mode, setMode] = useState<ModeType>("learning");
+  const [previousRunningTest, setPreviousRunningTest] =
+    useState<PreviousRunningTestType | null>(null);
 
+  // Modal visibility
+  const [showStartTestModal, setShowStartTestModal] =
+    useState<boolean>(false);
+  const [showPreviousTestModal, setShowPreviousTestModal] =
+    useState<boolean>(false);
+
+  // Test configuration
+  const [testOptions, setTestOptions] = useState<Record<string, number>>({
+    totalQuestion: 20,
+    totalTime: 60,
+    markCorrectAns: 1,
+    markIncorrectAns: 0,
+    markNotAttempted: 0,
+  });
+
+  /** Reset all state to initial values */
   const reset = () => {
     setTopicTree(null);
     setTopicFlatList(null);
     setSelectedTopicId(null);
     setLastSelfTestPercentage(null);
-    setMode("competitive");
-    setShowModal(false);
+    setMode("learning");
+    setPreviousRunningTest(null);
+    setShowStartTestModal(false);
+    setShowPreviousTestModal(false);
   };
 
   const getSelectedTopic = () => {
     if (!selectedTopicId || !topicFlatList) return null;
-    else return topicFlatList?.find((t) => t.topicId === selectedTopicId) ?? null;
+    else
+      return topicFlatList?.find((t) => t.topicId === selectedTopicId) ?? null;
   };
 
   return {
@@ -37,8 +66,14 @@ const useSmartLearning = () => {
     setLastSelfTestPercentage,
     mode,
     setMode,
-    showModal,
-    setShowModal,
+    previousRunningTest,
+    setPreviousRunningTest,
+    showStartTestModal,
+    setShowStartTestModal,
+    showPreviousTestModal,
+    setShowPreviousTestModal,
+    testOptions,
+    setTestOptions,
     reset,
   };
 };

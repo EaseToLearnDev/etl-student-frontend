@@ -1,5 +1,6 @@
 // React
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
@@ -10,15 +11,24 @@ import useSmartLearning from "../hooks/useSmartLearning";
 // Services
 import { loadSmartLearningTopictree } from "../services/loadSmartLearningTopicTree";
 import { loadLastSelfTestPercentage } from "../services/loadLastSelfTestPercentage";
+import { handleTopicModeSelector } from "../services/handleTopicModeSelector";
+import { handleResumeTest, handleStartTest } from "../services/handleTest";
+import { handleNewTestModal } from "../services/handleNewTestModal";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
+import { Modal } from "../../../../components/Modal";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TopicModeSelector from "../components/TopicModeSelector";
-import { Modal } from "../../../../components/Modal";
+import SLPreviousTestModalContent from "../components/SLPreviousTestModalContent";
 import SLTestModalContent from "../components/SLTestModalContent";
 
+/**
+ * SmartLearning page component for topic selection and session management in the Smart Learning feature.
+ */
 const SmartLearning = () => {
+  // Hooks
+  const navigate = useNavigate();
   const {
     reset,
     getSelectedTopic,
@@ -29,14 +39,23 @@ const SmartLearning = () => {
     mode,
     setMode,
     lastSelfTestPercentage,
+    previousRunningTest,
     setLastSelfTestPercentage,
-    showModal,
-    setShowModal,
+    setPreviousRunningTest,
+    setShowPreviousTestModal,
+    setShowStartTestModal,
+    showPreviousTestModal,
+    showStartTestModal,
+    testOptions,
+    setTestOptions,
   } = useSmartLearning();
 
+  // Get currently selected topic
   const selectedTopic = getSelectedTopic();
+
+  // ========== Initial Topic Tree ==========
   useEffect(() => {
-    const getTopicTree = async () => {
+    const fetchTopicTree = async () => {
       const data = await loadSmartLearningTopictree();
       if (data) {
         setTopicTree(data);
@@ -44,24 +63,34 @@ const SmartLearning = () => {
         setTopicFlatList(flatList);
       }
     };
-    getTopicTree();
+    fetchTopicTree();
     return () => reset();
   }, []);
 
+  // ========== Load Self Test Percentage on Topic-Select ==========
   useEffect(() => {
-    if (selectedTopic?.topicId) {
-      loadLastSelfTestPercentage(selectedTopic?.topicName).then((percentage) =>
-        setLastSelfTestPercentage(percentage)
-      );
-    }
+    const fetchSelfSessionPercentage = async () => {
+      if (selectedTopic?.topicId) {
+        const percentage = await loadLastSelfTestPercentage(
+          selectedTopic?.topicName
+        );
+        if (percentage) {
+          setLastSelfTestPercentage(percentage);
+        }
+      }
+    };
+    fetchSelfSessionPercentage();
   }, [selectedTopic?.topicId]);
 
+  // ========== Render ==========
   return (
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
       <div className="flex items-center gap-4">
         <h3 className="!font-bold items-end">Select Your Topic</h3>
       </div>
+
+      {/* Main Layout */}
       <div className="mt-5 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
@@ -93,27 +122,61 @@ const SmartLearning = () => {
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
-                setShowModal={setShowModal}
+                onClickHandler={() =>
+                  handleTopicModeSelector(
+                    setPreviousRunningTest,
+                    setShowStartTestModal,
+                    setShowPreviousTestModal
+                  )
+                }
               />
             ) : (
               <></>
             )
           }
-          hideSecondary={!selectedTopic || showModal}
+          hideSecondary={
+            !selectedTopic || showPreviousTestModal || showStartTestModal
+          }
           onSecondaryHide={() => setSelectedTopicId(null)}
           secondaryInitialHeight={1}
         />
       </div>
+
+      {/* Start Session Modal */}
       <Modal
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
+        isOpen={showStartTestModal}
+        onClose={() => setShowStartTestModal(false)}
         size="lg"
         className="p-4"
       >
         <SLTestModalContent
           mode={mode}
-          onClose={() => setShowModal(false)}
+          testOptions={testOptions}
+          setTestOptions={setTestOptions}
+          onStart={() =>
+            handleStartTest(navigate, mode, selectedTopic, testOptions)
+          }
+          onClose={() => setShowStartTestModal(false)}
           topicName={selectedTopic?.topicName || ""}
+        />
+      </Modal>
+
+      {/* Previous Session Modal */}
+      <Modal
+        isOpen={showPreviousTestModal}
+        onClose={() => setShowPreviousTestModal(false)}
+        size="lg"
+        className="p-4"
+      >
+        <SLPreviousTestModalContent
+          onStart={() =>
+            handleNewTestModal(setShowStartTestModal, setShowPreviousTestModal)
+          }
+          onResume={() => {
+            handleResumeTest(navigate, previousRunningTest);
+          }}
+          onClose={() => setShowPreviousTestModal(false)}
+          testName={previousRunningTest?.testName || ""}
         />
       </Modal>
     </div>

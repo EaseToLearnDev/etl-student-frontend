@@ -13,7 +13,7 @@ interface TopicModeSelectorProps {
   lastSelfTestPercentage: number;
   mode: ModeType;
   setMode: (mode: ModeType) => void;
-  setShowModal: (showModal: boolean) => void;
+  onClickHandler: () => void;
 }
 
 /**
@@ -24,7 +24,7 @@ const TopicModeSelector = ({
   lastSelfTestPercentage,
   mode,
   setMode,
-  setShowModal,
+  onClickHandler,
 }: TopicModeSelectorProps) => {
   const isLearning = mode === "learning";
 
@@ -71,7 +71,7 @@ const TopicModeSelector = ({
         <Button
           className="w-full"
           style="primary"
-          onClick={() => setShowModal(true)}
+          onClick={onClickHandler}
         >
           Continue
         </Button>

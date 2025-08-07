@@ -11,21 +11,20 @@ import { useState } from "react";
 interface SLTestModalContentProps {
   mode: ModeType;
   topicName: string;
+  testOptions: Record<string, number>;
+  setTestOptions: React.Dispatch<React.SetStateAction<Record<string, number>>>;
+  onStart: () => void;
   onClose: () => void;
 }
 const SLTestModalContent = ({
   mode,
   topicName,
+  testOptions,
+  setTestOptions,
   onClose,
+  onStart,
 }: SLTestModalContentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const [options, setOptions] = useState<Record<string, number>>({
-    totalQuestion: -1,
-    totalTime: -1,
-    markCorrectAns: -1,
-    markIncorrectAns: -1,
-    markNotAttempted: -1,
-  });
 
   const fields = [
     {
@@ -100,9 +99,9 @@ const SLTestModalContent = ({
                     "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                     "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
                   )}
-                  value={options[field.id] >= 0 ? options[field.id] : ""}
+                  value={testOptions[field.id]}
                   onChange={(e) =>
-                    setOptions((v) => ({
+                    setTestOptions((v) => ({
                       ...v,
                       [field.id]: Number(e.target.value) ?? -1,
                     }))
@@ -118,7 +117,7 @@ const SLTestModalContent = ({
       {/* Action Buttons */}
       <div className="flex justify-end mt-7">
         <div className="flex gap-4 items-center">
-          <Button>Start Session</Button>
+          <Button onClick={onStart}>Start Session</Button>
           <Button style="secondary" onClick={onClose}>
             Cancel
           </Button>
