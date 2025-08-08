@@ -22,6 +22,7 @@ import Login from "../features/auth/login/pages/Login";
 import Signup from "../features/auth/signup/pages/Signup";
 import Onboarding from "../features/onboarding/pages/Onboarding";
 import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
+import { PermissionRedirect } from "./PermissionRedirect";
 
 const Router = () => {
   return (
@@ -61,16 +62,30 @@ const Router = () => {
         <Route index element={<Navigate to="/dashboard" replace />} />
         <Route path="dashboard" element={<>Dashboard</>} />
 
+        {/* Calculate study room default route  */}
         <Route
           path="study-room"
-          element={<Navigate to="/study-room/study-material" replace />}
+          element={
+            <PermissionRedirect
+              to="/study-material"
+              parentId="studyRoom"
+              parentPath="study-room"
+            />
+          }
         />
         <Route path="study-room/study-material" element={<StudyMaterials />} />
         <Route path="study-room/smart-learning" element={<SmartLearning />} />
 
+        {/* Calculate exam room default route  */}
         <Route
           path="exam-room"
-          element={<Navigate to="/exam-room/topic-test" replace />}
+          element={
+            <PermissionRedirect
+              to="/topic-test"
+              parentId="examRoom"
+              parentPath="exam-room"
+            />
+          }
         />
         <Route path="exam-room/topic-test" element={<TopicTestTreeView />} />
         <Route path="exam-room/mock-test" element={<MockTestList />} />

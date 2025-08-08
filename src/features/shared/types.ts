@@ -111,6 +111,18 @@ export interface SchoolType {
   classId: number;
 }
 
+export interface CourseType {
+  templateId: number;
+  validityId: number;
+  courseId: number;
+  packTypeId: number;
+  benchmark: number;
+  organisationName: string;
+  validTillDate: string;
+  packTypeTitle: string;
+  tabs: Record<string, boolean>;
+}
+
 export interface CourseResponseType {
   templateId: number;
   validityId: number;
@@ -133,18 +145,6 @@ export interface CourseResponseType {
   otherCourses: number;
 }
 
-export interface CourseType {
-  templateId: number;
-  validityId: number;
-  courseId: number;
-  packTypeId: number;
-  benchmark: number;
-  organisationName: string;
-  validTillDate: string;
-  packTypeTitle: string;
-  tabs: Record<string, boolean>;
-}
-
 export enum Severity {
   None = "none",
   Normal = "normal",
@@ -155,6 +155,5 @@ export interface ErrorType {
   severity: Severity;
   message: string;
 }
-
 
 export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";

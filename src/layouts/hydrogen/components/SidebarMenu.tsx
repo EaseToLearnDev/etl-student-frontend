@@ -10,20 +10,29 @@ import { useStudentStore } from "../../../features/shared/store/useStudentStore"
 
 // Utils
 import cn from "../../../utils/classNames";
+import { getFilteredMenuItems } from "../../../utils/menuFilter";
 
 // Components
-import { menuItems } from "./MenuItems";
 import SidebarDropdown from "./SidebarDropdown";
 
+
+/**
+ * Renders the sidebar menu with navigation links and user info for the student dashboard.
+ */
 export function SidebarMenu() {
   const location = useLocation();
-  const studentName = useStudentStore((state) => state.studentData?.studentName);
+  const studentName = useStudentStore(
+    (state) => state.studentData?.studentName
+  );
   const emailId = useStudentStore((state) => state.studentData?.emailId);
+  const activeCourse = useStudentStore((state) => state.getActiveCourse());
+
+  const filteredMenuItems = getFilteredMenuItems(activeCourse);
 
   return (
     <div className="flex flex-col h-full mt-4 pb-4 3xl:mt-6">
       <div className="flex-1">
-        {menuItems.map((item, index) => {
+        {filteredMenuItems.map((item, index) => {
           const isActive = location.pathname.includes(item?.href as string);
 
           return (
@@ -73,7 +82,9 @@ export function SidebarMenu() {
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex gap-4">
             <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-              <p className="!font-bold">{studentName?.split(' ')?.map((w) => w[0] || '')}</p>
+              <p className="!font-bold">
+                {studentName?.split(" ")?.map((w) => w[0] || "")}
+              </p>
             </div>
             <div className="flex flex-col gap-1">
               <p className="!font-semibold block w-[140px] overflow-hidden text-ellipsis  whitespace-nowrap line-clamp-1">
