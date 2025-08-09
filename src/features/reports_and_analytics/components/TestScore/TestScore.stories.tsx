@@ -28,7 +28,6 @@ export const Default: Story = {
     name: "Full Mock Test 1",
     type: "Mock test",
     score: 85,
-    grade: "Good",
   },
 };
 
@@ -37,7 +36,6 @@ export const WithLongname: Story = {
     name: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque, non? gsa consectetur adipisicing ?",
     type: "Mock test",
     score: 92,
-    grade: "Excellent",
   },
 };
 
@@ -46,6 +44,5 @@ export const WithoutGrade: Story = {
     name: "Full Mock Test",
     type: "Mock test",
     score: 65,
-    grade: undefined,
   },
 };

@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import type { ModalSize } from "rizzui";
-
+export type ModalSize = "sm" | "md" | "lg" | "xl" | "full";
 type ModalTypes = {
   view: React.ReactNode;
   isOpen: boolean;

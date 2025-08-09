@@ -84,6 +84,7 @@ const TopicTestTreeView = () => {
             primaryContent={
               <TopicTreeView
                 topics={topicTree || []}
+                selectedTopic={selectedTopic}
                 onClickHandler={setSelectedTopic}
                 getId={(t) => t.topicId}
                 getLabel={(t) => t.topicName}

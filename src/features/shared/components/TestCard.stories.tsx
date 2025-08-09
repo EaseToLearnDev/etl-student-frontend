@@ -24,6 +24,10 @@ export const Default: Story = {
   args: {
     test: {
       ...baseTest,
+      id: 1,
+      time: 40,
+      title: "No Title",
+      score: 45,
       marks: 28,
       progress: "not_started",
     },
@@ -34,6 +38,11 @@ export const NotStartedWithoutMarks: Story = {
   args: {
     test: {
       ...baseTest,
+      id: 1,
+      time: 40,
+      title: "No Title",
+      score: 45,
+      marks: 28,
       progress: "not_started",
     },
   },
@@ -43,6 +52,11 @@ export const InProgress: Story = {
   args: {
     test: {
       ...baseTest,
+      id: 1,
+      time: 40,
+      title: "No Title",
+      score: 45,
+      marks: 28,
       progress: "in_progress",
     },
   },
@@ -50,7 +64,14 @@ export const InProgress: Story = {
 
 export const MobileInfoClickable: Story = {
   args: {
-    test: baseTest,
+    test: {
+      ...baseTest,
+      id: 1,
+      time: 40,
+      title: "No Title",
+      score: 45,
+      marks: 28,
+    },
     infoClickHandler: () => alert("Info clicked"),
   },
 };

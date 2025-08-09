@@ -1,15 +1,17 @@
 import { useState, type ReactElement, type RefObject } from "react";
-import { Popover } from "rizzui/popover";
 import useIsMobile from "../../../../hooks/useIsMobile";
 import type { FilterType } from "../sm.types";
 import useStudyMaterial from "../hooks/useStudyMaterial";
+import { Popover } from "../../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../../components/Popover/PopoverContent";
 
 const FilterList = ({
   setIsOpen,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-   const {setContentFilterType} = useStudyMaterial();
+  const { setContentFilterType } = useStudyMaterial();
 
   const handleClick = (filter: FilterType) => {
     setContentFilterType(filter);
@@ -39,15 +41,15 @@ const FilterDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Popover
-      isOpen={isOpen}
+      open={isOpen}
       setIsOpen={setIsOpen}
       shadow="sm"
       placement={isMobile ? "bottom" : "bottom-end"}
     >
-      <Popover.Trigger>{children}</Popover.Trigger>
-      <Popover.Content className="z-[9999] bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
+      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverContent className="z-[9999] p-4 bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
         <FilterList setIsOpen={setIsOpen} />
-      </Popover.Content>
+      </PopoverContent>
     </Popover>
   );
 };

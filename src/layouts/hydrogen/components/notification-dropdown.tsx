@@ -1,8 +1,10 @@
 import { useState, type ReactElement, type RefObject } from "react";
 import { AiFillNotification } from "react-icons/ai";
-import { Popover, Text } from "rizzui";
 import useIsMobile from "../../../hooks/useIsMobile";
 import BrushSolidIcon from "../../../components/icons/brush-solid-icon";
+import { Popover } from "../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../components/Popover/PopoverContent";
 const notificationsData = [
   {
     id: 1,
@@ -43,19 +45,19 @@ function NotificationsList({
           {notificationsData.map((item) => (
             <div
               key={item.name + item.id}
-              className="group grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-primary)]"
+              className="group grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-tertiary)]"
             >
               <div className="flex h-9 w-9 items-center justify-center rounded bg-[var(--surface-bg-primary)] p-1 [&>svg]:h-auto [&>svg]:w-5">
                 <AiFillNotification className="text-[var(--text-secondary)]" />
               </div>
               <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center">
                 <div className="w-full">
-                  <Text className="mb-0.5 w-11/12 truncate text-sm font-semibold text-[var(--text-primary)]">
+                  <p className="mb-0.5 w-11/12 truncate text-sm font-semibold text-[var(--text-primary)]">
                     {item.name}
-                  </Text>
-                  <Text className="ms-auto whitespace-nowrap pe-8 !text-xs text-[var(--text-tertiary)]">
+                  </p>
+                  <span className="ms-auto whitespace-nowrap pe-8 !text-xs text-[var(--text-tertiary)]">
                     MAR 02-2024
-                  </Text>
+                  </span>
                 </div>
                 <div className="ms-auto flex-shrink-0">
                   {item.unRead && (
@@ -87,15 +89,15 @@ export default function NotificationDropdown({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Popover
-      isOpen={isOpen}
+      open={isOpen}
       setIsOpen={setIsOpen}
       shadow="sm"
       placement={isMobile ? "bottom" : "bottom-end"}
     >
-      <Popover.Trigger>{children}</Popover.Trigger>
-      <Popover.Content className="z-[9999] px-0 pb-4 pe-6 pt-5 bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
+      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverContent className="z-[9999] px-0 pb-4 pe-6 pt-5 bg-[var(--surface-bg-secondary)] [&>svg]:hidden [&>svg]:dark:fill-[var(--surface-bg-secondary)] sm:[&>svg]:inline-flex">
         <NotificationsList setIsOpen={setIsOpen} />
-      </Popover.Content>
+      </PopoverContent>
     </Popover>
   );
 }

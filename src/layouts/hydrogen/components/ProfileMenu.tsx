@@ -1,9 +1,6 @@
 // React
 import { useState, type ReactElement, type RefObject } from "react";
 
-// Rizz UI
-import { Avatar, Popover } from "rizzui";
-
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
 import { MdFeedback, MdPayments } from "react-icons/md";
@@ -17,6 +14,9 @@ import useIsMobile from "../../../hooks/useIsMobile";
 
 // Utils
 import logout from "../../../utils/logout";
+import { Popover } from "../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../components/Popover/PopoverContent";
 
 export default function ProfileMenuDropDown({
   children,
@@ -31,16 +31,16 @@ export default function ProfileMenuDropDown({
 
   return (
     <Popover
-      isOpen={isOpen}
+      open={isOpen}
       setIsOpen={setIsOpen}
       shadow="sm"
       placement={isMobile ? "bottom" : "bottom-end"}
     >
-      <Popover.Trigger>{children}</Popover.Trigger>
+      <PopoverTrigger>{children}</PopoverTrigger>
 
-      <Popover.Content className="z-[9999] p-0 bg-[var(--surface-bg-secondary)] [&>svg]:dark:fill-gray-100">
+      <PopoverContent className="z-[9999] p-0 bg-[var(--surface-bg-secondary)] [&>svg]:dark:fill-gray-100">
         <DropdownMenu />
-      </Popover.Content>
+      </PopoverContent>
     </Popover>
   );
 }
@@ -82,7 +82,11 @@ function DropdownMenu() {
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-[var(--border-primary)] px-6 pb-5 pt-6">
-        <Avatar src="/avatar.webp" name="Albert Flores" />
+        <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
+          <p className="!font-bold">
+            {studentName?.split(" ")?.map((w) => w[0] || "")}
+          </p>
+        </div>
         <div className="ms-3">
           <h6 className="font-semibold --text-[var(--text-primary)]">
             {studentName}
@@ -100,7 +104,7 @@ function DropdownMenu() {
           <a
             key={item.name}
             href={item.href}
-            className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-primary)] focus:outline-none"
+            className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
           >
             <span className="text-[var(--text-secondary)]">{item.icon}</span>
             {item.name}

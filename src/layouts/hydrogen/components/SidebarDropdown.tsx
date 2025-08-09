@@ -1,7 +1,6 @@
 // React
 import { useState, type ReactElement, type RefObject } from "react";
 import { Link } from "react-router";
-import { Popover } from "rizzui";
 
 // Icons
 import { PiMoonFill, PiSignOutFill, PiSunFill } from "react-icons/pi";
@@ -13,6 +12,9 @@ import useDarkModeStore from "../../../store/useDarkModeStore";
 // Utils
 import cn from "../../../utils/classNames";
 import logout from "../../../utils/logout";
+import { Popover } from "../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../components/Popover/PopoverContent";
 
 const DropdownOptions = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
@@ -66,15 +68,15 @@ const SidebarDropdown = ({
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Popover
-      isOpen={isOpen}
+      open={isOpen}
       setIsOpen={setIsOpen}
       shadow="sm"
       placement="top-end"
     >
-      <Popover.Trigger>{children}</Popover.Trigger>
-      <Popover.Content className="z-[9999] bg-[var(--surface-bg-secondary)]">
+      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverContent className="z-[9999] bg-[var(--surface-bg-secondary)] border-1 border-[var(--border-primary)] p-4">
         <DropdownOptions />
-      </Popover.Content>
+      </PopoverContent>
     </Popover>
   );
 };
