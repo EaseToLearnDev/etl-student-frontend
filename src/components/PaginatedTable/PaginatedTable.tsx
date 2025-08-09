@@ -6,7 +6,7 @@ import {
 } from "react-icons/fi";
 import type { Column } from "../types";
 import Table from "../Table";
-import { usePaginatedTable } from "./usePaginatedTable";
+import { usePaginatedTable } from "./hooks/usePaginatedTable";
 
 interface PaginatedTableProps<T> {
   columns: Column<T>[];

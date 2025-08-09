@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopoverStore } from "../../store/usePopoverStore";
-import { getPopoverPosition } from "./utils/getPopoverPosition";
+import { getPopoverPosition } from "./popover.utils";
 
 export function PopoverRoot() {
   const { isOpen, view, placement, gap, arrow, enableOverlay, closePopover } =

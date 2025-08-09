@@ -1,5 +1,9 @@
+
 import { useEffect, useState } from "react";
 
+/**
+ * Custom React hook to track the window's scroll position.
+ */
 function useWindowScroll() {
   const [scroll, setScroll] = useState({ x: 0, y: 0 });
 

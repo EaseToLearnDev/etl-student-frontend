@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopoverContext } from "./Popover";
-import { getPopoverPosition } from "./utils/getPopoverPosition";
+import { getPopoverPosition } from "./popover.utils";
 
 type PopoverContentProps = {
   children: React.ReactNode;

@@ -1,4 +1,4 @@
-import type { PopoverPlacement } from "../../../store/usePopoverStore";
+import type { PopoverPlacement } from "../../store/usePopoverStore";
 
 const getOppositePlacement = (
   placement: PopoverPlacement
