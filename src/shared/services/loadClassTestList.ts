@@ -1,8 +1,18 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import { getClassTestList } from "../api/classTestList.api";
-import type { ClassTestType } from "../classTest.types";
-import { useCTStore } from "../store/useCTStore";
 
+// Types
+import type { ClassTestType } from "../types/classTest.types";
+
+// Store
+import { useStudentStore } from "../../features/shared/store/useStudentStore";
+import { useCTStore } from "../hooks/useCTStore";
+
+// Apis
+import { getClassTestList } from "../api/classTestList.api";
+
+
+/**
+ * Loads the list of class tests for the active student and course.
+ */
 export const loadClassTestList = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
   const { setTestList } = useCTStore.getState();

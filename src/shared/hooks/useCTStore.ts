@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ClassTestType } from "../classTest.types";
+import type { ClassTestType } from "../types/classTest.types";
 
 export interface CTStore {
   testList: ClassTestType[] | null;

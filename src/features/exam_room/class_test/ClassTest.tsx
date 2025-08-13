@@ -1,14 +1,8 @@
-// React
-import { useEffect } from "react";
-
 // Types
 import type { Column } from "../../../components/types";
 
 // Store
-import { useCTStore } from "./store/useCTStore";
-
-// Services
-import { loadClassTestList } from "./services/loadClassTestList";
+import { useCTStore } from "../../../shared/hooks/useCTStore";
 
 // Components
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
@@ -53,10 +47,6 @@ const columns: Column<any>[] = [
 
 const ClassTestPage = () => {
   const testList = useCTStore((state) => state.testList);
-
-  useEffect(() => {
-    loadClassTestList();
-  }, []);
   return (
     <div className="flex">
       <PaginatedTable

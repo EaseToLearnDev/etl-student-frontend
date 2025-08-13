@@ -1,6 +1,6 @@
 // React
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Icons
 import { MdCheck } from "react-icons/md";
@@ -12,8 +12,8 @@ import { useStudentStore } from "../../../features/shared/store/useStudentStore"
 import cn from "../../../utils/classNames";
 
 // Services
-import { handleSwitchCourse } from "../../../services/handleSwitchCourse";
-import getValidityFormatted from "../../../services/getValidityFormatted";
+import { handleSwitchCourse } from "../../../shared/services/handleSwitchCourse";
+import getValidityFormatted from "../../../shared/services/getValidityFormatted";
 
 // Components
 import HamburgerButton from "./HamburgerButton";
@@ -21,14 +21,18 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
+import { loadClassTestList } from "../../../shared/services/loadClassTestList";
+import { loadNotificationList } from "../../../shared/services/loadNotificationList";
 
 export default function Header({ className }: { className?: string }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isCourseSelectionOpen, setIsCourseSelectionOpen] =
     useState<boolean>(false);
   const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | null>(
     null
   );
+
   const courses = useStudentStore((state) => state.studentData?.courses);
 
   // UseEffects
@@ -37,6 +41,11 @@ export default function Header({ className }: { className?: string }) {
       handleSwitchCourse(navigate, selectedCourseIndex);
     }
   }, [selectedCourseIndex]);
+
+  useEffect(() => {
+    loadClassTestList();
+    loadNotificationList();
+  }, [location.pathname]);
 
   return (
     <StickyHeader

@@ -1,38 +1,18 @@
 import { useState, type ReactElement, type RefObject } from "react";
 import { AiFillNotification } from "react-icons/ai";
 import useIsMobile from "../../../hooks/useIsMobile";
-import BrushSolidIcon from "../../../components/icons/brush-solid-icon";
 import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
-const notificationsData = [
-  {
-    id: 1,
-    name: "Invitation for crafting engaging designs",
-    icon: BrushSolidIcon,
-    unRead: true,
-    sendTime: "2023-06-01T09:35:31.820Z",
-  },
-  {
-    id: 2,
-    name: "Isomorphic dashboard redesign",
-    icon: BrushSolidIcon,
-    unRead: true,
-    sendTime: "2023-05-30T09:35:31.820Z",
-  },
-  {
-    id: 3,
-    name: "3 New Incoming Project Files:",
-    icon: BrushSolidIcon,
-    unRead: false,
-    sendTime: "2023-06-01T09:35:31.820Z",
-  },
-];
+import { FaBoxOpen } from "react-icons/fa";
+import useNotificationStore from "../../../shared/hooks/useNotificationStore";
+
 function NotificationsList({
   setIsOpen,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const notifications = useNotificationStore((state) => state.notifcations);
   return (
     <div className="w-[320px] text-left sm:w-[360px] 2xl:w-[420px] rtl:text-right">
       <div className="mb-3 flex items-center justify-between ps-6">
@@ -40,42 +20,33 @@ function NotificationsList({
           Notifications
         </h5>
       </div>
-      <div className="custom-scrollbar max-h-[420px] overflow-y-auto scroll-smooth">
-        <div className="grid cursor-pointer grid-cols-1 gap-1 ps-4">
-          {notificationsData.map((item) => (
-            <div
-              key={item.name + item.id}
-              className="group grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-tertiary)]"
-            >
-              <div className="flex h-9 w-9 items-center justify-center rounded bg-[var(--surface-bg-primary)] p-1 [&>svg]:h-auto [&>svg]:w-5">
-                <AiFillNotification className="text-[var(--text-secondary)]" />
-              </div>
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center">
-                <div className="w-full">
-                  <p className="mb-0.5 w-11/12 truncate text-sm font-semibold text-[var(--text-primary)]">
-                    {item.name}
+      <div className="custom-scrollbar max-h-[420px] min-h-[100px] w-full flex overflow-y-auto scroll-smooth">
+        <div className="w-full h-full grid grid-cols-1 gap-1 ps-4">
+          {notifications && notifications?.length > 0 ? (
+            notifications?.map((item, index) => (
+              <div
+                onClick={() => setIsOpen(false)}
+                key={index}
+                className="h-full group cursor-pointer grid grid-cols-[auto_minmax(0,1fr)] gap-3 rounded-md px-2 py-2 pe-3 transition-colors hover:bg-[var(--surface-bg-tertiary)]"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded bg-[var(--surface-bg-primary)] p-1 [&>svg]:h-auto [&>svg]:w-5">
+                  <AiFillNotification className="text-[var(--text-secondary)]" />
+                </div>
+                <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center">
+                  <p className="text-[var(--text-tertiary)] text-ellipsis line-clamp-2">
+                    {item}
                   </p>
-                  <span className="ms-auto whitespace-nowrap pe-8 !text-xs text-[var(--text-tertiary)]">
-                    MAR 02-2024
-                  </span>
-                </div>
-                <div className="ms-auto flex-shrink-0">
-                  {item.unRead && (
-                    <span className="inline-block rounded-full bg-blue-500 p-0.5  w-[12px] h-[12px]"></span>
-                  )}
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="w-full min-h-[100px] flex flex-col gap-2 justify-center items-center text-[var(--text-tertiary)]">
+              <FaBoxOpen size={40} />
+              <p>You have no unread messages!</p>
             </div>
-          ))}
+          )}
         </div>
       </div>
-      <a
-        href={"#"}
-        onClick={() => setIsOpen(false)}
-        className="-me-6 block px-6 pb-0.5 pt-3 text-center hover:underline text-[var(--text-tertiary)]"
-      >
-        View All Activity
-      </a>
     </div>
   );
 }

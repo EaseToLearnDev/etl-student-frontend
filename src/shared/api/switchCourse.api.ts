@@ -1,4 +1,4 @@
-import { makeRequest } from "../utils/http";
+import { makeRequest } from "../../utils/http";
 
 interface SwitchCourseParams {
   openedCourseIndex: number;
