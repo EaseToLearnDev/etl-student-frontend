@@ -1,21 +1,20 @@
 // Types
 import type { TopicType } from "../../../shared/types";
 
-
 import { useStudentStore } from "../../../shared/store/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
 export const loadStudyMaterialTopicTree = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     return null;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     return null;

@@ -15,7 +15,7 @@ const HeaderMenuRight = () => {
         <button
           aria-label="Notification"
           className={cn(
-            "flex justify-center items-center relative h-[34px] w-[34px] shadow backdrop-blur-md dark:bg-[var(--surface-bg-secondary)] sm:w-10 md:h-9 md:w-9",
+            "flex justify-center items-center relative h-[34px] w-[34px] backdrop-blur-md bg-[var(--surface-bg-secondary)] shadow-sm sm:w-10 md:h-9 md:w-9",
             "focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px rounded-md outline-none"
           )}
         >
@@ -28,7 +28,7 @@ const HeaderMenuRight = () => {
             "w-9 shrink-0 overflow-hidden rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px sm:w-10"
           }
         >
-          <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
+          <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-secondary)] rounded-full flex justify-center items-center">
             <p className="!font-bold"> {studentName?.split(" ")?.map((w) => w[0] || "")}</p>
           </div>
         </button>

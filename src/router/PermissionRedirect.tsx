@@ -1,4 +1,3 @@
-
 import { Navigate } from "react-router-dom";
 import { useStudentStore } from "../features/shared/store/useStudentStore";
 import { getFilteredSubMenuItems } from "../utils/menuFilter";
@@ -15,9 +14,9 @@ interface PermissionRedirectProps {
 export const PermissionRedirect = ({
   to,
   parentId,
-  parentPath
+  parentPath,
 }: PermissionRedirectProps) => {
-  const activeCourse = useStudentStore((state) => state.getActiveCourse());
+  const activeCourse = useStudentStore((state) => state.activeCourse);
   const defaultPath = `/${parentPath}${to}`;
 
   // Get all enabled sub-items for this parent

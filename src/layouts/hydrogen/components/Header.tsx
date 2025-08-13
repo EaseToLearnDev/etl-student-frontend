@@ -1,15 +1,43 @@
+// React
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+
+// Icons
+import { MdCheck } from "react-icons/md";
+
+// Store
+import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+
 // Utils
 import cn from "../../../utils/classNames";
+
+// Services
+import { handleSwitchCourse } from "../../../services/handleSwitchCourse";
+import getValidityFormatted from "../../../services/getValidityFormatted";
 
 // Components
 import HamburgerButton from "./HamburgerButton";
 import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
-import Logo from "../../../components/logo";
-import { Link } from "react-router";
+import Select from "../../../components/Select";
 
 export default function Header({ className }: { className?: string }) {
+  const navigate = useNavigate();
+  const [isCourseSelectionOpen, setIsCourseSelectionOpen] =
+    useState<boolean>(false);
+  const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | null>(
+    null
+  );
+  const courses = useStudentStore((state) => state.studentData?.courses);
+
+  // UseEffects
+  useEffect(() => {
+    if (selectedCourseIndex !== null) {
+      handleSwitchCourse(navigate, selectedCourseIndex);
+    }
+  }, [selectedCourseIndex]);
+
   return (
     <StickyHeader
       className={cn("z-[990] 2xl:py-5 3xl:px-8 4xl:px-10", className)}
@@ -18,13 +46,38 @@ export default function Header({ className }: { className?: string }) {
         <HamburgerButton
           view={<Sidebar className="static w-full 2xl:w-full border-none" />}
         />
-        <Link
-          to={"/"}
-          aria-label="Site Logo"
-          className="me-4 w-9 shrink-0 text-gray-800 hover:text-gray-900 lg:me-5 xl:hidden"
-        >
-          <Logo className="max-w-[40px] h-fit text-[var(--text-primary)]" />
-        </Link>
+        <Select
+          items={courses || []}
+          isOpen={isCourseSelectionOpen}
+          onSelect={setSelectedCourseIndex}
+          onToggle={() => setIsCourseSelectionOpen((prev) => !prev)}
+          selectedIndex={selectedCourseIndex ?? 0}
+          type="Course"
+          className="w-[200px]"
+          dropdownClassName="w-[200px]"
+          getItemLabel={(item) => item.organisationName}
+          renderItem={(item, _, isSelected) => (
+            <div className="w-full flex items-center gap-2 justify-between">
+              <div className="flex flex-col">
+                <span className="!font-semibold">{item.organisationName}</span>
+                <span>
+                  {getValidityFormatted(
+                    item.validTillDate,
+                    item.packTypeTitle,
+                    item.organisationName
+                  )}
+                </span>
+              </div>
+              <div>
+                {isSelected ? (
+                  <MdCheck size={14} className="text-[var(--text-tertiary)]" />
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+          )}
+        />
       </div>
 
       <HeaderMenuRight />

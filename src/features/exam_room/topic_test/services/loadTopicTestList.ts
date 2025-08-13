@@ -4,16 +4,16 @@ import { getTopicTestList } from "../api/topicTestList.api";
 import { useTTStore } from "../store/useTTStore";
 
 export const loadTopicTestList = async (topic: TopicType) => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
   const { setTestList } = useTTStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     setTestList(null);
     return;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token  } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     setTestList(null);

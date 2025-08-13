@@ -4,16 +4,16 @@ import type { ClassTestType } from "../classTest.types";
 import { useCTStore } from "../store/useCTStore";
 
 export const loadClassTestList = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
   const { setTestList } = useCTStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     setTestList(null);
     return;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const courseId = courses?.[openedCourse]?.courseId;
+  const { loginId, token } = studentData;
+  const courseId = activeCourse?.courseId;
 
   if (!loginId || !token || !courseId) {
     setTestList(null);
@@ -21,11 +21,11 @@ export const loadClassTestList = async () => {
   }
 
   try {
-    const list = await getClassTestList({
+    const list = (await getClassTestList({
       courseId,
       loginId,
       token,
-    }) as ClassTestType[];
+    })) as ClassTestType[];
 
     if (!list) {
       setTestList(null);

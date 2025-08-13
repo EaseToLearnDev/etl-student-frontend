@@ -11,13 +11,13 @@ import { getTestCurrentRunning } from "../api/testCurrentRunning.api";
  * Retrieves the previous running test for the current student, or null if unavailable.
  */
 export const getPreviousRunningTest = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     return null;
   }
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     return null;

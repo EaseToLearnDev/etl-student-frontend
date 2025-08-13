@@ -9,16 +9,16 @@ import { useMTStore } from "../store/useMTStore";
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
 export const loadMockTestList = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
   const { setTestList } = useMTStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     setTestList(null);
     return;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     setTestList(null);
@@ -33,7 +33,7 @@ export const loadMockTestList = async () => {
       token,
       templateId,
     })) as MockTestCategoryType[];
-    
+
     if (!list) {
       setTestList(null);
       return;

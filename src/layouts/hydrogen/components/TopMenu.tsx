@@ -12,7 +12,7 @@ const TopMenu = () => {
   const url = location.pathname;
   const page = url.split("/").filter(Boolean)[0];
   const match = menuItems.find((item) => item.href.includes(page));
-  const activeCourse = useStudentStore((state) => state.getActiveCourse());
+  const activeCourse = useStudentStore((state) => state.activeCourse);
 
   const permittedSubItems = getFilteredSubMenuItems(
     match?.id || "",

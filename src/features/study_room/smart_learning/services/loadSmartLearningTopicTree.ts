@@ -7,19 +7,18 @@ import { useStudentStore } from "../../../shared/store/useStudentStore";
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
-
 /**
  * Loads the smart learning topic tree for the current student.
  */
 export const loadSmartLearningTopictree = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     return null;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     return null;
@@ -35,7 +34,7 @@ export const loadSmartLearningTopictree = async () => {
     })) as TopicType[];
 
     if (!data) {
-     return null;
+      return null;
     }
 
     return data;

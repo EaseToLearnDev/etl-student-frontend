@@ -4,8 +4,10 @@ import { persist } from "zustand/middleware";
 
 export interface StudentStore {
   studentData: StudentDataType | null;
+  activeCourse: CourseType | null;
+
   setStudentData: (data: StudentDataType | null) => void;
-  getActiveCourse: () => CourseType | null;
+  setActiveCourse: (index: number) => void;
   reset: () => void;
 }
 
@@ -16,14 +18,21 @@ export const useStudentStore = create<StudentStore>()(
   persist(
     (set, get) => ({
       studentData: null,
-      setStudentData: (data) => set({ studentData: data }),
-      getActiveCourse: () => {
-        const { studentData } = get();
-        const activeCourse = studentData?.courses[studentData?.openedCourse];
-        return activeCourse ?? null;
+      activeCourse: null,
+
+      setStudentData: (data) => {
+        const activeCourse = data?.courses[data?.openedCourse];
+        set({ studentData: data, activeCourse });
       },
+
+      setActiveCourse: (index) => {
+        const { studentData } = get();
+        const courses = studentData?.courses;
+        set({ activeCourse: courses ? courses[index] : null });
+      },
+
       reset: () => {
-        set({ studentData: null });
+        set({ studentData: null, activeCourse: null });
         localStorage.removeItem("student-storage");
       },
     }),

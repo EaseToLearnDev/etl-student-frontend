@@ -4,21 +4,23 @@ import { MdCheck } from "react-icons/md";
 import { createPortal } from "react-dom";
 import { useRef, useLayoutEffect, useState } from "react";
 
-interface SelectProps {
+interface SelectProps<T = string> {
   type?: string;
-  items: string[];
+  items: T[];
   selectedIndex: number | null;
   isOpen: boolean;
   onToggle: () => void;
   onSelect: (index: number) => void;
   className?: string;
   dropdownClassName?: string;
+  renderItem?: (item: T, index: number, isSelected: boolean) => React.ReactNode;
+  getItemLabel?: (item: T) => string; // 🔹 NEW
 }
 
 /**
  * A Customizable Select Component
  */
-const Select = ({
+const Select = <T,>({
   type,
   items,
   selectedIndex,
@@ -27,7 +29,9 @@ const Select = ({
   onSelect,
   className = "",
   dropdownClassName = "",
-}: SelectProps) => {
+  renderItem,
+  getItemLabel,
+}: SelectProps<T>) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
@@ -35,46 +39,71 @@ const Select = ({
     if (isOpen && buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
       setDropdownStyle({
-        position: 'absolute',
+        position: "absolute",
         top: rect.bottom + window.scrollY + 4,
         left: rect.left + window.scrollX,
-        zIndex: 50
+        zIndex: 999,
       });
     }
   }, [isOpen]);
 
   const dropdown = (
-    <div style={dropdownStyle} className={cn("flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2", dropdownClassName)}>
+    <div
+      style={dropdownStyle}
+      className={cn(
+        "flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2",
+        dropdownClassName
+      )}
+    >
       {type && (
         <span className="px-4 text-[var(--text-tertiary)] !font-medium">
           {type}
         </span>
       )}
-      {items.map((item, index) => (
-        <div
-          key={index}
-          onClick={() => {
-            onSelect(index);
-            onToggle();
-          }}
-          className={cn(
-            "flex gap-2 items-center justify-between p-2 cursor-pointer rounded-md !font-semibold",
-            index === selectedIndex
-              ? "bg-[var(--surface-bg-tertiary)] text-[var(--text-primary)]"
-              : "hover:bg-[var(--surface-bg-tertiary)]"
-          )}
-        >
-          <span>{item}</span>
-          {index === selectedIndex && (
-            <MdCheck size={14} className="text-[var(--text-tertiary)]" />
-          )}
-        </div>
-      ))}
+      {items.map((item, index) => {
+        const isSelected = index === selectedIndex;
+
+        return (
+          <div
+            key={index}
+            onClick={() => {
+              onSelect(index);
+              onToggle();
+            }}
+            className={cn(
+              "flex gap-2 items-center justify-between p-2 cursor-pointer rounded-md !font-semibold",
+              isSelected
+                ? "bg-[var(--surface-bg-tertiary)] text-[var(--text-primary)]"
+                : "hover:bg-[var(--surface-bg-tertiary)]"
+            )}
+          >
+            {renderItem ? (
+              renderItem(item, index, isSelected)
+            ) : (
+              <>
+                <span>{getItemLabel ? getItemLabel(item) : String(item)}</span>
+                {isSelected && (
+                  <MdCheck size={14} className="text-[var(--text-tertiary)]" />
+                )}
+              </>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
-  
+
+  const triggerLabel =
+    selectedIndex !== null
+      ? getItemLabel
+        ? getItemLabel(items[selectedIndex])
+        : String(items[selectedIndex])
+      : "Select an option";
+
   return (
-    <div className={cn("relative inline-block text-left max-w-[250px]", className)}>
+    <div
+      className={cn("relative inline-block text-left max-w-[250px]", className)}
+    >
       {/* Trigger button */}
       <button
         ref={buttonRef}
@@ -84,9 +113,7 @@ const Select = ({
           "bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)]"
         )}
       >
-        <span className="text-left">
-          {selectedIndex !== null ? items[selectedIndex] : "Select an option"}
-        </span>
+        <span className="text-left flex-1">{triggerLabel}</span>
         <BiChevronDown size={18} className="text-[var(--text-tertiary)]" />
       </button>
 

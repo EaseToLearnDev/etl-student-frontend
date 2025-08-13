@@ -9,16 +9,16 @@ import { useStudentStore } from "../../../shared/store/useStudentStore";
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
 export const loadTopicTestTree = async () => {
-  const { studentData } = useStudentStore.getState();
+  const { studentData, activeCourse } = useStudentStore.getState();
   const { setTopicTree } = useTTStore.getState();
 
-  if (!studentData) {
+  if (!studentData || !activeCourse) {
     setTopicTree(null);
     return;
   }
 
-  const { loginId, token, openedCourse, courses } = studentData;
-  const templateId = courses?.[openedCourse]?.templateId;
+  const { loginId, token } = studentData;
+  const templateId = activeCourse?.templateId;
 
   if (!loginId || !token || !templateId) {
     setTopicTree(null);

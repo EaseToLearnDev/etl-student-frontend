@@ -25,7 +25,7 @@ export function SidebarMenu() {
     (state) => state.studentData?.studentName
   );
   const emailId = useStudentStore((state) => state.studentData?.emailId);
-  const activeCourse = useStudentStore((state) => state.getActiveCourse());
+  const activeCourse = useStudentStore((state) => state.activeCourse);
 
   const filteredMenuItems = getFilteredMenuItems(activeCourse);
 
