@@ -1,37 +1,67 @@
 // Zustand
 import { create } from "zustand";
 // Types
-import { QuestionStatus } from "../types";
+import { QuestionStatus } from "../test_simulator.types";
 import type {
-  TestDataType,
-  QuestionType,
-  ResponseType,
-  SectionUIType,
-  CurrentPointerType,
-} from "../types";
+  TestData,
+  Question,
+  Response,
+  SectionUI,
+  CurrentPointer,
+  TestConfig,
+} from "../test_simulator.types";
+import type { ErrorType } from "../../shared/types";
 
 // Services
 import {
-  convertDataToSections,
-  updateStatusOnVisit,
-} from "../services/TestSimulator.services";
+  goToNextQuestionHandler,
+  goToPrevQuestionHandler,
+  setCurrentQuestionHandler,
+} from "../services/navigation";
+import {
+  clearCurrentResponseHandler,
+  setCurrentResponseHandler,
+} from "../services/responseHandlers";
+import {
+  decrementTimeHandler,
+  incrementTimeHandler,
+  startQuestionTimerHandler,
+  stopQuestionTimerHandler,
+} from "../services/timeHandlers";
+import { initializeTestData } from "../services/initHandlers";
+import {
+  getCurrentQuestionHandler,
+  getResponseForQuestionHandler,
+} from "../services/getters";
+import {
+  countQuestionsByStatusHandler,
+  getStatusByQuestionIdHandler,
+  markForReviewHandler,
+  updateStatusHandler,
+} from "../services/statusHandlers";
 
 export interface TestStore {
-  testData: TestDataType | null | undefined;
-  sectionsUI: SectionUIType[];
-  setTestData: (data: TestDataType | null | undefined) => void;
+  testData: TestData | null;
+  sectionsUI: SectionUI[];
+  setTestData: (data: TestData | null) => void;
 
-  currentPointer: CurrentPointerType;
+  testConfig: TestConfig | null;
+  setTestConfig: (config: TestConfig | null) => void;
+
+  testError: ErrorType | null;
+  setTestError: (error: ErrorType) => void;
+
+  currentPointer: CurrentPointer;
 
   goToNext: () => void;
   goToPrev: () => void;
 
-  getCurrentQuestion: () => QuestionType | null | undefined;
-  setCurrentQuestion: (question: QuestionType | null | undefined) => void;
+  getCurrentQuestion: () => Question | null;
+  setCurrentQuestion: (question: Question | null) => void;
 
-  questionResponseMap: Record<number, ResponseType | null | undefined>;
-  getCurrentResponse: () => ResponseType | null | undefined;
-  setCurrentResponse: (response: ResponseType | null | undefined) => void;
+  questionResponseMap: Record<number, Response | null>;
+  getCurrentResponse: () => Response | null;
+  setCurrentResponse: (response: Response | null) => void;
   clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
@@ -40,7 +70,7 @@ export interface TestStore {
   decrementTimeByQuestionId: (questionId: number) => void;
 
   questionStatusMap: Record<number, QuestionStatus>;
-  getStatusByQuestionId: (questionId: number) => QuestionStatus;
+  getStatusByQuestionId: (questionId: number) => QuestionStatus | null;
   changeStatusByQuestionId: (
     questionId: number,
     status: QuestionStatus
@@ -49,7 +79,7 @@ export interface TestStore {
 
   markCurrentForReview: () => void;
 
-  _questionTimerId: any;
+  _questionTimerId: ReturnType<typeof setInterval> | null;
   startQuestionTimer: () => void;
   stopQuestionTimer: () => void;
 
@@ -62,6 +92,8 @@ export interface TestStore {
 const useTestStore = create<TestStore>((set, get) => ({
   testData: null,
   sectionsUI: [],
+  testConfig: null,
+  testError: null,
   // Question Pointer
   currentPointer: {
     currentSectionPos: -1,
@@ -76,396 +108,284 @@ const useTestStore = create<TestStore>((set, get) => ({
   // Initialize test data
   setTestData: (data) =>
     set(() => {
-      if (!data)
+      if (!data) {
         return {
           testData: null,
           sectionsUI: [],
           questionStatusMap: {},
           questionResponseMap: {},
           questionTimeMap: {},
-          currentPointer: {
-            currentSectionPos: -1,
-            currentQuestionPos: -1,
-          },
+          currentPointer: { currentSectionPos: -1, currentQuestionPos: -1 },
         };
-
-      const statusMap: Record<number, QuestionStatus> = {};
-      const responseMap: Record<number, ResponseType | null> = {};
-      const timeMap: Record<number, number> = {};
-
-      data.questionSet.forEach((q) => {
-        statusMap[q.questionId] = QuestionStatus.NOT_VISITED;
-        responseMap[q.questionId] = q.studentResponse ?? null;
-        timeMap[q.questionId] = q.timeSpent ?? 0;
-      });
-
-      const sectionsUI = convertDataToSections(data);
-
-      // Mark first question as visited by default
-      const firstSection = data.sectionSet.find(
-        (sec) => sec.questionNumbers.length > 0
-      );
-      if (firstSection) {
-        const firstQId = firstSection.questionNumbers[0].questionId;
-        statusMap[firstQId] = QuestionStatus.VISITED;
       }
+
+      const { statusMap, responseMap, timeMap, sectionsUI, initialPointer } =
+        initializeTestData({ testData: data });
 
       return {
         testData: data,
-        sectionsUI: sectionsUI,
+        sectionsUI,
         questionStatusMap: statusMap,
         questionResponseMap: responseMap,
         questionTimeMap: timeMap,
-        currentPointer: {
-          currentSectionPos: 0,
-          currentQuestionPos: 0,
-        },
+        currentPointer: initialPointer,
       };
     }),
 
+  setTestError: (error) => set({ testError: error }),
+
+  setTestConfig: (config) => set({ testConfig: config }),
+
   // Next Handler
   goToNext: () => {
-    const { testData, currentPointer, questionResponseMap, questionStatusMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
-      get();
+    const {
+      testData,
+      currentPointer,
+      questionResponseMap,
+      questionStatusMap,
+      startQuestionTimer,
+      stopQuestionTimer,
+    } = get();
     if (!testData) return;
 
-    
-    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
-    if (si < 0 || qi < 0) return;
-    
-    const sectionSet = testData?.sectionSet;
-    const section = sectionSet[si];
-    if (!section) return;
+    stopQuestionTimer();
 
-    const currQId = section?.questionNumbers[qi]?.questionId;
-    if (!currQId) return;
-    
-    stopTimer();
-    // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
-    if (
-      questionStatusMap[currQId] === QuestionStatus.VISITED &&
-      !questionResponseMap[currQId]
-    ) {
-      set((state) => ({
-        questionStatusMap: {
-          ...state.questionStatusMap,
-          [currQId]: QuestionStatus.NOT_ATTEMPTED,
-        },
-      }));
+    const result = goToNextQuestionHandler({
+      testData,
+      currentPointer,
+      questionResponseMap,
+      questionStatusMap,
+    });
+
+    if (!result) return;
+
+    set({
+      currentPointer: result.newPointer,
+      questionStatusMap: result.newStatusMap,
+    });
+
+    if (!result.reachedEnd) {
+      startQuestionTimer();
+    } else {
+      // TODO: open submit modal
     }
-
-    // next question in same section?
-    if (qi + 1 < section.questionNumbers.length) {
-      const nextQId = section?.questionNumbers[qi + 1].questionId;
-      set((state) => ({
-        currentPointer: {
-          currentSectionPos: si,
-          currentQuestionPos: qi + 1,
-        },
-        questionStatusMap: updateStatusOnVisit(
-          state.questionStatusMap,
-          nextQId
-        ),
-      }));
-      startTimer();
-      return;
-    }
-
-    // move to first question of next section if exists
-    for (let s = si + 1; s < sectionSet.length; s++) {
-      const nextSec = sectionSet[s];
-      if (nextSec?.questionNumbers.length > 0) {
-        const nextQId = nextSec?.questionNumbers[0].questionId;
-
-        set((state) => ({
-          currentPointer: {
-            currentSectionPos: s,
-            currentQuestionPos: 0,
-          },
-          questionStatusMap: updateStatusOnVisit(
-            state.questionStatusMap,
-            nextQId
-          ),
-        }));
-        startTimer();
-        return;
-      }
-    }
-
-    // TODO
-    // Handle last question of last section condition (open submit modal)
   },
 
   // Prev Handler
   goToPrev: () => {
-    const { testData, currentPointer, questionStatusMap, questionResponseMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
-      get();
+    const {
+      testData,
+      currentPointer,
+      questionResponseMap,
+      questionStatusMap,
+      startQuestionTimer,
+      stopQuestionTimer,
+    } = get();
     if (!testData) return;
 
-    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
-    if (si < 0 || qi < 0) return;
+    stopQuestionTimer();
 
-    const sectionSet = testData?.sectionSet;
-    const section = sectionSet[si];
-    if (!section) return;
+    const result = goToPrevQuestionHandler({
+      testData,
+      currentPointer,
+      questionResponseMap,
+      questionStatusMap,
+    });
 
-    const currQId = section?.questionNumbers[qi]?.questionId;
-    if (!currQId) return;
+    if (!result) return;
 
-    stopTimer();
+    set({
+      currentPointer: result.newPointer,
+      questionStatusMap: result.newStatusMap,
+    });
 
-    // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
-    if (
-      questionStatusMap[currQId] === QuestionStatus.VISITED &&
-      !questionResponseMap[currQId]
-    ) {
-      set((state) => ({
-        questionStatusMap: {
-          ...state.questionStatusMap,
-          [currQId]: QuestionStatus.NOT_ATTEMPTED,
-        },
-      }));
+    if (!result.reachedStart) {
+      startQuestionTimer();
+    } else {
+      // TODO: disable "Prev" button
     }
-
-    // Prev question in same section?
-    if (qi > 0) {
-      const prevQId = section.questionNumbers[qi - 1].questionId;
-      set((state) => ({
-        currentPointer: {
-          currentSectionPos: si,
-          currentQuestionPos: qi - 1,
-        },
-        questionStatusMap: updateStatusOnVisit(
-          state.questionStatusMap,
-          prevQId
-        ),
-      }));
-      startTimer();
-      return;
-    }
-
-    // move to last question of previous section
-    for (let s = si - 1; s >= 0; s--) {
-      const prevSec = sectionSet[s];
-      if (prevSec?.questionNumbers?.length > 0) {
-        const prevQId =
-          prevSec.questionNumbers[prevSec.questionNumbers.length - 1]
-            .questionId;
-        set((state) => ({
-          currentPointer: {
-            currentSectionPos: s,
-            currentQuestionPos: prevSec.questionNumbers.length - 1,
-          },
-          questionStatusMap: updateStatusOnVisit(
-            state.questionStatusMap,
-            prevQId
-          ),
-        }));
-        startTimer();
-        return;
-      }
-    }
-
-    // TODO
-    // Handle first question in first section (set a flag to disable button)
   },
 
+  // Current Question Handler
   getCurrentQuestion: () => {
     const { testData, currentPointer } = get();
     if (!testData) return null;
 
-    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
-    if (si < 0 || qi < 0) return null;
-
-    const questionId =
-      testData.sectionSet[si]?.questionNumbers[qi]?.questionId ?? null;
-    if (!questionId) return null;
-
-    return (
-      testData?.questionSet?.find((q) => q.questionId === questionId) ?? null
-    );
+    return getCurrentQuestionHandler({ testData, currentPointer });
   },
 
+  // Set Current Question Handler
   setCurrentQuestion: (question) => {
-    const { testData, currentPointer, questionStatusMap, questionResponseMap, startQuestionTimer: startTimer, stopQuestionTimer: stopTimer } =
-      get();
+    const {
+      testData,
+      currentPointer,
+      questionStatusMap,
+      questionResponseMap,
+      startQuestionTimer: startTimer,
+      stopQuestionTimer: stopTimer,
+    } = get();
     if (!testData || !question) return;
-
-    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
-    if (si < 0 || qi < 0) return;
-
-    const currQId = testData?.sectionSet[si]?.questionNumbers[qi]?.questionId;
-    if (!currQId) return;
 
     stopTimer();
 
-    if (
-      questionStatusMap[currQId] === QuestionStatus.VISITED &&
-      !questionResponseMap[currQId]
-    ) {
-      set((state) => ({
-        questionStatusMap: {
-          ...state.questionStatusMap,
-          [currQId]: QuestionStatus.NOT_ATTEMPTED,
-        },
-      }));
-    }
+    const result = setCurrentQuestionHandler({
+      testData,
+      currentPointer,
+      questionStatusMap,
+      questionResponseMap,
+      question,
+    });
 
-    const nextSectionIndex = testData.sectionSet?.findIndex(
-      (sec) => sec.sectionName === question.sectionName
-    );
-    if (nextSectionIndex < 0) return;
+    if (!result) return;
 
-    const nextQuestionIndex = testData.sectionSet[
-      nextSectionIndex
-    ]?.questionNumbers?.findIndex((q) => q.questionId === question.questionId);
-    if (nextQuestionIndex < 0) return;
+    set({
+      currentPointer: result.newPointer,
+      questionStatusMap: result.newStatusMap,
+    });
 
-    set((state) => ({
-      currentPointer: {
-        currentSectionPos: nextSectionIndex,
-        currentQuestionPos: nextQuestionIndex,
-      },
-      questionStatusMap: updateStatusOnVisit(
-        state.questionStatusMap,
-        question.questionId
-      ),
-    }));
     startTimer();
   },
 
-  // Responses
+  // Response Handler
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
     if (!question) return null;
 
-    return questionResponseMap[question.questionId] ?? null;
+    return getResponseForQuestionHandler({
+      questionId: question.questionId,
+      questionResponseMap,
+    });
   },
 
+  // Set Current Response Handler
   setCurrentResponse: (response) => {
     const { getCurrentQuestion } = get();
     const question = getCurrentQuestion();
     if (!question) return null;
 
-    set((state) => {
-      const newStatus = response
-        ? QuestionStatus.ATTEMPTED
-        : QuestionStatus.NOT_ATTEMPTED;
-      return {
-        questionResponseMap: {
-          ...state.questionResponseMap,
-          [question.questionId]: response,
-        },
-        questionStatusMap: {
-          ...state.questionStatusMap,
-          [question.questionId]: newStatus,
-        },
-      };
+    const { questionResponseMap, questionStatusMap } = get();
+
+    const result = setCurrentResponseHandler({
+      question,
+      response,
+      questionResponseMap,
+      questionStatusMap,
+    });
+
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
     });
   },
 
+  // Clear Current Response Handler
   clearCurrentResponse: () => {
-    const { getCurrentQuestion } = get();
+    const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
+      get();
     const question = getCurrentQuestion();
     if (!question) return null;
 
-    set((state) => ({
-      questionResponseMap: {
-        ...state.questionResponseMap,
-        [question.questionId]: null,
-      },
-      questionStatusMap: {
-        ...state.questionStatusMap,
-        [question.questionId]: QuestionStatus.NOT_ATTEMPTED,
-      },
-    }));
+    const result = clearCurrentResponseHandler({
+      question,
+      questionResponseMap,
+      questionStatusMap,
+    });
+
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
+    });
   },
 
-  // Time tracking
+  // Time tracking Handlers
   getTimeByQuestionId: (questionId) => get().questionTimeMap[questionId] ?? 0,
 
-  incrementTimeByQuestionId: (questionId) =>
-    set((state) => ({
-      questionTimeMap: {
-        ...state.questionTimeMap,
-        [questionId]: (state.questionTimeMap[questionId] ?? 0) + 1,
-      },
-    })),
+  incrementTimeByQuestionId: (questionId) => {
+    const { questionTimeMap } = get();
+    const { newTimeMap } = incrementTimeHandler({
+      questionId,
+      questionTimeMap,
+    });
 
-  decrementTimeByQuestionId: (questionId) =>
-    set((state) => ({
-      questionTimeMap: {
-        ...state.questionTimeMap,
-        [questionId]: Math.max((state.questionTimeMap[questionId] ?? 0) - 1, 0),
-      },
-    })),
-
-  // Question status
-  getStatusByQuestionId: (questionId) =>
-    get().questionStatusMap[questionId] ?? QuestionStatus.NOT_VISITED,
-  changeStatusByQuestionId: (questionId, status) =>
-    set((state) => ({
-      questionStatusMap: {
-        ...state.questionStatusMap,
-        [questionId]: status,
-      },
-    })),
-
-  getQuestionCountByStatus: (status: QuestionStatus) => {
-    const { testData, questionStatusMap } = get();
-    if (!testData) return 0;
-    return (
-      testData.questionSet.filter(
-        (q) => questionStatusMap[q.questionId] === status
-      ).length ?? 0
-    );
+    set({ questionTimeMap: newTimeMap });
   },
 
-  // Status Related
+  decrementTimeByQuestionId: (questionId) => {
+    const { questionTimeMap } = get();
+    const { newTimeMap } = decrementTimeHandler({
+      questionId,
+      questionTimeMap,
+    });
+
+    set({ questionTimeMap: newTimeMap });
+  },
+
+  // Status Handlers
   markCurrentForReview: () => {
-    const { testData, currentPointer } = get();
+    const { testData, currentPointer, questionStatusMap } = get();
     if (!testData) return;
 
-    const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
-    if (si < 0 || qi < 0) return;
+    const result = markForReviewHandler({
+      testData,
+      currentPointer,
+      questionStatusMap,
+    });
 
-    const currQId = testData.sectionSet[si]?.questionNumbers[qi]?.questionId;
-    if (!currQId) return;
-
-    set((state) => ({
-      questionStatusMap: {
-        ...state.questionStatusMap,
-        [currQId]: QuestionStatus.MARKED_FOR_REVIEW,
-      },
-    }));
+    if (result) {
+      set({ questionStatusMap: result.newStatusMap });
+    }
   },
 
+  getStatusByQuestionId: (questionId) => {
+    const { questionStatusMap } = get();
+    return getStatusByQuestionIdHandler({ questionId, questionStatusMap });
+  },
+
+  changeStatusByQuestionId: (questionId, status) => {
+    const { questionStatusMap } = get();
+    const { newStatusMap } = updateStatusHandler({
+      questionId,
+      newStatus: status,
+      questionStatusMap,
+    });
+
+    set({ questionStatusMap: newStatusMap });
+  },
+
+  getQuestionCountByStatus: (status) => {
+    const { questionStatusMap } = get();
+    return countQuestionsByStatusHandler({ status, questionStatusMap });
+  },
+  // Start Question Timer Handler
   startQuestionTimer: () => {
-    const { _questionTimerId: __timerId, getCurrentQuestion } = get();
+    const {
+      _questionTimerId: timerId,
+      getCurrentQuestion,
+      questionTimeMap,
+    } = get();
     const question = getCurrentQuestion();
     if (!question) return;
 
-    if (__timerId) clearInterval(__timerId);
+    const result = startQuestionTimerHandler({
+      question,
+      timerId,
+      questionTimeMap,
+    });
 
-    const interval = setInterval(() => {
-      set((state) => ({
-        questionTimeMap: {
-          ...state.questionTimeMap,
-          [question.questionId]:
-            (state.questionTimeMap[question.questionId] ?? 0) + 1,
-        },
-      }));
-    }, 1000);
-
-    set({ _questionTimerId: interval });
+    if (!result) return;
+    set({ _questionTimerId: result.intervalId });
   },
+
+  // Stop Question Timer Handler
   stopQuestionTimer: () => {
-    const { _questionTimerId: __timerId } = get();
-    if (__timerId) {
-      clearTimeout(__timerId);
-      set({ _questionTimerId: null });
-    }
+    const { _questionTimerId: timerId } = get();
+    stopQuestionTimerHandler({ timerId });
+    set({ _questionTimerId: null });
   },
 
   // Reset state
@@ -474,6 +394,8 @@ const useTestStore = create<TestStore>((set, get) => ({
     stopTimer();
     set({
       testData: null,
+      testConfig: null,
+      testError: null,
       sectionsUI: [],
       currentPointer: {
         currentSectionPos: -1,

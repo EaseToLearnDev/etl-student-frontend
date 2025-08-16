@@ -54,3 +54,21 @@ export const checkForTable = (data: string) => {
   return body;
 };
 
+/**
+ * Converts an object of query parameters to a URL query string.
+ */
+export const toQueryString = (params: Record<string, string>) =>
+  new URLSearchParams(params).toString().replace(/\+/g, "%20");
+
+/**
+ * Converts seconds to a time string in HH:mm:ss format.
+ */
+export const getTimeFromSeconds = (seconds: number) => {
+  const hh = Math.floor(seconds / 3600);
+  const mm = Math.floor((seconds % 3600) / 60);
+  const ss = seconds % 60;
+
+  return `${hh.toString().padStart(2, "0")}:${mm
+    .toString()
+    .padStart(2, "0")}:${ss.toString().padStart(2, "0")}`;
+};

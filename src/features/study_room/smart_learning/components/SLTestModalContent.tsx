@@ -36,15 +36,15 @@ const SLTestModalContent = ({
       label: "Total Time",
     },
     {
-      id: "markCorrectAns",
+      id: "marksCorrectAns",
       label: "Mark for Correct Answers",
     },
     {
-      id: "markIncorrectAns",
+      id: "marksIncorrectAns",
       label: "Mark for Incorrect Answers",
     },
     {
-      id: "markNotAttempted",
+      id: "marksNotAttempted",
       label: "Mark for Questions Not Attempted",
     },
   ];

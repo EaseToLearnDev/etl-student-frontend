@@ -261,6 +261,18 @@ span {
   --scrollbar-height: 8px;
 }
 
+/* Math Start */
+.math-container {
+  max-width: 100%;
+  overflow-x: auto;
+}
+math {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+/* Math End */
+
 /* Text Content Start */
 .text_content {
   --fs-heading-2: 32px;

@@ -19,7 +19,7 @@ const Radio = ({ text, onChange, checked }: RadioProps) => {
         checked={checked}
         onChange={onChange}
         className={cn(
-          "appearance-none w-[14px] h-[14px] border-1 border-[var(--border-primary)] rounded-full outline-none transition-all duration-200 ease-in-out",
+          "appearance-none w-[14px] h-[14px] aspect-square border-1 border-[var(--border-primary)] rounded-full outline-none transition-all duration-200 ease-in-out",
           "checked:bg-[var(--sb-ocean-bg-active)] checked:border-none checked:w-[16px] checked:h-[16px]"
         )}
       />

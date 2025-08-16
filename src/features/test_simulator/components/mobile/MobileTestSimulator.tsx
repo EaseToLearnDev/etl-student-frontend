@@ -13,9 +13,6 @@ import {
 // Store
 import useDrawerStore from "../../../../store/useDrawerStore";
 
-// Services & Utils
-import { getTimeFromSeconds } from "../../services/TestSimulator.services";
-
 // Layouts & Components
 import { useChildLayout } from "../../../../layouts/child-layout/hooks/useChildLayout";
 import BottomNavigationSheet from "../../../../layouts/child-layout/components/BottomNavigationSheet";
@@ -27,6 +24,7 @@ import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "./ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
+import { getTimeFromSeconds } from "../../../../utils";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
@@ -39,6 +37,7 @@ const MobileTestSimulator = () => {
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const isExpired = useTestTimerStore((state) => state.isExpired);
+  const isRunning = useTestTimerStore((state) => state.isRunning);
 
   // Hooks
   const {
@@ -57,9 +56,13 @@ const MobileTestSimulator = () => {
       <TestHeader />
       {/* Timer */}
       <div className="flex flex-col items-center mt-4">
-        <span className="text-center">Time Remaining</span>
+        {isRunning ? (
+          <span className="text-center">Time Remaining</span>
+        ) : (
+          <></>
+        )}
         <h2 className="text-center">
-          {isExpired ? "Time's Up" : formattedTime}
+          <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
         </h2>
       </div>
 
@@ -91,7 +94,7 @@ const MobileTestSimulator = () => {
 
       {/* Bottom Navigation for tony AI Chat Window */}
       <BottomNavigationSheet
-        sheetContent={<AiChatPanel onClose={handleSecondaryHide}/>}
+        sheetContent={<AiChatPanel onClose={handleSecondaryHide} />}
         sheetHeight={sheetHeight}
         MAX_HEIGHT={MAX_HEIGHT}
         MIN_HEIGHT={MIN_HEIGHT}

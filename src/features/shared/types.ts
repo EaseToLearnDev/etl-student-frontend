@@ -147,13 +147,15 @@ export interface CourseResponseType {
 
 export enum Severity {
   None = "none",
-  Normal = "normal",
-  Warning = "warning",
-  Alert = "alert",
+  Info = 'info', // for success and information
+  Warning = "warning", // warnings and invalid input fields
+  Alert = "alert", // error messages
+  Fatal = 'fatal', // only for log out
 }
 export interface ErrorType {
   severity: Severity;
   message: string;
+  id?: string;
 }
 
 export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";

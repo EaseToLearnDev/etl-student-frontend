@@ -35,7 +35,14 @@ const ActiveQuestionPanel = () => {
         {/* Question Title & Body  */}
         <div className="h-full flex flex-col gap-4">
           <h5 className="text-[24px]">{currentQuestion?.sectionName}</h5>
-          <h5>{currentQuestion?.questionBody}</h5>
+          <h5>
+            <div
+              className="flex flex-col gap-2 p-4 math-container"
+              dangerouslySetInnerHTML={{
+                __html: currentQuestion?.questionBody ?? "",
+              }}
+            />
+          </h5>
         </div>
         {/* Response Choices */}
         <div className="flex flex-col gap-5">

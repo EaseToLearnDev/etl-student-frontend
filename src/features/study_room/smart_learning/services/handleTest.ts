@@ -4,6 +4,7 @@ import type { NavigateFunction } from "react-router-dom";
 // Types
 import type { TopicType } from "../../../shared/types";
 import type { ModeType, PreviousRunningTestType } from "../sl.types";
+import { toQueryString } from "../../../../utils";
 
 /**
  * Starts a new test session and navigates to the test simulator.
@@ -21,9 +22,9 @@ export const handleStartTest = async (
       questionType: "Multiple Choice",
       totalQuestion: String(testOptions.totalQuestion),
       totalTime: String(testOptions.totalTime),
-      marksCorrectAnswer: String(testOptions.marksCorrectAnswer),
-      marksIncorrectAnswer: String(testOptions.markIncorrectAns),
-      marksNotAttempted: String(testOptions.markNotAttempted),
+      marksCorrectAnswer: String(testOptions.marksCorrectAns),
+      marksIncorrectAnswer: String(testOptions.marksIncorrectAns),
+      marksNotAttempted: String(testOptions.marksNotAttempted),
       searchFlag: "Topic",
       searchQuery: selectedTopic.topicName,
       topicId: String(selectedTopic.topicId),
@@ -31,8 +32,7 @@ export const handleStartTest = async (
       assessmentMode: mode === "learning" ? "beginner" : "advance",
     };
 
-    const queryString = new URLSearchParams(params).toString();
-
+    const queryString = toQueryString(params);
     navigate(`/test-simulator?${queryString}`);
   }
 };
@@ -56,9 +56,7 @@ export const handleResumeTest = async (
           : "advance",
     };
 
-    const queryString = new URLSearchParams(params).toString();
-    console.log("string:", queryString);
-
+    const queryString = toQueryString(params);
     navigate(`/test-simulator?${queryString}`);
   }
 };

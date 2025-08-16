@@ -32,9 +32,9 @@ const useSmartLearning = () => {
   const [testOptions, setTestOptions] = useState<Record<string, number>>({
     totalQuestion: 20,
     totalTime: 60,
-    markCorrectAns: 1,
-    markIncorrectAns: 0,
-    markNotAttempted: 0,
+    marksCorrectAns: 1,
+    marksIncorrectAns: -1,
+    marksNotAttempted: 0,
   });
 
   /** Reset all state to initial values */

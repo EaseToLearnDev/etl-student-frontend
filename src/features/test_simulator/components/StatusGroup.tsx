@@ -2,7 +2,7 @@
 import { useShallow } from "zustand/react/shallow";
 
 // Types
-import { QuestionStatus } from "../types";
+import { QuestionStatus } from "../test_simulator.types";
 
 // Stores
 import useTestStore from "../store/useTestStore";

@@ -22,11 +22,7 @@ export const loadTextContent = async (selectedContent: TopicContentType) => {
       token,
     })) as TextContentType;
 
-    if (!data) {
-      return null;
-    }
-
-    return data;
+    return data ?? null;
   } catch (error) {
     console.log("Failed to load text content: ", error);
     return null;

@@ -1,5 +1,5 @@
 // Types
-import { type QuestionType } from "../types";
+import { type Question } from "../test_simulator.types";
 
 // Store
 import useTestStore from "../store/useTestStore";
@@ -9,7 +9,7 @@ import cn from "../../../utils/classNames";
 
 
 interface QuestionProps {
-  question: QuestionType;
+  question: Question;
   questionNumber: number;
 }
 
