@@ -5,6 +5,7 @@ import useTestStore from "../../store/useTestStore";
 // Components
 import Button from "../../../../components/Button";
 import Radio from "../../../../components/Radio";
+import { MathJax } from "better-react-mathjax";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -34,15 +35,19 @@ const ActiveQuestionPanel = () => {
       <div className="flex flex-col gap-10">
         {/* Question Title & Body  */}
         <div className="h-full flex flex-col gap-4">
-          <h5 className="text-[24px]">{currentQuestion?.sectionName}</h5>
-          <h5>
-            <div
-              className="flex flex-col gap-2 p-4 math-container"
-              dangerouslySetInnerHTML={{
-                __html: currentQuestion?.questionBody ?? "",
-              }}
-            />
-          </h5>
+          <h5 className="text-[24px]">{currentQuestion?.sectionName ?? "Questions"}</h5>
+          <MathJax dynamic>
+            <h5>
+              <div
+                className="math-container max-h-[400px] overflow-y-auto"
+                dangerouslySetInnerHTML={{
+                  __html: (currentQuestion?.questionBody ?? "")
+                    .trim()
+                    .replace(/[\r\n]+/g, ""),
+                }}
+              />
+            </h5>
+          </MathJax>
         </div>
         {/* Response Choices */}
         <div className="flex flex-col gap-5">

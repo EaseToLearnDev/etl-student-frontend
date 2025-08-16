@@ -10,6 +10,7 @@ import cn from "../../../../utils/classNames";
 // Components
 import Radio from "../../../../components/Radio";
 import Button from "../../../../components/Button";
+import { MathJax } from "better-react-mathjax";
 
 /**
  * Mobile-only active question panel component for the test simulator.
@@ -35,11 +36,20 @@ const ActiveQuestionPanel = () => {
       {/* Active Question Panel */}
       <div className="flex flex-1 flex-col w-full h-full bg-[var(--surface-bg-primary)] rounded-[20px] p-5 justify-between">
         {/* Question Title & Body */}
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-3">
           <h5>Questions</h5>
-          <div className="flex flex-col gap-5 p-4">
-            <h4>{currentQuestion?.questionBody}</h4>
-          </div>
+          <MathJax dynamic>
+            <h4>
+              <div
+                className="math-container max-h-[400px] overflow-y-auto"
+                dangerouslySetInnerHTML={{
+                  __html: (currentQuestion?.questionBody ?? "")
+                    .trim()
+                    .replace(/[\r\n]+/g, ""),
+                }}
+              />
+            </h4>
+          </MathJax>
           {/* Response Choices */}
           <div className="flex flex-col gap-5 p-4">
             {currentQuestion?.responseChoice?.map((response, index) => (

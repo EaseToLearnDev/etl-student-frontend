@@ -1,3 +1,4 @@
+import { MathJax } from "better-react-mathjax";
 import cn from "../utils/classNames";
 
 interface RadioProps {
@@ -23,7 +24,16 @@ const Radio = ({ text, onChange, checked }: RadioProps) => {
           "checked:bg-[var(--sb-ocean-bg-active)] checked:border-none checked:w-[16px] checked:h-[16px]"
         )}
       />
-      <p className="select-none">{text}</p>
+      <MathJax>
+        <h6 className="select-none">
+          <div
+            className="math-container"
+            dangerouslySetInnerHTML={{
+              __html: text.trim().replace(/[\r\n]+/g, ""),
+            }}
+          />
+        </h6>
+      </MathJax>
     </label>
   );
 };
