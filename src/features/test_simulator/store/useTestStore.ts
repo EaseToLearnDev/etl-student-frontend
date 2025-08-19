@@ -83,6 +83,11 @@ export interface TestStore {
   startQuestionTimer: () => void;
   stopQuestionTimer: () => void;
 
+  isSubmissionModalOpen: boolean;
+  isContinueLaterModalOpen: boolean;
+  setIsSubmissionModalOpen: (v: boolean) => void;
+  setIsContinueLaterModalOpen: (v: boolean) => void;
+
   reset: () => void;
 }
 
@@ -94,16 +99,16 @@ const useTestStore = create<TestStore>((set, get) => ({
   sectionsUI: [],
   testConfig: null,
   testError: null,
-  // Question Pointer
   currentPointer: {
     currentSectionPos: -1,
     currentQuestionPos: -1,
   },
   questionResponseMap: {},
-
   questionTimeMap: {},
   questionStatusMap: {},
   _questionTimerId: null,
+  isSubmissionModalOpen: false,
+  isContinueLaterModalOpen: false,
 
   // Initialize test data
   setTestData: (data) =>
@@ -387,6 +392,9 @@ const useTestStore = create<TestStore>((set, get) => ({
     stopQuestionTimerHandler({ timerId });
     set({ _questionTimerId: null });
   },
+
+  setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
+  setIsContinueLaterModalOpen: (v) => set({ isContinueLaterModalOpen: v }),
 
   // Reset state
   reset: () => {

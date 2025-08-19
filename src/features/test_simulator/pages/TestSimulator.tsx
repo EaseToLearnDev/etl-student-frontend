@@ -14,6 +14,9 @@ import { loadTestDetails } from "../services/loadTestDetails";
 // Layouts and Components
 import MobileTestSimulator from "../components/mobile/MobileTestSimulator";
 import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
+import { Modal } from "../../../components/Modal";
+import SubmissionModalContent from "../components/SubmissionModalContent";
+import ContinueLaterModalContent from "../components/ContinueLaterModalContent";
 
 const TestSimulator = () => {
   const location = useLocation();
@@ -28,6 +31,18 @@ const TestSimulator = () => {
   const setTestError = useTestStore((state) => state.setTestError);
   const startQuestionTimer = useTestStore((state) => state.startQuestionTimer);
   const stopQuestionTimer = useTestStore((state) => state.stopQuestionTimer);
+  const isSubmissionModalOpen = useTestStore(
+    (state) => state.isSubmissionModalOpen
+  );
+  const setIsSubmissionModalOpen = useTestStore(
+    (state) => state.setIsSubmissionModalOpen
+  );
+  const isContinueLaterModalOpen = useTestStore(
+    (state) => state.isContinueLaterModalOpen
+  );
+  const setIsContinueLaterModalOpen = useTestStore(
+    (state) => state.setIsContinueLaterModalOpen
+  );
   const startTestTimer = useTestTimerStore((state) => state.startTestTimer);
   const stopTestTimer = useTestTimerStore((state) => state.stopTestTimer);
 
@@ -63,12 +78,38 @@ const TestSimulator = () => {
     };
   }, []);
 
-  return testError?.id === "not_found" ? (
-    <h1>TEST NOT FOUND!</h1>
-  ) : !isMobile ? (
-    <DesktopTestSimulator />
-  ) : (
-    <MobileTestSimulator />
+  return (
+    <>
+      {testError?.id === "not_found" ? (
+        <h1>TEST NOT FOUND!</h1>
+      ) : !isMobile ? (
+        <DesktopTestSimulator />
+      ) : (
+        <MobileTestSimulator />
+      )}
+      <Modal
+        isOpen={isSubmissionModalOpen}
+        onClose={() => setIsSubmissionModalOpen(false)}
+        size="lg"
+        className="p-4"
+      >
+        <SubmissionModalContent
+          onSubmit={undefined}
+          onClose={() => setIsSubmissionModalOpen(false)}
+        />
+      </Modal>
+      <Modal
+        isOpen={isContinueLaterModalOpen}
+        onClose={() => setIsContinueLaterModalOpen(false)}
+        size="lg"
+        className="p-4"
+      >
+        <ContinueLaterModalContent
+          onSubmit={undefined}
+          onClose={() => setIsContinueLaterModalOpen(false)}
+        />
+      </Modal>
+    </>
   );
 };
 

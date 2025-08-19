@@ -108,3 +108,36 @@ export interface TestConfig {
   assessmentMode?: AssessmentMode;
   packTypeTitle?: PackTypeTitle;
 }
+
+
+export interface TestSubmitRequest {
+  courseId: number;
+  templateId: number;
+  packTypeId: number;
+  packTypeTitle: PackTypeTitle;
+  testId: number;
+  testType: number;
+  testOption: number;
+  testMode: string;
+  totalTime: number;
+  remainingTime: number;
+  totalQuestion: number;
+  testTitle: string;
+  bloom: number;
+  questionSet: {
+    questionId: number;
+    topicId: string;
+    timeSpent: number;
+    studentResponse?: string;
+    correctAnswerMarks: number;
+    incorrectAnswerMarks: number;
+    notAnswerMarks: number;
+    bloomId: number;
+    noQuestionAttempt: number;
+  }[];
+  noQuestionAttempt: number;
+  schoolId: number;
+  schoolName: string;
+  className: string;
+  helpCounter: number;
+}
