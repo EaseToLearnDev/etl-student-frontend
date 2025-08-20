@@ -1,6 +1,6 @@
 // React
 import { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -17,10 +17,13 @@ import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
 import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import ContinueLaterModalContent from "../components/ContinueLaterModalContent";
+import { handleTestSubmit } from "../services/handleTestSubmit";
+import { handleContinueLater } from "../services/handleContinueLater";
 
 const TestSimulator = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
 
@@ -69,7 +72,6 @@ const TestSimulator = () => {
     };
 
     setupTest();
-
     return () => {
       stopQuestionTimer();
       if (testConfig?.assessmentMode === "advance") {
@@ -94,7 +96,9 @@ const TestSimulator = () => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={undefined}
+          onSubmit={() =>
+            handleTestSubmit()?.then((data) => navigate("/dashboard"))
+          }
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
@@ -105,7 +109,9 @@ const TestSimulator = () => {
         className="p-4"
       >
         <ContinueLaterModalContent
-          onSubmit={undefined}
+          onSubmit={() =>
+            handleContinueLater().then((data) => navigate("/dashboard"))
+          }
           onClose={() => setIsContinueLaterModalOpen(false)}
         />
       </Modal>

@@ -109,7 +109,6 @@ export interface TestConfig {
   packTypeTitle?: PackTypeTitle;
 }
 
-
 export interface TestSubmitRequest {
   courseId: number;
   templateId: number;
@@ -140,4 +139,27 @@ export interface TestSubmitRequest {
   schoolName: string;
   className: string;
   helpCounter: number;
+}
+
+export interface TestStopRequest {
+  courseId: number;
+  templateId: number;
+  testName: string;
+  testType: number;
+  testId: number;
+  testDetail: {
+    testId: number;
+    testName: string;
+    testType: number;
+    testOption: number;
+    totalTime: number;
+    remainingTime: number;
+    lastQuestionIndex: number;
+    sectionLock: string;
+    bloom: number;
+    sectionSet: Section[];
+    questionSet: Question[];
+  }[];
+  helpCounter: number;
+  testMode: string;
 }
