@@ -1,10 +1,10 @@
-import useOnboardingStore from "../store/useOnboardingStore";
+import useOnboardingStore from "../hooks/useOnboardingStore";
 import { OnboardingPhase, type OnboardingPhaseType } from "../onboarding.types";
 import SelectCourseCategory from "../components/SelectCourseCategory";
 import SelectCourse from "../components/SelectCourse";
 import SelectPlan from "../components/SelectPlan";
 
-const Onboarding = () => {
+const OnboardingPage = () => {
   const currentPhase = useOnboardingStore((state) => state.currentPhase);
 
   const phases: OnboardingPhaseType = {
@@ -26,4 +26,4 @@ const Onboarding = () => {
   );
 };
 
-export default Onboarding;
+export default OnboardingPage;

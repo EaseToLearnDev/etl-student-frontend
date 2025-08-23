@@ -1,9 +1,15 @@
-import useDarkModeStore from "../../store/useDarkModeStore";
-import cn from "../../utils/classNames";
+// Hooks
+import useDarkModeStore from "../../../store/useDarkModeStore";
 
-const Settings = () => {
+// Utils
+import cn from "../../../utils/classNames";
+
+/**
+ * Settings page component for toggling between dark and light color themes.
+ */
+const SettingsPage = () => {
   const { darkMode, setDarkMode } = useDarkModeStore();
-  
+
   return (
     <div>
       <h1>Settings</h1>
@@ -38,4 +44,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

@@ -1,6 +1,13 @@
-import { Navigate } from "react-router-dom";
-import { useStudentStore } from "../features/store/useStudentStore";
 
+// React
+import { Navigate } from "react-router-dom";
+
+// Hooks
+import { useStudentStore } from "../features/shared/hooks/useStudentStore";
+
+/**
+ * Protects routes by redirecting unauthenticated users to the login page.
+ */
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const {studentData} = useStudentStore.getState();
 

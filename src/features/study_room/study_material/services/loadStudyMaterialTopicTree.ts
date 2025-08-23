@@ -1,11 +1,15 @@
 // Types
 import type { Topic } from "../../../shared/types";
 
-import { useStudentStore } from "../../../store/useStudentStore";
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
+/**
+ * Loads the study material topic tree for the active student and course.
+ */
 export const loadStudyMaterialTopicTree = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
 

@@ -1,5 +1,5 @@
-import { useStudentStore } from "../../shared/store/useStudentStore";
 import { studentProfileVerifyOtp } from "../api/studentProfileVerifyOtp.api";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 interface HandleStudentProfileVerifyOtpProps {
   otpForMobile?: number;

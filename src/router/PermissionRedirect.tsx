@@ -1,6 +1,12 @@
+// React
 import { Navigate } from "react-router-dom";
-import { useStudentStore } from "../features/store/useStudentStore";
+
+// Hooks
+import { useStudentStore } from "../features/shared/hooks/useStudentStore";
+
+// Utils
 import { getFilteredSubMenuItems } from "../utils/menuFilter";
+
 
 interface PermissionRedirectProps {
   to: string;

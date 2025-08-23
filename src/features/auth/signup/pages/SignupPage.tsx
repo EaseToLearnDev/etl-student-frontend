@@ -7,11 +7,11 @@ import OtpContent from "../components/OtpContent";
 
 // Components
 import SignupContent from "../components/SignupContent";
-import useSignupStore from "../store/useSignupStore";
+import useSignupStore from "../hooks/useSignupStore";
 import { SignupPhase, type SignupPhasesType } from "../signup.types";
 import ChangeNumberContent from "../components/ChangeNumberContent";
 
-const Signup = () => {
+const SignupPage = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const currentPhase = useSignupStore((state) => state.currentPhase);
 
@@ -61,4 +61,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default SignupPage;

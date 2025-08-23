@@ -23,13 +23,13 @@ import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TopicModeSelector from "../components/TopicModeSelector";
 import SLTestModalContent from "../components/SLTestModalContent";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
-import { usePrevTestStore } from "../../../store/usePrevTestStore";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import type { Topic } from "../../../shared/types";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
  */
-const SmartLearning = () => {
+const SmartLearningPage = () => {
   // Hooks
   const navigate = useNavigate();
   const reset = useSLStore((s) => s.reset);
@@ -205,4 +205,4 @@ const SmartLearning = () => {
   );
 };
 
-export default SmartLearning;
+export default SmartLearningPage;

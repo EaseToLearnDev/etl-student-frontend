@@ -30,7 +30,7 @@ import MediaContentModalView from "../components/MediaContentModalVIew";
 /**
  * SMTopicListPage displays a list of study material topics and their content.
  */
-const StudyMaterials = () => {
+const StudyMaterialsPage = () => {
   // Helpers
   const getSelectedTopic = useSMStore((s) => s.getSelectedTopic);
   const reset = useSMStore((s) => s.reset);
@@ -170,4 +170,4 @@ const StudyMaterials = () => {
   );
 };
 
-export default StudyMaterials;
+export default StudyMaterialsPage;

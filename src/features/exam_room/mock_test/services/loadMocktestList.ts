@@ -2,8 +2,8 @@
 import type { MockTestCategory } from "../../../shared/types";
 
 // Store
-import { useStudentStore } from "../../../store/useStudentStore";
-import { useMTStore } from "../store/useMTStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import { useMTStore } from "../hooks/useMTStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";

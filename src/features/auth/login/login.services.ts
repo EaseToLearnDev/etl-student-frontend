@@ -7,8 +7,8 @@ import {
 } from "../../shared/types";
 
 // Store
-import { useLoginStore } from "./store/useLoginStore";
-import { useStudentStore } from "../../store/useStudentStore";
+import { useLoginStore } from "./hooks/useLoginStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
 import { LoginApi } from "./apis/login";

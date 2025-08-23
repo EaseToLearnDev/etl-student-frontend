@@ -1,14 +1,25 @@
+// React
 import { useState, type ChangeEvent } from "react";
+
+// Types
+import type { StudentData } from "../../shared/types";
+
+// Icons
 import { BiCamera, BiEdit, BiX } from "react-icons/bi";
-import { useStudentStore } from "../../shared/store/useStudentStore";
+
+// Hooks
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
+
+// Services
 import { handleDeleteStudentAccount } from "../services/handleDeleteStudentAccount";
+import { handleVerifyOtpAccountDeleteRequest } from "../services/handleVerifyOtpAccountDeleteRequest";
+import { LoadProfilePic } from "../services/LoadProfilePic";
+import { removeProfilePic } from "../services/removeProfilePic";
+
+// Components
 import { Modal } from "../../../components/Modal";
 import Button from "../../../components/Button";
 import VerifyOtpContent from "./VerifyOtpContent";
-import { LoadProfilePic } from "../services/LoadProfilePic";
-import type { StudentDataType } from "../../shared/types";
-import { removeProfilePic } from "../services/removeProfilePic";
-import { handleVerifyOtpAccountDeleteRequest } from "../services/handleVerifyOtpACcountDeleteRequest";
 
 interface ProfileHeaderProps {
   editProfile: boolean;
@@ -47,7 +58,7 @@ const ProfileHeader = ({ editProfile, setEditProfile }: ProfileHeaderProps) => {
       const res = await LoadProfilePic({ file });
       const fileUrl = res.virtualUrlFile ?? "";
       setStudentData({
-        ...(studentData as StudentDataType),
+        ...(studentData as StudentData),
         profilePic: fileUrl,
       });
       setprofilePic(fileUrl);
@@ -60,7 +71,7 @@ const ProfileHeader = ({ editProfile, setEditProfile }: ProfileHeaderProps) => {
     if (res.responseTxt === "success") {
       setprofilePic(null);
       setStudentData({
-        ...(studentData as StudentDataType),
+        ...(studentData as StudentData),
         profilePic: "",
       });
       setIsEditing(false);
@@ -74,7 +85,7 @@ const ProfileHeader = ({ editProfile, setEditProfile }: ProfileHeaderProps) => {
     });
     if (res) {
       setStudentData({
-        ...(studentData as StudentDataType),
+        ...(studentData as StudentData),
         deleteFlag: 1,
       });
     } else {

@@ -1,7 +1,7 @@
 // Types
 import type { PrevRunningTest } from "../types";
 // Store
-import { useStudentStore } from "../../store/useStudentStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 // Apis
 import { getTestCurrentRunning } from "../../study_room/smart_learning/api/testCurrentRunning.api";
 

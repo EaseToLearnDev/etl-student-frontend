@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Course, StudentData } from "../shared/types";
+import type { Course, StudentData } from "../types";
 import { persist } from "zustand/middleware";
 
 export interface StudentStore {

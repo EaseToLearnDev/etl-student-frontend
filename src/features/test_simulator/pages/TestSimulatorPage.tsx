@@ -18,20 +18,16 @@ import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import ContinueLaterModalContent from "../components/ContinueLaterModalContent";
 
-const TestSimulator = () => {
+const TestSimulatorPage = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
 
   const params = new URLSearchParams(location.search);
 
-  const testData = useTestStore((state) => state.testData);
   const setTestData = useTestStore((state) => state.setTestData);
   const testError = useTestStore((state) => state.testError);
   const testConfig = useTestStore((state) => state.testConfig);
   const setTestConfig = useTestStore((state) => state.setTestConfig);
-  const questionResponseMap = useTestStore(
-    (state) => state.questionResponseMap
-  );
   const setTestError = useTestStore((state) => state.setTestError);
   const startQuestionTimer = useTestStore((state) => state.startQuestionTimer);
   const stopQuestionTimer = useTestStore((state) => state.stopQuestionTimer);
@@ -117,4 +113,4 @@ const TestSimulator = () => {
   );
 };
 
-export default TestSimulator;
+export default TestSimulatorPage;

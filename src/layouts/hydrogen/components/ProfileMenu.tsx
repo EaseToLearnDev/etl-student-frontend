@@ -7,7 +7,7 @@ import { MdFeedback, MdPayments } from "react-icons/md";
 import { BiSolidVideos } from "react-icons/bi";
 
 // Store
-import { useStudentStore } from "../../../features/store/useStudentStore";
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";

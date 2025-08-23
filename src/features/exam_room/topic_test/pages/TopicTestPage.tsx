@@ -5,7 +5,7 @@ import { MdArrowBack } from "react-icons/md";
 
 // Store & Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
-import { usePrevTestStore } from "../../../store/usePrevTestStore";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import { useTTStore } from "../store/useTTStore";
 
 // Utils
@@ -34,7 +34,7 @@ import { handleStartTest } from "../services/handleStartTest";
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
  */
-const TopicTestTreeView = () => {
+const TopicTestPage = () => {
   // Hooks
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -231,4 +231,4 @@ const TopicTestTreeView = () => {
   );
 };
 
-export default TopicTestTreeView;
+export default TopicTestPage;

@@ -1,7 +1,7 @@
 import DesktopChildLayout from "../../../layouts/child-layout/components/DesktopChildLayout";
 import ProfileContent from "../components/ProfileContent";
 
-const ProfileSection = () => {
+const ProfilePage = () => {
   return (
     <div>
       <h3 className="pb-5">My Profile</h3>
@@ -15,4 +15,4 @@ const ProfileSection = () => {
   );
 };
 
-export default ProfileSection;
+export default ProfilePage;

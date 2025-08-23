@@ -2,7 +2,7 @@
 import type { Topic } from "../../../shared/types";
 
 // Store
-import { useStudentStore } from "../../../store/useStudentStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";

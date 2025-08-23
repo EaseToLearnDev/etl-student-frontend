@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useStudentStore } from "../../shared/store/useStudentStore";
 import ProfileHeader from "./ProfileHeader";
 import ProfileInput from "./ProfileInput";
 import Button from "../../../components/Button";
@@ -7,6 +6,7 @@ import { Modal } from "../../../components/Modal";
 import VerifyOtpContent from "./VerifyOtpContent";
 import { handleStudentProfileUpdateDetails } from "../services/handleStudentProfileUpdateDetails";
 import { handleStudentProfileVerifyOtp } from "../services/handleStudentProfileVerifyOtp";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 const ProfileContent = () => {
   const { studentData, setStudentData } = useStudentStore.getState();

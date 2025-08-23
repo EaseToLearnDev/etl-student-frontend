@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router";
 
 // Store
 import useDarkModeStore from "../../../../store/useDarkModeStore";
-import { useLoginStore } from "../store/useLoginStore";
+import { useLoginStore } from "../hooks/useLoginStore";
 
 // Utils
 import cn from "../../../../utils/classNames";
@@ -17,7 +17,7 @@ import Button from "../../../../components/Button";
 /**
  * Login page component for user authentication.
  */
-const Login = () => {
+const LoginPage = () => {
   const navigate = useNavigate();
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const errorMessage = useLoginStore((state) => state.error.message);
@@ -139,4 +139,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

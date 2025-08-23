@@ -1,5 +1,5 @@
-// Store
-import { useStudentStore } from "../../store/useStudentStore";
+// Hooks
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
 import { testRunningDelete } from "../../study_room/smart_learning/api/testRunningDelete";

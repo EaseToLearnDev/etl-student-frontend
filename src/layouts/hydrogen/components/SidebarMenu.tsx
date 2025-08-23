@@ -6,7 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 // import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
 // Store
-import { useStudentStore } from "../../../features/store/useStudentStore";
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 
 // Utils
 import cn from "../../../utils/classNames";

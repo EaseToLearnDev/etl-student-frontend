@@ -9,8 +9,8 @@ import type { MockTestCategory } from "../../../shared/types";
 import useIsMobile from "../../../../hooks/useIsMobile";
 
 // Store
-import { useMTStore } from "../store/useMTStore";
-import { usePrevTestStore } from "../../../store/usePrevTestStore";
+import { useMTStore } from "../hooks/useMTStore";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Services
 import { loadMockTestList } from "../services/loadMocktestList";
@@ -34,9 +34,9 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
 
 /**
- * MockTestList component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
+ * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
  */
-const MockTestList = () => {
+const MockTestPage = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
 
@@ -191,4 +191,4 @@ const MockTestList = () => {
   );
 };
 
-export default MockTestList;
+export default MockTestPage;

@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router";
 import { MdCheck } from "react-icons/md";
 
 // Store
-import { useStudentStore } from "../../../features/store/useStudentStore";
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 
 // Utils
 import cn from "../../../utils/classNames";

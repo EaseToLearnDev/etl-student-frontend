@@ -1,5 +1,5 @@
-// Store
-import { useStudentStore } from "../../../store/useStudentStore";
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Api
 import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";

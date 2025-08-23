@@ -2,11 +2,15 @@
 import type { TopicTest, Topic } from "../../../shared/types";
 
 // Store
-import { useStudentStore } from "../../../store/useStudentStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTestList } from "../api/topicTestList.api";
 
+
+/**
+ * Loads the list of topic tests for a given topic.
+ */
 export const loadTopicTestList = async (topic: Topic) => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
