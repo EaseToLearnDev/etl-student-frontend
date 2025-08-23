@@ -1,4 +1,3 @@
-
 // React
 import { Navigate, Route, Routes } from "react-router";
 
@@ -16,9 +15,6 @@ import SmartLearningPage from "../features/study_room/smart_learning/pages/Smart
 import TestSimulatorPage from "../features/test_simulator/pages/TestSimulatorPage";
 import MockTestPage from "../features/exam_room/mock_test/pages/MockTestPage";
 import ClassTestPage from "../features/exam_room/class_test/pages/ClassTestPage";
-import ReportAnalytics from "../features/reports_and_analytics/pages/ReportAnalytics";
-import OverallPerformanceReport from "../features/reports_and_analytics/pages/OverallPerformanceReport";
-import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
 import LoginPage from "../features/auth/login/pages/LoginPage";
 import SignupPage from "../features/auth/signup/pages/SignupPage";
 import OnboardingPage from "../features/onboarding/pages/OnboardingPage";
@@ -26,6 +22,11 @@ import TopicTestPage from "../features/exam_room/topic_test/pages/TopicTestPage"
 import { PermissionRedirect } from "./PermissionRedirect";
 import ProfilePage from "../features/profile/pages/ProfilePage";
 import SettingsPage from "../features/settings/pages/SettingsPage";
+import ReportLearningSessionPage from "../features/report/pages/ReportLearningSessionPage";
+import ReportOverviewPage from "../features/report/pages/ReportOverviewPage";
+import ReportCompetitiveSessionPage from "../features/report/pages/ReportCompetitiveSessionPage";
+import ReportTopicTestPage from "../features/report/pages/ReportTopicTestPage";
+import ReportMockTestPage from "../features/report/pages/ReportMockTestPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -79,8 +80,14 @@ const Router = () => {
             />
           }
         />
-        <Route path="study-room/study-material" element={<StudyMaterialsPage />} />
-        <Route path="study-room/smart-learning" element={<SmartLearningPage />} />
+        <Route
+          path="study-room/study-material"
+          element={<StudyMaterialsPage />}
+        />
+        <Route
+          path="study-room/smart-learning"
+          element={<SmartLearningPage />}
+        />
 
         {/* Calculate exam room default route  */}
         <Route
@@ -99,18 +106,23 @@ const Router = () => {
 
         <Route
           path="report"
-          element={<Navigate to="/report/overview" replace />}
+          element={
+            <PermissionRedirect
+              to="/report/overview"
+              parentId="report"
+              parentPath="report"
+            />
+          }
         />
-        <Route path="report/overview" element={<ReportAnalytics />} />
+        <Route path="report/overview" element={<ReportOverviewPage />} />
+        <Route path="report/learning" element={<ReportLearningSessionPage />} />
         <Route
-          path="report/overview/performance"
-          element={<OverallPerformanceReport />}
+          path="report/competitive"
+          element={<ReportCompetitiveSessionPage />}
         />
-        <Route
-          path="report/overview/performance/:subject"
-          element={<OverallPerformanceReport />}
-        />
-        <Route path="report/mock-test" element={<MockTestAnalytics />} />
+        <Route path="report/topic-test" element={<ReportTopicTestPage />} />
+        <Route path="report/mock-test" element={<ReportMockTestPage />} />
+        {/* <Route path="report/class-test" element={<ReportClass />} /> */}
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />

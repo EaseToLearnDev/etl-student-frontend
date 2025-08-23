@@ -15,15 +15,15 @@ import { LoginApi } from "./apis/login";
 import type { NavigateFunction } from "react-router";
 
 export const HandleLogin = async (navigate: NavigateFunction) => {
-  const { email, password, setError, setLoading } = useLoginStore.getState();
+  const { userId, password, setError, setLoading } = useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
   try {
-    validateCredentials(email, password);
+    // validateCredentials(email, password);
 
     setError("", Severity.None);
     setLoading(true);
 
-    const data: StudentDataResponse = await LoginApi(email, password);
+    const data: StudentDataResponse = await LoginApi(userId, password);
 
     setLoading(false);
 
@@ -97,19 +97,19 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
   }
 };
 
-const validateCredentials = (email: string, password: string) => {
-  const cleanEmail = email.trim();
-  const cleanPassword = password.trim();
+// const validateCredentials = (email: string, password: string) => {
+//   const cleanEmail = email.trim();
+//   const cleanPassword = password.trim();
 
-  const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-    cleanEmail
-  );
+//   const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+//     cleanEmail
+//   );
 
-  if (!emailMatch || !emailMatch) {
-    throw new Error("invalid_email");
-  }
+//   if (!emailMatch || !emailMatch) {
+//     throw new Error("invalid_email");
+//   }
 
-  if (!cleanPassword) {
-    throw new Error("invalid_password");
-  }
-};
+//   if (!cleanPassword) {
+//     throw new Error("invalid_password");
+//   }
+// };

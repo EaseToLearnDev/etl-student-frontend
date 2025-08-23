@@ -81,7 +81,7 @@ const data: any = [
   },
 ];
 
-const CompetitiveSession = () => {
+const ReportCompetitiveSessionPage = () => {
   return (
     <>
       {data.length > 0 ? (
@@ -102,4 +102,4 @@ const CompetitiveSession = () => {
   )
 }
 
-export default CompetitiveSession
+export default ReportCompetitiveSessionPage

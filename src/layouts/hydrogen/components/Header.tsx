@@ -14,6 +14,7 @@ import cn from "../../../utils/classNames";
 // Services
 import { handleSwitchCourse } from "../../../shared/services/handleSwitchCourse";
 import getValidityFormatted from "../../../shared/services/getValidityFormatted";
+import { loadNotificationList } from "../../../shared/services/loadNotificationList";
 
 // Components
 import HamburgerButton from "./HamburgerButton";
@@ -21,25 +22,15 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
-import { loadNotificationList } from "../../../shared/services/loadNotificationList";
 
 export default function Header({ className }: { className?: string }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isCourseSelectionOpen, setIsCourseSelectionOpen] =
-    useState<boolean>(false);
-  const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | null>(
-    null
-  );
 
-  const courses = useStudentStore((state) => state.studentData?.courses);
+  const courses = useStudentStore((s) => s.studentData?.courses);
+  const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
 
-  // UseEffects
-  useEffect(() => {
-    if (selectedCourseIndex !== null) {
-      handleSwitchCourse(navigate, selectedCourseIndex);
-    }
-  }, [selectedCourseIndex]);
+  const [isCourseSelectionOpen, setIsCourseSelectionOpen] = useState(false);
 
   useEffect(() => {
     loadNotificationList();
@@ -56,9 +47,9 @@ export default function Header({ className }: { className?: string }) {
         <Select
           items={courses || []}
           isOpen={isCourseSelectionOpen}
-          onSelect={setSelectedCourseIndex}
+          onSelect={(index) => handleSwitchCourse({ navigate, index })}
           onToggle={() => setIsCourseSelectionOpen((prev) => !prev)}
-          selectedIndex={selectedCourseIndex ?? 0}
+          selectedIndex={openedCourse ?? 0}
           type="Course"
           className="w-[200px]"
           dropdownClassName="w-[200px]"

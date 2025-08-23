@@ -49,6 +49,13 @@ const TopMenu = () => {
         x: activeElement.offsetLeft,
         scaleX: activeElement.offsetWidth,
       });
+
+      // Ensure active tab is visible
+      activeElement.scrollIntoView({
+        behavior: "smooth",
+        inline: "center",
+        block: "nearest",
+      });
     }
   }, [activeItemHref]);
 
@@ -58,42 +65,46 @@ const TopMenu = () => {
     <div className="flex flex-col gap-2">
       {/* Page Title */}
       <h3 className="pl-2">{match?.name}</h3>
-      <div
-        ref={menuRef}
-        className="relative flex gap-3 items-center border-b border-b-[var(--border-tertiary)]"
-      >
-        {/* Moving indicator */}
+
+      {/* Scrollable Tabs */}
+      <div className="relative">
         <div
-          className="absolute bottom-0 h-[2px] bg-[var(--sb-ocean-bg-active)] transition-transform duration-300 ease-in-out"
-          style={{
-            transform: `translateX(${indicatorStyle.x || 0}px) scaleX(${
-              (indicatorStyle.scaleX || 1) / 100
-            })`,
-            width: "100px",
-            transformOrigin: "left",
-          }}
-        />
+          ref={menuRef}
+          className="relative flex gap-3 items-center border-b border-b-[var(--border-tertiary)] overflow-x-auto scrollbar-hide"
+        >
+          {/* Moving indicator */}
+          <div
+            className="absolute bottom-0 h-[2px] bg-[var(--sb-ocean-bg-active)] transition-transform duration-300 ease-in-out"
+            style={{
+              transform: `translateX(${indicatorStyle.x || 0}px) scaleX(${
+                (indicatorStyle.scaleX || 1) / 100
+              })`,
+              width: "100px",
+              transformOrigin: "left",
+            }}
+          />
 
-        {/* Tabs */}
-        {permittedSubItems.map((item) => {
-          const fullPath = `/${page}${item.href}`;
-          const isActive = activeItemHref === fullPath;
+          {/* Tabs */}
+          {permittedSubItems.map((item) => {
+            const fullPath = `/${page}${item.href}`;
+            const isActive = activeItemHref === fullPath;
 
-          return (
-            <Link
-              key={item.href}
-              to={fullPath}
-              data-href={fullPath}
-              className={cn(
-                "flex gap-2 items-center px-2 py-4 cursor-pointer text-[var(--text-secondary)] rounded-md transition-colors duration-200",
-                isActive && "text-[var(--sb-ocean-bg-active)]"
-              )}
-            >
-              {item.icon}
-              {item.name}
-            </Link>
-          );
-        })}
+            return (
+              <Link
+                key={item.href}
+                to={fullPath}
+                data-href={fullPath}
+                className={cn(
+                  "flex gap-2 items-center px-2 py-4 cursor-pointer text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
+                  isActive && "text-[var(--sb-ocean-bg-active)]"
+                )}
+              >
+                <div className="w-[12px] h-[12px] aspect-square">{item.icon}</div>
+                {item.name}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

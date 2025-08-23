@@ -7,14 +7,20 @@ import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
 // Apis
 import { switchCourse } from "../api/switchCourse.api";
 
+interface HandleSwitchCourseParams {
+  navigate: NavigateFunction;
+  index: number;
+}
+
 /**
  * Handles switching the active course for the student and navigates to the home page.
  */
-export const handleSwitchCourse = async (
-  navigate: NavigateFunction,
-  selectedIndex: number
-) => {
-  const { studentData, setActiveCourse } = useStudentStore.getState();
+export const handleSwitchCourse = async ({
+  navigate,
+  index,
+}: HandleSwitchCourseParams) => {
+  const { studentData, setStudentData, setActiveCourse } =
+    useStudentStore.getState();
 
   if (!studentData) {
     return;
@@ -28,13 +34,14 @@ export const handleSwitchCourse = async (
 
   try {
     const data = await switchCourse({
-      openedCourseIndex: selectedIndex,
+      openedCourseIndex: index,
       loginId,
       token,
     });
 
     if (data.responseTxt === "success") {
-      setActiveCourse(selectedIndex);
+      setActiveCourse(index);
+      setStudentData({ ...studentData, openedCourse: index });
     }
     navigate("/");
   } catch (error) {

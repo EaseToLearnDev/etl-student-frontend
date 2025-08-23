@@ -35,6 +35,8 @@ const PaginatedTable = <T,>({
     <div className="flex-1 border-1 border-[var(--border-primary)] rounded-lg overflow-hidden">
       {header && <div className="p-6 pb-5">{header}</div>}
       <Table columns={columns} data={paginatedData} />
+
+      {/* Pagination Controls */}
       <div className="flex justify-end items-center py-2 px-6">
         <div className="flex items-center gap-2">
           <p>

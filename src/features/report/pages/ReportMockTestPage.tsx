@@ -1,6 +1,7 @@
+// import Button from "../../../components/Button";
+import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
 import type { Column } from "../../../components/types";
-import { ChartBarIcon } from "@heroicons/react/24/outline";
 
 const columns: Column<any>[] = [
   {
@@ -21,20 +22,16 @@ const columns: Column<any>[] = [
     accessor: "totalQuestions",
   },
   {
-    header: "Help in Questions",
-    accessor: "helpCounter",
+    header: "Full Marks",
+    accessor: "fullMarks",
   },
   {
-    header: "Correct",
-    accessor: "correct",
+    header: "MarksObtain",
+    accessor: "marksObtain",
   },
   {
-    header: "Incorrect",
-    accessor: "incorrect",
-  },
-  {
-    header: "Unattempted",
-    accessor: "unattempted",
+    header: "TimeSpent",
+    accessor: "timeSpent",
   },
   //   {
   //     header: "Action",
@@ -46,69 +43,65 @@ const columns: Column<any>[] = [
   //   },
 ];
 
-const data: any =   [
+const data: any = [
   {
     testTitle: "Aptitude Test 1",
-    testType: "Aptitude",
+    testType: "Mock test",
     date: new Date("2025-08-01T10:30:00"),
     totalQuestions: 20,
-    helpCounter: 2,
-    correct: 15,
-    incorrect: 3,
-    unattempted: 2,
+    fullMarks: 100,
+    marksObtain: 78,
+    timeSpent: "35 mins",
   },
   {
     testTitle: "Reasoning Test 1",
-    testType: "Reasoning",
+    testType: "Mock test",
     date: new Date("2025-08-05T14:00:00"),
     totalQuestions: 25,
-    helpCounter: 1,
-    correct: 18,
-    incorrect: 5,
-    unattempted: 2,
+    fullMarks: 125,
+    marksObtain: 95,
+    timeSpent: "42 mins",
   },
   {
     testTitle: "English Test 1",
-    testType: "English",
+    testType: "Mock test",
     date: new Date("2025-08-10T09:15:00"),
     totalQuestions: 30,
-    helpCounter: 0,
-    correct: 22,
-    incorrect: 6,
-    unattempted: 2,
+    fullMarks: 150,
+    marksObtain: 110,
+    timeSpent: "50 mins",
   },
   {
-    testTitle: "Mock Full Test",
-    testType: "Full Length",
+    testTitle: "Biology Test 1",
+    testType: "Mock test",
     date: new Date("2025-08-15T11:45:00"),
     totalQuestions: 50,
-    helpCounter: 3,
-    correct: 35,
-    incorrect: 10,
-    unattempted: 5,
+    fullMarks: 250,
+    marksObtain: 180,
+    timeSpent: "120 mins",
   },
 ];
 
 
-const LearningSession = () => {
+const ReportMockTestPage = () => {
   return (
     <>
       {data.length > 0 ? (
         <div className="flex">
           <PaginatedTable
             columns={columns}
-            header={<h5>Learning Session</h5>}
+            header={<h5>Mock test</h5>}
             data={data}
           />
         </div>
       ) : (
         <div className="flex flex-col items-center justify-center w-full h-full text-[var(--text-tertiary)]">
-          <ChartBarIcon className="h-48 w-48 mb-2" />
-          <p>No Learninig Session Data Available</p>
+          <ArchiveBoxXMarkIcon className="h-48 w-48 mb-2" />
+          <p>No Mock Test Data Available</p>
         </div>
       )}
     </>
   );
 };
 
-export default LearningSession;
+export default ReportMockTestPage;
