@@ -69,6 +69,8 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
       loginId: data.loginId,
       schools: data.schools,
       courses: courses,
+      profilePic: data.profilePic,
+      deleteFlag: data.deleteFlag
     };
 
     setStudentData(studentData);

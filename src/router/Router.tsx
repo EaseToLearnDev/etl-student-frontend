@@ -23,6 +23,7 @@ import Signup from "../features/auth/signup/pages/Signup";
 import Onboarding from "../features/onboarding/pages/Onboarding";
 import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
 import { PermissionRedirect } from "./PermissionRedirect";
+import ProfileSection from "../features/profile/pages/ProfileSection";
 
 const Router = () => {
   return (
@@ -107,6 +108,7 @@ const Router = () => {
         <Route path="report/mock-test" element={<MockTestAnalytics />} />
 
         <Route path="settings" element={<Settings />} />
+      <Route path="profile" element={<ProfileSection />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulator />} />
       <Route path="*" element={<NotFound />} />

@@ -85,6 +85,8 @@ export interface StudentDataResponseType {
   phoneNo: string;
   status: string;
   loginId: string;
+  profilePic: string;
+  deleteFlag: number;
   schools: SchoolType[];
   courses: CourseResponseType[];
 }
@@ -100,6 +102,8 @@ export interface StudentDataType {
   phoneNo: string;
   status: string;
   loginId: string;
+  profilePic: string;
+  deleteFlag: number;
   schools: SchoolType[];
   courses: CourseType[];
 }
