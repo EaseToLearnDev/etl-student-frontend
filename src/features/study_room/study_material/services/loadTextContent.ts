@@ -1,4 +1,4 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
+import { useStudentStore } from "../../../store/useStudentStore";
 import { getTextContent } from "../api/textContent.api";
 import type { TextContentType, TopicContentType } from "../sm.types";
 

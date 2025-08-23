@@ -1,9 +1,10 @@
-// React
-import type { NavigateFunction } from "react-router-dom";
-
 // Types
-import type { TopicType } from "../../../shared/types";
-import type { ModeType, PreviousRunningTestType } from "../sl.types";
+import type { NavigateFunction } from "react-router-dom";
+import type { Topic } from "../../../shared/types";
+import type { ModeType } from "../sl.types";
+import { type PrevRunningTest } from "../../../shared/types";
+
+// Utils
 import { toQueryString } from "../../../../utils";
 
 /**
@@ -12,7 +13,7 @@ import { toQueryString } from "../../../../utils";
 export const handleStartTest = async (
   navigate: NavigateFunction,
   mode: ModeType,
-  selectedTopic: TopicType | null,
+  selectedTopic: Topic | null,
   testOptions: Record<string, number>
 ) => {
   if (selectedTopic) {
@@ -42,11 +43,9 @@ export const handleStartTest = async (
  */
 export const handleResumeTest = async (
   navigate: NavigateFunction,
-  previousRunningTest: PreviousRunningTestType | null
+  previousRunningTest: PrevRunningTest | null
 ) => {
-  console.log("inside handle resume session");
   if (previousRunningTest) {
-    console.log("inside previousRunningTest");
     let params = {
       testSession: String(previousRunningTest.testSession),
       testType: String(previousRunningTest.testType),

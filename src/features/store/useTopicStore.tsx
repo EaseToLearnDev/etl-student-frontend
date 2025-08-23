@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { TopicType }  from "../../shared/types";
+import type { Topic }  from "../shared/types";
 
 type TopicStore = {
-  topic: TopicType | null;
-  setTopic: (value: TopicType | null) => void;
+  topic: Topic | null;
+  setTopic: (value: Topic | null) => void;
   reset: () => void;
 };
 

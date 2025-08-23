@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from "react-router";
 import { MdCheck } from "react-icons/md";
 
 // Store
-import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../../features/store/useStudentStore";
 
 // Utils
 import cn from "../../../utils/classNames";
@@ -21,7 +21,6 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
-import { loadClassTestList } from "../../../shared/services/loadClassTestList";
 import { loadNotificationList } from "../../../shared/services/loadNotificationList";
 
 export default function Header({ className }: { className?: string }) {
@@ -43,7 +42,6 @@ export default function Header({ className }: { className?: string }) {
   }, [selectedCourseIndex]);
 
   useEffect(() => {
-    loadClassTestList();
     loadNotificationList();
   }, [location.pathname]);
 

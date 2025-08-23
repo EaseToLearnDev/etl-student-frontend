@@ -1,3 +1,6 @@
+// Types
+import type { NormalizedTest } from "../utils/normalizeTestData";
+
 // Icons
 import {
   PiChartBarFill,
@@ -6,35 +9,30 @@ import {
   PiTimerFill,
 } from "react-icons/pi";
 
-// Types
-import { type NormalizedTest } from "../utils/normalizeTestData";
-
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
-
-// Utils
-import { capitalizeWords } from "../../../utils";
 
 // Components
 import Button from "../../../components/Button";
 
-type TestCardProps = {
+interface TestCardProps {
   test: NormalizedTest;
   infoClickHandler?: () => void;
+  onClickHandler?: (test: NormalizedTest) => void;
 };
 /**
  * TestCard component displays details of a test including name, time, questions,
  * marks, difficulty, and progress. It also provides actions to start, resume, or view results.
- *
- * Props:
- * - test - The test data to display.
- * - infoClickHandler - Optional handler for info icon click (mobile only).
  */
-const TestCard = ({ test, infoClickHandler }: TestCardProps) => {
+const TestCard = ({
+  test,
+  infoClickHandler,
+  onClickHandler,
+}: TestCardProps) => {
   const isMobile = useIsMobile();
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4 p-5 lg:justify-between">
-      <div className="flex flex-col gap-5">
+    <div className="relative flex flex-col lg:flex-row items-center justify-center gap-8 p-5 lg:justify-between border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)] rounded-lg transition-colors duration-100 ease-in">
+      <div className="flex flex-col gap-5 w-full">
         <div className="flex flex-col gap-4">
           <div className="flex justify-between items-center">
             <h5>{test?.title}</h5>
@@ -64,44 +62,10 @@ const TestCard = ({ test, infoClickHandler }: TestCardProps) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          {[
-            { heading: "Difficulty Level", value: test?.difficulty },
-            {
-              heading: "Your progress",
-              value: capitalizeWords(
-                test?.progress
-                  ? test?.progress?.split("_").join(" ")
-                  : ""
-              ),
-            },
-          ].map((stat) => (
-            <div
-              key={stat.heading}
-              className="w-full lg:w-fit flex items-center gap-2 px-3 py-1.5 border-1 rounded-full border-[var(--border-primary)]"
-            >
-              <div className="w-[4px] h-[4px] rounded-full bg-[var(--text-primary)]" />
-              <span>
-                {stat.heading} - {stat.value}
-              </span>
-            </div>
-          ))}
-        </div>
       </div>
-      {test?.progress === "not_started" && test?.marks ? (
-        <div className="flex flex-col gap-2 justify-center items-center">
-          <h5>
-            {test?.score}/{test?.marks}
-          </h5>
-          <Button className="min-w-[120px]">View Result</Button>
-        </div>
-      ) : test?.progress === "not_started" && !test?.marks ? (
-        <div>
-          <Button className="min-w-[120px]">Start Now</Button>
-        </div>
-      ) : (
-        <Button className="min-w-[120px]">Resume</Button>
-      )}
+      <Button className="min-w-[120px]" onClick={() => onClickHandler?.(test)}>
+        Start
+      </Button>
     </div>
   );
 };

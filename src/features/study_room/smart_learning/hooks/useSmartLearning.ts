@@ -2,7 +2,7 @@
 import { useState } from "react";
 
 // Types
-import { type TopicType } from "../../../shared/types";
+import { type Topic } from "../../../shared/types";
 import { type PreviousRunningTestType, type ModeType } from "../sl.types";
 
 /**
@@ -10,8 +10,8 @@ import { type PreviousRunningTestType, type ModeType } from "../sl.types";
  */
 const useSmartLearning = () => {
   // Topic data structures
-  const [topicTree, setTopicTree] = useState<TopicType[] | null>(null);
-  const [topicFlatList, setTopicFlatList] = useState<TopicType[] | null>(null);
+  const [topicTree, setTopicTree] = useState<Topic[] | null>(null);
+  const [topicFlatList, setTopicFlatList] = useState<Topic[] | null>(null);
   const [selectedTopicId, setSelectedTopicId] = useState<number | null>(null);
 
   // Session state

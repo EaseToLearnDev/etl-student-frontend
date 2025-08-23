@@ -1,6 +1,6 @@
 import type { NavigateFunction } from "react-router";
 import { switchCourse } from "../api/switchCourse.api";
-import { useStudentStore } from "../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../features/store/useStudentStore";
 
 export const handleSwitchCourse = async (
   navigate: NavigateFunction,

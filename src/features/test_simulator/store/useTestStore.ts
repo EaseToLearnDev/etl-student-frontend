@@ -10,7 +10,7 @@ import type {
   CurrentPointer,
   TestConfig,
 } from "../test_simulator.types";
-import type { ErrorType } from "../../shared/types";
+import type { Error } from "../../shared/types";
 
 // Services
 import {
@@ -48,8 +48,8 @@ export interface TestStore {
   testConfig: TestConfig | null;
   setTestConfig: (config: TestConfig | null) => void;
 
-  testError: ErrorType | null;
-  setTestError: (error: ErrorType) => void;
+  testError: Error | null;
+  setTestError: (error: Error) => void;
 
   currentPointer: CurrentPointer;
 

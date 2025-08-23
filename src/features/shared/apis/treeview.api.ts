@@ -1,8 +1,8 @@
+import type { TreeView } from "../types";
 import { makeRequest } from "../../../utils/http";
-import type { TreeViewType } from "../types";
 
 interface GetTopicTreeViewParams {
-  type: TreeViewType;
+  type: TreeView;
   mode: 0 | 1;
   loginId: string;
   token: string;
@@ -16,18 +16,22 @@ export const getTopicTreeView = async ({
   token,
   templateId,
 }: GetTopicTreeViewParams): Promise<unknown | null> => {
-  const res = await makeRequest("get", "/treeview/get-tree-by-course", null, {
-    params: {
-      type,
-      mode,
-      templateId,
-    },
-    headers: {
-      loginId,
-      token,
-      device: "web",
-    },
-  });
-
-  return res?.data ?? null;
+  try {
+    const res = await makeRequest("get", "/treeview/get-tree-by-course", null, {
+      params: {
+        type,
+        mode,
+        templateId,
+      },
+      headers: {
+        loginId,
+        token,
+        device: "web",
+      },
+    });
+    return res?.data ?? null;
+  } catch (error) {
+    console.log("Failed to get topic tree:", error);
+    return null;
+  }
 };

@@ -1,19 +1,19 @@
+// Types
+import type { PrevRunningTest } from "../types";
 // Store
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-
+import { useStudentStore } from "../../store/useStudentStore";
 // Apis
-import { testRunningDelete } from "../api/testRunningDelete";
+import { getTestCurrentRunning } from "../../study_room/smart_learning/api/testCurrentRunning.api";
 
 /**
- * Deletes the previous running test for the current student, if available.
+ * Retrieves the previous running test for the current student, or null if unavailable.
  */
-export const deletePreviousRunningTest = async () => {
+export const loadPreviousRunningTest = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse) {
     return null;
   }
-
   const { loginId, token } = studentData;
   const templateId = activeCourse?.templateId;
 
@@ -22,12 +22,13 @@ export const deletePreviousRunningTest = async () => {
   }
 
   try {
-    const data = await testRunningDelete({
+    const data = (await getTestCurrentRunning({
       loginId,
       token,
       templateId,
-    });
-    return data;
+    })) as PrevRunningTest;
+
+    return data ?? null;
   } catch (error) {
     console.error("Failed to load test current running:", error);
     return null;

@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useStudentStore } from "../features/shared/store/useStudentStore";
+import { useStudentStore } from "../features/store/useStudentStore";
 import { getFilteredSubMenuItems } from "../utils/menuFilter";
 
 interface PermissionRedirectProps {

@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router";
 import { menuItems } from "./MenuItems";
 import cn from "../../../utils/classNames";
-import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../../features/store/useStudentStore";
 import { getFilteredSubMenuItems } from "../../../utils/menuFilter";
 
 /**

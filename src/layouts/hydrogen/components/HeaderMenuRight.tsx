@@ -3,7 +3,7 @@ import RingBellSolidIcon from "../../../components/icons/ring-bell-solid-icon";
 import NotificationDropdown from "./notification-dropdown";
 import ProfileMenuDropDown from "./ProfileMenu";
 import cn from "../../../utils/classNames";
-import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../../features/store/useStudentStore";
 
 const HeaderMenuRight = () => {
   const studentName = useStudentStore(

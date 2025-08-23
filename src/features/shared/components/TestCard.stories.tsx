@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import TestCard from "./TestCard";
-import type { TestType } from "../types";
+import type { Test } from "../types";
 
 const meta: Meta<typeof TestCard> = {
   component: TestCard,
@@ -10,7 +10,7 @@ export default meta;
 
 type Story = StoryObj<typeof TestCard>;
 
-const baseTest: TestType = {
+const baseTest: Test = {
   testName: "Physical Chemistry",
   testUrl: "physical-chemistry",
   testTime: 180,

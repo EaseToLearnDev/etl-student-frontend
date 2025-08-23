@@ -1,5 +1,5 @@
 import { makeRequest } from "../../../../utils/http";
-import type { TopicTestType } from "../../../shared/types";
+import type { TopicTest } from "../../../shared/types";
 
 interface GetTopicTestListParams {
   topicName: string;
@@ -14,7 +14,7 @@ export const getTopicTestList = async ({
   topicId,
   loginId,
   token,
-}: GetTopicTestListParams): Promise<TopicTestType[] | null> => {
+}: GetTopicTestListParams): Promise<TopicTest[] | null> => {
   const res = await makeRequest("get", "/topictestlist", null, {
     params: {
       templateId,

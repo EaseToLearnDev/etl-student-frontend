@@ -1,4 +1,4 @@
-import { useStudentStore } from "../features/shared/store/useStudentStore";
+import { useStudentStore } from "../features/store/useStudentStore";
 
 const logout = () => {
   const { reset } = useStudentStore.getState();

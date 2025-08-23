@@ -1,50 +1,59 @@
 import { create } from "zustand";
-import type { TopicTestType, TopicType } from "../../../shared/types";
+import type { TopicTest, Topic } from "../../../shared/types";
 
 export interface TTStore {
-  topicTree: TopicType[] | null;
-  selectedTopic: TopicType | null;
-  testList: TopicTestType[] | null;
+  topicTree: Topic[] | null;
+  topicFlatList: Topic[] | null;
+  selectedTopicId: number | null;
+  selectedTest: TopicTest | null;
+  testList: TopicTest[] | null;
+  showStartTestModal: boolean;
+  showPreviousTestModal: boolean;
 
-  setTopicTree: (topicTree: TopicType[] | null) => void;
-  setSelectedTopic: (topic: TopicType | null) => void;
-  setTestList: (testList: TopicTestType[] | null) => void;
+  setTopicTree: (topicTree: Topic[] | null) => void;
+  setTopicFlatList: (list: Topic[] | null) => void;
+  setSelectedTopicId: (id: number | null) => void;
+  setSelectedTest: (test: TopicTest | null) => void;
+  setTestList: (testList: TopicTest[] | null) => void;
+  setShowStartTestModal: (show: boolean) => void;
+  setShowPreviousTestModal: (show: boolean) => void;
 
-  getTopicById: (tree: TopicType[] | null, topicId: number) => TopicType | null;
-
+  getSelectedTopic: () => Topic | null;
   reset: () => void;
   resetSelectedTopic: () => void;
 }
 
 export const useTTStore = create<TTStore>((set, get) => ({
   topicTree: null,
-  selectedTopic: null,
+  topicFlatList: null,
+  selectedTopicId: null,
+  selectedTest: null,
   testList: null,
+  showStartTestModal: false,
+  showPreviousTestModal: false,
 
   setTopicTree: (topicTree) => set({ topicTree }),
-  setSelectedTopic: (topic) => set({ selectedTopic: topic }),
-  setTestList: (testList) => set({testList}),
-
-  getTopicById: (tree, topicId) => {
-    if(!tree) return null;
-    for (const topic of tree) {
-      if (topic.topicId === topicId) {
-        return topic;
-      }
-      if (topic.children?.length) {
-        const found = get().getTopicById(topic.children, topicId);
-        if (found) return found;
-      }
-    }
-    return null;
+  setTopicFlatList: (list) => set({ topicFlatList: list }),
+  setSelectedTopicId: (id) => set({ selectedTopicId: id }),
+  setSelectedTest: (test) => set({ selectedTest: test }),
+  setTestList: (testList) => set({ testList }),
+  setShowStartTestModal: (show) => set({ showStartTestModal: show }),
+  setShowPreviousTestModal: (show) => set({ showPreviousTestModal: show }),
+  getSelectedTopic: () => {
+    const { selectedTopicId, topicFlatList } = get();
+    if (!selectedTopicId || !topicFlatList) return null;
+    return topicFlatList.find((t) => t.topicId === selectedTopicId) ?? null;
   },
-
   reset: () => {
     set({
       topicTree: null,
-      selectedTopic: null,
+      topicFlatList: null,
+      selectedTopicId: null,
+      selectedTest: null,
       testList: null,
+      showStartTestModal: false,
+      showPreviousTestModal: false,
     });
   },
-  resetSelectedTopic: () => set({ selectedTopic: null, testList: null }),
+  resetSelectedTopic: () => set({ selectedTopicId: null, testList: null }),
 }));

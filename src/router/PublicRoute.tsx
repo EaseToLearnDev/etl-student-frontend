@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useStudentStore } from "../features/shared/store/useStudentStore";
+import { useStudentStore } from "../features/store/useStudentStore";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const studentData = useStudentStore(state => state.studentData);

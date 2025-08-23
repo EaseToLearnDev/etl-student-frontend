@@ -1,5 +1,5 @@
 // Store
-import { useStudentStore } from "../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../features/store/useStudentStore";
 import useNotificationStore from "../hooks/useNotificationStore";
 
 // Apis

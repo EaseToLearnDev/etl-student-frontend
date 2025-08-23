@@ -1,9 +1,9 @@
-import type { TopicType } from "../types";
+import type { Topic } from "../types";
 
-export const flattenTopics = (topics: TopicType[]): TopicType[] => {
-  const result: TopicType[] = [];
+export const flattenTopics = (topics: Topic[]): Topic[] => {
+  const result: Topic[] = [];
 
-  const traverse = (items: TopicType[]) => {
+  const traverse = (items: Topic[]) => {
     for (const item of items) {
       result.push({ ...item, children: [] });
       if (item.children?.length) {

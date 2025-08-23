@@ -5,11 +5,11 @@
 import Button from "../../../../components/Button";
 import TopicProgressChart from "./topic-progress-chart/TopicProgressChart";
 import SmartLearningInstructions from "./SmartLearningInstructions";
-import type { TopicType } from "../../../shared/types";
+import type { Topic } from "../../../shared/types";
 import type { ModeType } from "../sl.types";
 
 interface TopicModeSelectorProps {
-  selectedTopic: TopicType;
+  selectedTopic: Topic;
   lastSelfTestPercentage: number;
   mode: ModeType;
   setMode: (mode: ModeType) => void;
