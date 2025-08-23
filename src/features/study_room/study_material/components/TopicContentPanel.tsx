@@ -1,5 +1,5 @@
 // Types
-import type { TopicType } from "../../../shared/types";
+import type { Topic } from "../../../shared/types";
 import type { FilterType, TopicContentType } from "../sm.types";
 
 // Icons
@@ -10,7 +10,7 @@ import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
 
 interface TopicContentPanelProps {
-  selectedTopic: TopicType;
+  selectedTopic: Topic;
   setSelectedContent: (contentType: TopicContentType) => void;
   topicContentList: TopicContentType[];
   contentFilterType: FilterType;

@@ -1,9 +1,9 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import type { TopicType } from "../../../shared/types";
+import { useStudentStore } from "../../../store/useStudentStore";
+import type { Topic } from "../../../shared/types";
 import { getTopicContent } from "../api/topicContent.api";
 import type { TopicContentType } from "../sm.types";
 
-export const loadTopicContent = async (topic: TopicType) => {
+export const loadTopicContent = async (topic: Topic) => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse || !topic) {

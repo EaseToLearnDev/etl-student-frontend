@@ -1,32 +1,41 @@
 // Types
-import type { MockTestCategoryType, TopicTestType } from "../types";
+import type { MockTest, TopicTest } from "../types";
 
 // Utils
-import { normalizeTestData } from "../utils/normalizeTestData";
+import {
+  normalizeTestData,
+  type NormalizedTest,
+} from "../utils/normalizeTestData";
 
 // Components
 import TestCard from "./TestCard";
 
 type TestCardListProps = {
-  tests: MockTestCategoryType | TopicTestType[];
+  tests: MockTest[] | TopicTest[];
   infoClickHandler?: () => void;
+  onClickHandler?: (test: NormalizedTest) => void;
 };
 
-const TestCardList = ({ tests, infoClickHandler }: TestCardListProps) => {
+const TestCardList = ({
+  tests,
+  infoClickHandler,
+  onClickHandler,
+}: TestCardListProps) => {
   return (
-    (tests as MockTestCategoryType)?.testList
-      ? (tests as MockTestCategoryType)?.testList
-      : (tests as TopicTestType[])
-  ).map((test, index) => {
-    const normalized = normalizeTestData(test);
-    return (
-      <TestCard
-        key={index}
-        test={normalized}
-        infoClickHandler={infoClickHandler}
-      />
-    );
-  });
+    <div className="flex flex-col gap-4">
+      {tests?.map((test, index) => {
+        const normalized = normalizeTestData(test);
+        return (
+          <TestCard
+            key={index}
+            test={normalized}
+            infoClickHandler={infoClickHandler}
+            onClickHandler={onClickHandler}
+          />
+        );
+      })}
+    </div>
+  );
 };
 
 export default TestCardList;

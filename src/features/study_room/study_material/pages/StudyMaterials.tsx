@@ -1,15 +1,18 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+// Types
+import type { Topic } from "../../../shared/types";
 
 // Icons
 import { MdClose } from "react-icons/md";
 
+// Store
+import { useSMStore } from "../store/useSMStore";
+
 // Utils
 import cn from "../../../../utils/classNames";
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
-
-// Hooks
-import useStudyMaterial from "../hooks/useStudyMaterial";
 
 // Services
 import { loadStudyMaterialTopicTree } from "../services/loadStudyMaterialTopicTree";
@@ -28,23 +31,27 @@ import MediaContentModalView from "../components/MediaContentModalVIew";
  * SMTopicListPage displays a list of study material topics and their content.
  */
 const StudyMaterials = () => {
-  const {
-    reset,
-    topicTree,
-    setTopicTree,
-    setTopicFlatList,
-    contentFilterType,
-    topicContentList,
-    setTopicContentList,
-    getSelectedTopic,
-    setSelectedTopicId,
-    selectedContent,
-    setSelectedContent,
-    textContent,
-    setTextContent,
-  } = useStudyMaterial();
+  // Helpers
+  const getSelectedTopic = useSMStore((s) => s.getSelectedTopic);
+  const reset = useSMStore((s) => s.reset);
 
-  const selectedTopic = getSelectedTopic();
+  // State
+  const topicTree = useSMStore((s) => s.topicTree);
+  const selectedTopicId = useSMStore((s) => s.selectedTopicId);
+  const topicContentList = useSMStore((s) => s.topicContentList);
+  const contentFilterType = useSMStore((s) => s.contentFilterType);
+  const selectedContent = useSMStore((s) => s.selectedContent);
+  const textContent = useSMStore((s) => s.textContent);
+
+  // Actions
+  const setTopicTree = useSMStore((s) => s.setTopicTree);
+  const setTopicFlatList = useSMStore((s) => s.setTopicFlatList);
+  const setTopicContentList = useSMStore((s) => s.setTopicContentList);
+  const setSelectedTopicId = useSMStore((s) => s.setSelectedTopicId);
+  const setSelectedContent = useSMStore((s) => s.setSelectedContent);
+  const setTextContent = useSMStore((s) => s.setTextContent);
+
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {
@@ -59,6 +66,10 @@ const StudyMaterials = () => {
     getTopicTree();
     return reset;
   }, []);
+
+  useEffect(() => {
+    setSelectedTopic(getSelectedTopic());
+  }, [selectedTopicId]);
 
   // ========== Load Topic Content on Topic Select ==========
   useEffect(() => {

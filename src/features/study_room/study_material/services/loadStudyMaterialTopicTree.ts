@@ -1,7 +1,7 @@
 // Types
-import type { TopicType } from "../../../shared/types";
+import type { Topic } from "../../../shared/types";
 
-import { useStudentStore } from "../../../shared/store/useStudentStore";
+import { useStudentStore } from "../../../store/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
@@ -27,7 +27,7 @@ export const loadStudyMaterialTopicTree = async () => {
       loginId,
       token,
       templateId,
-    })) as TopicType[];
+    })) as Topic[];
 
     if (!data) {
       return null;

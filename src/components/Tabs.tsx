@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from "react";
 import cn from "../utils/classNames";
 
 interface TabsProps {
-  tabs: string[];
+  tabs: readonly string[];
   selectedIndex: number;
   onSelect: (index: number) => void;
   containerClassName?: string;

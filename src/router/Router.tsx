@@ -9,7 +9,6 @@ import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 
 // Pages
 import NotFound from "../shared/NotFound";
-import Settings from "../features/settings";
 import StudyMaterials from "../features/study_room/study_material/pages/StudyMaterials";
 import SmartLearning from "../features/study_room/smart_learning/pages/SmartLearning";
 import TestSimulator from "../features/test_simulator/pages/TestSimulator";
@@ -23,6 +22,7 @@ import Signup from "../features/auth/signup/pages/Signup";
 import Onboarding from "../features/onboarding/pages/Onboarding";
 import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
 import { PermissionRedirect } from "./PermissionRedirect";
+import Settings from "../features/settings";
 
 const Router = () => {
   return (

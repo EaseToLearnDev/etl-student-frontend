@@ -1,10 +1,10 @@
-import type { CourseType } from "../features/shared/types";
+import type { Course } from "../features/shared/types";
 import { menuItems } from "../layouts/hydrogen/components/MenuItems";
 
 /**
  * Filters main menu items based on the active course and static status.
  */
-export const getFilteredMenuItems = (activeCourse: CourseType | null) => {
+export const getFilteredMenuItems = (activeCourse: Course | null) => {
   if (!activeCourse) return [];
 
   return menuItems.filter((item) => {
@@ -21,7 +21,7 @@ export const getFilteredMenuItems = (activeCourse: CourseType | null) => {
  */
 export const getFilteredSubMenuItems = (
   parentId: string,
-  activeCourse: CourseType | null
+  activeCourse: Course | null
 ) => {
   if (!activeCourse) return [];
 

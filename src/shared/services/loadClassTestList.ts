@@ -3,7 +3,7 @@
 import type { ClassTestType } from "../types/classTest.types";
 
 // Store
-import { useStudentStore } from "../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../features/store/useStudentStore";
 import { useCTStore } from "../hooks/useCTStore";
 
 // Apis

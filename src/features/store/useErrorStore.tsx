@@ -1,11 +1,11 @@
 // Zustand
 import { create } from "zustand";
 // Types
-import { Severity, type ErrorType } from "../types";
+import { Severity, type Error } from "../shared/types";
 
 
 export interface ErrorStore {
-  error: ErrorType;
+  error: Error;
   isLoading: boolean;
   setErrorMessage: (message: string, severity: Severity) => void;
   setLoading: (v: boolean) => void;

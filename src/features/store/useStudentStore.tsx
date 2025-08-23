@@ -1,12 +1,12 @@
 import { create } from "zustand";
-import type { CourseType, StudentDataType } from "../types";
+import type { Course, StudentData } from "../shared/types";
 import { persist } from "zustand/middleware";
 
 export interface StudentStore {
-  studentData: StudentDataType | null;
-  activeCourse: CourseType | null;
+  studentData: StudentData | null;
+  activeCourse: Course | null;
 
-  setStudentData: (data: StudentDataType | null) => void;
+  setStudentData: (data: StudentData | null) => void;
   setActiveCourse: (index: number) => void;
   reset: () => void;
 }

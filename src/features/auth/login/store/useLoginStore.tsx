@@ -1,10 +1,10 @@
 import { create } from "zustand";
-import { Severity, type ErrorType } from "../../../shared/types";
+import { Severity, type Error } from "../../../shared/types";
 
 export interface LoginStore {
   email: string;
   password: string;
-  error: ErrorType;
+  error: Error;
   loading: boolean;
 
   setLoading: (v: boolean) => void;

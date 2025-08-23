@@ -8,9 +8,9 @@ import { useStudentStore } from "../../../store/useStudentStore";
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 
 /**
- * Loads the smart learning topic tree for the current student.
+ * Loads the topic tree for the active course and student.
  */
-export const loadSmartLearningTopictree = async () => {
+export const loadTopicTree = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse) return null;
@@ -21,7 +21,7 @@ export const loadSmartLearningTopictree = async () => {
   if (!loginId || !token || !templateId) return null;
 
   const data = (await getTopicTreeView({
-    type: "learning",
+    type: "topic",
     mode: 0,
     loginId,
     token,

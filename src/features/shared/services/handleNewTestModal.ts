@@ -1,7 +1,6 @@
 // Api
 import { deletePreviousRunningTest } from "./deletePreviousRunningTest";
 
-
 /**
  * Handles the logic for displaying the new test modal after deleting any previous running test.
  */

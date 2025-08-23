@@ -1,27 +1,30 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useNavigate } from "react-router";
+
+// Store
+import { useSLStore } from "../store/useSLStore";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
 
-// Hooks
-import useSmartLearning from "../hooks/useSmartLearning";
-
 // Services
 import { loadSmartLearningTopictree } from "../services/loadSmartLearningTopicTree";
 import { loadLastSelfTestPercentage } from "../services/loadLastSelfTestPercentage";
-import { handleTopicModeSelector } from "../services/handleTopicModeSelector";
+import { manageTestModal } from "../../../shared/services/manageTestModal";
 import { handleResumeTest, handleStartTest } from "../services/handleTest";
-import { handleNewTestModal } from "../services/handleNewTestModal";
+import { handleNewTestModal } from "../../../shared/services/handleNewTestModal";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import { Modal } from "../../../../components/Modal";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TopicModeSelector from "../components/TopicModeSelector";
-import SLPreviousTestModalContent from "../components/SLPreviousTestModalContent";
 import SLTestModalContent from "../components/SLTestModalContent";
+import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
+import { usePrevTestStore } from "../../../store/usePrevTestStore";
+import type { Topic } from "../../../shared/types";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -29,29 +32,43 @@ import SLTestModalContent from "../components/SLTestModalContent";
 const SmartLearning = () => {
   // Hooks
   const navigate = useNavigate();
-  const {
-    reset,
-    getSelectedTopic,
-    topicTree,
-    setTopicTree,
-    setTopicFlatList,
-    setSelectedTopicId,
-    mode,
-    setMode,
-    lastSelfTestPercentage,
-    previousRunningTest,
-    setLastSelfTestPercentage,
-    setPreviousRunningTest,
-    setShowPreviousTestModal,
-    setShowStartTestModal,
-    showPreviousTestModal,
-    showStartTestModal,
-    testOptions,
-    setTestOptions,
-  } = useSmartLearning();
+  const reset = useSLStore((s) => s.reset);
+  const getSelectedTopic = useSLStore((s) => s.getSelectedTopic);
 
-  // Get currently selected topic
-  const selectedTopic = getSelectedTopic();
+  const topicTree = useSLStore((s) => s.topicTree);
+  const setTopicTree = useSLStore((s) => s.setTopicTree);
+
+  const selectedTopicId = useSLStore((s) => s.selectedTopicId);
+  const setTopicFlatList = useSLStore((s) => s.setTopicFlatList);
+  const setSelectedTopicId = useSLStore((s) => s.setSelectedTopicId);
+
+  const mode = useSLStore((s) => s.mode);
+  const setMode = useSLStore((s) => s.setMode);
+
+  const lastSelfTestPercentage = useSLStore((s) => s.lastSelfTestPercentage);
+  const setLastSelfTestPercentage = useSLStore(
+    (s) => s.setLastSelfTestPercentage
+  );
+
+  const previousRunningTest = usePrevTestStore(
+    (s) => s.prevRunningTest
+  );
+  const setPreviousRunningTest = usePrevTestStore(
+    (s) => s.setPrevRunningTest
+  );
+
+  const showPreviousTestModal = useSLStore((s) => s.showPreviousTestModal);
+  const setShowPreviousTestModal = useSLStore(
+    (s) => s.setShowPreviousTestModal
+  );
+
+  const showStartTestModal = useSLStore((s) => s.showStartTestModal);
+  const setShowStartTestModal = useSLStore((s) => s.setShowStartTestModal);
+
+  const testOptions = useSLStore((s) => s.testOptions);
+  const setTestOptions = useSLStore((s) => s.setTestOptions);
+
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {
@@ -66,6 +83,10 @@ const SmartLearning = () => {
     fetchTopicTree();
     return () => reset();
   }, []);
+
+  useEffect(() => {
+    setSelectedTopic(getSelectedTopic());
+  }, [selectedTopicId]);
 
   // ========== Load Self Test Percentage on Topic-Select ==========
   useEffect(() => {
@@ -123,11 +144,12 @@ const SmartLearning = () => {
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
                 onClickHandler={() =>
-                  handleTopicModeSelector(
+                  manageTestModal({
+                    previousRunningTest,
                     setPreviousRunningTest,
                     setShowStartTestModal,
-                    setShowPreviousTestModal
-                  )
+                    setShowPreviousTestModal,
+                  })
                 }
               />
             ) : (
@@ -168,7 +190,7 @@ const SmartLearning = () => {
         size="lg"
         className="p-4"
       >
-        <SLPreviousTestModalContent
+        <PreviousTestModalContent
           onStart={() =>
             handleNewTestModal(setShowStartTestModal, setShowPreviousTestModal)
           }

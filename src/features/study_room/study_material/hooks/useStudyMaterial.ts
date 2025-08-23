@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TopicType } from "../../../shared/types";
+import type { Topic } from "../../../shared/types";
 import type {
   FilterType,
   TextContentType,
@@ -7,8 +7,8 @@ import type {
 } from "../sm.types";
 
 const useStudyMaterial = () => {
-  const [topicTree, setTopicTree] = useState<TopicType[] | null>(null);
-  const [topicFlatList, setTopicFlatList] = useState<TopicType[] | null>(null);
+  const [topicTree, setTopicTree] = useState<Topic[] | null>(null);
+  const [topicFlatList, setTopicFlatList] = useState<Topic[] | null>(null);
   const [topicContentList, setTopicContentList] = useState<
     TopicContentType[] | null
   >(null);
