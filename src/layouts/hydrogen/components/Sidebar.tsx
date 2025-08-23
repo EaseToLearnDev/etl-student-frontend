@@ -11,9 +11,14 @@ export default function Sidebar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 2xl:px-8 2xl:pt-6">
-        <Link to={"/"} aria-label="Site Logo">
-          <LogoFull className="max-w-[180px] h-fit" />
+      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 2xl:px-8 2xl:pt-6 select-none focus:outline-none">
+        <Link
+          to="/"
+          aria-label="Site Logo"
+          className="focus:outline-none focus:ring-0"
+          tabIndex={-1}
+        >
+          <LogoFull className="max-w-[180px] h-fit select-none pointer-events-none" />
         </Link>
       </div>
 

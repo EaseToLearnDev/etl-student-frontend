@@ -17,6 +17,7 @@ interface TopicProps<T> {
   getLabel: (topic: T) => string;
   getChildren?: (topic: T) => T[] | undefined;
   renderRightSection?: (topic: T, isActive: boolean) => React.ReactNode;
+  level?: number; // added for depth tracking
 }
 
 const Topic = <T,>({
@@ -27,6 +28,7 @@ const Topic = <T,>({
   getLabel,
   getChildren,
   renderRightSection,
+  level = 0,
 }: TopicProps<T>) => {
   const isMobile = useIsMobile();
   const [expanded, setExpanded] = useState<boolean>(false);
@@ -45,7 +47,12 @@ const Topic = <T,>({
   const children = getChildren?.(topic);
 
   return (
-    <div className={cn("mt-2", isMobile ? "ml-[20px]" : "ml-[40px]")}>
+    <div
+      className={cn(
+        "mt-2",
+        level > 0 ? (isMobile ? "ml-[20px]" : "ml-[40px]") : "" // only add margin if not root
+      )}
+    >
       <div
         onClick={handleSelect}
         className={cn(
@@ -121,6 +128,7 @@ const Topic = <T,>({
             getLabel={getLabel}
             getChildren={getChildren}
             renderRightSection={renderRightSection}
+            level={level + 1} // increment level for children
           />
         ))}
       </div>

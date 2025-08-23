@@ -97,35 +97,33 @@ const TopicTestPage = () => {
     fetchTestList(selectedTopic);
   }, [selectedTopicId]);
 
-  // Fetch
-  useEffect(() => {}, [selectedTopic]);
+  const showTestList = selectedTopic && testList && testList?.length > 0;
 
+  // Render
   return (
     <div className="h-full flex flex-col flex-grow">
-      {/* Header */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2">
         {selectedTopic && testList && testList?.length > 0 && (
           <div
             onClick={resetSelectedTopic}
             className={cn(
-              "w-[34px] h-[34px] aspect-square flex justify-center items-center cursor-pointer",
+              "w-[30px] h-[30px] aspect-square flex justify-center items-center cursor-pointer",
               "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
             )}
           >
             <MdArrowBack size={20} className="text-[var(--text-primary)]" />
           </div>
         )}
-        <h3 className="!font-bold items-end text-ellipsis line-clamp-2">
+        <h5 className="!font-semibold pl-2 items-end text-ellipsis line-clamp-2">
           {selectedTopic && testList && testList?.length > 0
             ? capitalizeWords(selectedTopic?.topicName)
             : "Select Your Topic"}
-        </h3>
+        </h5>
       </div>
-
-      <div className="mt-5 h-full overflow-y-auto">
-        {selectedTopic && testList && testList?.length > 0 ? (
-          <ChildLayout
-            primaryContent={
+      <div className="mt-4 h-full overflow-y-auto">
+        <ChildLayout
+          primaryContent={
+            showTestList ? (
               <TestCardList
                 tests={testList || []}
                 infoClickHandler={() => {
@@ -143,18 +141,7 @@ const TopicTestPage = () => {
                   });
                 }}
               />
-            }
-            secondaryContent={
-              <TopicTestInstructions
-                title={capitalizeWords(selectedTopic.topicName)}
-              />
-            }
-            hideSecondary={hideSecondary}
-            onSecondaryHide={() => setHideSecondary(true)}
-          />
-        ) : (
-          <ChildLayout
-            primaryContent={
+            ) : (
               <TopicTreeView
                 topics={topicTree || []}
                 selectedTopic={selectedTopic}
@@ -176,12 +163,23 @@ const TopicTestPage = () => {
                   )
                 }
               />
-            }
-            hideSecondary={true}
-          />
-        )}
-      </div>
-
+            )
+          }
+          secondaryContent={
+            showTestList ? (
+              <TopicTestInstructions
+                title={capitalizeWords(selectedTopic.topicName)}
+              />
+            ) : (
+              <></>
+            )
+          }
+          hideSecondary={!showTestList || hideSecondary}
+          onSecondaryHide={
+            showTestList ? () => setHideSecondary(true) : undefined
+          }
+        />
+      </div>{" "}
       {/* Start Test Modal */}
       <Modal
         isOpen={showStartTestModal}
@@ -210,7 +208,6 @@ const TopicTestPage = () => {
           }}
         />
       </Modal>
-
       {/* Previous Test Modal */}
       <Modal
         isOpen={showPreviousTestModal}

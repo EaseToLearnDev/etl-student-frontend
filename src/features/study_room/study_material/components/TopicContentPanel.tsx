@@ -35,9 +35,9 @@ const TopicContentPanel = ({
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="flex items-center justify-between">
-        <h5 className="!font-semibold text-[var(--text-primary)] text-ellipsis line-clamp-2">
+        <h6 className="!font-semibold text-ellipsis line-clamp-2">
           {selectedTopic?.topicName}
-        </h5>
+        </h6>
         <div className="flex gap-4">
           <FilterDropdown>
             <FiFilter size={20} className="cursor-pointer" />

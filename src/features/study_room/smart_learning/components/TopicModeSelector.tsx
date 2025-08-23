@@ -31,15 +31,15 @@ const TopicModeSelector = ({
   return (
     <div className="flex flex-col w-full h-full">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h5 className="!font-semibold text-[var(--text-primary)]">
+      <div className="flex items-center justify-center">
+        <h6 className="!font-semibold text-center">
           {selectedTopic?.topicName}
-        </h5>
+        </h6>
       </div>
 
       {/* Progress section */}
       <div className="flex flex-col items-center gap-5 mt-5">
-        <h6 className="text-center font-semibold">Topic Progress</h6>
+        <p className="text-center font-semibold">Topic Progress</p>
         <TopicProgressChart progress={lastSelfTestPercentage ?? 0} />
       </div>
       {/* Mode selection section */}
