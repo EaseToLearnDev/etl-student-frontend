@@ -1,8 +1,8 @@
 // Types
 import type { TopicContentType as TopicContentType } from "../sm.types";
+import type { ReactNode } from "react";
 
 // Icons
-import type { ReactNode } from "react";
 import DocIcon from "../../../../components/icons/doc-solid-icon";
 import PDFIcon from "../../../../components/icons/pdf-solid-icon";
 import PPTIcon from "../../../../components/icons/ppt-solid-icon";

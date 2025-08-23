@@ -1,16 +1,33 @@
-import type { TextContentType } from "../sm.types";
-import NestedList from "./NestedList";
-import { buildNestedList } from "../services/buildNestedList";
-import useIsMobile from "../../../../hooks/useIsMobile";
-import { MdArrowUpward } from "react-icons/md";
-import { checkForTable, checkVisible } from "../../../../utils";
+
+// React
 import { useEffect, useRef, useState } from "react";
+
+// Types
+import type { TextContentType } from "../sm.types";
+
+// Icons
+import { MdArrowUpward } from "react-icons/md";
+
+// Hooks
+import useIsMobile from "../../../../hooks/useIsMobile";
+
+// Utils
+import { checkForTable, checkVisible } from "../../../../utils";
 import cn from "../../../../utils/classNames";
+
+// Services
+import { buildNestedList } from "../services/buildNestedList";
+
+// Components
+import NestedList from "./NestedList";
 
 interface TextContentModalViewProps {
   content: TextContentType;
 }
 
+/**
+ * Modal view component for displaying text content with a table of contents and scroll-to-top functionality.
+ */
 const TextContentModalView = ({ content }: TextContentModalViewProps) => {
   const list = buildNestedList(content?.links);
   const isMobile = useIsMobile();

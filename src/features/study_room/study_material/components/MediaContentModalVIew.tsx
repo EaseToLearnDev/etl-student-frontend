@@ -1,9 +1,13 @@
+// React
 import type { TopicContentType } from "../sm.types";
 
 interface MediaContentModalViewProps {
   content: TopicContentType;
 }
 
+/**
+ * Renders an iframe to display video or document content in a modal view.
+ */
 const MediaContentModalView = ({ content }: MediaContentModalViewProps) => {
   return content.contentType === "Video" ? (
     // Video Iframe
