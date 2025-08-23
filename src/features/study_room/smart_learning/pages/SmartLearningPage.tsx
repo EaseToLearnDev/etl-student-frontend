@@ -50,12 +50,8 @@ const SmartLearningPage = () => {
     (s) => s.setLastSelfTestPercentage
   );
 
-  const previousRunningTest = usePrevTestStore(
-    (s) => s.prevRunningTest
-  );
-  const setPreviousRunningTest = usePrevTestStore(
-    (s) => s.setPrevRunningTest
-  );
+  const previousRunningTest = usePrevTestStore((s) => s.prevRunningTest);
+  const setPreviousRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
 
   const showPreviousTestModal = useSLStore((s) => s.showPreviousTestModal);
   const setShowPreviousTestModal = useSLStore(
@@ -108,11 +104,10 @@ const SmartLearningPage = () => {
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <h3 className="!font-bold items-end">Select Your Topic</h3>
+        <h5 className="!font-semibold pl-2 items-end">Select Your Topic</h5>
       </div>
-
       {/* Main Layout */}
-      <div className="mt-5 h-full overflow-y-auto">
+      <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
             <TopicTreeView

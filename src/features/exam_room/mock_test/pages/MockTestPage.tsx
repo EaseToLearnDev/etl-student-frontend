@@ -29,6 +29,7 @@ import { Modal } from "../../../../components/Modal";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartMockTestModalContent from "../components/StartMockTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
+import cn from "../../../../utils/classNames";
 
 // Constants
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
@@ -61,7 +62,7 @@ const MockTestPage = () => {
   const [hideSecondary, setHideSecondary] = useState(isMobile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedDropdownIndex, setSelectedDropdownIndex] = useState(0);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
 
   // Derived data
   const completeMockTests = testList?.[0] || ({} as MockTestCategory);
@@ -79,7 +80,12 @@ const MockTestPage = () => {
   return (
     <div className="w-full h-full overflow-hidden">
       {/* Tabs + Subject Filter */}
-      <div className="flex flex-col lg:flex-row lg:items-center gap-4 justify-between md:w-[60%] lg:w-[70%] xl:w-[75%] pr-5">
+      <div
+        className={cn(
+          "flex flex-col lg:flex-row lg:items-center gap-4 justify-between md:w-[60%] lg:w-[70%] xl:w-[75%]",
+          !isMobile ? " pr-5" : ""
+        )}
+      >
         <Tabs
           tabs={TABS}
           selectedIndex={selectedTabIndex}
