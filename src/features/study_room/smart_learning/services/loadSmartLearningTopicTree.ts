@@ -1,8 +1,8 @@
 // Types
-import type { TopicType } from "../../../shared/types";
+import type { Topic } from "../../../shared/types";
 
-// Store
-import { useStudentStore } from "../../../shared/store/useStudentStore";
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
@@ -13,33 +13,20 @@ import { getTopicTreeView } from "../../../shared/apis/treeview.api";
 export const loadSmartLearningTopictree = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
-  if (!studentData || !activeCourse) {
-    return null;
-  }
+  if (!studentData || !activeCourse) return null;
 
   const { loginId, token } = studentData;
   const templateId = activeCourse?.templateId;
 
-  if (!loginId || !token || !templateId) {
-    return null;
-  }
+  if (!loginId || !token || !templateId) return null;
 
-  try {
-    const data = (await getTopicTreeView({
-      type: "learning",
-      mode: 0,
-      loginId,
-      token,
-      templateId,
-    })) as TopicType[];
+  const data = (await getTopicTreeView({
+    type: "learning",
+    mode: 0,
+    loginId,
+    token,
+    templateId,
+  })) as Topic[];
 
-    if (!data) {
-      return null;
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Failed to load topic tree:", error);
-    return null;
-  }
+  return data ?? null;
 };

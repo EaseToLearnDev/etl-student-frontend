@@ -7,7 +7,7 @@ import { MdFeedback, MdPayments } from "react-icons/md";
 import { BiSolidVideos } from "react-icons/bi";
 
 // Store
-import { useStudentStore } from "../../../features/shared/store/useStudentStore";
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -17,6 +17,8 @@ import logout from "../../../utils/logout";
 import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
+import { RiUserSettingsFill } from "react-icons/ri";
+import { Link } from "react-router";
 
 export default function ProfileMenuDropDown({
   children,
@@ -48,7 +50,7 @@ export default function ProfileMenuDropDown({
 const menuItems = [
   {
     name: "My Profile",
-    href: "#",
+    href: "profile",
     icon: <FaUser />,
   },
   {
@@ -70,6 +72,11 @@ const menuItems = [
     name: "Feedback",
     href: "#",
     icon: <MdFeedback />,
+  },
+  {
+    name: "Settings",
+    href: "/settings",
+    icon: <RiUserSettingsFill />,
   },
 ];
 
@@ -101,14 +108,14 @@ function DropdownMenu() {
       </div>
       <div className="grid px-3.5 py-3.5 font-medium text-[var(--text-primary)] text-base">
         {menuItems.map((item) => (
-          <a
+          <Link
             key={item.name}
-            href={item.href}
+            to={item.href}
             className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
           >
             <span className="text-[var(--text-secondary)]">{item.icon}</span>
             {item.name}
-          </a>
+          </Link>
         ))}
       </div>
       <div className="border-t border-[var(--border-primary)] px-6 pb-6 pt-5">

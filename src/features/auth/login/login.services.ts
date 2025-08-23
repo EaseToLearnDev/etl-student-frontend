@@ -1,14 +1,14 @@
 // Types
 import {
   Severity,
-  type CourseType,
-  type StudentDataResponseType,
-  type StudentDataType,
+  type Course,
+  type StudentDataResponse,
+  type StudentData,
 } from "../../shared/types";
 
 // Store
-import { useLoginStore } from "./store/useLoginStore";
-import { useStudentStore } from "../../shared/store/useStudentStore";
+import { useLoginStore } from "./hooks/useLoginStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
 import { LoginApi } from "./apis/login";
@@ -23,7 +23,7 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
     setError("", Severity.None);
     setLoading(true);
 
-    const data: StudentDataResponseType = await LoginApi(email, password);
+    const data: StudentDataResponse = await LoginApi(email, password);
 
     setLoading(false);
 
@@ -42,7 +42,7 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
         tonyHelp: !!c.tonyHelp,
         otherCourses: !!c.otherCourses,
       };
-      const course: CourseType = {
+      const course: Course = {
         templateId: c.templateId,
         validityId: c.validityId,
         courseId: c.courseId,
@@ -56,7 +56,7 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
       return course;
     });
 
-    const studentData: StudentDataType = {
+    const studentData: StudentData = {
       openedCourse: data.openedCourse,
       firstTimeUser: data.firstTimeUser,
       websiteId: data.websiteId,
@@ -69,6 +69,8 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
       loginId: data.loginId,
       schools: data.schools,
       courses: courses,
+      profilePic: data.profilePic,
+      deleteFlag: data.deleteFlag
     };
 
     setStudentData(studentData);

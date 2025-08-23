@@ -1,9 +1,9 @@
 // Types
-import type { MockTestCategoryType } from "../../../shared/types";
+import type { MockTestCategory } from "../../../shared/types";
 
 // Store
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import { useMTStore } from "../store/useMTStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import { useMTStore } from "../hooks/useMTStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
@@ -32,7 +32,7 @@ export const loadMockTestList = async () => {
       loginId,
       token,
       templateId,
-    })) as MockTestCategoryType[];
+    })) as MockTestCategory[];
 
     if (!list) {
       setTestList(null);

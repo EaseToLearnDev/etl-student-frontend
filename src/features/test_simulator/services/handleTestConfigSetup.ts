@@ -1,5 +1,5 @@
 // Types
-import { Severity, type ErrorType } from "../../shared/types";
+import { Severity, type Error } from "../../shared/types";
 import type {
   AssessmentMode,
   ExamType,
@@ -15,7 +15,7 @@ interface HandleTestConfigSetupParams {
 }
 interface HandleTestConfigSetupResponse {
   testConfig: TestConfig | null;
-  error: ErrorType | null;
+  error: Error | null;
 }
 
 /**

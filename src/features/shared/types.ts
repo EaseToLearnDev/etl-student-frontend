@@ -1,13 +1,13 @@
-export type TopicType = {
+export type Topic = {
   topicId: number;
   questionCount?: number;
   subjectiveCount?: number;
   topicName: string;
   pathIds: string;
-  children: TopicType[];
+  children: Topic[];
 };
 
-export type TestType = {
+export type Test = {
   testName: string;
   testUrl: string;
   testTime: number;
@@ -18,13 +18,13 @@ export type TestType = {
   marks?: number;
 };
 
-export interface MockTestCategoryType {
+export interface MockTestCategory {
   categoryId: number;
   categoryName: string;
-  testList: MockTestType[];
+  testList: MockTest[];
 }
 
-export interface MockTestType {
+export interface MockTest {
   mocktestId: number;
   testName: string;
   instanceUuid: string;
@@ -35,13 +35,12 @@ export interface MockTestType {
   correctAnsMark: number;
   wrongAnsMark: number;
   noAnsMark: number;
-  sectionSet?: MockSectionType[];
+  sectionSet?: MockSection[];
   difficulty?: string;
-  progress?: "not_started" | "in_progress";
   marks?: number;
 }
 
-export interface MockSectionType {
+export interface MockSection {
   sectionId: number;
   sectionName: string;
   questionRange: string;
@@ -52,19 +51,19 @@ export interface MockSectionType {
   noQuestionAttempt: number;
 }
 
-export interface TopicTestResponseType {
+export interface TopicTestResponse {
   responseTxt: string;
   message: string;
-  obj: TopicTestType[];
+  obj: TopicTest[];
 }
 
-export interface TopicTestType {
+export interface TopicTest {
   mockTestTitle: string;
   mockTestId: number;
   topicId: number;
-  patternDetails: PatternDetailsType;
+  patternDetails: PatternDetails;
 }
-export interface PatternDetailsType {
+export interface PatternDetails {
   totalQuestion: number;
   totalTime: number;
   totalMark: number;
@@ -74,7 +73,7 @@ export interface PatternDetailsType {
   questionType: string;
 }
 
-export interface StudentDataResponseType {
+export interface StudentDataResponse {
   openedCourse: number;
   firstTimeUser: number;
   websiteId: number;
@@ -85,11 +84,15 @@ export interface StudentDataResponseType {
   phoneNo: string;
   status: string;
   loginId: string;
+  schools: School[];
+  courses: CourseResponse[];
+  profilePic: string;
+  deleteFlag: number;
   schools: SchoolType[];
   courses: CourseResponseType[];
 }
 
-export interface StudentDataType {
+export interface StudentData {
   openedCourse: number;
   firstTimeUser: number;
   websiteId: number;
@@ -100,18 +103,20 @@ export interface StudentDataType {
   phoneNo: string;
   status: string;
   loginId: string;
-  schools: SchoolType[];
-  courses: CourseType[];
+  profilePic: string;
+  deleteFlag: number;
+  schools: School[];
+  courses: Course[];
 }
 
-export interface SchoolType {
+export interface School {
   schoolName: string;
   className: string;
   schoolId: number;
   classId: number;
 }
 
-export interface CourseType {
+export interface Course {
   templateId: number;
   validityId: number;
   courseId: number;
@@ -123,7 +128,7 @@ export interface CourseType {
   tabs: Record<string, boolean>;
 }
 
-export interface CourseResponseType {
+export interface CourseResponse {
   templateId: number;
   validityId: number;
   courseId: number;
@@ -147,15 +152,23 @@ export interface CourseResponseType {
 
 export enum Severity {
   None = "none",
-  Info = 'info', // for success and information
+  Info = "info", // for success and information
   Warning = "warning", // warnings and invalid input fields
   Alert = "alert", // error messages
-  Fatal = 'fatal', // only for log out
+  Fatal = "fatal", // only for log out
 }
-export interface ErrorType {
+export interface Error {
   severity: Severity;
   message: string;
   id?: string;
 }
 
-export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";
+export type TreeView = "topic" | "learning" | "mock" | "smart" | "test";
+
+export interface PrevRunningTest {
+  responseTxt: string;
+  testMode?: string;
+  testName?: string;
+  testSession?: string;
+  testType?: number;
+}

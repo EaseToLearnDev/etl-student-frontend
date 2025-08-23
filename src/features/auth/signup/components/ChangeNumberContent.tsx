@@ -1,6 +1,6 @@
 import Button from "../../../../components/Button";
 import cn from "../../../../utils/classNames";
-import useSignupStore from "../store/useSignupStore";
+import useSignupStore from "../hooks/useSignupStore";
 import { switchPhase } from "../signup.services";
 import { SignupPhase } from "../signup.types";
 

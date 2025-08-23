@@ -1,7 +1,7 @@
 // Components
 import Button from "../../../../components/Button";
 import InputOTP from "./InputOTP";
-import useSignupStore from "../store/useSignupStore";
+import useSignupStore from "../hooks/useSignupStore";
 import { switchPhase } from "../signup.services";
 import { SignupPhase } from "../signup.types";
 import { Link } from "react-router";

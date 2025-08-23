@@ -1,4 +1,4 @@
-import type { MockTestType, TopicTestType } from "../types";
+import type { MockTest, TopicTest } from "../types";
 
 export interface NormalizedTest {
   id: number;
@@ -14,10 +14,10 @@ export interface NormalizedTest {
 /**
  * Normalizes test data from either a `MockTestType` or `TopicTestType` into a unified `NormalizedTest` format.
  */
-export const normalizeTestData = (test: MockTestType | TopicTestType): NormalizedTest => {
-  if ((test as MockTestType).testName !== undefined) {
+export const normalizeTestData = (test: MockTest | TopicTest): NormalizedTest => {
+  if ((test as MockTest).testName !== undefined) {
       // MockTestType
-    const mockTest = (test as MockTestType);
+    const mockTest = (test as MockTest);
     return {
       id: mockTest.mocktestId,
       title: mockTest.testName,
@@ -30,7 +30,7 @@ export const normalizeTestData = (test: MockTestType | TopicTestType): Normalize
     };
   } else {
     // TopicTestType
-    const topicTest = (test as TopicTestType);
+    const topicTest = (test as TopicTest);
     return {
       id: topicTest.mockTestId,
       title: topicTest.mockTestTitle,

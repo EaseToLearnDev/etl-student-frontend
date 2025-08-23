@@ -1,8 +1,15 @@
+// React
 import { Link, useLocation } from "react-router";
-import { menuItems } from "./MenuItems";
+
+// Hooks
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
+
+// Utils
 import cn from "../../../utils/classNames";
-import { useStudentStore } from "../../../features/shared/store/useStudentStore";
 import { getFilteredSubMenuItems } from "../../../utils/menuFilter";
+
+// Components
+import { menuItems } from "./MenuItems";
 
 /**
  * Renders the top navigation menu with permitted sub-menu items for the active course.

@@ -1,5 +1,5 @@
 import { SignupPhase } from "./signup.types";
-import useSignupStore from "./store/useSignupStore";
+import useSignupStore from "./hooks/useSignupStore";
 
 export const handleSignup = () => {
 

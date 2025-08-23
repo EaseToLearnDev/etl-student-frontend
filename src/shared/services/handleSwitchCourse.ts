@@ -1,7 +1,15 @@
+// Types
 import type { NavigateFunction } from "react-router";
-import { switchCourse } from "../api/switchCourse.api";
-import { useStudentStore } from "../../features/shared/store/useStudentStore";
 
+// Hooks
+import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
+
+// Apis
+import { switchCourse } from "../api/switchCourse.api";
+
+/**
+ * Handles switching the active course for the student and navigates to the home page.
+ */
 export const handleSwitchCourse = async (
   navigate: NavigateFunction,
   selectedIndex: number

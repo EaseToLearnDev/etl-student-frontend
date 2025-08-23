@@ -1,3 +1,5 @@
+
+// React
 import { Navigate, Route, Routes } from "react-router";
 
 // Route
@@ -9,21 +11,25 @@ import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 
 // Pages
 import NotFound from "../shared/NotFound";
-import Settings from "../features/settings";
-import StudyMaterials from "../features/study_room/study_material/pages/StudyMaterials";
-import SmartLearning from "../features/study_room/smart_learning/pages/SmartLearning";
-import TestSimulator from "../features/test_simulator/pages/TestSimulator";
-import MockTestList from "../features/exam_room/mock_test/pages/MockTestList";
-import ClassTestPage from "../features/exam_room/class_test/ClassTest";
+import StudyMaterialsPage from "../features/study_room/study_material/pages/StudyMaterialsPage";
+import SmartLearningPage from "../features/study_room/smart_learning/pages/SmartLearningPage";
+import TestSimulatorPage from "../features/test_simulator/pages/TestSimulatorPage";
+import MockTestPage from "../features/exam_room/mock_test/pages/MockTestPage";
+import ClassTestPage from "../features/exam_room/class_test/pages/ClassTestPage";
 import ReportAnalytics from "../features/reports_and_analytics/pages/ReportAnalytics";
 import OverallPerformanceReport from "../features/reports_and_analytics/pages/OverallPerformanceReport";
 import MockTestAnalytics from "../features/reports_and_analytics/pages/MockTestAnalytics";
-import Login from "../features/auth/login/pages/Login";
-import Signup from "../features/auth/signup/pages/Signup";
-import Onboarding from "../features/onboarding/pages/Onboarding";
-import TopicTestTreeView from "../features/exam_room/topic_test/pages/TopicTestTreeView";
+import LoginPage from "../features/auth/login/pages/LoginPage";
+import SignupPage from "../features/auth/signup/pages/SignupPage";
+import OnboardingPage from "../features/onboarding/pages/OnboardingPage";
+import TopicTestPage from "../features/exam_room/topic_test/pages/TopicTestPage";
 import { PermissionRedirect } from "./PermissionRedirect";
+import ProfilePage from "../features/profile/pages/ProfilePage";
+import SettingsPage from "../features/settings/pages/SettingsPage";
 
+/**
+ * Main application router component that defines all routes and their layouts.
+ */
 const Router = () => {
   return (
     <Routes>
@@ -31,7 +37,7 @@ const Router = () => {
         path="/login"
         element={
           <PublicRoute>
-            <Login />
+            <LoginPage />
           </PublicRoute>
         }
       />
@@ -39,7 +45,7 @@ const Router = () => {
         path="/signup"
         element={
           <PublicRoute>
-            <Signup />
+            <SignupPage />
           </PublicRoute>
         }
       />
@@ -47,7 +53,7 @@ const Router = () => {
         path="/onboarding"
         element={
           <PrivateRoute>
-            <Onboarding />
+            <OnboardingPage />
           </PrivateRoute>
         }
       />
@@ -73,8 +79,8 @@ const Router = () => {
             />
           }
         />
-        <Route path="study-room/study-material" element={<StudyMaterials />} />
-        <Route path="study-room/smart-learning" element={<SmartLearning />} />
+        <Route path="study-room/study-material" element={<StudyMaterialsPage />} />
+        <Route path="study-room/smart-learning" element={<SmartLearningPage />} />
 
         {/* Calculate exam room default route  */}
         <Route
@@ -87,8 +93,8 @@ const Router = () => {
             />
           }
         />
-        <Route path="exam-room/topic-test" element={<TopicTestTreeView />} />
-        <Route path="exam-room/mock-test" element={<MockTestList />} />
+        <Route path="exam-room/topic-test" element={<TopicTestPage />} />
+        <Route path="exam-room/mock-test" element={<MockTestPage />} />
         <Route path="exam-room/class-test" element={<ClassTestPage />} />
 
         <Route
@@ -106,9 +112,10 @@ const Router = () => {
         />
         <Route path="report/mock-test" element={<MockTestAnalytics />} />
 
-        <Route path="settings" element={<Settings />} />
+        <Route path="settings" element={<SettingsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
       </Route>
-      <Route path="test-simulator" element={<TestSimulator />} />
+      <Route path="test-simulator" element={<TestSimulatorPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

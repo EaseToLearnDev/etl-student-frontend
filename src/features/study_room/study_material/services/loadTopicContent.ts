@@ -1,9 +1,17 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import type { TopicType } from "../../../shared/types";
-import { getTopicContent } from "../api/topicContent.api";
+// Types
+import type { Topic } from "../../../shared/types";
 import type { TopicContentType } from "../sm.types";
 
-export const loadTopicContent = async (topic: TopicType) => {
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+
+// Apis
+import { getTopicContent } from "../api/topicContent.api";
+
+/**
+ * Loads the content for a given topic for the active student and course.
+ */
+export const loadTopicContent = async (topic: Topic) => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse || !topic) {

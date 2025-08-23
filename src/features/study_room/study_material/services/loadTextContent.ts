@@ -1,7 +1,15 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import { getTextContent } from "../api/textContent.api";
+// Types
 import type { TextContentType, TopicContentType } from "../sm.types";
 
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+
+// Apis
+import { getTextContent } from "../api/textContent.api";
+
+/**
+ * Loads text content for the selected topic using student credentials.
+ */
 export const loadTextContent = async (selectedContent: TopicContentType) => {
   const { studentData } = useStudentStore.getState();
 

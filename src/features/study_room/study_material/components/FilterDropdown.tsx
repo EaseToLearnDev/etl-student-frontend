@@ -1,17 +1,29 @@
-import { useState, type ReactElement, type RefObject } from "react";
-import useIsMobile from "../../../../hooks/useIsMobile";
+
+// React
+import { useState } from "react";
+
+// Types
+import type { ReactElement, RefObject } from "react";
 import type { FilterType } from "../sm.types";
-import useStudyMaterial from "../hooks/useStudyMaterial";
+
+// Hooks
+import useIsMobile from "../../../../hooks/useIsMobile";
+import { useSMStore } from "../hooks/useSMStore";
+
+// Components
 import { Popover } from "../../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../../components/Popover/PopoverContent";
 
+/**
+ * Dropdown component for filtering study materials by type.
+ */
 const FilterList = ({
   setIsOpen,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { setContentFilterType } = useStudyMaterial();
+  const { setContentFilterType } = useSMStore();
 
   const handleClick = (filter: FilterType) => {
     setContentFilterType(filter);

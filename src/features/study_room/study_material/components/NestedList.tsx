@@ -1,7 +1,16 @@
+
+// React
 import { useState } from "react";
+
+// Types
 import type { LinkItem } from "../sm.types";
+
+// Icons
 import { FiChevronDown, FiChevronRight } from "react-icons/fi";
 
+/**
+ * Renders a nested, collapsible list of study material links.
+ */
 const NestedList = ({ items }: { items: LinkItem[] }) => {
   return (
     <ul className="h-full pl-2 pr-2">

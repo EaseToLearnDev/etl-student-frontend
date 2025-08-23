@@ -1,24 +1,25 @@
-import { useStudentStore } from "../../../shared/store/useStudentStore";
-import type { TopicTestType, TopicType } from "../../../shared/types";
+// Types
+import type { TopicTest, Topic } from "../../../shared/types";
+
+// Store
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+
+// Apis
 import { getTopicTestList } from "../api/topicTestList.api";
-import { useTTStore } from "../store/useTTStore";
 
-export const loadTopicTestList = async (topic: TopicType) => {
+
+/**
+ * Loads the list of topic tests for a given topic.
+ */
+export const loadTopicTestList = async (topic: Topic) => {
   const { studentData, activeCourse } = useStudentStore.getState();
-  const { setTestList } = useTTStore.getState();
 
-  if (!studentData || !activeCourse) {
-    setTestList(null);
-    return;
-  }
+  if (!studentData || !activeCourse) return null;
 
-  const { loginId, token  } = studentData;
+  const { loginId, token } = studentData;
   const templateId = activeCourse?.templateId;
 
-  if (!loginId || !token || !templateId) {
-    setTestList(null);
-    return;
-  }
+  if (!loginId || !token || !templateId) return null;
 
   try {
     const list = (await getTopicTestList({
@@ -27,16 +28,11 @@ export const loadTopicTestList = async (topic: TopicType) => {
       loginId,
       token,
       templateId,
-    })) as TopicTestType[];
+    })) as TopicTest[];
 
-    if (!list) {
-      setTestList(null);
-      return;
-    }
-
-    setTestList(list);
+    return list ?? null;
   } catch (error) {
     console.log("Failed to load topic test list: ", error);
-    setTestList(null);
+    return null;
   }
 };

@@ -1,7 +1,7 @@
 import { Link } from "react-router";
 import Button from "../../../../components/Button";
 import cn from "../../../../utils/classNames";
-import useSignupStore from "../store/useSignupStore";
+import useSignupStore from "../hooks/useSignupStore";
 import { handleSignup } from "../signup.services";
 
 const SignupContent = () => {

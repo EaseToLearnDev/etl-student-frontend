@@ -12,7 +12,7 @@ interface SLTestModalContentProps {
   mode: ModeType;
   topicName: string;
   testOptions: Record<string, number>;
-  setTestOptions: React.Dispatch<React.SetStateAction<Record<string, number>>>;
+  setTestOptions: (options: Record<string, number>) => void;
   onStart: () => void;
   onClose: () => void;
 }
@@ -101,10 +101,10 @@ const SLTestModalContent = ({
                   )}
                   value={testOptions[field.id]}
                   onChange={(e) =>
-                    setTestOptions((v) => ({
-                      ...v,
+                    setTestOptions({
+                      ...testOptions,
                       [field.id]: Number(e.target.value) ?? -1,
-                    }))
+                    })
                   }
                 />
               </div>

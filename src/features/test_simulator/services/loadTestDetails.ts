@@ -2,7 +2,7 @@
 import type { TestConfig, TestData } from "../test_simulator.types";
 
 // Store
-import { useStudentStore } from "../../shared/store/useStudentStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
 import { testDetailExisting } from "../api/testDetailExisting.api";
@@ -11,6 +11,10 @@ import { testDetails } from "../api/testDetails.api";
 interface LoadTestDetailsParams {
   testConfig: TestConfig;
 }
+
+/**
+ * Loads test details for the current student and active course.
+ */
 export const loadTestDetails = async ({
   testConfig,
 }: LoadTestDetailsParams): Promise<TestData | null> => {
