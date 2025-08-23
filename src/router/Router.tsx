@@ -24,7 +24,7 @@ import ProfilePage from "../features/profile/pages/ProfilePage";
 import SettingsPage from "../features/settings/pages/SettingsPage";
 import ReportLearningSessionPage from "../features/report/pages/ReportLearningSessionPage";
 import ReportOverviewPage from "../features/report/pages/ReportOverviewPage";
-import ReportCompetitiveSessionPage from "../features/report/pages/ReportCompetitiveSessionPage";
+import ReportClassTestPage from "../features/report/pages/ReportClassTestPage";
 import ReportTopicTestPage from "../features/report/pages/ReportTopicTestPage";
 import ReportMockTestPage from "../features/report/pages/ReportMockTestPage";
 
@@ -118,11 +118,11 @@ const Router = () => {
         <Route path="report/learning" element={<ReportLearningSessionPage />} />
         <Route
           path="report/competitive"
-          element={<ReportCompetitiveSessionPage />}
+          element={<ReportClassTestPage />}
         />
         <Route path="report/topic-test" element={<ReportTopicTestPage />} />
         <Route path="report/mock-test" element={<ReportMockTestPage />} />
-        {/* <Route path="report/class-test" element={<ReportClass />} /> */}
+        <Route path="report/class-test" element={<ReportClassTestPage />} />
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
