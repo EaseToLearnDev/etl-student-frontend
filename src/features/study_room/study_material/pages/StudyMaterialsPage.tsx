@@ -7,8 +7,8 @@ import type { Topic } from "../../../shared/types";
 // Icons
 import { MdClose } from "react-icons/md";
 
-// Store
-import { useSMStore } from "../store/useSMStore";
+// Hooks
+import { useSMStore } from "../hooks/useSMStore";
 
 // Utils
 import cn from "../../../../utils/classNames";

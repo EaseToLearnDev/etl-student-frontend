@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 
 import { useNavigate } from "react-router";
 
-// Store
-import { useSLStore } from "../store/useSLStore";
+// Hooks
+import { useSLStore } from "../hooks/useSLStore";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
