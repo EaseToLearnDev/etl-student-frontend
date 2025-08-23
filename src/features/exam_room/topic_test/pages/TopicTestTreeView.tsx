@@ -200,13 +200,13 @@ const TopicTestTreeView = () => {
           }
           onClose={() => setShowStartTestModal(false)}
           details={{
-            marksCorrect: 4,
-            marksIncorrect: -1,
-            marksUnattempted: 0,
-            questionType: "Multiple Choice",
-            totalMarks: 45,
-            totalQuestions: 40,
-            totalTime: 20,
+            marksCorrect: selectedTest?.patternDetails?.markCorrectAns,
+            marksIncorrect: selectedTest?.patternDetails?.markIncorrectAns,
+            marksUnattempted: selectedTest?.patternDetails?.markNotAttempt,
+            questionType: selectedTest?.patternDetails?.questionType,
+            totalMarks: selectedTest?.patternDetails?.totalMark,
+            totalQuestions: selectedTest?.patternDetails?.totalQuestion,
+            totalTime: selectedTest?.patternDetails?.totalTime,
           }}
         />
       </Modal>

@@ -3,7 +3,7 @@ import { toQueryString } from "../../../../utils";
 
 interface HandleStartTestParams {
   navigate: NavigateFunction;
-  testId: number | null;
+  testId: number | string | null;
   testType: number | null;
 }
 export const handleStartTest = async ({

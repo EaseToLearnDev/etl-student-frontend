@@ -46,9 +46,9 @@ export default function StartTopicTestModalContent({
       icon: <PiClock size={20} />,
     },
     {
-      field: "Question Type",
-      value: details?.questionType,
-      icon: <FiTarget size={20} />,
+      field: "Total Marks",
+      value: details?.totalMarks,
+      icon: <PiMedal size={20} />,
     },
     {
       field: "Correct Answer",
@@ -60,14 +60,15 @@ export default function StartTopicTestModalContent({
       value: details?.marksIncorrect,
       icon: <PiWarning size={20} />,
     },
-    {
-      field: "Total Marks",
-      value: details?.totalMarks,
-      icon: <PiMedal size={20} />,
-    },
+
     {
       field: "Question Not Attempted",
       value: details?.marksUnattempted,
+      icon: <FiTarget size={20} />,
+    },
+    {
+      field: "Question Type",
+      value: details?.questionType,
       icon: <FiTarget size={20} />,
     },
   ];

@@ -21,7 +21,6 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
-import { loadClassTestList } from "../../../shared/services/loadClassTestList";
 import { loadNotificationList } from "../../../shared/services/loadNotificationList";
 
 export default function Header({ className }: { className?: string }) {
@@ -43,7 +42,6 @@ export default function Header({ className }: { className?: string }) {
   }, [selectedCourseIndex]);
 
   useEffect(() => {
-    loadClassTestList();
     loadNotificationList();
   }, [location.pathname]);
 

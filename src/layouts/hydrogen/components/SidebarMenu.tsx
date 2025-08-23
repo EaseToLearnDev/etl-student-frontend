@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // Icons
-import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+// import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 
 // Store
 import { useStudentStore } from "../../../features/store/useStudentStore";
@@ -13,18 +13,17 @@ import cn from "../../../utils/classNames";
 import { getFilteredMenuItems } from "../../../utils/menuFilter";
 
 // Components
-import SidebarDropdown from "./SidebarDropdown";
-
+// import SidebarDropdown from "./SidebarDropdown";
 
 /**
  * Renders the sidebar menu with navigation links and user info for the student dashboard.
  */
 export function SidebarMenu() {
   const location = useLocation();
-  const studentName = useStudentStore(
-    (state) => state.studentData?.studentName
-  );
-  const emailId = useStudentStore((state) => state.studentData?.emailId);
+  // const studentName = useStudentStore(
+  //   (state) => state.studentData?.studentName
+  // );
+  // const emailId = useStudentStore((state) => state.studentData?.emailId);
   const activeCourse = useStudentStore((state) => state.activeCourse);
 
   const filteredMenuItems = getFilteredMenuItems(activeCourse);
@@ -78,7 +77,7 @@ export function SidebarMenu() {
         })}
       </div>
       {/* Bottom section for Settings and Logout */}
-      <div className="mt-auto">
+      {/* <div className="mt-auto">
         <div className="flex w-full items-center justify-between px-4 py-2">
           <div className="flex gap-4">
             <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
@@ -101,7 +100,7 @@ export function SidebarMenu() {
             </div>
           </SidebarDropdown>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

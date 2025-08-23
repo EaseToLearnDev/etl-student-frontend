@@ -1,4 +1,4 @@
-export interface ClassTestType {
+export interface ClassTest {
     autoId: number;
     scheduleId: string;
     testTitle: string;
