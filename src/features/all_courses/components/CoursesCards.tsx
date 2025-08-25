@@ -10,6 +10,7 @@ interface Course {
   courseSubTitle: string;
   categoryName: string;
   image: string;
+  featuresList: string[];
 }
 
 interface CoursesCardsProps {
@@ -17,6 +18,7 @@ interface CoursesCardsProps {
   courseList: Course[];
   hideSecondary: boolean;
   selectedCategories: string[];
+  onCourseClick?: (course: Course) => void;
 }
 
 const CoursesCards = ({
@@ -24,9 +26,9 @@ const CoursesCards = ({
   courseList,
   hideSecondary,
   selectedCategories,
+  onCourseClick,
 }: CoursesCardsProps) => {
   const { studentData } = useStudentStore.getState();
-
   const filteredCourses = courseList.filter(
     (course): course is Course =>
       (course.courseTitle.toLowerCase().includes(search.toLowerCase()) ||
@@ -55,13 +57,8 @@ const CoursesCards = ({
         const alreadyPurchased = studentData?.courses?.some(
           (c) => c.courseId === course.courseId
         );
-
-        return (
-          <Link
-            key={course.courseId}
-            to={`/course/${course.courseId}`}
-            className="bg-[var(--surface-bg-primary)] border-1 border-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform"
-          >
+        const cardContent = (
+          <>
             <img
               src={
                 course.image ??
@@ -76,7 +73,11 @@ const CoursesCards = ({
                   {course.courseTitle}
                 </h5>
                 {alreadyPurchased && (
-                  <Badge theme={Theme.GreenHaze} style="filled" className="px-2 py-1">
+                  <Badge
+                    theme={Theme.GreenHaze}
+                    style="filled"
+                    className="px-2 py-1"
+                  >
                     <span>Purchased</span>
                   </Badge>
                 )}
@@ -85,6 +86,24 @@ const CoursesCards = ({
                 {course.courseSubTitle}
               </span>
             </div>
+          </>
+        );
+        
+        return onCourseClick ? (
+          <div
+            key={course.courseId}
+            onClick={() => onCourseClick(course)}
+            className="bg-[var(--surface-bg-primary)] border-1 border-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform cursor-pointer"
+          >
+            {cardContent}
+          </div>
+        ) : (
+          <Link
+            key={course.courseId}
+            to={`/course/${course.courseId}`}
+            className="bg-[var(--surface-bg-primary)] border-1 border-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform"
+          >
+            {cardContent}
           </Link>
         );
       })}
