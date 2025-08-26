@@ -22,7 +22,7 @@ interface PlanFeaturesProps {
 
 export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
 
-  if (features.length >0 ){
+  if (features.length === 0 ){
     return (
       <div className="flex items-center justify-center h-full w-full">
         <h4>No Table Found</h4>

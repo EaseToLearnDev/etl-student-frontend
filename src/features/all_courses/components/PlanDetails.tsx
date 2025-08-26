@@ -17,11 +17,11 @@ interface PlanDetailsProps {
 export const PlanDetails = ({ course }: PlanDetailsProps) => {
   return (
     <div className="flex gap-4">
-      <div className="max-h-[480px] w-1/2 overflow-y-scroll">
+      <div className="max-h-[500px] w-1/2 overflow-y-scroll">
         <PlanFeatures features={course.featuresList ?? []} />
       </div>
       <div className="w-1/2">
-        <PlanBody coursePlan={course.twoPriceList} title={course.courseTitle} />
+        <PlanBody coursePlan={course.twoPriceList} courseTitle={course.courseTitle} courseId={course.courseId} />
       </div>
     </div>
   );
