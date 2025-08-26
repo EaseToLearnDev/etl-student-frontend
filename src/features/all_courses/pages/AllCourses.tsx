@@ -15,10 +15,9 @@ const AllCourses = () => {
   const [loading, setloading] = useState(false);
   const [hideSecondary, setHideSecondary] = useState(true);
 
-  // ✅ new state for selected course
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
-  
-  console.log(selectedCourse)
+
+  console.log(selectedCourse);
   useEffect(() => {
     const fetchCourses = async () => {
       setloading(true);
@@ -32,7 +31,6 @@ const AllCourses = () => {
               categoryId: category.categoryId,
             }))
           ) || [];
-          setSelectedCourse(flatCourses.find((c) => c.courseId === 28))
         const extractedCategories =
           res?.obj?.map((category: any) => category.categoryName) || [];
         setCourseList(flatCourses);
@@ -105,7 +103,7 @@ const AllCourses = () => {
             hideSecondary={hideSecondary}
             onSecondaryHide={() => {
               setHideSecondary(true);
-              setSelectedCourse(null); 
+              setSelectedCourse(null);
             }}
           />
         )}

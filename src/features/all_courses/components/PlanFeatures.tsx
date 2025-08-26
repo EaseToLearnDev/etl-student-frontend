@@ -6,7 +6,6 @@ interface FeatureOption {
 }
 
 interface FeatureRow {
-  autoId: number;
   courseId: number;
   description: string;
   list: FeatureOption[];
@@ -21,8 +20,16 @@ interface PlanFeaturesProps {
   features: FeatureSection[];
 }
 
-
 export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
+
+  if (features.length >0 ){
+    return (
+      <div className="flex items-center justify-center h-full w-full">
+        <h4>No Table Found</h4>
+      </div>
+    )
+  }
+
   const renderTable = (sub: FeatureRow) => (
     <div className="overflow-x-auto">
       <table className="w-full border border-[#cdcecf] rounded-[16px] border-separate border-spacing-0 overflow-hidden">
@@ -45,7 +52,7 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
               <td className="border-b border-[#cdcecf] text-left px-4 py-2 text-[14px] font-normal">
                 {row.title}
               </td>
-              {row.list.slice(1).map((opt, m) => (
+              {row.list.slice(1).map((opt: FeatureOption, m: number) => (
                 <td
                   key={m}
                   className="border-b border-[#cdcecf] text-center px-4 py-2 text-[14px] font-normal"
@@ -69,9 +76,7 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
   return (
     <div className="w-full" id="features">
       {/* Heading */}
-      <h3 className="text-center pt-4">
-        Compare Features
-      </h3>
+      <h3 className="text-center pt-4">Compare Features</h3>
 
       <div className="px-4">
         {features.map((section, i) =>
@@ -80,20 +85,14 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
               key={i}
               className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[19px] mt-5 mb-14 p-5 pb-10 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
             >
-              <h4 className="text-center mb-4">
-                {section.sectionType}
-              </h4>
+              <h4 className="text-center mb-4">{section.sectionType}</h4>
               {section.list.map((sub, j) => (
                 <div
                   key={j}
                   className="bg-[var(--surface-bg-primary)] mb-4 border border-[#ccc] rounded-[16px] p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
                 >
-                  <h5>
-                    {sub.title}
-                  </h5>
-                  <p className="mb-4">
-                    {sub.description}
-                  </p>
+                  <h5>{sub.title}</h5>
+                  <p className="mb-4">{sub.description}</p>
                   {renderTable(sub)}
                 </div>
               ))}
@@ -104,12 +103,8 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
                 key={j}
                 className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[16px] my-12 p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
               >
-                <h5>
-                  {sub.title}
-                </h5>
-                <p className="my-4">
-                  {sub.description}
-                </p>
+                <h5>{sub.title}</h5>
+                <p className="my-4">{sub.description}</p>
                 {renderTable(sub)}
               </div>
             ))
