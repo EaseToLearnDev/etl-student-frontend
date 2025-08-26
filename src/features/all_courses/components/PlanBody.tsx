@@ -5,36 +5,26 @@ import Tabs from "../../../components/Tabs";
 import { handlePaymentButton } from "../services/handlePaymentButton";
 import { useStudentStore } from "../../shared/store/useStudentStore";
 import { VerifyPromoCode } from "../services/VerifyPromoCode";
-
-import.meta.env.VITE_BASE_URL;
-
-interface CoursePlanListItem {
-  packId: number;
-  packName: string;
-  price: number;
-}
-
-interface CoursePlan {
-  packType: string;
-  list: CoursePlanListItem[];
-}
+import type { PriceList } from "../../shared/types";
 
 interface PlanBodyProps {
-  coursePlan: CoursePlan[];
+  coursePlan: PriceList[];
   courseTitle: string;
   courseId: number;
 }
+
+type DeviceType = "web" | "ios";
 
 export const PlanBody = ({
   coursePlan,
   courseTitle,
   courseId,
 }: PlanBodyProps) => {
-  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const [code, setCode] = useState("");
   const [applied, setApplied] = useState(false);
   const [selectedPlanId, setSelectedPlanId] = useState<number | null>(null);
-  const [selPriceList, setSelPriceList] = useState([]);
+  const [selPriceList, setSelPriceList] = useState<PriceList[]>([]);
   const [error, setError] = useState(false);
 
   const { studentData } = useStudentStore.getState();
@@ -48,24 +38,22 @@ export const PlanBody = ({
   }, [selectedTabIndex, coursePlan]);
 
   const effectivePlan =
-    selPriceList && selPriceList.length > 0
-      ? selPriceList
-      : coursePlan;
+    selPriceList && selPriceList.length > 0 ? selPriceList : coursePlan;
 
   const promo = async (promoCode: string) => {
     try {
       const res = await VerifyPromoCode({ promoCode, courseId });
       if (res?.responseTxt === "success" && res?.obj) {
-        console.log(res)
+        console.log(res);
         setSelPriceList(res.obj);
         setApplied(true);
       } else {
         setApplied(false);
-        setError(true)
+        setError(true);
       }
     } catch (error) {
       console.log("Failed to Apply Coupon", error);
-      setError(true)
+      setError(true);
       setApplied(false);
     }
   };
@@ -84,7 +72,8 @@ export const PlanBody = ({
 
     const deviceType = "web";
 
-    const option = deviceType === "ios" ? 3 : 2;
+    const option = (deviceType as DeviceType) === "ios" ? 3 : 2;
+
     try {
       const res = await handlePaymentButton({
         option,
@@ -111,7 +100,9 @@ export const PlanBody = ({
           res.productinfo;
         return false;
       } else {
-        const form = document.forms["pgform"];
+        const form = document.forms.namedItem(
+          "pgform"
+        ) as HTMLFormElement | null;
         if (!form) {
           console.error("PayU form not found in DOM");
           return;

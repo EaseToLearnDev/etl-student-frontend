@@ -1,23 +1,8 @@
 import { BiCheck } from "react-icons/bi";
-
-interface FeatureOption {
-  optionFlag: boolean;
-  optionLabel: string;
-}
-
-interface FeatureRow {
-  courseId: number;
-  description: string;
-  list: FeatureOption[];
-}
-
-interface FeatureSection {
-  sectionType?: string;
-  list: FeatureRow[];
-}
+import type { FeaturesList, SectionList } from "../../shared/types";
 
 interface PlanFeaturesProps {
-  features: FeatureSection[];
+  features: FeaturesList[];
 }
 
 export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
@@ -30,7 +15,7 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
     )
   }
 
-  const renderTable = (sub: FeatureRow) => (
+  const renderTable = (sub: SectionList) => (
     <div className="overflow-x-auto">
       <table className="w-full border border-[#cdcecf] rounded-[16px] border-separate border-spacing-0 overflow-hidden">
         <thead>
@@ -52,7 +37,7 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
               <td className="border-b border-[#cdcecf] text-left px-4 py-2 text-[14px] font-normal">
                 {row.title}
               </td>
-              {row.list.slice(1).map((opt: FeatureOption, m: number) => (
+              {row.list.slice(1).map((opt, m: number) => (
                 <td
                   key={m}
                   className="border-b border-[#cdcecf] text-center px-4 py-2 text-[14px] font-normal"

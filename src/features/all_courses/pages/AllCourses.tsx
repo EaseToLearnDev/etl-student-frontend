@@ -17,7 +17,6 @@ const AllCourses = () => {
 
   const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
 
-  console.log(selectedCourse);
   useEffect(() => {
     const fetchCourses = async () => {
       setloading(true);

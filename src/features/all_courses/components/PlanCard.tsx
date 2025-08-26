@@ -1,17 +1,7 @@
+import type { PriceDetailsList } from "../../shared/types";
+
 interface PlanCardProps {
-  plan: {
-    courseId: number;
-    description: string;
-    discount: number;
-    packId: number;
-    retailPrice: number;
-    salePrice: number;
-    title: string;
-    validityDate: string;
-    validityDuration: number;
-    validityType: number;
-    dayPrice?: number;
-  };
+  plan: PriceDetailsList;
   selected: boolean;
   onSelect: () => void;
 }
@@ -73,7 +63,7 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
             {plan?.description || ""}
           </p>
           <p className="text-[var(--text-secondary)]">
-            {plan?.dayPrice ? `Price per day: ₹ ${plan?.dayPrice}` : ""}
+            Price per day: ₹{Math.floor(plan?.salePrice/plan?.validityDuration)}
           </p>
         </div>
       </div>
