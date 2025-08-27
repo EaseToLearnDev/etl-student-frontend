@@ -12,9 +12,9 @@ import { useStudentStore } from "../../../features/shared/hooks/useStudentStore"
 import cn from "../../../utils/classNames";
 
 // Services
-import { handleSwitchCourse } from "../../../shared/services/handleSwitchCourse";
-import getValidityFormatted from "../../../shared/services/getValidityFormatted";
-import { loadNotificationList } from "../../../shared/services/loadNotificationList";
+import { handleSwitchCourse } from "../../../global/services/handleSwitchCourse";
+import getValidityFormatted from "../../../global/services/getValidityFormatted";
+import { loadNotificationList } from "../../../global/services/loadNotificationList";
 
 // Components
 import HamburgerButton from "./HamburgerButton";
@@ -23,9 +23,11 @@ import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
 import { Modal } from "../../../components/Modal";
-import { useInviteTeacherStore } from "../../../store/useInviteTeacherStore";
+import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
 import Button from "../../../components/Button";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
+import { handleStudentInvite } from "../../../global/services/handleStudentInvite";
+import FeedbackModal from "./FeedbackModal";
 
 export default function Header({ className }: { className?: string }) {
   const navigate = useNavigate();
@@ -33,7 +35,8 @@ export default function Header({ className }: { className?: string }) {
 
   const courses = useStudentStore((s) => s.studentData?.courses);
   const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
-
+  const teacherLoginId = useInviteTeacherStore((s) => s.teacherLoginId);
+  const setTeacherLoginId = useInviteTeacherStore((s) => s.setTeacherLoginId);
   const showInviteTeacherModal = useInviteTeacherStore(
     (s) => s.showInviteTeacherModal
   );
@@ -103,6 +106,8 @@ export default function Header({ className }: { className?: string }) {
               Teacher User-ID / Email / Mobile
             </label>
             <input
+              value={teacherLoginId}
+              onChange={(e) => setTeacherLoginId(e.target.value)}
               className={cn(
                 "w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                 "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
@@ -112,9 +117,12 @@ export default function Header({ className }: { className?: string }) {
           </div>
           <div className="flex justify-end mt-4">
             <div className="flex gap-4 items-center">
-              <Button style="primary">
+              <Button
+                style="primary"
+                onClick={() => handleStudentInvite({ teacherLoginId })}
+              >
                 <PiPaperPlaneTiltFill size={16} />
-                Send
+                Invite
               </Button>
               <Button
                 style="secondary"
@@ -135,6 +143,7 @@ export default function Header({ className }: { className?: string }) {
           <MdClose size={20} />
         </div>
       </Modal>
+      <FeedbackModal />
     </StickyHeader>
   );
 }

@@ -19,7 +19,8 @@ import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import { RiUserSettingsFill } from "react-icons/ri";
 import { Link } from "react-router";
-import { useInviteTeacherStore } from "../../../store/useInviteTeacherStore";
+import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
+import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
 
 export default function ProfileMenuDropDown({
   children,
@@ -85,6 +86,7 @@ const DropdownMenu = () => {
   const emailId = useStudentStore((s) => s.studentData?.emailId);
 
   const setShowInviteTeacherModal = useInviteTeacherStore((s) => s.setShowInviteTeacherModal);
+  const setShowFeedbackModal = useFeedbackStore((s) => s.setShowFeedbackModal);
 
   return (
     <div className="w-64 text-left rtl:text-right">
@@ -118,7 +120,16 @@ const DropdownMenu = () => {
               <span className="text-[var(--text-secondary)]">{item.icon}</span>
               {item.name}
             </button>
-          ) : (
+          ) : item.name === "Feedback" ? (
+            <button
+              key={item.name}
+              onClick={() => setShowFeedbackModal(true)}
+              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+            >
+              <span className="text-[var(--text-secondary)]">{item.icon}</span>
+              {item.name}
+            </button>
+          )  : (
             <Link
               key={item.name}
               to={item.href}

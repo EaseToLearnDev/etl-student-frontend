@@ -1,6 +1,6 @@
 // Hooks
 import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
-import { useCTStore } from "../../../shared/hooks/useCTStore";
+import { useCTStore } from "../../../global/hooks/useCTStore";
 // Components
 import ClassTestCard from "./ClassTestCard";
 

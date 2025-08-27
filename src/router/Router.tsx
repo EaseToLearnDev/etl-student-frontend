@@ -9,7 +9,7 @@ import PublicRoute from "./PublicRoute";
 import HydrogenLayout from "../layouts/hydrogen/components/MainLayout";
 
 // Pages
-import NotFound from "../shared/NotFound";
+import NotFound from "../global/NotFound";
 import StudyMaterialsPage from "../features/study_room/study_material/pages/StudyMaterialsPage";
 import SmartLearningPage from "../features/study_room/smart_learning/pages/SmartLearningPage";
 import TestSimulatorPage from "../features/test_simulator/pages/TestSimulatorPage";

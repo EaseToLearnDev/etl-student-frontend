@@ -38,7 +38,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "flex py-3 px-5 justify-center items-center gap-3 rounded-[4px] font-semibold text-nowrap transition-all duration-200 ease-in-out",
+        "flex py-3 px-5 justify-center items-center gap-2 rounded-[4px] font-semibold text-nowrap transition-all duration-200 ease-in-out",
         "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
         styleMap[style],
         className

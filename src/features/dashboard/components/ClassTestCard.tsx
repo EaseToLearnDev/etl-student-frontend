@@ -1,6 +1,6 @@
 // Types
 import Button from "../../../components/Button";
-import type { ClassTest } from "../../../shared/types/classTest.types";
+import type { ClassTest } from "../../../global/types/classTest.types";
 // Icons
 import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 

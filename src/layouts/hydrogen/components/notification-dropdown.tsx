@@ -5,7 +5,7 @@ import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import { FaBoxOpen } from "react-icons/fa";
-import useNotificationStore from "../../../shared/hooks/useNotificationStore";
+import useNotificationStore from "../../../global/hooks/useNotificationStore";
 
 function NotificationsList({
   setIsOpen,

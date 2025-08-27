@@ -2,14 +2,14 @@
 import type { Column } from "../../../../components/types";
 
 // Store
-import { useCTStore } from "../../../../shared/hooks/useCTStore";
+import { useCTStore } from "../../../../global/hooks/useCTStore";
 
 // Components
 import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
 import Button from "../../../../components/Button";
 import ArchiveBoxIcon from "../../../../components/icons/archive-box-icon";
 import { useEffect } from "react";
-import { loadClassTestList } from "../../../../shared/services/loadClassTestList";
+import { loadClassTestList } from "../../../../global/services/loadClassTestList";
 import { Modal } from "../../../../components/Modal";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import { handleStartTest } from "../../topic_test/services/handleStartTest";
