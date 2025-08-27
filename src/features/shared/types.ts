@@ -161,12 +161,59 @@ export interface Error {
   id?: string;
 }
 
-export type TreeView = "topic" | "learning" | "mock" | "smart" | "test";
+export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";
 
-export interface PrevRunningTest {
-  responseTxt: string;
-  testMode?: string;
-  testName?: string;
-  testSession?: string;
-  testType?: number;
+export interface FeaturesList {
+  sectionType: string;
+  list: SectionList[];
+}
+
+export interface SectionList {
+  autoId: number;
+  courseId: number;
+  description: string;
+  list: ChileSectionList[];
+  sectionType: number;
+  sequence: number;
+  title: string;
+}
+
+export interface ChileSectionList {
+  autoId: number;
+  list: OptionalFlagsList[];
+  title: string;
+}
+
+export interface OptionalFlagsList {
+  optionFlag: boolean;
+  optionLabel: boolean;
+}
+
+export interface PriceDetailsList {
+  courseId: number;
+  description: string;
+  discount: number;
+  packId: number;
+  retailPrice: number;
+  salePrice: number;
+  title: string;
+  validityDate: string;
+  validityDuration: number;
+  validityType: number;
+}
+
+export interface PriceList {
+  packType: string;
+  list: PriceDetailsList[];
+  index: number
+}
+
+export interface SelectedCourse {
+  courseId: number;
+  courseTitle: string;
+  courseSubTitle: string;
+  categoryName: string;
+  image: string;
+  featuresList?: FeaturesList[];
+  twoPriceList: PriceList[];
 }
