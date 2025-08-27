@@ -1,7 +1,7 @@
 // Zustand
 import { create } from "zustand";
 // Types
-import { Severity, type Error } from "../shared/types";
+import { Severity, type Error } from "../../shared/types"
 
 
 export interface ErrorStore {

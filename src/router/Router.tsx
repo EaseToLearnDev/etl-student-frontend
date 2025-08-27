@@ -28,6 +28,8 @@ import ReportClassTestPage from "../features/report/pages/ReportClassTestPage";
 import ReportTopicTestPage from "../features/report/pages/ReportTopicTestPage";
 import ReportMockTestPage from "../features/report/pages/ReportMockTestPage";
 import ReportCompetitiveSessionPage from "../features/report/pages/ReportCompetitiveSessionPage";
+import DashboardPage from "../features/dashboard/pages/DashboardPage";
+import PaymentsPage from "../features/payments/pages/PaymentsPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -68,7 +70,7 @@ const Router = () => {
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<>Dashboard</>} />
+        <Route path="dashboard" element={<DashboardPage />} />
 
         {/* Calculate study room default route  */}
         <Route
@@ -127,6 +129,7 @@ const Router = () => {
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
+        <Route path="payments" element={<PaymentsPage />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulatorPage />} />
       <Route path="*" element={<NotFound />} />

@@ -19,6 +19,7 @@ import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import { RiUserSettingsFill } from "react-icons/ri";
 import { Link } from "react-router";
+import { useInviteTeacherStore } from "../../../store/useInviteTeacherStore";
 
 export default function ProfileMenuDropDown({
   children,
@@ -55,7 +56,7 @@ const menuItems = [
   },
   {
     name: "Payments",
-    href: "#",
+    href: "payments",
     icon: <MdPayments />,
   },
   {
@@ -79,12 +80,11 @@ const menuItems = [
     icon: <RiUserSettingsFill />,
   },
 ];
+const DropdownMenu = () => {
+  const studentName = useStudentStore((s) => s.studentData?.studentName);
+  const emailId = useStudentStore((s) => s.studentData?.emailId);
 
-function DropdownMenu() {
-  const studentName = useStudentStore(
-    (state) => state.studentData?.studentName
-  );
-  const emailId = useStudentStore((state) => state.studentData?.emailId);
+  const setShowInviteTeacherModal = useInviteTeacherStore((s) => s.setShowInviteTeacherModal);
 
   return (
     <div className="w-64 text-left rtl:text-right">
@@ -106,18 +106,31 @@ function DropdownMenu() {
           </p>
         </div>
       </div>
+
       <div className="grid px-3.5 py-3.5 font-medium text-[var(--text-primary)] text-base">
-        {menuItems.map((item) => (
-          <Link
-            key={item.name}
-            to={item.href}
-            className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
-          >
-            <span className="text-[var(--text-secondary)]">{item.icon}</span>
-            {item.name}
-          </Link>
-        ))}
+        {menuItems.map((item) =>
+          item.name === "Invite Teacher" ? (
+            <button
+              key={item.name}
+              onClick={() => setShowInviteTeacherModal(true)}
+              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+            >
+              <span className="text-[var(--text-secondary)]">{item.icon}</span>
+              {item.name}
+            </button>
+          ) : (
+            <Link
+              key={item.name}
+              to={item.href}
+              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+            >
+              <span className="text-[var(--text-secondary)]">{item.icon}</span>
+              {item.name}
+            </Link>
+          )
+        )}
       </div>
+
       <div className="border-t border-[var(--border-primary)] px-6 pb-6 pt-5">
         <button
           onClick={logout}
@@ -128,4 +141,4 @@ function DropdownMenu() {
       </div>
     </div>
   );
-}
+};

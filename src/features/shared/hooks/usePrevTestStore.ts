@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { PrevRunningTest } from "../shared/types";
+import type { PrevRunningTest } from "../../shared/types";
 
 interface PrevTestStore {
   prevRunningTest: PrevRunningTest | null;
