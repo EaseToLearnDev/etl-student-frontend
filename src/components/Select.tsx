@@ -2,7 +2,7 @@ import { BiChevronDown } from "react-icons/bi";
 import cn from "../utils/classNames";
 import { MdCheck } from "react-icons/md";
 import { createPortal } from "react-dom";
-import { useRef, useLayoutEffect, useState } from "react";
+import { useRef, useLayoutEffect, useState, useEffect } from "react";
 
 interface SelectProps<T = string> {
   type?: string;
@@ -14,12 +14,9 @@ interface SelectProps<T = string> {
   className?: string;
   dropdownClassName?: string;
   renderItem?: (item: T, index: number, isSelected: boolean) => React.ReactNode;
-  getItemLabel?: (item: T) => string; // 🔹 NEW
+  getItemLabel?: (item: T) => string;
 }
 
-/**
- * A Customizable Select Component
- */
 const Select = <T,>({
   type,
   items,
@@ -33,6 +30,7 @@ const Select = <T,>({
   getItemLabel,
 }: SelectProps<T>) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
 
   useLayoutEffect(() => {
@@ -47,11 +45,35 @@ const Select = <T,>({
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: Event) => {
+      const target = event.target as Node;
+      if (
+        buttonRef.current?.contains(target) ||
+        dropdownRef.current?.contains(target)
+      ) {
+        return; // clicked inside
+      }
+      onToggle(); // clicked outside -> close
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isOpen, onToggle]);
+
   const dropdown = (
     <div
+      ref={dropdownRef}
       style={dropdownStyle}
       className={cn(
-        "flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2",
+        "flex flex-col gap-2 bg-[var(--surface-bg-secondary)] rounded-lg shadow-lg p-2 max-h-[500px] overflow-y-auto",
         dropdownClassName
       )}
     >
@@ -68,7 +90,7 @@ const Select = <T,>({
             key={index}
             onClick={() => {
               onSelect(index);
-              onToggle();
+              onToggle(); // close after selecting
             }}
             className={cn(
               "flex gap-2 items-center justify-between p-2 cursor-pointer rounded-md !font-semibold",
@@ -104,7 +126,6 @@ const Select = <T,>({
     <div
       className={cn("relative inline-block text-left max-w-[250px]", className)}
     >
-      {/* Trigger button */}
       <button
         ref={buttonRef}
         onClick={onToggle}
@@ -116,8 +137,6 @@ const Select = <T,>({
         <span className="text-left flex-1">{triggerLabel}</span>
         <BiChevronDown size={18} className="text-[var(--text-tertiary)]" />
       </button>
-
-      {/* Dropdown list */}
       {isOpen && createPortal(dropdown, document.body)}
     </div>
   );

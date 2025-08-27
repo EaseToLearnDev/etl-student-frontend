@@ -41,3 +41,4 @@ storybook-static*storybook.log*.sw?*.sln*.njsproj*.ntvs**.ntvs*
 
 *storybook.log
 storybook-static
+.vercel

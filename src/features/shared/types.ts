@@ -84,12 +84,10 @@ export interface StudentDataResponse {
   phoneNo: string;
   status: string;
   loginId: string;
-  schools: School[];
-  courses: CourseResponse[];
   profilePic: string;
   deleteFlag: number;
-  schools: SchoolType[];
-  courses: CourseResponseType[];
+  schools: School[];
+  courses: CourseResponse[];
 }
 
 export interface StudentData {

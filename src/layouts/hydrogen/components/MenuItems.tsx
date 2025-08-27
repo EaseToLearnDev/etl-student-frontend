@@ -80,10 +80,35 @@ export const menuItems = [
         icon: <PiChartBarFill />,
       },
       {
+        id: "reportLearning",
+        name: "Learning Session",
+        href: "/learning",
+        icon: <PiBooksFill />,
+      },
+      {
+        id: "reportCompetitive",
+        name: "Competitive Session",
+        href: "/competitive",
+        icon: <PiBrainFill />,
+      },
+      {
+        id: "reportTopicTest",
+        name: "Topic Test",
+        href: "/topic-test",
+        icon: <PiClipboardTextFill />,
+      },
+      {
         id: "reportMockTest",
         name: "Mock Test",
         href: "/mock-test",
         icon: <PiTimerFill />,
+      },
+
+      {
+        id: "reportClassTest",
+        name: "Class Test",
+        href: "/class-test",
+        icon: <PiPencilSimpleFill />,
       },
     ],
   },

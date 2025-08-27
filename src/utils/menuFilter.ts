@@ -28,6 +28,34 @@ export const getFilteredSubMenuItems = (
   const parentItem = menuItems.find((item) => item.id === parentId);
   if (!parentItem?.menuItems) return [];
 
+  // Special case: Report tabs
+  if (parentId === "report" && activeCourse.tabs["report"]) {
+    return parentItem.menuItems.filter((subItem) => {
+      switch (subItem.id) {
+        // Always show overview if report is enabled
+        case "reportOverview":
+          return true;
+
+        case "reportLearning":
+        case "reportCompetitive":
+          return !!activeCourse.tabs["selfTest"];
+
+        case "reportTopicTest":
+          return !!activeCourse.tabs["topicTest"];
+
+        case "reportMockTest":
+          return !!activeCourse.tabs["mockTest"];
+
+        case "reportClassTest":
+          return !!activeCourse.tabs["classTest"];
+
+        default:
+          return false;
+      }
+    });
+  }
+
+  // Default case: filter by tab id directly
   return parentItem.menuItems.filter(
     (subItem) => activeCourse.tabs[subItem.id]
   );

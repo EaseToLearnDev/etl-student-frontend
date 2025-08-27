@@ -57,10 +57,13 @@ const ClassTestPage = () => {
     {
       header: "Action",
       render: (row) => (
-        <Button style="primary" onClick={() => {
-          setSelectedTest(row);
-          setShowStartTestModal(true);
-          }}>
+        <Button
+          style="primary"
+          onClick={() => {
+            setSelectedTest(row);
+            setShowStartTestModal(true);
+          }}
+        >
           <p>Start Now</p>
         </Button>
       ),
@@ -76,6 +79,7 @@ const ClassTestPage = () => {
     };
     fetchData();
   }, []);
+
   return testList ? (
     <div className="flex">
       <PaginatedTable
@@ -106,7 +110,7 @@ const ClassTestPage = () => {
             questionType: selectedTest?.questionType,
             totalMarks: selectedTest?.totalMark,
             totalQuestions: selectedTest?.totalQuestion,
-            totalTime: selectedTest?.totalTime
+            totalTime: selectedTest?.totalTime,
           }}
         />
       </Modal>
@@ -114,8 +118,8 @@ const ClassTestPage = () => {
   ) : (
     <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
       <div className="flex flex-col gap-2 items-center justify-center">
-        <ArchiveBoxIcon fontSize={100} />
-        <h5>No Class Test Found</h5>
+        <ArchiveBoxIcon width={100} height={100} />
+        <h5>No Class Test Available</h5>
       </div>
     </div>
   );

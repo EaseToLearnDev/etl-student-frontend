@@ -29,7 +29,6 @@ export const Default: Story = {
       title: "No Title",
       score: 45,
       marks: 28,
-      progress: "not_started",
     },
   },
 };
@@ -43,7 +42,6 @@ export const NotStartedWithoutMarks: Story = {
       title: "No Title",
       score: 45,
       marks: 28,
-      progress: "not_started",
     },
   },
 };
@@ -57,7 +55,6 @@ export const InProgress: Story = {
       title: "No Title",
       score: 45,
       marks: 28,
-      progress: "in_progress",
     },
   },
 };

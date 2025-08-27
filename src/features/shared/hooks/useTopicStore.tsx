@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Topic }  from "../shared/types";
+import type { Topic }  from "../../shared/types";
 
 type TopicStore = {
   topic: Topic | null;

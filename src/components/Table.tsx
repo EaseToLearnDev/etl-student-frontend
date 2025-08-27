@@ -14,7 +14,7 @@ const Table = <T,>({ columns, data, tableClassName = "" }: TableProps<T>) => {
           <tr>
             {columns.map((col, index) => (
               <th
-                className="py-3 px-6 bg-[var(--surface-bg-tertiary)] text-left !font-semibold text-[var(--text-secondary)] uppercase whitespace-nowrap"
+                className="py-3 px-6 bg-[var(--surface-bg-secondary)] text-left !font-semibold text-[var(--text-secondary)] uppercase whitespace-nowrap"
                 key={index}
               >
                 <span>{col.header}</span>
@@ -26,7 +26,7 @@ const Table = <T,>({ columns, data, tableClassName = "" }: TableProps<T>) => {
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className="border-b-1 last:border-0 border-[var(--border-primary)] hover:bg-[var(--surface-bg-secondary)]"
+              className="border-b-1 last:border-0 border-[var(--border-primary)] hover:bg-[var(--surface-bg-primary)]"
             >
               {columns.map((col, colIndex) => (
                 <td key={colIndex} className={`py-6 px-6 whitespace-nowrap ${col.className || ""}`}>

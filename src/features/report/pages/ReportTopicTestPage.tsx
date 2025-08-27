@@ -89,7 +89,7 @@ const data: any = [
     },
 ];
 
-const TopicTest = () => {
+const ReportTopicTestPage = () => {
   return (
     <>
       {data.length > 0 ? (
@@ -110,4 +110,4 @@ const TopicTest = () => {
   );
 };
 
-export default TopicTest;
+export default ReportTopicTestPage;

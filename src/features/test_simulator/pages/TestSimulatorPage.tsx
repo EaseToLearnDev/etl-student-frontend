@@ -94,7 +94,7 @@ const TestSimulatorPage = () => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={undefined}
+          onSubmit={() => {}}
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
@@ -105,7 +105,7 @@ const TestSimulatorPage = () => {
         className="p-4"
       >
         <ContinueLaterModalContent
-          onSubmit={undefined}
+          onSubmit={() => {}}
           onClose={() => setIsContinueLaterModalOpen(false)}
         />
       </Modal>

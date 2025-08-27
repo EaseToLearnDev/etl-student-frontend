@@ -2,7 +2,7 @@
 import useTestStore from "../../store/useTestStore";
 
 // Components
-import Question from "../Question";
+import QuestionCard from "../Question";
 
 /**
  * Renders a scrollable list of questions for the current section in the test simulator (mobile view).
@@ -23,7 +23,7 @@ const SectionQuestionScroll = () => {
           <div className="flex gap-2 max-w-max px-2">
             {currentSection?.questionList?.length > 0 ? (
               currentSection?.questionList?.map((q, i: number) => (
-                <Question
+                <QuestionCard
                   key={q.questionId}
                   question={q}
                   questionNumber={i + 1}

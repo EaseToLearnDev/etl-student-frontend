@@ -22,7 +22,7 @@ const LoginPage = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const errorMessage = useLoginStore((state) => state.error.message);
   const loading = useLoginStore((state) => state.loading);
-  const email = useLoginStore((state) => state.email);
+  const userId = useLoginStore((state) => state.userId);
   const password = useLoginStore((state) => state.password);
   const setCredentials = useLoginStore((state) => state.setCredentials);
 
@@ -64,23 +64,23 @@ const LoginPage = () => {
             <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
               {/* Form Fields */}
               <div className="flex flex-col gap-6">
-                {/* Email Field */}
+                {/* UserId Field */}
                 <div className="flex flex-col gap-1">
                   <label
-                    htmlFor="email"
+                    htmlFor="userId"
                     className="!font-medium text-[var(--text-secondary)]"
                   >
-                    Email
+                    Email or User ID 
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     placeholder="you@company.com"
                     className={cn(
                       "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                       "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
                     )}
                     required
-                    value={email}
+                    value={userId}
                     onChange={(e) => setCredentials(e.target.value, password)}
                   />
                 </div>
@@ -102,7 +102,7 @@ const LoginPage = () => {
                     )}
                     required
                     value={password}
-                    onChange={(e) => setCredentials(email, e.target.value)}
+                    onChange={(e) => setCredentials(userId, e.target.value)}
                   />
                 </div>
               </div>
