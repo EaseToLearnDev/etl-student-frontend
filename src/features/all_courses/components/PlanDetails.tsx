@@ -8,8 +8,6 @@ interface PlanDetailsProps {
 }
 
 export const PlanDetails = ({ course }: PlanDetailsProps) => {
-  console.log(course);
-
   const features = course.featuresList as FeaturesList[] ?? []
   return (
     <div className="flex gap-4">

@@ -5,15 +5,20 @@ import Tabs from "../../../components/Tabs";
 import { handlePaymentButton } from "../services/handlePaymentButton";
 import { useStudentStore } from "../../shared/store/useStudentStore";
 import { VerifyPromoCode } from "../services/VerifyPromoCode";
-import type { PriceList } from "../../shared/types";
+import type {
+  CourseResponseType,
+  CourseType,
+  PriceList,
+} from "../../shared/types";
+import Button from "../../../components/Button";
+import { handleFreeCourse } from "../services/handleFreeCourse";
+import { useNavigate } from "react-router";
 
 interface PlanBodyProps {
   coursePlan: PriceList[];
   courseTitle: string;
   courseId: number;
 }
-
-type DeviceType = "web" | "ios";
 
 export const PlanBody = ({
   coursePlan,
@@ -27,7 +32,8 @@ export const PlanBody = ({
   const [selPriceList, setSelPriceList] = useState<PriceList[]>([]);
   const [error, setError] = useState(false);
 
-  const { studentData } = useStudentStore.getState();
+  const { studentData, setStudentData } = useStudentStore.getState();
+  const navigate = useNavigate();
 
   if (!studentData) return null;
 
@@ -58,72 +64,116 @@ export const PlanBody = ({
     }
   };
 
-  const handleCourseSelect = async () => {
-    if (selectedPlanId === null) {
-      console.log("Please select a plan first");
-      return;
-    }
-    const packId = selectedPlanId;
+  const handleCourseSelect = async (option: number) => {
+    if (option === 1) {
+      try {
+        const res = await handleFreeCourse(courseId);
+        console.log(res);
+        if (res.responseTxt === "course_already_taken") {
+          alert("COURSE ALREADY TAKEN");
+          navigate("/dashboard");
+        } else {
+          const courses = res.obj.map((c: CourseResponseType) => {
+            const tabs: Record<string, boolean> = {
+              dashboard: !!c.dashboard,
+              report: !!c.report,
+              studyMaterial: !!c.studyMaterial,
+              selfTest: !!c.selfTest,
+              topicTest: !!c.topicTest,
+              mockTest: !!c.mockTest,
+              dynamicMockTest: !!c.dynamicMockTest,
+              classTest: !!c.classTest,
+              teacherHelp: !!c.teacherHelp,
+              tonyHelp: !!c.tonyHelp,
+              otherCourses: !!c.otherCourses,
+            };
+            const course: CourseType = {
+              templateId: c.templateId,
+              validityId: c.validityId,
+              courseId: c.courseId,
+              packTypeId: c.packTypeId,
+              benchmark: c.benchmark,
+              organisationName: c.organisationName,
+              validTillDate: c.validTillDate,
+              packTypeTitle: c.packTypeTitle,
+              tabs: tabs,
+            };
+            return course;
+          });
 
-    let apiQuery = "";
-    if (code) {
-      apiQuery += "&promoCode=" + code;
-    }
-
-    const deviceType = "web";
-
-    const option = (deviceType as DeviceType) === "ios" ? 3 : 2;
-
-    try {
-      const res = await handlePaymentButton({
-        option,
-        courseId,
-        courseTitle,
-        packId,
-        apiQuery,
-      });
-      if (option === 3) {
-        window.location.href =
-          "inapppayment?orderId=" +
-          res.orderId +
-          "&token=" +
-          res.token +
-          "&amount=" +
-          res.amount +
-          "&firstname=" +
-          studentData.studentName +
-          "&email=" +
-          studentData.emailId +
-          "&phone=" +
-          studentData.phoneNo +
-          "&productinfo=" +
-          res.productinfo;
-        return false;
-      } else {
-        const form = document.forms.namedItem(
-          "pgform"
-        ) as HTMLFormElement | null;
-        if (!form) {
-          console.error("PayU form not found in DOM");
-          return;
+          setStudentData({
+            ...studentData,
+            courses,
+          });
+          navigate("/dashboard");
         }
-
-        form.key.value = res.key;
-        form.txnid.value = res.token;
-        form.amount.value = res.amount;
-        form.firstname.value = studentData.studentName;
-        form.email.value = studentData.emailId;
-        form.phone.value = studentData.phoneNo;
-        form.productinfo.value = res.productinfo;
-        form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
-        form.furl.value = import.meta.env.VITE_BASE_URL + "/pgcancelled";
-        form.hash.value = res.hashCode;
-
-        form.submit();
+      } catch (error) {
+        console.log("Error fetching Selected Course: ", error);
+        return null;
       }
-    } catch (error) {
-      console.log("Error Directing to Payment Gateway: ", error);
-      return null;
+    } else {
+      if (selectedPlanId === null) {
+        console.log("Please select a plan first");
+        return;
+      }
+      const packId = selectedPlanId;
+
+      let apiQuery = "";
+      if (code) {
+        apiQuery += "&promoCode=" + code;
+      }
+
+      try {
+        const res = await handlePaymentButton({
+          option,
+          courseId,
+          courseTitle,
+          packId,
+          apiQuery,
+        });
+        if (option === 3) {
+          window.location.href =
+            "inapppayment?orderId=" +
+            res.orderId +
+            "&token=" +
+            res.token +
+            "&amount=" +
+            res.amount +
+            "&firstname=" +
+            studentData.studentName +
+            "&email=" +
+            studentData.emailId +
+            "&phone=" +
+            studentData.phoneNo +
+            "&productinfo=" +
+            res.productinfo;
+          return false;
+        } else {
+          const form = document.forms.namedItem(
+            "pgform"
+          ) as HTMLFormElement | null;
+          if (!form) {
+            console.error("PayU form not found in DOM");
+            return;
+          }
+
+          form.key.value = res.key;
+          form.txnid.value = res.token;
+          form.amount.value = res.amount;
+          form.firstname.value = studentData.studentName;
+          form.email.value = studentData.emailId;
+          form.phone.value = studentData.phoneNo;
+          form.productinfo.value = res.productinfo;
+          form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
+          form.furl.value = import.meta.env.VITE_BASE_URL + "/pgcancelled";
+          form.hash.value = res.hashCode;
+
+          form.submit();
+        }
+      } catch (error) {
+        console.log("Error Directing to Payment Gateway: ", error);
+        return null;
+      }
     }
   };
 
@@ -131,6 +181,13 @@ export const PlanBody = ({
     <div className="h-full sticky top-0 right-0 overflow-y-visible">
       <div className="flex items-center justify-start flex-col w-full py-[10px] max-h-max">
         <h3 className="mb-3">{courseTitle} Subscriptions</h3>
+        <Button
+          style="neutral"
+          onClick={() => handleCourseSelect(1)}
+          className="mb-4"
+        >
+          Free Trail
+        </Button>
         <div className="w-[150px] border border-gray-400 rounded-full bg-gray-100 flex items-center justify-evenly mx-auto mb-6">
           <Tabs
             tabs={effectivePlan.map((plan) => plan.packType)}

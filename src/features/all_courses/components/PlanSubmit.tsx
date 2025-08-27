@@ -4,7 +4,7 @@ import { BiCheck } from "react-icons/bi";
 import Button from "../../../components/Button";
 
 interface PlanSubmitProps {
-  submit: () => void;
+  submit: (option: number) => void;
   promo: (promoCode: string) => void;
   code: string;
   setCode: React.Dispatch<React.SetStateAction<string>>;
@@ -12,6 +12,8 @@ interface PlanSubmitProps {
   setApplied: React.Dispatch<React.SetStateAction<boolean>>;
   error: boolean;
 }
+
+type DeviceType = "web" | "ios";
 
 export const PlanSubmit = ({
   submit,
@@ -22,11 +24,13 @@ export const PlanSubmit = ({
   error,
 }: PlanSubmitProps) => {
   const handlePromoSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); 
+    e.preventDefault();
     if (!applied && code.trim()) {
       promo(code.trim());
     }
   };
+
+  const deviceType: DeviceType = "web";
 
   return (
     <>
@@ -62,16 +66,17 @@ export const PlanSubmit = ({
         </form>
 
         {/* Proceed to Pay */}
-        <Button onClick={submit} style="neutral">
+        <Button
+          onClick={() => submit((deviceType as DeviceType) === "ios" ? 3 : 2)}
+          style="neutral"
+        >
           Proceed To Pay
         </Button>
       </div>
       {applied && (
         <p className="text-green-600 mt-2">Promo applied successfully 🎉</p>
       )}
-      {error && (
-        <p className="text-red-600 mt-2">Invalid promo code</p>
-      )}
+      {error && <p className="text-red-600 mt-2">Invalid promo code</p>}
     </>
   );
 };
