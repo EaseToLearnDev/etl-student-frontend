@@ -7,6 +7,10 @@ import cn from "../../../utils/classNames";
 import { useState } from "react";
 import { PiBook, PiChartLine, PiTimer } from "react-icons/pi";
 import { Link } from "react-router";
+import { Modal } from "../../../components/Modal";
+import { MdClose } from "react-icons/md";
+import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
+import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
@@ -15,23 +19,47 @@ interface FeaturedBannerCarousalProps {
 const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
   const [selectedSlideIndex, setSelectedSlideIndex] = useState<number>(0);
 
+  const selectedContent = useSMStore((s) => s.selectedContent);
+  const setSelectedContent = useSMStore((s) => s.setSelectedContent);
+
   const tutorialCards = [
     {
       title: "Study Room",
       description: "Watch Study Room tutorials to boost your learning.",
       icon: <PiBook />,
+      content: {
+        contentTitle: "The Nitrogen Cycle",
+        contentType: "Video",
+        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+        id: 375,
+        language: "English",
+      },
     },
     {
       title: "Exam Room",
       description:
         "Learn how to attempt practice exams, view results, and improve your score.",
       icon: <PiTimer />,
+      content: {
+        contentTitle: "The Nitrogen Cycle",
+        contentType: "Video",
+        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+        id: 375,
+        language: "English",
+      },
     },
     {
       title: "Analytics",
       description:
         "Track your performance with detailed analytics and progress insights.",
       icon: <PiChartLine />,
+      content: {
+        contentTitle: "The Nitrogen Cycle",
+        contentType: "Video",
+        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+        id: 375,
+        language: "English",
+      },
     },
   ];
 
@@ -77,7 +105,8 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
         {tutorialCards.map((card, i) => (
           <div
             key={i}
-            className="border border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
+            onClick={() => setSelectedContent(card.content)}
+            className="border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
           >
             <div className="w-10 h-10 flex bg-white/10 rounded-md justify-center items-center text-2xl">
               {card.icon}
@@ -143,6 +172,27 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       >
         {slides}
       </div>
+
+      {selectedContent && (
+        <Modal
+          isOpen={selectedContent !== null}
+          onClose={() => setSelectedContent(null)}
+          className="p-4 lg:p-10"
+          containerClassName="!h-full !w-full !max-w-full"
+        >
+
+           <MediaContentModalView content={selectedContent} />
+          <div
+            onClick={() => setSelectedContent(null)}
+            className={cn(
+              "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+              " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+            )}
+          >
+            <MdClose size={20} />
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };
