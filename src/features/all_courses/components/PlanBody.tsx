@@ -2,17 +2,17 @@ import { useEffect, useState } from "react";
 import { PlanCard } from "./PlanCard";
 import { PlanSubmit } from "./PlanSubmit";
 import Tabs from "../../../components/Tabs";
-import { handlePaymentButton } from "../services/handlePaymentButton";
-import { useStudentStore } from "../../shared/store/useStudentStore";
+import { handlePaymentButton } from "../services/handlePaymentButton";;
 import { VerifyPromoCode } from "../services/VerifyPromoCode";
 import type {
-  CourseResponseType,
-  CourseType,
+  CourseResponse,
+  Course,
   PriceList,
 } from "../../shared/types";
 import Button from "../../../components/Button";
 import { handleFreeCourse } from "../services/handleFreeCourse";
 import { useNavigate } from "react-router";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 interface PlanBodyProps {
   coursePlan: PriceList[];
@@ -73,7 +73,7 @@ export const PlanBody = ({
           alert("COURSE ALREADY TAKEN");
           navigate("/dashboard");
         } else {
-          const courses = res.obj.map((c: CourseResponseType) => {
+          const courses = res.obj.map((c: CourseResponse) => {
             const tabs: Record<string, boolean> = {
               dashboard: !!c.dashboard,
               report: !!c.report,
@@ -87,7 +87,7 @@ export const PlanBody = ({
               tonyHelp: !!c.tonyHelp,
               otherCourses: !!c.otherCourses,
             };
-            const course: CourseType = {
+            const course: Course = {
               templateId: c.templateId,
               validityId: c.validityId,
               courseId: c.courseId,

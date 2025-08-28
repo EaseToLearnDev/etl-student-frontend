@@ -30,6 +30,7 @@ import ReportMockTestPage from "../features/report/pages/ReportMockTestPage";
 import ReportCompetitiveSessionPage from "../features/report/pages/ReportCompetitiveSessionPage";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
+import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -126,6 +127,8 @@ const Router = () => {
         <Route path="report/topic-test" element={<ReportTopicTestPage />} />
         <Route path="report/mock-test" element={<ReportMockTestPage />} />
         <Route path="report/class-test" element={<ReportClassTestPage />} />
+
+        <Route path="selectcourse" element={<AllCoursesPage />} />
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />

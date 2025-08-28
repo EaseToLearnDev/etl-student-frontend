@@ -1,35 +1,55 @@
+import Badge from "../../../components/Badge";
+import cn from "../../../utils/classNames";
+import { Theme } from "../../../utils/colors";
 
 interface FilterCoursesProps {
   categories: string[];
   selectedCategories: string[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
 
-export const FilterCourses = ({ categories, selectedCategories, setSelectedCategories }: FilterCoursesProps) => {
-
+export const FilterCourses = ({
+  categories,
+  selectedCategories,
+  setSelectedCategories,
+}: FilterCoursesProps) => {
   const handleCheckboxChange = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c): c is string => c !== category)
-        : [...prev, category]
+    setSelectedCategories(
+      (prev) =>
+        prev
+          ? prev.includes(category)
+            ? prev.filter((c): c is string => c !== category)
+            : [...prev, category]
+          : [category]
     );
   };
 
   return (
     <div>
-      <h5 className="mb-3">Filter by Category</h5>
-      <div className="space-y-2">
-        {categories.map((category) => (
-          <label key={category} className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={selectedCategories.includes(category)}
-              onChange={() => handleCheckboxChange(category)}
-              className="w-4 h-4 accent-blue-500"
-            />
-            <p>{category}</p>
-          </label>
-        ))}
+      <div className="flex gap-4 justify-between items-center">
+        <h5>Filter by Category</h5>
+        <p
+          onClick={() => setSelectedCategories(null)}
+          className="cursor-pointer"
+        >
+          Clear All
+        </p>
+      </div>
+      <div className="flex flex-wrap gap-3 mt-7">
+        {categories.map((category, index) => {
+          const isCategorySelected = selectedCategories.includes(category);
+          return (
+            <Badge
+              key={index}
+              theme={isCategorySelected ? Theme.Ocean : Theme.Neutral}
+              style={isCategorySelected ? "filled" : "outline"}
+              onClickHandler={() => handleCheckboxChange(category)}
+              className={cn("border !border-[var(--border-secondary)]")}
+            >
+              {category}
+            </Badge>
+          );
+        })}
       </div>
     </div>
   );

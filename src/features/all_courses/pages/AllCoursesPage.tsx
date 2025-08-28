@@ -6,12 +6,15 @@ import { fetchCategoryAndCourses } from "../services/fetchCategoryAndCourses";
 import { FilterCourses } from "../components/FilterCourses";
 import { PlanDetails } from "../components/PlanDetails";
 import { MdArrowBack } from "react-icons/md";
+import cn from "../../../utils/classNames";
 
 const AllCoursesPage = () => {
   const [search, setsearch] = useState("");
   const [courseList, setCourseList] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[] | null>(
+    null
+  );
   const [loading, setloading] = useState(false);
   const [hideSecondary, setHideSecondary] = useState(true);
 
@@ -46,11 +49,14 @@ const AllCoursesPage = () => {
 
   return (
     <div>
-      {/* {selectedCourse ? (
+      {selectedCourse ? (
         <div className="flex flex-row gap-2 items-center mb-2">
           <div
             onClick={() => setSelectedCourse(null)}
-            className="w-[34px] h-[34px] flex justify-center items-center cursor-pointer border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
+            className={cn(
+              "w-[34px] h-[34px] flex justify-center items-center",
+              "cursor-pointer border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
+            )}
           >
             <MdArrowBack size={20} />
           </div>
@@ -61,10 +67,11 @@ const AllCoursesPage = () => {
           search={search}
           setSearch={setsearch}
           onClickFilter={() => setHideSecondary((prev) => !prev)}
-          selectedCategories={selectedCategories}
+          isFilterSectionOpen={!hideSecondary}
+          selectedCategories={selectedCategories || []}
           setSelectedCategories={setSelectedCategories}
         />
-      )} */}
+      )}
 
       <div>
         {selectedCourse ? (
@@ -84,7 +91,7 @@ const AllCoursesPage = () => {
                   search={search}
                   courseList={courseList}
                   hideSecondary={hideSecondary}
-                  selectedCategories={selectedCategories}
+                  selectedCategories={selectedCategories || []}
                   onCourseClick={(course) => {
                     setSelectedCourse(course);
                     setHideSecondary(false);
@@ -95,7 +102,7 @@ const AllCoursesPage = () => {
             secondaryContent={
               <FilterCourses
                 categories={categories}
-                selectedCategories={selectedCategories}
+                selectedCategories={selectedCategories || []}
                 setSelectedCategories={setSelectedCategories}
               />
             }

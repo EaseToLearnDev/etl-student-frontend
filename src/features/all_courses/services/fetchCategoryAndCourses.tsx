@@ -1,4 +1,4 @@
-import { useStudentStore } from "../../shared/store/useStudentStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { categoryAndCourses } from "../apis/categoryAndCourses.api";
 
 export const fetchCategoryAndCourses = () => {

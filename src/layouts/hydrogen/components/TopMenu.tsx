@@ -61,7 +61,9 @@ const TopMenu = () => {
   return (
     <div className="flex flex-col gap-2">
       {/* Page Title */}
-      <h3 className="pl-2">{match?.name}</h3>
+      {!match?.hideTitle && (
+        <h3 className="pl-2">{match?.name}</h3>
+      )}
       {permittedSubItems.length ? (
         // Scrollable Tabs
         <div className="relative">

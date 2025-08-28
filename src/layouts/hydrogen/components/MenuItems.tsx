@@ -10,7 +10,17 @@ import {
   PiTimerFill,
 } from "react-icons/pi";
 
-export const menuItems = [
+interface MenuItem {
+  id: string;
+  name: string;
+  href: string;
+  static?: boolean;
+  icon?: React.ReactNode;
+  menuItems?: MenuItem[];
+  hideTitle?: boolean;
+}
+
+export const menuItems: MenuItem[] = [
   {
     id: "dashboard",
     name: "Dashboard",
@@ -111,5 +121,13 @@ export const menuItems = [
         icon: <PiPencilSimpleFill />,
       },
     ],
+  },
+  {
+    id: "otherCourses",
+    name: "All Courses",
+    href: "/selectcourse",
+    static: false,
+    icon: <PiBooksFill />,
+    hideTitle: true,
   },
 ];

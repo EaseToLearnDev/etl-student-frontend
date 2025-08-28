@@ -4,13 +4,15 @@ import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 import { BiX } from "react-icons/bi";
 import { useEffect } from "react";
+import { MdClose } from "react-icons/md";
 
 interface AllCoursesHeaderProps {
   search: string;
   setSearch: (value: string) => void;
   selectedCategories: string[];
   onClickFilter: () => void;
-  setSelectedCategories: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedCategories: React.Dispatch<React.SetStateAction<string[] | null>>;
+  isFilterSectionOpen: boolean;
 }
 
 const AllCoursesHeader = ({
@@ -19,10 +21,11 @@ const AllCoursesHeader = ({
   onClickFilter,
   selectedCategories,
   setSelectedCategories,
+  isFilterSectionOpen,
 }: AllCoursesHeaderProps) => {
   const handleRemoveCategory = (category: string) => {
     setSelectedCategories((prev) =>
-      prev.filter((c): c is string => c !== category)
+      prev ? prev.filter((c): c is string => c !== category) : []
     );
   };
 
@@ -34,27 +37,33 @@ const AllCoursesHeader = ({
   }, [selectedCategories]);
 
   return (
-    <div className="sticky top-0 z-50 bg-[var(--surface-bg-primary)] mb-2 rounded-xl">
+    <div className="sticky top-0 z-50 mb-2 bg-[var(--app-bg)]">
       <div className="p-4 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 justify-between">
         <h3 className="font-semibold">Select Course</h3>
-        <div className="flex items-center w-full sm:w-1/2 md:max-w-md bg-gray-100 rounded-full px-3 py-2">
-          <FiSearch className="text-gray-500 mr-2" />
-          <input
-            type="text"
-            placeholder="Search courses..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="flex-1 bg-transparent outline-none text-gray-700"
-          />
+        <div className="flex items-center gap-4">
+          <div className="flex items-center min-w-[300px] max-w-[300px] bg-[var(--surface-bg-secondary)] rounded-full px-4 py-2">
+            <FiSearch className="text-[var(--text-tertiary)] mr-2" />
+            <input
+              type="text"
+              placeholder="Search courses..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]"
+            />
+          </div>
+          <Button
+            style="primary"
+            onClick={onClickFilter}
+            className="flex items-center gap-2 rounded-full"
+          >
+            {!isFilterSectionOpen ? (
+              <FiFilter className="text-lg" />
+            ) : (
+              <MdClose className="text-lg" />
+            )}
+            <p>Filter</p>
+          </Button>
         </div>
-        <Button
-          style="primary"
-          onClick={onClickFilter}
-          className="flex items-center gap-2 rounded-full"
-        >
-          <FiFilter className="text-lg" />
-          <p>Filter</p>
-        </Button>
       </div>
 
       {selectedCategories.length > 0 && (

@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import { FaDizzy } from "react-icons/fa";
-import { useStudentStore } from "../../shared/store/useStudentStore";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 interface Course {
   courseId: number;
@@ -69,9 +69,9 @@ const CoursesCards = ({
             />
             <div className="flex flex-col gap-2 p-4">
               <div className="flex flex-row items-center justify-between">
-                <h5 className="text-[var(--text-primary)]">
+                <h6 className="text-[var(--text-primary)]">
                   {course.courseTitle}
-                </h5>
+                </h6>
                 {alreadyPurchased && (
                   <Badge
                     theme={Theme.GreenHaze}
@@ -93,7 +93,7 @@ const CoursesCards = ({
           <div
             key={course.courseId}
             onClick={() => onCourseClick(course)}
-            className="bg-[var(--surface-bg-primary)] border-1 border-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform cursor-pointer"
+            className="bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform cursor-pointer"
           >
             {cardContent}
           </div>
@@ -101,7 +101,7 @@ const CoursesCards = ({
           <Link
             key={course.courseId}
             to={`/course/${course.courseId}`}
-            className="bg-[var(--surface-bg-primary)] border-1 border-white shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform"
+            className="bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform"
           >
             {cardContent}
           </Link>

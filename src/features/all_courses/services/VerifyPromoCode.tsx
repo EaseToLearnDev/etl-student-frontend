@@ -1,4 +1,4 @@
-import { useStudentStore } from "../../shared/store/useStudentStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { verifyPromoCodesMultiplePricing } from "../apis/veriftPromoCodesMultiplePricing.api";
 
 interface VerifyPromoCodeProps {
