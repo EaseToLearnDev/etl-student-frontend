@@ -112,7 +112,7 @@ export default function Header({ className }: { className?: string }) {
                 "w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                 "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
               )}
-              placeholder="example@domain.com"
+              placeholder=" you@example.com"
             />
           </div>
           <div className="flex justify-end mt-4">

@@ -1,8 +1,8 @@
-import type { TreeView } from "../types";
+import type { TreeViewType } from "../types";
 import { makeRequest } from "../../../utils/http";
 
 interface GetTopicTreeViewParams {
-  type: TreeView;
+  type: TreeViewType;
   mode: 0 | 1;
   loginId: string;
   token: string;
