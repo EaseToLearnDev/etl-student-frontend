@@ -1,5 +1,10 @@
 import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 import { PiAndroidLogoFill, PiAppleLogoFill } from "react-icons/pi";
+import { useState } from "react";
+import useIsMobile from "../../../hooks/useIsMobile";
+import { Popover } from "../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../components/Popover/PopoverContent";
 
 interface DownloadAppCardProps {
   title?: string;
@@ -17,6 +22,8 @@ export default function DownloadAppCard({
   iosUrl = "#",
   className = "",
 }: DownloadAppCardProps) {
+  const isMobile = useIsMobile();
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <aside
       className={`w-full rounded-lg shadow-md p-5 sm:p-6 flexflex-col items-center gap-4 ${className}`}
@@ -73,7 +80,31 @@ export default function DownloadAppCard({
                 <div className="text-sm font-medium">Google Play</div>
               </div>
             </div>
-            <CloudArrowDownIcon className="ml-2 w-5 h-5 text-[var(--text-secondary)]" />
+            <Popover
+              open={isOpen}
+              setIsOpen={setIsOpen}
+              shadow="sm"
+              placement={isMobile ? "bottom" : "bottom-end"}
+            >
+              <PopoverTrigger>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <CloudArrowDownIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="z-[9999] flex justify-center items-center px-4 py-4 bg-[var(--surface-bg-secondary)]">
+                <img
+                  src="/qrcode.png"
+                  alt="Download App QR"
+                  className="w-[160px] h-auto"
+                />
+              </PopoverContent>
+            </Popover>
           </a>
         </div>
       </div>

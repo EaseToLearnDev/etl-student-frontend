@@ -6,10 +6,11 @@ export interface LoginStore {
   password: string;
   error: Error;
   loading: boolean;
+  token: string | null;
 
   setLoading: (v: boolean) => void;
   setError: (message: string, severity: Severity) => void;
-
+  setToken: (token: string | null) => void;
   setCredentials: (userId: string, password: string) => void;
 }
 
@@ -22,8 +23,10 @@ export const useLoginStore = create<LoginStore>((set) => ({
     message: "",
   },
   loading: false,
+  token: null,
 
   setLoading: (v) => set({ loading: v }),
   setError: (message, severity) => set({ error: { severity, message } }),
   setCredentials: (userId, password) => set({ userId, password }),
+  setToken: (token) => set({token})
 }));

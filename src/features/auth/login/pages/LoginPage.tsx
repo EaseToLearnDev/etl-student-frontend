@@ -1,5 +1,6 @@
 // React
 import { Link, useNavigate } from "react-router";
+import { useState } from "react";
 
 // Store
 import useDarkModeStore from "../../../../store/useDarkModeStore";
@@ -9,13 +10,15 @@ import { useLoginStore } from "../hooks/useLoginStore";
 import cn from "../../../../utils/classNames";
 
 // Services
-import { HandleLogin } from "../login.services";
+import { HandleLogin, handleVerifyOtp } from "../login.services";
 
 // Components
 import Button from "../../../../components/Button";
+import Tabs from "../../../../components/Tabs";
+import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
 
 /**
- * Login page component for user authentication.
+ * Login page component for user authentication (Password + OTP).
  */
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -24,10 +27,13 @@ const LoginPage = () => {
   const loading = useLoginStore((state) => state.loading);
   const userId = useLoginStore((state) => state.userId);
   const password = useLoginStore((state) => state.password);
+  const token = useLoginStore((state) => state.token);
+  const setToken = useLoginStore((state) => state.setToken);
   const setCredentials = useLoginStore((state) => state.setCredentials);
 
+  const [loginWith, setLoginWith] = useState("password");
+
   return (
-    // Main Login Container
     <div
       className={cn(
         "w-full min-h-[100dvh]",
@@ -37,7 +43,6 @@ const LoginPage = () => {
       )}
     >
       <div className="flex flex-col lg:flex-row w-full min-h-[100dvh]">
-        {/* Logo Section */}
         <div
           className={cn(
             "h-[100px] md:h-[120px] lg:h-[100dvh] lg:w-1/2 p-4 lg:p-10 flex flex-col gap-2 lg:gap-5 justify-center items-center flex-shrink-0",
@@ -54,27 +59,52 @@ const LoginPage = () => {
           <h2 className="text-white select-none">Ease To Learn</h2>
         </div>
 
-        {/* Login Form Section */}
         <div className="flex-1 lg:w-1/2 p-5 bg-[var(--surface-bg-primary)] rounded-t-[25px] lg:rounded-none flex pt-20 justify-center lg:items-center">
           <div className="w-full max-w-[500px]">
-            {/* Form Header */}
-            <h2 className="!font-black text-center">Login</h2>
+            <h2 className="!font-black text-center">{token ? "" : "Login"}</h2>
 
-            {/* Login Form */}
+                {token ? (
+                    <VerifyOtpContent 
+                    onCancel={() => setToken(null)}
+                    onVerify={handleVerifyOtp}
+                    error={errorMessage}
+                    />
+                ) :(
+                    <>
+                {/* Login Form */}
+            <div className="flex justify-center gap-6 mt-6">
+              <Tabs
+                tabs={["Password", "OTP"]}
+                selectedIndex={loginWith === "password" ? 0 : 1}
+                onSelect={(index) => {
+                  if (index === 0) {
+                    setLoginWith("password");
+                    setCredentials(userId, "");
+                  } else {
+                    setLoginWith("otp");
+                  }
+                }}
+                activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
+              />
+            </div>
+
+
             <form className="mt-10" onSubmit={(e) => e.preventDefault()}>
-              {/* Form Fields */}
               <div className="flex flex-col gap-6">
-                {/* UserId Field */}
                 <div className="flex flex-col gap-1">
                   <label
                     htmlFor="userId"
                     className="!font-medium text-[var(--text-secondary)]"
                   >
-                    Email or User ID 
+                    {loginWith === "otp" ? "Mobile Number" : "Email or User ID"}
                   </label>
                   <input
                     type="text"
-                    placeholder="you@company.com"
+                    placeholder={
+                      loginWith === "otp"
+                        ? "Enter your mobile number"
+                        : "you@company.com"
+                    }
                     className={cn(
                       "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                       "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
@@ -85,54 +115,67 @@ const LoginPage = () => {
                   />
                 </div>
 
-                {/* Password Field */}
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor="email"
-                    className="!font-medium text-[var(--text-secondary)]"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    placeholder="**********"
-                    className={cn(
-                      "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                      "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
-                    )}
-                    required
-                    value={password}
-                    onChange={(e) => setCredentials(userId, e.target.value)}
-                  />
-                </div>
+                {loginWith === "password" && (
+                  <div className="flex flex-col gap-1">
+                    <label
+                      htmlFor="password"
+                      className="!font-medium text-[var(--text-secondary)]"
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="**********"
+                      className={cn(
+                        "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+                        "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                      )}
+                      required
+                      value={password}
+                      onChange={(e) => setCredentials(userId, e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
 
-              {/* Login Button */}
               <Button
                 style="primary"
                 type="submit"
                 className="mt-8 w-full"
-                onClick={loading ? undefined : () => HandleLogin(navigate)}
+                onClick={
+                  loading
+                    ? undefined
+                    : () => HandleLogin(navigate, loginWith)
+                }
               >
                 <h6 className="!font-semibold">
-                  {loading ? "Loading" : "Login"}
+                  {loading
+                    ? "Loading"
+                    : loginWith === "password"
+                    ? "Login"
+                    : "Get OTP"}
                 </h6>
               </Button>
-              <h6>{errorMessage ? errorMessage : ""}</h6>
+              <h6 className="text-red-500">{errorMessage || ""}</h6>
 
-              {/* Sign Up Link */}
-              <div className="flex justify-center mt-10 gap-[2px]">
-                <Link
-                  to={"/forget-password"}
-                  className="text-[var(--sb-ocean-bg-active)]"
-                >
-                  <h6 className="!font-bold hover:underline">
-                    Forget Password?
-                  </h6>
-                </Link>
-              </div>
+              {loginWith === "password" && (
+                <div className="flex justify-center mt-10 gap-[2px]">
+                  <Link
+                    to={"/forget-password"}
+                    className="text-[var(--sb-ocean-bg-active)]"
+                  >
+                    <h6 className="!font-bold hover:underline">
+                      Forget Password?
+                    </h6>
+                  </Link>
+                </div>
+              )}
             </form>
+            </>
+            )
+            }
           </div>
+          
         </div>
       </div>
     </div>
