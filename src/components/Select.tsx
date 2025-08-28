@@ -13,6 +13,7 @@ interface SelectProps<T = string> {
   onSelect: (index: number) => void;
   className?: string;
   dropdownClassName?: string;
+  dropdownItemClassName?: string;
   renderItem?: (item: T, index: number, isSelected: boolean) => React.ReactNode;
   getItemLabel?: (item: T) => string;
 }
@@ -26,6 +27,7 @@ const Select = <T,>({
   onSelect,
   className = "",
   dropdownClassName = "",
+  dropdownItemClassName = "",
   renderItem,
   getItemLabel,
 }: SelectProps<T>) => {
@@ -40,7 +42,7 @@ const Select = <T,>({
         position: "absolute",
         top: rect.bottom + window.scrollY + 4,
         left: rect.left + window.scrollX,
-        zIndex: 999,
+        zIndex: 9999,
       });
     }
   }, [isOpen]);
@@ -96,7 +98,8 @@ const Select = <T,>({
               "flex gap-2 items-center justify-between p-2 cursor-pointer rounded-md !font-semibold",
               isSelected
                 ? "bg-[var(--surface-bg-tertiary)] text-[var(--text-primary)]"
-                : "hover:bg-[var(--surface-bg-tertiary)]"
+                : "hover:bg-[var(--surface-bg-tertiary)]",
+              dropdownItemClassName
             )}
           >
             {renderItem ? (
@@ -115,26 +118,25 @@ const Select = <T,>({
     </div>
   );
 
-  const triggerLabel =
-    selectedIndex !== null
-      ? getItemLabel
-        ? getItemLabel(items[selectedIndex])
-        : String(items[selectedIndex])
-      : "Select an option";
+const triggerLabel =
+  selectedIndex !== null && items[selectedIndex] !== undefined
+    ? getItemLabel
+      ? getItemLabel(items[selectedIndex])
+      : String(items[selectedIndex])
+    : "Select an option";
+
 
   return (
-    <div
-      className={cn("relative inline-block text-left max-w-[250px]", className)}
-    >
+    <div className={cn("relative inline-block text-left", className)}>
       <button
         ref={buttonRef}
         onClick={onToggle}
         className={cn(
-          "w-full flex gap-2 items-center justify-between p-2 rounded-md focus:outline-none",
-          "bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)]"
+          "w-full h-full flex gap-2 items-center justify-between p-2 rounded-md focus:outline-none",
+          "bg-[var(--surface-bg-secondary)] border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-tertiary)]"
         )}
       >
-        <span className="text-left flex-1">{triggerLabel}</span>
+        <span className="text-left flex-1">{triggerLabel ?? ""}</span>
         <BiChevronDown size={18} className="text-[var(--text-tertiary)]" />
       </button>
       {isOpen && createPortal(dropdown, document.body)}
