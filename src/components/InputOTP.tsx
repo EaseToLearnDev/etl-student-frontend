@@ -1,5 +1,6 @@
-import { useOtp } from "../../../../hooks/useOtp";
-import cn from "../../../../utils/classNames";
+import { useEffect } from "react";
+import { useOtp } from "../hooks/useOtp";
+import cn from "../utils/classNames";
 
 interface InputOTPProps {
   length: number;
@@ -16,7 +17,6 @@ const InputOTP = ({
 }: InputOTPProps) => {
   const {
     otpArr,
-    currentIndex,
     inputRefs,
     insertOtpNum,
     handleKeyDown,
@@ -24,9 +24,9 @@ const InputOTP = ({
     otpValue,
   } = useOtp(length);
 
-  if (onChange) {
-    onChange(otpValue);
-  }
+  useEffect(() => {
+    onChange?.(otpValue);
+  }, [otpValue, onChange]);
 
   return (
     <div className="flex gap-3 items-center justify-center">
@@ -45,20 +45,20 @@ const InputOTP = ({
             type="text"
             inputMode="numeric"
             maxLength={1}
-            disabled={index !== currentIndex}
             className={cn(
               "w-full h-full rounded-md p-2 text-center bg-transparent",
               "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
               inputClassName
             )}
-            value={otp >= 0 ? otp : ""}
-            onChange={(e) => insertOtpNum(e.target.value)}
-            onKeyDown={(e) => handleKeyDown(e)}
-            onInput={(e) => {
-              const target = e.target as HTMLInputElement;
-              target.value = target.value.replace(/\D/g, "");
+            value={otp}
+            onChange={(e) => insertOtpNum(e.target.value, index)}
+            onKeyDown={handleKeyDown}
+            onFocus={(e) => {
+              setCurrentIndex(index);
+              if (otp)
+                setTimeout(() => (e.target as HTMLInputElement).select(), 0);
             }}
-            onFocus={() => setCurrentIndex(index)}
+            aria-label={`Digit ${index + 1} of ${length} OTP`}
           />
         </div>
       ))}

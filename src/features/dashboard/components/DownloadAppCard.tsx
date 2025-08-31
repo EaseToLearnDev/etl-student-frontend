@@ -1,10 +1,9 @@
+// Icons
 import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
 import { PiAndroidLogoFill, PiAppleLogoFill } from "react-icons/pi";
-import { useState } from "react";
-import useIsMobile from "../../../hooks/useIsMobile";
-import { Popover } from "../../../components/Popover/Popover";
-import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
-import { PopoverContent } from "../../../components/Popover/PopoverContent";
+
+// Components
+import QrPopover from "./QrPopover";
 
 interface DownloadAppCardProps {
   title?: string;
@@ -18,12 +17,8 @@ interface DownloadAppCardProps {
 export default function DownloadAppCard({
   title = "Get the app",
   subtitle = "Download the mobile app for the best experience",
-  androidUrl = "#",
-  iosUrl = "#",
   className = "",
 }: DownloadAppCardProps) {
-  const isMobile = useIsMobile();
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <aside
       className={`w-full rounded-lg shadow-md p-5 sm:p-6 flexflex-col items-center gap-4 ${className}`}
@@ -38,12 +33,9 @@ export default function DownloadAppCard({
       <div className="flex-1 min-w-0">
         <div className="mt-4 flex flex-col gap-3">
           {/* iOS button */}
-          <a
-            href={iosUrl}
+          <div
             className="max-w-[300px] inline-flex items-center gap-3 justify-between px-4 py-2 rounded-lg border border-[var(--border-secondary)] shadow-sm hover:shadow focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors"
             aria-label="Download on the App Store"
-            rel="noopener noreferrer"
-            target="_blank"
           >
             <div className="flex items-center gap-3">
               <span className="flex items-center justify-center bg-[var(--surface-bg-secondary)] rounded-md p-2">
@@ -59,15 +51,13 @@ export default function DownloadAppCard({
             <span className="text-[var(--text-tertiary)]">Coming Soon</span>
 
             {/* <CloudArrowDownIcon className="ml-2 w-5 h-5 text-[var(--text-secondary)]" /> */}
-          </a>
+          </div>
 
           {/* Android button */}
-          <a
-            href={androidUrl}
+          <div
             className="max-w-[300px] inline-flex items-center gap-3 justify-between px-4 py-2 rounded-lg border border-[var(--border-secondary)] shadow-sm hover:shadow focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors"
             aria-label="Get it on Google Play"
             rel="noopener noreferrer"
-            target="_blank"
           >
             <div className="flex items-center gap-3">
               <span className="flex items-center justify-center bg-[var(--surface-bg-secondary)] rounded-md p-2">
@@ -80,32 +70,18 @@ export default function DownloadAppCard({
                 <div className="text-sm font-medium">Google Play</div>
               </div>
             </div>
-            <Popover
-              open={isOpen}
-              setIsOpen={setIsOpen}
-              shadow="sm"
-              placement={isMobile ? "bottom" : "bottom-end"}
-            >
-              <PopoverTrigger>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                >
-                  <CloudArrowDownIcon className="w-5 h-5 text-[var(--text-secondary)]" />
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="z-[9999] flex justify-center items-center px-4 py-4 bg-[var(--surface-bg-secondary)]">
-                <img
-                  src="/qrcode.png"
-                  alt="Download App QR"
-                  className="w-[160px] h-auto"
-                />
-              </PopoverContent>
-            </Popover>
-          </a>
+            <QrPopover>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              >
+                <CloudArrowDownIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+              </button>
+            </QrPopover>
+          </div>
         </div>
       </div>
     </aside>

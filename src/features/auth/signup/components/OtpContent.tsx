@@ -1,6 +1,6 @@
 // Components
 import Button from "../../../../components/Button";
-import InputOTP from "./InputOTP";
+import InputOTP from "../../../../components/InputOTP";
 import useSignupStore from "../hooks/useSignupStore";
 import { switchPhase } from "../signup.services";
 import { SignupPhase } from "../signup.types";
@@ -21,10 +21,7 @@ const OtpContent = () => {
       <form className="mt-29" onSubmit={(e) => e.preventDefault()}>
         {/* Form Fields */}
         <InputOTP length={6} />
-
-Shared global state of API responses
-
-
+        Shared global state of API responses
         {/* Signup Button */}
         <Button style="primary" className="mt-8 w-full">
           <Link to="/onboarding">
@@ -39,7 +36,6 @@ Shared global state of API responses
             Change Number
           </h6>
         </button>
-
         {/* Login Link */}
         <div className="flex justify-center mt-10 gap-[2px]">
           <h6>Didn't receive OTP? </h6>
