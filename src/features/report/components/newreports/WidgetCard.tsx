@@ -13,7 +13,7 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 const widgetCardClasses = {
-  base: "border border-gray-200 p-5 lg:p-7 shadow",
+  base: "border border-[var(--border-secondary)] p-5 lg:p-7 shadow",
   rounded: {
     sm: "rounded-sm",
     DEFAULT: "rounded-lg",

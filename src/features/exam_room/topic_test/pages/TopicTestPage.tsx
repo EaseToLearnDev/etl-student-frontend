@@ -19,6 +19,7 @@ import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
 import { manageTestModal } from "../../../shared/services/manageTestModal";
 import { handleNewTestModal } from "../../../shared/services/handleNewTestModal";
 import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
+import { handleStartTest } from "../services/handleStartTest";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -29,7 +30,6 @@ import { Modal } from "../../../../components/Modal";
 import { type Topic } from "../../../shared/types";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
-import { handleStartTest } from "../services/handleStartTest";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.

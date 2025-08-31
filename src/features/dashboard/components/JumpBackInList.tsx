@@ -31,7 +31,7 @@ const JumpBackInList = () => {
       {/* Header with nav buttons */}
       <div className="flex justify-between items-center">
         <h5>Jump Back In</h5>
-        <div className="flex items-center gap-4 text-white">
+        <div className="flex items-center gap-4 text-[var(--text-primary)]">
           <button
             onClick={() => scroll("left")}
             className="size-7 flex justify-center items-center border border-[var(--border-secondary)] rounded-md transition"

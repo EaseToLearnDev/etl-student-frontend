@@ -1,18 +1,22 @@
 import { BiCheck } from "react-icons/bi";
 import type { FeaturesList, SectionList } from "../../shared/types";
+import cn from "../../../utils/classNames";
 
 interface PlanFeaturesProps {
   features: FeaturesList[];
+  className?: string;
 }
 
-export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
-
-  if (features.length === 0 ){
+export const PlanFeatures = ({
+  features,
+  className = "",
+}: PlanFeaturesProps) => {
+  if (features.length === 0) {
     return (
       <div className="flex items-center justify-center h-full w-full">
         <h4>No Table Found</h4>
       </div>
-    )
+    );
   }
 
   const renderTable = (sub: SectionList) => (
@@ -59,43 +63,38 @@ export const PlanFeatures = ({ features }: PlanFeaturesProps) => {
   );
 
   return (
-    <div className="w-full" id="features">
-      {/* Heading */}
-      <h3 className="text-center pt-4">Compare Features</h3>
-
-      <div className="px-4">
-        {features.map((section, i) =>
-          section?.sectionType !== "Others" && section?.list?.length > 0 ? (
-            <div
-              key={i}
-              className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[19px] mt-5 mb-14 p-5 pb-10 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
-            >
-              <h4 className="text-center mb-4">{section.sectionType}</h4>
-              {section.list.map((sub, j) => (
-                <div
-                  key={j}
-                  className="bg-[var(--surface-bg-primary)] mb-4 border border-[#ccc] rounded-[16px] p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
-                >
-                  <h5>{sub.title}</h5>
-                  <p className="mb-4">{sub.description}</p>
-                  {renderTable(sub)}
-                </div>
-              ))}
-            </div>
-          ) : section?.sectionType === "Others" && section?.list?.length > 0 ? (
-            section.list.map((sub, j) => (
+    <div className={cn("w-full", className)} id="features">
+      {features.map((section, i) =>
+        section?.sectionType !== "Others" && section?.list?.length > 0 ? (
+          <div
+            key={i}
+            className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[19px] mt-5 mb-14 p-5 pb-10 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
+          >
+            <h4 className="text-center mb-4">{section.sectionType}</h4>
+            {section.list.map((sub, j) => (
               <div
                 key={j}
-                className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[16px] my-12 p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
+                className="bg-[var(--surface-bg-primary)] mb-4 border border-[#ccc] rounded-[16px] p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
               >
                 <h5>{sub.title}</h5>
-                <p className="my-4">{sub.description}</p>
+                <p className="mb-4">{sub.description}</p>
                 {renderTable(sub)}
               </div>
-            ))
-          ) : null
-        )}
-      </div>
+            ))}
+          </div>
+        ) : section?.sectionType === "Others" && section?.list?.length > 0 ? (
+          section.list.map((sub, j) => (
+            <div
+              key={j}
+              className="bg-[var(--surface-bg-primary)] border border-[#ccc] rounded-[16px] my-12 p-8 transition-all duration-300 ease-[cubic-bezier(0,0,0.5,1)] hover:shadow-[2px_4px_16px_#00000029] hover:scale-[1.01]"
+            >
+              <h5>{sub.title}</h5>
+              <p className="my-4">{sub.description}</p>
+              {renderTable(sub)}
+            </div>
+          ))
+        ) : null
+      )}
     </div>
   );
 };

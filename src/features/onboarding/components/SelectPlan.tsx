@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Tabs from "../../../components/Tabs";
-import PlanFeature from "./PlanFeature";
+import PlanFeature from "../../shared/components/PlanFeature";
 import { OnboardingPhase, type FeatureType } from "../onboarding.types";
 import { switchPhase } from "../onboarding.services";
 import Button from "../../../components/Button";

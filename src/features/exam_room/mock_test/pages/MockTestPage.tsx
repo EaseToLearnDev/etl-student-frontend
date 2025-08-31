@@ -62,7 +62,7 @@ const MockTestPage = () => {
   const [hideSecondary, setHideSecondary] = useState(isMobile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedDropdownIndex, setSelectedDropdownIndex] = useState(0);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   // Derived data
   const completeMockTests = testList?.[0] || ({} as MockTestCategory);

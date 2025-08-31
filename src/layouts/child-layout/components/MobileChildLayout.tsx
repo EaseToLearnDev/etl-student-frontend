@@ -32,7 +32,7 @@ const MobileChildLayout = ({
   return (
     <div className="w-full h-full">
       {/* Primary content fills the background */}
-      <div className="w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)]">
+      <div className="w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-hide">
         {primaryContent}
       </div>
       {createPortal(

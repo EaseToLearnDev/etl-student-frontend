@@ -10,7 +10,7 @@ export enum OnboardingPhase {
 export type OnboardingPhaseType = Record<OnboardingPhase, ReactNode>;
 
 export interface FeatureType {
-    title: string;
+    sectionType: string;
     subfeatures: SubFeatureType[]
 }
 

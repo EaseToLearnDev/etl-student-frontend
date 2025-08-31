@@ -9,8 +9,8 @@ export const fetchCategoryAndCourses = () => {
   const { loginId, token } = studentData;
 
   try {
-    const res = categoryAndCourses({ loginId, token });
-    return res;
+    const data = categoryAndCourses({ loginId, token });
+    return data ?? null;  
   } catch (error) {
     console.log("Failed to fetch Courses: ", error);
     return null;
