@@ -26,6 +26,7 @@ import { Modal } from "../../../../components/Modal";
 import TopicContentPanel from "../components/TopicContentPanel";
 import TextContentModalView from "../components/TextContentModalView";
 import MediaContentModalView from "../components/MediaContentModalVIew";
+import { Skeleton } from "../../../../components/SkeletonLoader";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -100,6 +101,19 @@ const StudyMaterialsPage = () => {
     getTextContent();
   }, [selectedContent?.id]);
 
+  if (!topicTree || topicTree.length === 0) {
+    return (
+      <div className="space-y-3 p-4">
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+      </div>
+    );
+  }
+
   // ========== Render ==========
   return (
     <div className="h-full flex flex-col flex-grow">
@@ -129,7 +143,16 @@ const StudyMaterialsPage = () => {
                 contentFilterType={contentFilterType}
               />
             ) : (
-              <></>
+              <>
+                <div className="space-y-3 p-4">
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                </div>
+              </>
             )
           }
           hideSecondary={!selectedTopic || selectedContent !== null}

@@ -25,6 +25,7 @@ import SLTestModalContent from "../components/SLTestModalContent";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import type { Topic } from "../../../shared/types";
+import { Skeleton } from "../../../../components/SkeletonLoader";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -99,6 +100,19 @@ const SmartLearningPage = () => {
     fetchSelfSessionPercentage();
   }, [selectedTopic?.topicId]);
 
+  if (!topicTree || topicTree.length === 0) {
+    return (
+      <div className="space-y-3 p-4">
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+        <Skeleton height={50} variant="text" width="100%" />
+      </div>
+    );
+  }
+
   // ========== Render ==========
   return (
     <div className="h-full flex flex-col flex-grow">
@@ -148,7 +162,13 @@ const SmartLearningPage = () => {
                 }
               />
             ) : (
-              <></>
+              <>
+                <div className="space-y-3 p-4">
+                  <Skeleton height={300} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                  <Skeleton height={70} variant="text" width="100%" />
+                </div>
+              </>
             )
           }
           hideSecondary={
