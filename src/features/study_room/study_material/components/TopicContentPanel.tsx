@@ -8,6 +8,7 @@ import { FiFilter } from "react-icons/fi";
 // Components
 import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
+import { Skeleton } from "../../../../components/SkeletonLoader";
 
 interface TopicContentPanelProps {
   selectedTopic: Topic;
@@ -54,7 +55,15 @@ const TopicContentPanel = ({
             />
           ))
         ) : (
-          <></>
+          <>
+            <div className="space-y-3 p-4">
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+            </div>
+          </>
         )}
       </div>
     </div>

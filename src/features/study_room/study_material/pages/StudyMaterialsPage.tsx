@@ -27,6 +27,7 @@ import TopicContentPanel from "../components/TopicContentPanel";
 import TextContentModalView from "../components/TextContentModalView";
 import MediaContentModalView from "../components/MediaContentModalVIew";
 import { Skeleton } from "../../../../components/SkeletonLoader";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -43,6 +44,7 @@ const StudyMaterialsPage = () => {
   const contentFilterType = useSMStore((s) => s.contentFilterType);
   const selectedContent = useSMStore((s) => s.selectedContent);
   const textContent = useSMStore((s) => s.textContent);
+  const loading = useLoadingStore((s) => s.loading);
 
   // Actions
   const setTopicTree = useSMStore((s) => s.setTopicTree);
@@ -101,19 +103,6 @@ const StudyMaterialsPage = () => {
     getTextContent();
   }, [selectedContent?.id]);
 
-  if (!topicTree || topicTree.length === 0) {
-    return (
-      <div className="space-y-3 p-4">
-        <Skeleton height={50} variant="text" width="100%" />
-        <Skeleton height={50} variant="text" width="100%" />
-        <Skeleton height={50} variant="text" width="100%" />
-        <Skeleton height={50} variant="text" width="100%" />
-        <Skeleton height={50} variant="text" width="100%" />
-        <Skeleton height={50} variant="text" width="100%" />
-      </div>
-    );
-  }
-
   // ========== Render ==========
   return (
     <div className="h-full flex flex-col flex-grow">
@@ -125,17 +114,32 @@ const StudyMaterialsPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            <TopicTreeView
-              topics={topicTree || []}
-              selectedTopic={selectedTopic}
-              onClickHandler={(t) => setSelectedTopicId(t ? t?.topicId : null)}
-              getId={(t) => t.topicId}
-              getLabel={(t) => t.topicName}
-              getChildren={(t) => t.children}
-            />
+            loading && (!topicTree || topicTree.length === 0) ? (
+              <>
+                <div className="space-y-4 p-4">
+                  <Skeleton height={30} variant="text" />
+                  <Skeleton height={30} variant="text" />
+                  <Skeleton height={30} variant="text" />
+                  <Skeleton height={30} variant="text" />
+                  <Skeleton height={30} variant="text" />
+                  <Skeleton height={30} variant="text" />
+                </div>
+              </>
+            ) : (
+              <TopicTreeView
+                topics={topicTree || []}
+                selectedTopic={selectedTopic}
+                onClickHandler={(t) =>
+                  setSelectedTopicId(t ? t?.topicId : null)
+                }
+                getId={(t) => t.topicId}
+                getLabel={(t) => t.topicName}
+                getChildren={(t) => t.children}
+              />
+            )
           }
           secondaryContent={
-            topicContentList && selectedTopic ? (
+            !loading && topicContentList && selectedTopic ? (
               <TopicContentPanel
                 setSelectedContent={setSelectedContent}
                 topicContentList={topicContentList}
@@ -144,13 +148,13 @@ const StudyMaterialsPage = () => {
               />
             ) : (
               <>
-                <div className="space-y-3 p-4">
-                  <Skeleton height={70} variant="text" width="100%" />
-                  <Skeleton height={70} variant="text" width="100%" />
-                  <Skeleton height={70} variant="text" width="100%" />
-                  <Skeleton height={70} variant="text" width="100%" />
-                  <Skeleton height={70} variant="text" width="100%" />
-                  <Skeleton height={70} variant="text" width="100%" />
+                <div className="mt-4 space-y-3 p-4">
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
                 </div>
               </>
             )

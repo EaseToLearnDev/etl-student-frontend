@@ -33,7 +33,7 @@ export const Skeleton: React.FC<SkeletonProps> = ({
   animation = "pulse",
   ...props
 }) => {
-  const baseClasses = "bg-[rgba(0,0,0,0.1)]" //Change Loader Color
+  const baseClasses = "bg-[var(--skeleton-bg)]"
 
   const variantClasses = {
     text: "h-4 rounded",
