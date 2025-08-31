@@ -14,6 +14,8 @@ import { Modal } from "../../../../components/Modal";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import { handleStartTest } from "../../topic_test/services/handleStartTest";
 import { useNavigate } from "react-router";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TableSkeleton } from "../../../../components/TableSkeleton";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -21,6 +23,7 @@ import { useNavigate } from "react-router";
 const ClassTestPage = () => {
   const navigate = useNavigate();
   const testList = useCTStore((s) => s.testList);
+  const loading = useLoadingStore((s) => s.loading);
   const setTestList = useCTStore((s) => s.setTestList);
   const selectedTest = useCTStore((s) => s.selectedTest);
   const setSelectedTest = useCTStore((s) => s.setSelectedTest);
@@ -80,7 +83,10 @@ const ClassTestPage = () => {
     fetchData();
   }, []);
 
-  return testList ? (
+  return loading ? (
+    <TableSkeleton />
+  ): 
+  (testList ? (
     <div className="flex">
       <PaginatedTable
         columns={columns}
@@ -122,7 +128,7 @@ const ClassTestPage = () => {
         <h5>No Class Test Available</h5>
       </div>
     </div>
-  );
+  ));
 };
 
 export default ClassTestPage;

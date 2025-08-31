@@ -28,6 +28,7 @@ import TextContentModalView from "../components/TextContentModalView";
 import MediaContentModalView from "../components/MediaContentModalVIew";
 import { Skeleton } from "../../../../components/SkeletonLoader";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -116,14 +117,7 @@ const StudyMaterialsPage = () => {
           primaryContent={
             loading && (!topicTree || topicTree.length === 0) ? (
               <>
-                <div className="space-y-4 p-4">
-                  <Skeleton height={30} variant="text" />
-                  <Skeleton height={30} variant="text" />
-                  <Skeleton height={30} variant="text" />
-                  <Skeleton height={30} variant="text" />
-                  <Skeleton height={30} variant="text" />
-                  <Skeleton height={30} variant="text" />
-                </div>
+                <TreeViewSkeleton />
               </>
             ) : (
               <TopicTreeView

@@ -30,6 +30,8 @@ import { Modal } from "../../../../components/Modal";
 import { type Topic } from "../../../shared/types";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -62,6 +64,8 @@ const TopicTestPage = () => {
   const setShowPreviousTestModal = useTTStore(
     (s) => s.setShowPreviousTestModal
   );
+
+  const loading = useLoadingStore((s) => s.loading);
 
   // States
   const [hideSecondary, setHideSecondary] = useState<boolean>(
@@ -141,6 +145,8 @@ const TopicTestPage = () => {
                   });
                 }}
               />
+            ) : loading ? (
+              <TreeViewSkeleton />
             ) : (
               <TopicTreeView
                 topics={topicTree || []}
