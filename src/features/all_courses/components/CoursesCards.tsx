@@ -1,112 +1,73 @@
-import { Link } from "react-router-dom";
-import { FaDizzy } from "react-icons/fa";
-import Badge from "../../../components/Badge";
-import { Theme } from "../../../utils/colors";
+// Types
+import type { CategoryType, CourseType } from "../../shared/types";
+
+// Utils
+import cn from "../../../utils/classNames";
+
+// Store
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
-interface Course {
-  courseId: number;
-  courseTitle: string;
-  courseSubTitle: string;
-  categoryName: string;
-  image: string;
-  featuresList: string[];
-}
+// Components
+import CourseCard from "./CourseCard";
+import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
 
 interface CoursesCardsProps {
   search: string;
-  courseList: Course[];
+  courseList: CourseType[];
+  selectedCourse: CourseType | null;
   hideSecondary: boolean;
-  selectedCategories: string[];
-  onCourseClick?: (course: Course) => void;
+  selectedCategories: CategoryType[];
+  onCourseClick?: (course: CourseType) => void;
 }
 
+/**
+ * Displays a list of course cards filtered by search and selected categories.
+ */
 const CoursesCards = ({
   search,
   courseList,
-  hideSecondary,
+  selectedCourse,
   selectedCategories,
   onCourseClick,
 }: CoursesCardsProps) => {
   const { studentData } = useStudentStore.getState();
-  const filteredCourses = courseList.filter(
-    (course): course is Course =>
-      (course.courseTitle.toLowerCase().includes(search.toLowerCase()) ||
-        course.courseSubTitle.toLowerCase().includes(search.toLowerCase())) &&
-      (selectedCategories.length === 0 ||
-        selectedCategories.includes(course.categoryName))
-  );
+  const filteredCourses = courseList.filter((course) => {
+    const matchesSearch =
+      course.courseTitle.toLowerCase().includes(search.toLowerCase()) ||
+      course.courseSubTitle.toLowerCase().includes(search.toLowerCase());
+
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.some(
+        (cat) => cat.categoryName === course.categoryName
+      );
+    return matchesSearch && matchesCategory;
+  });
 
   if (filteredCourses.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-        <FaDizzy size={60} className="mb-3 text-gray-400" />
-        <p className="text-lg font-medium">No courses found</p>
+      <div className="w-full h-full flex flex-col items-center justify-center text-[var(--text-tertiary)]">
+        <ArchiveBoxIcon width={100} height={100} />
+        <h5 className="text-lg font-medium">No courses found</h5>
       </div>
     );
   }
 
   return (
-    <div
-      id="courses-container"
-      className={`grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 ${
-        hideSecondary ? "lg:grid-cols-4" : "lg:grid-cols-3"
-      }`}
-    >
+    <div className={cn("grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4")}>
       {filteredCourses.map((course) => {
-        const alreadyPurchased = studentData?.courses?.some(
-          (c) => c.courseId === course.courseId
-        );
-        const cardContent = (
-          <>
-            <img
-              src={
-                course.image ??
-                "https://images.hdqwalls.com/wallpapers/bthumb/bmw-m4-gt3-evo-j2.jpg"
-              }
-              alt={course.courseTitle}
-              className="h-40 w-full object-cover"
-            />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex flex-row items-center justify-between">
-                <h6 className="text-[var(--text-primary)]">
-                  {course.courseTitle}
-                </h6>
-                {alreadyPurchased && (
-                  <Badge
-                    theme={Theme.GreenHaze}
-                    style="filled"
-                    className="px-2 py-1"
-                  >
-                    <span>Purchased</span>
-                  </Badge>
-                )}
-              </div>
-              <span className="text-[var(--text-tertiary)]">
-                {course.courseSubTitle}
-              </span>
-            </div>
-          </>
-        );
-        
-        return onCourseClick ? (
-          <div
-            key={course.courseId}
-            onClick={() => onCourseClick(course)}
-            className="bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform cursor-pointer"
-          >
-            {cardContent}
-          </div>
-        ) : (
-          <Link
-            key={course.courseId}
-            to={`/course/${course.courseId}`}
-            className="bg-[var(--surface-bg-primary)] border-1 border-[var(--border-secondary)] shadow-md rounded-xl overflow-hidden hover:shadow-lg transition hover:scale-105 transform"
-          >
-            {cardContent}
-          </Link>
-        );
-      })}
+        const existingCourse = studentData?.courses?.find((c) => c.courseId === course.courseId);
+        const status = existingCourse ? `Enrolled: ${existingCourse?.packTypeTitle}` : '';
+        return (
+        <CourseCard
+          key={course?.courseId}
+          course={course}
+          onClick={() => onCourseClick?.(course)}
+          status={status}
+          isActive={selectedCourse?.courseId === course?.courseId}
+        />
+      )}
+      )}
     </div>
   );
 };

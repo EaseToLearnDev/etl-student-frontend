@@ -1,25 +1,31 @@
-import type { FeaturesList, SelectedCourse } from "../../shared/types";
+import { MdClose } from "react-icons/md";
+import cn from "../../../utils/classNames";
+import type { CourseType } from "../../shared/types";
 import { PlanBody } from "./PlanBody";
-import { PlanFeatures } from "./PlanFeatures";
-
 
 interface PlanDetailsProps {
-  course: SelectedCourse;
+  course: CourseType;
+  onClose: () => void;
 }
 
-export const PlanDetails = ({ course }: PlanDetailsProps) => {
-  const features = course.featuresList as FeaturesList[] ?? []
+export const PlanDetails = ({ course, onClose }: PlanDetailsProps) => {
+  const features = course.featuresList;
   return (
-    <div className="flex gap-4">
-      <div className="max-h-[500px] w-1/2 overflow-y-scroll">
-        <PlanFeatures features={features} />
-      </div>
-      <div className="w-1/2">
-        <PlanBody
-          coursePlan={course.twoPriceList}
-          courseTitle={course.courseTitle}
-          courseId={course.courseId}
-        />
+    <div className="relative">
+      <PlanBody
+        features={features}
+        coursePlan={course.twoPriceList}
+        courseTitle={course.courseTitle}
+        courseId={course.courseId}
+      />
+      <div
+        onClick={onClose}
+        className={cn(
+          "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+          " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+        )}
+      >
+        <MdClose size={20} />
       </div>
     </div>
   );

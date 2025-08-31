@@ -22,7 +22,7 @@ export const handlePaymentButton = ({
 
   const { loginId, token } = studentData;
   try {
-    const res = paymentTokenGenerateMultiplePricing({
+    const data = paymentTokenGenerateMultiplePricing({
       option,
       courseId,
       courseTitle,
@@ -31,7 +31,7 @@ export const handlePaymentButton = ({
       loginId,
       token,
     });
-    return res;
+    return data;
   } catch (error) {
     console.log("Failed to Direct to the Payment: ", error);
     return null;

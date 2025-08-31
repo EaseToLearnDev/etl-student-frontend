@@ -163,6 +163,42 @@ export interface Error {
 
 export type TreeViewType = "topic" | "learning" | "mock" | "smart" | "test";
 
+export interface CategoryType {
+  categoryId: number;
+  categoryName: string;
+  coursesList: CourseType[];
+}
+
+export interface CourseType {
+  courseId: number;
+  courseTitle: string;
+  courseSubTitle: string;
+  categoryName: string;
+  image: string;
+  promoList: any[];
+  featuresList?: FeaturesList[];
+  twoPriceList: PriceList[];
+}
+
+export interface PriceList {
+  packType: string;
+  list: PriceDetailsList[];
+  index: number;
+}
+
+export interface PriceDetailsList {
+  courseId: number;
+  description: string;
+  discount: number;
+  packId: number;
+  retailPrice: number;
+  salePrice: number;
+  title: string;
+  validityDate: string;
+  validityDuration: number;
+  validityType: number;
+}
+
 export interface FeaturesList {
   sectionType: string;
   list: SectionList[];
@@ -184,36 +220,8 @@ export interface ChileSectionList {
   title: string;
 }
 
+// For checking if course is purchased or not
 export interface OptionalFlagsList {
   optionFlag: boolean;
-  optionLabel: boolean;
-}
-
-export interface PriceDetailsList {
-  courseId: number;
-  description: string;
-  discount: number;
-  packId: number;
-  retailPrice: number;
-  salePrice: number;
-  title: string;
-  validityDate: string;
-  validityDuration: number;
-  validityType: number;
-}
-
-export interface PriceList {
-  packType: string;
-  list: PriceDetailsList[];
-  index: number
-}
-
-export interface SelectedCourse {
-  courseId: number;
-  courseTitle: string;
-  courseSubTitle: string;
-  categoryName: string;
-  image: string;
-  featuresList?: FeaturesList[];
-  twoPriceList: PriceList[];
+  optionLabel: string;
 }

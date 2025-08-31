@@ -149,7 +149,7 @@ body {
 body.dark-mode {
   --app-bg: #000000;
 
-  --surface-bg-primary: #09090b;
+  --surface-bg-primary: #0d0d0d;
   --surface-bg-secondary: #18181b;
   --surface-bg-tertiary: #27272a;
 

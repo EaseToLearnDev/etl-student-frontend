@@ -22,5 +22,5 @@ export const categoryAndCourses = async ({
   }
 );
 
-  return res?.data ?? null;
+  return res?.data?.obj ?? null;
 };
