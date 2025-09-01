@@ -1,4 +1,5 @@
 // Components
+import EmptyState from "../../../components/EmptyState";
 import Topic from "./Topic";
 
 interface TopicListProps<T> {
@@ -23,6 +24,9 @@ const TopicTreeView = <T,>({
   getChildren,
   renderRightSection,
 }: TopicListProps<T>) => {
+  if (!topics || topics.length === 0) {
+    return <EmptyState title="No Topics Available" />;
+  }
   return (
     <div>
       {topics?.map((topic) => (

@@ -11,6 +11,7 @@ import { loadDashboardData } from "../services/loadDashboardData";
 import BorderedCard from "../../../components/BorderedCard";
 import PerformanceBarChart from "../components/PerformanceBarChart";
 import PerformancePieChart from "../components/PerformancePieChart";
+import EmptyState from "../../../components/EmptyState";
 
 const ReportOverviewPage = () => {
   const overviewData = useReportOverviewStore((s) => s.overviewData);
@@ -42,6 +43,8 @@ const ReportOverviewPage = () => {
         toolTip: String(report?.y), // % value
       };
     }) || [];
+
+    if(!parseReportValues || !overviewData) return <EmptyState title="No Overview Data Available" />;
 
   return (
     <div className="px-5 pb-5 h-full flex flex-col flex-grow scrollbar-hide overflow-y-auto">

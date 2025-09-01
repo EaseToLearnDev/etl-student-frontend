@@ -10,6 +10,7 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 // Components
 import CourseCard from "./CourseCard";
 import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
+import EmptyState from "../../../components/EmptyState";
 
 interface CoursesCardsProps {
   search: string;
@@ -46,10 +47,10 @@ const CoursesCards = ({
 
   if (filteredCourses.length === 0) {
     return (
-      <div className="w-full h-full flex flex-col items-center justify-center text-[var(--text-tertiary)]">
-        <ArchiveBoxIcon width={100} height={100} />
-        <h5 className="text-lg font-medium">No courses found</h5>
-      </div>
+      <EmptyState 
+        title="No courses found"
+        icon={<ArchiveBoxIcon width={100} height={100} />}
+      />
     );
   }
 

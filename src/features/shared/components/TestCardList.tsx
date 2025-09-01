@@ -1,4 +1,5 @@
 // Types
+import EmptyState from "../../../components/EmptyState";
 import type { MockTest, TopicTest } from "../types";
 
 // Utils
@@ -21,6 +22,7 @@ const TestCardList = ({
   infoClickHandler,
   onClickHandler,
 }: TestCardListProps) => {
+  if(!tests) return <EmptyState title="No Tests Available" />
   return (
     <div className="flex flex-col gap-4">
       {tests?.map((test, index) => {

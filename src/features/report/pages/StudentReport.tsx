@@ -34,6 +34,7 @@ import ReportOverviewPage from "./ReportOverviewPage";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TableSkeleton } from "../../../components/TableSkeleton";
 import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
+import EmptyState from "../../../components/EmptyState";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -144,6 +145,8 @@ const StudentReport = () => {
       }
     }
   };
+
+  if(!reportData || !sessionData) return <EmptyState title="No Report Data Available" />;
 
   const tabContents = [
     <ReportOverviewPage />,

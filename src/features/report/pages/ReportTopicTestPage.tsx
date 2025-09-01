@@ -3,6 +3,7 @@ import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import type { Column } from "../../../components/types";
 import type { TestReportdata } from "./ReportMockTestPage";
 import Button from "../../../components/Button";
+import EmptyState from "../../../components/EmptyState";
 
 interface ReportTopicTestPageProps {
   data: TestReportdata[];
@@ -42,10 +43,11 @@ const ReportTopicTestPage = ({
           />
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
-          <ArchiveBoxXMarkIcon className="h-48 w-48 mb-2" />
-          <p>No Topic Test Data Available</p>
-        </div>
+        <EmptyState
+          title="No Topic Test Data Available"
+          icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
+          className="min-h-[60vh]"
+        />
       )}
     </>
   );
