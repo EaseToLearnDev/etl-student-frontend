@@ -1,5 +1,5 @@
 import cn from "../../../utils/classNames";
-import type { PriceDetailsList } from "../allCourses.types";
+import type { PriceDetailsList } from "../../shared/types";
 
 interface PlanCardProps {
   plan: PriceDetailsList;

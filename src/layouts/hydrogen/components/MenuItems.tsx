@@ -1,7 +1,6 @@
 import {
   PiBooksFill,
   PiBrainFill,
-  PiChartBarFill,
   PiChartLineFill,
   PiClipboardTextFill,
   PiHouseFill,
@@ -79,7 +78,7 @@ export const menuItems: MenuItem[] = [
   {
     id: "report",
     name: "Reports",
-    href: "/report/overview",
+    href: "/report",
     static: false,
     icon: <PiChartLineFill />,
     // menuItems: [

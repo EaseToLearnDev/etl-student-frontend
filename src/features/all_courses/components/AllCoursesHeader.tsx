@@ -2,7 +2,7 @@
 import { FiFilter, FiSearch } from "react-icons/fi";
 
 // Types
-import type { CategoryType } from "../allCourses.types";
+import type { CategoryType } from "../../shared/types";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";

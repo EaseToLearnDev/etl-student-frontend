@@ -1,4 +1,4 @@
-import type { CategoryType } from "../allCourses.types";
+import type { CategoryType } from "../../shared/types";
 
 export const handleRemoveCategory = (
   categoryList: CategoryType[],

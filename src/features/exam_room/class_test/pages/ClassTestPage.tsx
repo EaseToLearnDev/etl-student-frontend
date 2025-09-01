@@ -1,19 +1,24 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
+// Icons
+import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
+
 // Types
 import type { Column } from "../../../../components/types";
 
 // Store
 import { useCTStore } from "../../../../global/hooks/useCTStore";
 
-// Components
-import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
-import Button from "../../../../components/Button";
-import ArchiveBoxIcon from "../../../../components/icons/archive-box-icon";
-import { useEffect } from "react";
+// Services
 import { loadClassTestList } from "../../../../global/services/loadClassTestList";
-import { Modal } from "../../../../components/Modal";
-import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import { handleStartTest } from "../../topic_test/services/handleStartTest";
-import { useNavigate } from "react-router";
+
+// Components
+import { Modal } from "../../../../components/Modal";
+import Button from "../../../../components/Button";
+import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
+import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TableSkeleton } from "../../../../components/TableSkeleton";
 
@@ -123,9 +128,9 @@ const ClassTestPage = () => {
     </div>
   ) : (
     <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
-      <div className="flex flex-col gap-2 items-center justify-center">
-        <ArchiveBoxIcon width={100} height={100} />
-        <h5>No Class Test Available</h5>
+      <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
+        <ArchiveBoxXMarkIcon className="h-45 w-45 mb-2" />
+        <p>No Class Tests Available</p>
       </div>
     </div>
   ));
