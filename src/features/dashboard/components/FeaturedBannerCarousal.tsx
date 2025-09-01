@@ -22,7 +22,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
   const selectedContent = useSMStore((s) => s.selectedContent);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
-  const mobile = useIsMobile()
+  const mobile = useIsMobile();
 
   const tutorialCards = [
     {
@@ -70,31 +70,37 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     <div key="slide-1" className="relative w-full h-full flex-shrink-0">
       <img
         src="/dashboard_banner.png"
-        className="absolute top-0 left-0 w-full h-full select-none pointer-events-none z-10"
+        className="absolute top-0 left-0 w-full h-full object-cover select-none pointer-events-none z-10"
       />
 
-      <div className="absolute top-0 left-0 w-full h-full z-30 p-10">
-        <h3 className="text-white">Welcome Back</h3>
-        <h6 className="text-gray-300 mt-2 max-w-[60ch]">
-          Discover new courses and keep learning.
-        </h6>
-      </div>
+      <div className="relative z-30 flex flex-col justify-between h-full w-full p-6 sm:p-10">
+        <div>
+          <h3 className="text-white">
+            Welcome Back
+          </h3>
+          <p className="text-gray-300 mt-2 max-w-[40ch]">
+            Discover new courses and keep learning.
+          </p>
+        </div>
 
-      <div className="w-full absolute bottom-0 left-0 z-30 p-10 flex items-center gap-5">
-        <button className="bg-white hover:bg-gray-300 p-4 text-black font-medium rounded-xl transition-all duration-200 ease">
-          Explore Features
-        </button>
-        <button onClick={() => setSelectedSlideIndex(1)} className="text-white">
-          Watch Tutorials
-        </button>
-        {/* Conditionally Render If Profile Incomplete */}
-        <Link
-          to={"/profile"}
-          className="ml-auto border border-white/50 hover:bg-white/10 p-4 rounded-xl flex items-center gap-2 text-white transition-all duration-200 ease"
-        >
-          Complete Profile
-          <ArrowRightIcon width={16} height={16} />
-        </Link>
+        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5">
+          <button className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease">
+            Explore Features
+          </button>
+          <button
+            onClick={() => setSelectedSlideIndex(1)}
+            className="text-white border border-white/40 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl hover:bg-white/10 transition"
+          >
+            Watch Tutorials
+          </button>
+          <Link
+            to={"/profile"}
+            className="sm:ml-auto border border-white/50 hover:bg-white/10 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 text-white transition-all duration-200 ease"
+          >
+            Complete Profile
+            <ArrowRightIcon width={14} height={14} className="sm:w-4 sm:h-4" />
+          </Link>
+        </div>
       </div>
     </div>,
 
@@ -115,7 +121,11 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             </div>
             <div>
               <h6 className="text-lg font-semibold">{card.title}</h6>
-              {mobile ? "" : <p className="text-sm text-gray-200">{card.description}</p>}
+              {mobile ? (
+                ""
+              ) : (
+                <p className="text-sm text-gray-200">{card.description}</p>
+              )}
             </div>
           </div>
         ))}
@@ -182,8 +192,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           className="p-4 lg:p-10"
           containerClassName="!h-full !w-full !max-w-full"
         >
-
-           <MediaContentModalView content={selectedContent} />
+          <MediaContentModalView content={selectedContent} />
           <div
             onClick={() => setSelectedContent(null)}
             className={cn(
