@@ -11,6 +11,7 @@ import { Modal } from "../../../components/Modal";
 import { MdClose } from "react-icons/md";
 import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
 import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
@@ -21,6 +22,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
   const selectedContent = useSMStore((s) => s.selectedContent);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
+  const mobile = useIsMobile()
 
   const tutorialCards = [
     {
@@ -101,7 +103,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       key="slide-2"
       className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center p-10"
     >
-      <div className="grid grid-cols-3 gap-5 w-full h-full select-none">
+      <div className="grid grid-cols-3 gap-5 w-full h-fit select-none">
         {tutorialCards.map((card, i) => (
           <div
             key={i}
@@ -113,7 +115,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             </div>
             <div>
               <h6 className="text-lg font-semibold">{card.title}</h6>
-              <p className="text-sm text-gray-200">{card.description}</p>
+              {mobile ? "" : <p className="text-sm text-gray-200">{card.description}</p>}
             </div>
           </div>
         ))}
