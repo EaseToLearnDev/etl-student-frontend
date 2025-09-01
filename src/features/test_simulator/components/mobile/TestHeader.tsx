@@ -12,20 +12,17 @@ const TestHeader = () => {
   const setIsSubmissionModalOpen = useTestStore(
     (state) => state.setIsSubmissionModalOpen
   );
-  const setIsContinueLaterModalOpen = useTestStore(
-    (state) => state.setIsContinueLaterModalOpen
-  );
 
   return (
     <div className="flex items-center justify-between p-2">
       <h3 className="text-ellipsis line-clamp-1 flex-1">{testTitle}</h3>
       <div className="flex items-center gap-2">
-        <Button
+        {/* <Button
           onClick={() => setIsContinueLaterModalOpen(true)}
           style="secondary"
         >
           End Session
-        </Button>
+        </Button> */}
         <Button onClick={() => setIsSubmissionModalOpen(true)}>Submit</Button>
       </div>
     </div>

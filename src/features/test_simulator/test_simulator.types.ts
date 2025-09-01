@@ -141,3 +141,9 @@ export interface TestSubmitRequest {
   className: string;
   helpCounter: number;
 }
+
+
+export enum AIModalView {
+  AIContent,
+  StudyMaterialContent,
+}
