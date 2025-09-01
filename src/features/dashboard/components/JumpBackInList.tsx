@@ -1,18 +1,31 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { JumpBackInCardType } from "../dashboard.types";
 import JumpBackInCard from "./JumpBackInCard";
+import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
+import type { PrevRunningTest } from "../../shared/types";
 
 const JumpBackInList = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [data, setdata] = useState<PrevRunningTest | null>(null);
 
-  const dummyData: JumpBackInCardType[] = [
-    { subject: "Physics", topicTitle: "Motions-Speed", progress: 80 },
-    { subject: "Chemistry", topicTitle: "Reactions-Types", progress: 95 },
-    { subject: "Chemistry", topicTitle: "Acid and Bases", progress: 75 },
-    { subject: "Maths", topicTitle: "Algebra", progress: 60 },
-    { subject: "Biology", topicTitle: "Human Heart", progress: 88 },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await loadPreviousRunningTest();
+      if(data) {
+        setdata(data);
+      }
+    } 
+    fetchData();
+  }, [])
+
+const cardData: JumpBackInCardType[] = 
+  data
+    ? [{
+        subject: data.testMode || "",
+        topicTitle: data.testName || "",
+      }]
+    : [];
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -52,7 +65,7 @@ const JumpBackInList = () => {
         ref={scrollRef}
         className="max-w-full flex overflow-x-auto scrollbar-hide pt-4 scroll-smooth snap-x snap-mandatory"
       >
-        {dummyData?.map((data, idx) => (
+        {cardData?.map((data, idx) => (
           <div
             key={idx}
             className="snap-start shrink-0 basis-[calc((100%-60px)/4)] mr-5 last:mr-0"
