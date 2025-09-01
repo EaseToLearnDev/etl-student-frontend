@@ -17,6 +17,7 @@ import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
 import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import AiHelpModal from "../components/AiHelpModal";
+import { useAiStore } from "../store/useAiStore";
 
 const TestSimulatorPage = () => {
   const location = useLocation();
@@ -36,10 +37,11 @@ const TestSimulatorPage = () => {
   const setIsSubmissionModalOpen = useTestStore(
     (s) => s.setIsSubmissionModalOpen
   );
-  const setIsHelpModalOpen = useTestStore((s) => s.setIsHelpModalOpen);
-  const isHelpModalOpen = useTestStore((s) => s.isHelpModalOpen);
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
   const startTestTimer = useTestTimerStore((s) => s.startTestTimer);
   const stopTestTimer = useTestTimerStore((s) => s.stopTestTimer);
+  const setIsAiFeatureEnabled = useAiStore((s) => s.setIsAiFeatureEnabled);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -57,6 +59,9 @@ const TestSimulatorPage = () => {
 
         if (testConfig?.assessmentMode === "advance") {
           startTestTimer(data?.remainingTime ?? 0);
+        }
+        if (testConfig?.testType === 1) {
+          setIsAiFeatureEnabled(true);
         }
 
         startQuestionTimer();

@@ -11,14 +11,25 @@ import {
 import { useAiStore } from "../store/useAiStore";
 import { AIModalView } from "../test_simulator.types";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { handleOpenAI } from "../services/handleOpenAI";
+import useTestStore from "../store/useTestStore";
+import { checkForTable } from "../../../utils";
+import { goGoogle } from "../services/goGoogle";
+import { useEffect } from "react";
+import { getHelpContent } from "../services/getHelpContent";
+import TopicContentItem from "../../study_room/study_material/components/TopicContentItem";
 
 interface AiHelpModalInterface {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const AIContent = () => {
+const Main = () => {
   const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
+  const loading = useLoadingStore((s) => s.loading);
+  const currentQuestion = useTestStore((s) => s.getCurrentQuestion());
+  const setSolution = useAiStore((s) => s.setSolution);
 
   return (
     <div>
@@ -43,8 +54,25 @@ const AIContent = () => {
         the reasons of the answer and not only the answer.
       </p>
 
-      <Button className="mt-7 w-full">
-        <LuBot size={20} /> {"Ask TONY (Your AI Teacher)"}
+      <Button
+        className="mt-7 w-full"
+        disabled={loading}
+        onClick={() =>
+          handleOpenAI({ questionId: currentQuestion?.questionId }).then(
+            (v) => {
+              setSolution(v ? v : "");
+              setCurrentModalView(AIModalView.AIContent);
+            }
+          )
+        }
+      >
+        {!loading ? (
+          <>
+            <LuBot size={20} /> {"Ask TONY (Your AI Teacher)"}
+          </>
+        ) : (
+          "Please Wait..."
+        )}
       </Button>
 
       {/* Secondary Actions */}
@@ -52,6 +80,12 @@ const AIContent = () => {
         <Button
           style="secondary"
           className="hover:bg-[var(--surface-bg-tertiary)]"
+          onClick={() =>
+            goGoogle({
+              questionText: currentQuestion?.questionBody,
+              responseChoices: currentQuestion?.responseChoice,
+            })
+          }
         >
           <MagnifyingGlassIcon width={20} height={20} />
           Search Google
@@ -69,7 +103,8 @@ const AIContent = () => {
   );
 };
 
-const StudyMaterialContent = () => {
+const AIContent = () => {
+  const solution = useAiStore((s) => s.solution);
   const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
 
   return (
@@ -77,9 +112,9 @@ const StudyMaterialContent = () => {
       <div className="flex justify-between items-center gap-4 py-2">
         <div
           onClick={() => {
-            setCurrentModalView(AIModalView.AIContent);
+            setCurrentModalView(AIModalView.Main);
           }}
-          className="flex gap-2 items-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] border-none hover:bg-[var(--surface-bg-tertiary)]"
+          className="flex gap-2 items-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
         >
           <ArrowLeftIcon className="w-4 h-4" />
           <p>Back</p>
@@ -89,32 +124,119 @@ const StudyMaterialContent = () => {
           <p className="text-[var(--text-secondary)]">Tony's Response</p>
         </div>
       </div>
-      <WidgetCard className="min-h-[300px] w-full mt-2"></WidgetCard>
+      <WidgetCard className="w-full mt-2">
+        {solution ? (
+          <div
+            className="text_content w-full min-h-[300px]"
+            dangerouslySetInnerHTML={{
+              __html: checkForTable(solution?.trim().replace(/[\r\n]+/g, "")),
+            }}
+          />
+        ) : (
+          <div className="w-full grid place-items-center min-h-[200px]">
+            <h6 className="text-[var(--text-secondary)]">
+              Our AI could not find solution for some reason. Try after sometime
+            </h6>
+          </div>
+        )}
+      </WidgetCard>
+      <WidgetCard className="mt-4 bg-[var(--sb-sunglow-bg-disabled)] !p-4">
+        <p className="!font-semibold">Disclaimer</p>
+        <span className="text-[var(-text-secondary)]">
+          Tony AI is an NLP model for increasing conceptual understanding and
+          sometimes may give inaccurate answers more so in image-based
+          questions. When in doubt, seek ETL teachers support in Report &
+          Analytics. ETL Teacher would also respond if you have SKIPPED the
+          question.
+        </span>
+      </WidgetCard>
+    </div>
+  );
+};
+
+const StudyMaterialContent = () => {
+  const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
+  const studyMaterial = useAiStore((s) => s.studyMaterial);
+
+  return (
+    <div>
+      <div className="flex justify-between items-center gap-4 py-2">
+        <div
+          onClick={() => {
+            setCurrentModalView(AIModalView.Main);
+          }}
+          className="flex gap-2 items-center text-[var(--text-secondary)] hover:text-[var(--text-primary)] cursor-pointer"
+        >
+          <ArrowLeftIcon className="w-4 h-4" />
+          <p>Back</p>
+        </div>
+      </div>
+      <WidgetCard className="min-h-fit max-h-[400px] w-full mt-2 overflow-y-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {studyMaterial && studyMaterial?.length > 0 ? (
+            studyMaterial?.map((content) => (
+              <TopicContentItem
+                key={content?.id}
+                content={content}
+                onClickHandler={() => {}}
+              />
+            ))
+          ) : (
+            <div className="w-full grid place-items-center min-h-[100px]">
+              <h6 className="text-[var(--text-secondary)]">
+                No study materials available for this topic.
+              </h6>
+            </div>
+          )}
+        </div>
+      </WidgetCard>
     </div>
   );
 };
 
 const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
   const currentModalView = useAiStore((s) => s.currentModalView);
+  const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
+  const testConfig = useTestStore((s) => s.testConfig);
+  const currentQuestion = useTestStore((s) => s.getCurrentQuestion());
+  const setStudyMaterial = useAiStore((s) => s.setStudyMaterial);
 
   // map enum to component
   const views = {
+    [AIModalView.Main]: <Main />,
     [AIModalView.AIContent]: <AIContent />,
     [AIModalView.StudyMaterialContent]: <StudyMaterialContent />,
   };
+
+  useEffect(() => {
+    const fetchStudyMaterials = async () => {
+      if (!isOpen) return;
+      const list = await getHelpContent({
+        topicId: currentQuestion?.topicId,
+        searchQuery: testConfig?.searchQuery,
+        searchFlag: testConfig?.searchFlag,
+      });
+      if (list) {
+        setStudyMaterial(list);
+      }
+    };
+    fetchStudyMaterials();
+    return () => setCurrentModalView(AIModalView.Main);
+  }, [isOpen]);
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="md"
+      size="lg"
       className="p-4"
       blur="none"
+      noGutter
     >
-      <div className="relative p-2">
+      <div className="relative p-2 max-h-[500px]">
         {/* Top Header */}
         <div className="flex flex-col gap-4">
-          <div className="flex justify-between items-center gap-4">
+          <div className="sticky top-0 left-0 w-full p-4 bg-[var(--surface-bg-secondary)] flex justify-between items-center gap-4">
             <div className="flex items-center gap-4">
               <div className="flex justify-center items-center size-8 aspect-square bg-[var(--sb-ocean-bg-active)] rounded-md">
                 <BookOpenIcon width={16} height={16} />
@@ -133,7 +255,7 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
           </div>
 
           {/* Main Body */}
-          {views[currentModalView]}
+          <div className="px-4 pb-4">{views[currentModalView]}</div>
         </div>
       </div>
     </Modal>

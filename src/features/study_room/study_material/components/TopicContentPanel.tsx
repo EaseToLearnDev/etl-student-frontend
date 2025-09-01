@@ -51,7 +51,7 @@ const TopicContentPanel = ({
             <TopicContentItem
               key={index}
               content={content}
-              setSelectedContent={setSelectedContent}
+              onClickHandler={setSelectedContent}
             />
           ))
         ) : (

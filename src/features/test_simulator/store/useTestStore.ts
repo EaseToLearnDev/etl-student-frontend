@@ -86,9 +86,6 @@ export interface TestStore {
   isSubmissionModalOpen: boolean;
   setIsSubmissionModalOpen: (v: boolean) => void;
 
-  isHelpModalOpen: boolean;
-  setIsHelpModalOpen: (v: boolean) => void;
-
   reset: () => void;
 }
 
@@ -109,7 +106,6 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionStatusMap: {},
   _questionTimerId: null,
   isSubmissionModalOpen: false,
-  isHelpModalOpen: true,
 
   // Initialize test data
   setTestData: (data) =>
@@ -395,7 +391,6 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
-  setIsHelpModalOpen: (v) => set({ isHelpModalOpen: v }),
   // Reset state
   reset: () => {
     const { stopQuestionTimer: stopTimer } = get();
@@ -413,7 +408,6 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionResponseMap: {},
       questionTimeMap: {},
       isSubmissionModalOpen: false,
-      isHelpModalOpen: false,
     });
   },
 }));

@@ -22,14 +22,16 @@ import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "./ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
-import useTestStore from "../../store/useTestStore";
+import AiIcon from "../../../../components/icons/ai-icon";
+import { useAiStore } from "../../store/useAiStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
  */
 const MobileTestSimulator = () => {
   // States
-  const setIsHelpModalOpen = useTestStore(s => s.setIsHelpModalOpen);
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isAiFeatureEnabled = useAiStore(s => s.isAiFeatureEnabled);
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
@@ -71,23 +73,17 @@ const MobileTestSimulator = () => {
       </div>
 
       {/* Tony AI Floating Button */}
-      <div
+      {isAiFeatureEnabled && <div
         className="fixed bottom-[120px] right-[32px] flex flex-col items-center gap-1"
         onClick={() => {
-          setIsHelpModalOpen(true)
+          setIsHelpModalOpen(true);
         }}
       >
-        <div className="cursor-pointer size-[60px] bg-cyan-300 dark:bg-cyan-700 rounded-full flex justify-center items-center">
-          <img
-            src="/tony-logo.svg"
-            alt="Tony AI"
-            width={50}
-            height={50}
-            className="!size-[50px] object-cover"
-          />
+        <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-secondary)] flex justify-center items-center">
+        <AiIcon width={28} height={28}  />
         </div>
-        <span className="font-semibold !text-xs">TONI AI</span>
-      </div>
+        <span className="font-semibold !text-xs">TONY AI</span>
+      </div>}
 
       {/* Bottom Navigation for tony AI Chat Window
       <BottomNavigationSheet

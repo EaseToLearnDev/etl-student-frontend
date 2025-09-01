@@ -8,33 +8,37 @@ import cn from "../../../../utils/classNames";
 import AiIcon from "../../../../components/icons/ai-icon";
 import QuestionNavigator from "./QuestionNavigator";
 // import AiChatPanel from "../AiChatPanel";
-import useTestStore from "../../store/useTestStore";
+import { useAiStore } from "../../store/useAiStore";
 
 /**
  * TestSidePanel component renders a side panel for the test simulator interface.
  *
  */
 const TestSidePanel = () => {
-  const setIsHelpModalOpen = useTestStore((s) => s.setIsHelpModalOpen);
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
   return (
     <div className="relative h-full flex flex-col gap-5 overflow-y-hidden">
       <div className="flex justify-between items-center">
         {/* <h5>{isAiChatOpen ? "Assistant Tony" : "Questions"}</h5> */}
         <h5>Questions</h5>
-        <button
-          onClick={() => setIsHelpModalOpen(true)}
-          className={cn(
-            "cursor-pointer rounded-full hover:bg-[var(--surface-bg-secondary)]",
-            "w-[32px] h-[32px] flex justify-center items-center"
-          )}
-        >
-          {/* {isAiChatOpen ? (
+
+        {isAiFeatureEnabled && (
+          <button
+            onClick={() => setIsHelpModalOpen(true)}
+            className={cn(
+              "cursor-pointer hover:bg-[var(--surface-bg-secondary)]",
+              "size-10 aspect-square rounded-full flex justify-center items-center"
+            )}
+          >
+            {/* {isAiChatOpen ? (
             <MdChevronLeft size={20} />
           ) : (
             <AiIcon fontSize={18} />
           )} */}
-          <AiIcon fontSize={18} />
-        </button>
+            <AiIcon fontSize={18} />
+          </button>
+        )}
       </div>
       {/* {isAiChatOpen ? <AiChatPanel /> : <QuestionNavigator />} */}
       <QuestionNavigator />
