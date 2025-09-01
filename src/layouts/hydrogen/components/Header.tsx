@@ -28,6 +28,7 @@ import Button from "../../../components/Button";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { handleStudentInvite } from "../../../global/services/handleStudentInvite";
 import FeedbackModal from "./FeedbackModal";
+import { StudentRatingCourseModal } from "./StudentRatingCourseModal";
 
 export default function Header({ className }: { className?: string }) {
   const navigate = useNavigate();
@@ -144,6 +145,7 @@ export default function Header({ className }: { className?: string }) {
         </div>
       </Modal>
       <FeedbackModal />
+      <StudentRatingCourseModal />
     </StickyHeader>
   );
 }

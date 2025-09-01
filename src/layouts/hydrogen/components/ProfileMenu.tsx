@@ -3,7 +3,7 @@ import { useState, type ReactElement, type RefObject } from "react";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
-import { MdFeedback, MdPayments } from "react-icons/md";
+import { MdFeedback, MdPayments, MdStar } from "react-icons/md";
 import { BiSolidVideos } from "react-icons/bi";
 
 // Store
@@ -21,6 +21,7 @@ import { RiUserSettingsFill } from "react-icons/ri";
 import { Link } from "react-router";
 import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
 import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
+import { useRatingCourseStore } from "../../../global/hooks/useRatingCourseStore";
 
 export default function ProfileMenuDropDown({
   children,
@@ -76,6 +77,11 @@ const menuItems = [
     icon: <MdFeedback />,
   },
   {
+    name: "Rating a Course",
+    href: "#",
+    icon: <MdStar />,
+  },
+  {
     name: "Settings",
     href: "/settings",
     icon: <RiUserSettingsFill />,
@@ -87,6 +93,7 @@ const DropdownMenu = () => {
 
   const setShowInviteTeacherModal = useInviteTeacherStore((s) => s.setShowInviteTeacherModal);
   const setShowFeedbackModal = useFeedbackStore((s) => s.setShowFeedbackModal);
+  const setShowStudentRatingModal = useRatingCourseStore((s) => s.setShowStudentRatingModal)
 
   return (
     <div className="w-64 text-left rtl:text-right">
@@ -129,7 +136,16 @@ const DropdownMenu = () => {
               <span className="text-[var(--text-secondary)]">{item.icon}</span>
               {item.name}
             </button>
-          )  : (
+          ) : item.name === "Rating a Course" ? (
+            <button
+              key={item.name}
+              onClick={() => setShowStudentRatingModal(true)}
+              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+            >
+              <span className="text-[var(--text-secondary)]">{item.icon}</span>
+              {item.name}
+            </button>
+          ) : (
             <Link
               key={item.name}
               to={item.href}
