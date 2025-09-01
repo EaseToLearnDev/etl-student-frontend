@@ -13,12 +13,11 @@ const JumpBackInCard = ({ data }: JumpBackInCardProps) => {
         <Badge
           theme={Theme.Neutral}
           style="outline"
-          className="w-fit !rounded-lg p-2 border !border-[var(--border-secondary)]"
+          className="w-fit !rounded-lg py-1 px-2 border !border-[var(--border-secondary)]"
         >
-          {data?.subject}
+          <p>{data?.subject}</p>
         </Badge>
-        <h5>{data?.topicTitle}</h5>
-        <p className="text-[var(--sb-ocean-bg-active)]">{`${data?.progress}% Complete`}</p>
+        <p className="font-medium">{data?.topicTitle}</p>
       </div>
     </div>
   );
