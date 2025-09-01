@@ -28,6 +28,7 @@ import type { Topic } from "../../../shared/types";
 import { Skeleton } from "../../../../components/SkeletonLoader";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -115,7 +116,7 @@ const SmartLearningPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            loading && (!topicTree || topicTree.length === 0) ? (
+            loading ? (
               <>
                 <TreeViewSkeleton />
               </>
@@ -145,7 +146,15 @@ const SmartLearningPage = () => {
             )
           }
           secondaryContent={
-            !loading && selectedTopic ? (
+            loading ? (
+              <>
+                <div className="space-y-3 p-4">
+                  <Skeleton height={300} variant="rounded" />
+                  <Skeleton height={70} variant="text" />
+                  <Skeleton height={70} variant="text" />
+                </div>
+              </>
+            ) : selectedTopic ? (
               <TopicModeSelector
                 selectedTopic={selectedTopic}
                 mode={mode}
@@ -161,13 +170,7 @@ const SmartLearningPage = () => {
                 }
               />
             ) : (
-              <>
-                <div className="space-y-3 p-4">
-                  <Skeleton height={300} variant="rounded" />
-                  <Skeleton height={70} variant="text" />
-                  <Skeleton height={70} variant="text" />
-                </div>
-              </>
+              <EmptyState title="No Data Available" />
             )
           }
           hideSecondary={

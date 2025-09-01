@@ -115,7 +115,7 @@ const StudyMaterialsPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            loading && (!topicTree || topicTree.length === 0) ? (
+            loading ? (
               <>
                 <TreeViewSkeleton />
               </>

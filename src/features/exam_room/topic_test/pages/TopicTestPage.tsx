@@ -36,6 +36,7 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 import Button from "../../../../components/Button";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -130,7 +131,9 @@ const TopicTestPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            showTestList ? (
+            loading ? (
+              <TreeViewSkeleton />
+            ) : showTestList ? (
               <TestCardList
                 tests={testList || []}
                 infoClickHandler={() => {
@@ -148,9 +151,7 @@ const TopicTestPage = () => {
                   });
                 }}
               />
-            ) : loading ? (
-              <TreeViewSkeleton />
-            ) : (
+            ) : topicTree && topicTree.length > 0 ? (
               <TopicTreeView
                 topics={topicTree || []}
                 selectedTopic={selectedTopic}
@@ -172,6 +173,8 @@ const TopicTestPage = () => {
                   )
                 }
               />
+            ) : (
+              <EmptyState title="No Tests Available" />
             )
           }
           secondaryContent={
@@ -180,7 +183,7 @@ const TopicTestPage = () => {
                 title={capitalizeWords(selectedTopic.topicName)}
               />
             ) : (
-              <></>
+              <EmptyState title="No Instructions Available" />
             )
           }
           hideSecondary={!showTestList || hideSecondary}

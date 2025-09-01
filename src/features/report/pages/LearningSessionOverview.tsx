@@ -9,6 +9,7 @@ import { Widget } from "../components/newreports/Widget";
 import Tabs from "../../../components/Tabs";
 import { tintHexColor } from "../libs/reduceColorsContrast";
 import type { LearningAnalyticsData } from "../services/loadLearningAnalyticData";
+import EmptyState from "../../../components/EmptyState";
 
 // Mock Data Response
 // const mockData = {
@@ -44,7 +45,7 @@ export const LearningSessionOverview = ({
 }: LearningSessionOverviewProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  if (!data) return <div>No data available</div>;
+  if (!data) return <EmptyState title="No Data Available" />;
 
   const overallPerformanceData = data.overallResultList.map((d) => ({
     name: d.name,
