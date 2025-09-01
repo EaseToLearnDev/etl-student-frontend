@@ -90,6 +90,8 @@ const MockTestPage = () => {
           tabs={TABS}
           selectedIndex={selectedTabIndex}
           onSelect={setSelectedTabIndex}
+          tabClassName="px-5 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
+          activeTabClassName="px-5 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
         />
         {selectedTabIndex === 1 && (
           <Select

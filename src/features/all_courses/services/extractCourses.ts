@@ -1,4 +1,4 @@
-import type { CategoryType } from "../allCourses.types";
+import type { CategoryType } from "../../shared/types";
 
 /**
  * Flattens an array of categories into a single array of courses, each enriched with its category information.

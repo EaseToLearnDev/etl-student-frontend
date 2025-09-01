@@ -225,3 +225,12 @@ export interface OptionalFlagsList {
   optionFlag: boolean;
   optionLabel: string;
 }
+
+
+export interface PrevRunningTest {
+  responseTxt: string;
+  testMode?: string;
+  testName?: string;
+  testSession?: string;
+  testType?: number;
+}

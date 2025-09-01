@@ -1,7 +1,12 @@
 // React
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { MdArrowBack } from "react-icons/md";
+
+// Icons
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+
+// Types
+import { type Topic } from "../../../shared/types";
 
 // Store & Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
@@ -9,7 +14,6 @@ import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import { useTTStore } from "../store/useTTStore";
 
 // Utils
-import cn from "../../../../utils/classNames";
 import { capitalizeWords } from "../../../../utils";
 
 // Services
@@ -27,9 +31,9 @@ import TestCardList from "../../../shared/components/TestCardList";
 import TopicTreeView from "../../../shared/components/TopicTreeView";
 import TopicTestInstructions from "../components/TopicTestInstructions";
 import { Modal } from "../../../../components/Modal";
-import { type Topic } from "../../../shared/types";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
+import Button from "../../../../components/Button";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -104,15 +108,14 @@ const TopicTestPage = () => {
     <div className="h-full flex flex-col flex-grow">
       <div className="flex items-center gap-2">
         {selectedTopic && testList && testList?.length > 0 && (
-          <div
-            onClick={resetSelectedTopic}
-            className={cn(
-              "w-[30px] h-[30px] aspect-square flex justify-center items-center cursor-pointer",
-              "border-1 border-[var(--border-primary)] rounded-full hover:bg-[var(--surface-bg-secondary)]"
-            )}
-          >
-            <MdArrowBack size={20} className="text-[var(--text-primary)]" />
-          </div>
+            <Button
+          onClick={resetSelectedTopic}
+          style="secondary"
+          className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none"
+        >
+          <ArrowLeftIcon className="w-5 h-5" />
+          <p>Go Back</p>
+        </Button>
         )}
         <h5 className="!font-semibold pl-2 items-end text-ellipsis line-clamp-2">
           {selectedTopic && testList && testList?.length > 0

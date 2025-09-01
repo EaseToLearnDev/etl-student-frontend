@@ -17,20 +17,15 @@ import MockTestPage from "../features/exam_room/mock_test/pages/MockTestPage";
 import ClassTestPage from "../features/exam_room/class_test/pages/ClassTestPage";
 import LoginPage from "../features/auth/login/pages/LoginPage";
 import SignupPage from "../features/auth/signup/pages/SignupPage";
-import OnboardingPage from "../features/onboarding/pages/OnboardingPage";
+// import OnboardingPage from "../features/onboarding/pages/OnboardingPage";
 import TopicTestPage from "../features/exam_room/topic_test/pages/TopicTestPage";
 import { PermissionRedirect } from "./PermissionRedirect";
 import ProfilePage from "../features/profile/pages/ProfilePage";
 import SettingsPage from "../features/settings/pages/SettingsPage";
-import ReportLearningSessionPage from "../features/report/pages/ReportLearningSessionPage";
-import ReportOverviewPage from "../features/report/pages/ReportOverviewPage";
-import ReportClassTestPage from "../features/report/pages/ReportClassTestPage";
-import ReportTopicTestPage from "../features/report/pages/ReportTopicTestPage";
-import ReportMockTestPage from "../features/report/pages/ReportMockTestPage";
-import ReportCompetitiveSessionPage from "../features/report/pages/ReportCompetitiveSessionPage";
 import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
+import StudentReport from "../features/report/pages/StudentReport";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -54,14 +49,14 @@ const Router = () => {
           </PublicRoute>
         }
       />
-      <Route
+      {/* <Route
         path="/onboarding"
         element={
           <PrivateRoute>
             <OnboardingPage />
           </PrivateRoute>
         }
-      />
+      /> */}
       <Route
         path="/"
         element={
@@ -108,26 +103,8 @@ const Router = () => {
         <Route path="exam-room/mock-test" element={<MockTestPage />} />
         <Route path="exam-room/class-test" element={<ClassTestPage />} />
 
-        <Route
-          path="report"
-          element={
-            <PermissionRedirect
-              to="/report/overview"
-              parentId="report"
-              parentPath="report"
-            />
-          }
-        />
-        <Route path="report/overview" element={<ReportOverviewPage />} />
-        <Route path="report/learning" element={<ReportLearningSessionPage />} />
-        <Route
-          path="report/competitive"
-          element={<ReportCompetitiveSessionPage />}
-        />
-        <Route path="report/topic-test" element={<ReportTopicTestPage />} />
-        <Route path="report/mock-test" element={<ReportMockTestPage />} />
-        <Route path="report/class-test" element={<ReportClassTestPage />} />
 
+        <Route path="report" element={<StudentReport />} />
         <Route path="selectcourse" element={<AllCoursesPage />} />
 
         <Route path="settings" element={<SettingsPage />} />

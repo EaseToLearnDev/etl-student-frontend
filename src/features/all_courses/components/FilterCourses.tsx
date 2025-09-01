@@ -3,7 +3,7 @@ import Button from "../../../components/Button";
 import useIsMobile from "../../../hooks/useIsMobile";
 import cn from "../../../utils/classNames";
 import { Theme } from "../../../utils/colors";
-import type { CategoryType } from "../allCourses.types";
+import type { CategoryType } from "../../shared/types";
 
 interface FilterCoursesProps {
   categories: CategoryType[];
