@@ -9,10 +9,14 @@ import SupportSection from "../components/SupportSection";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
 import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
+import { Toast } from "../../../components/Toast";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
+  const toastData = useToastStore((s) => s.toastData)
+  const showToast = useToastStore((s) => s.showToast)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -58,6 +62,14 @@ const DashboardPage = () => {
           <SupportSection />
         </WidgetCard>
       </div>
+
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };

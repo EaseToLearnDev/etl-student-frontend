@@ -64,7 +64,7 @@ export const Toast: React.FC<ToastProps> = ({
   description,
   button,
   duration = 3000,
-  className,
+  className
 }) => {
   const [visible, setVisible] = useState(true);
 
@@ -106,7 +106,6 @@ export const Toast: React.FC<ToastProps> = ({
               </Button>
             )}
           </div>
-          
         </div>
       </div>
 

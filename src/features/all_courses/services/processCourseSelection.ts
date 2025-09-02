@@ -2,6 +2,8 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { handleFreeCourse } from "../services/handleFreeCourse";
 import { handlePaymentButton } from "../services/handlePaymentButton";
 import type { Course, CourseResponse } from "../../shared/types";
+import { ToastType } from "../../../components/Toast";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 export const processCourseSelection = async ({
   option,
@@ -19,6 +21,7 @@ export const processCourseSelection = async ({
   navigate: (path: string) => void;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
+  const { setToast } = useToastStore.getState();
   if (!studentData) return console.error("No student data found");
 
   // ---------------- Free course flow ----------------
@@ -26,8 +29,11 @@ export const processCourseSelection = async ({
     try {
       const res = await handleFreeCourse(courseId);
       if (res.responseTxt === "course_already_taken") {
-        // TODO: Global Toast
-        return navigate("/dashboard");
+        setToast({
+          type: ToastType.DANGER,
+          title: "Course Already Taken",
+          description: "You have already enrolled in this course.",
+        });
       }
 
       const courses: Course[] = res.obj.map((c: CourseResponse) => ({
@@ -95,10 +101,15 @@ export const processCourseSelection = async ({
     form.phone.value = studentData.phoneNo;
     form.productinfo.value = res.productinfo;
     form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
-    form.furl.value = import.meta.env.VITE_BASE_URL + "/pgcancelled";
+    form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
+    // setToast({
+    //     type: ToastType.DANGER,
+    //     title: "Payment Failed",
+    //     description: "Something went wrong with your payment. Please try again.",
+    //   });
     form.hash.value = res.hashCode;
 
-    // form.submit();
+    form.submit();
   } catch (err) {
     console.error("Error directing to Payment Gateway:", err);
   }
