@@ -10,11 +10,15 @@ import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
 import JumpBackInCard from "./JumpBackInCard";
 import EmptyState from "../../../components/EmptyState";
 import EmptyGhostIcon from "../../../components/icons/empty-ghost-icon";
-import { Modal } from "../../../components/Modal";
+import PreviousTestModal from "./PreviousTestModal";
+import { handleResumeTest } from "../../study_room/smart_learning/services/handleTest";
+import { useNavigate } from "react-router";
 
 const JumpBackInList = () => {
+  const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [isPreviousTestModalOpen, setIsPreviousTestModalOpen] = useState<boolean>(false);
+  const [isPreviousTestModalOpen, setIsPreviousTestModalOpen] =
+    useState<boolean>(false);
   const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
 
   const scroll = (direction: "left" | "right") => {
@@ -55,24 +59,26 @@ const JumpBackInList = () => {
         ref={scrollRef}
         className="max-w-full flex overflow-x-auto scrollbar-hide pt-4 scroll-smooth snap-x snap-mandatory"
       >
-        {prevRunningTest ? (
+        {prevRunningTest?.testMode ? (
           <div className="snap-start shrink-0 basis-[calc((100%-60px)/4)] mr-5 last:mr-0">
             <JumpBackInCard
+              onClick={() => setIsPreviousTestModalOpen(true)}
               testType={prevRunningTest?.testMode || ""}
               topicTitle={prevRunningTest?.testName || ""}
             />
           </div>
         ) : (
           <EmptyState
-            icon={<EmptyGhostIcon />}
+            icon={<EmptyGhostIcon width={100} height={100} />}
             title="No Previous Tests Found"
           />
         )}
       </div>
-
-      {/* <Modal isOpen={isPreviousTestModalOpen} onClose={() => setIsPreviousTestModalOpen(false)}>
-
-      </Modal> */}
+      <PreviousTestModal
+        isOpen={isPreviousTestModalOpen}
+        onResume={() => handleResumeTest(navigate, prevRunningTest)}
+        onClose={() => setIsPreviousTestModalOpen(false)}
+      />
     </div>
   );
 };

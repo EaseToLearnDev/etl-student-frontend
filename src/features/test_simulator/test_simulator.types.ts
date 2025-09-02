@@ -92,7 +92,7 @@ export type AssessmentMode = "beginner" | "advance";
 export type PackTypeTitle = "FREE" | "PRO" | "ACE";
 
 export interface TestConfig {
-  testId: number;
+  testId?: number;
   testType: number;
   testSession?: string;
   questionType?: QuestionType;

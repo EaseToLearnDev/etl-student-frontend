@@ -16,7 +16,7 @@ export const testDetailExisting = async ({
   loginId,
   token,
 }: TestDetailExistingParams) => {
-  const res = await makeRequest("get", "/testdetailExisting", null, {
+  const res = await makeRequest("get", "/testdetailexisting", null, {
     params: {
       testSession,
       templateId,
