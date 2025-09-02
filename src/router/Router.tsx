@@ -27,6 +27,9 @@ import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
 import StudentReport from "../features/report/pages/StudentReport";
 import ViewAnswers from "../features/test_simulator/components/ViewAnswers";
+import { TestWizard } from "../components/TestWizard";
+import { LearningSessionOverview } from "../features/report/pages/LearningSessionOverview";
+import { TestAnalyticsOverview } from "../features/report/pages/TestAnalyticsOverview";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -110,8 +113,11 @@ const Router = () => {
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="payments" element={<PaymentsPage />} />
+        <Route path="learning-testanalytics" element={<LearningSessionOverview />} />
+        <Route path="testanalytics" element={<TestAnalyticsOverview />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulatorPage />} />
+      <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
