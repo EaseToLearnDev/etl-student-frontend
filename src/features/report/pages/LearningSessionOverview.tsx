@@ -10,6 +10,8 @@ import Tabs from "../../../components/Tabs";
 import { tintHexColor } from "../libs/reduceColorsContrast";
 import type { LearningAnalyticsData } from "../services/loadLearningAnalyticData";
 import EmptyState from "../../../components/EmptyState";
+import { Modal } from "../../../components/Modal";
+import ViewAnswers from "../../test_simulator/components/ViewAnswers";
 
 // Mock Data Response
 // const mockData = {
@@ -44,6 +46,7 @@ export const LearningSessionOverview = ({
   data,
 }: LearningSessionOverviewProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isViewAnswersModalOpen, setIsViewAnswersModalOpen] = useState(false);
 
   if (!data) return <EmptyState title="No Data Available" />;
 
@@ -134,7 +137,7 @@ export const LearningSessionOverview = ({
     },
     {
       label: "View Answers",
-      content: <h1>View Answers</h1>,
+      onClick: () => setIsViewAnswersModalOpen(true),
     },
   ];
 
@@ -142,7 +145,7 @@ export const LearningSessionOverview = ({
     <div className="container-wrapper px-10 pt-8">
       <Widget title={data.testName} subtitle={data.submitDate}>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-6">
-          <div className="flex-1 min-w-[150px] h-24 rounded-lg bg-[var(--surface-bg-tertiary)] flex flex-col justify-center items-center gap-2">
+          <div className="flex-1 min-w-<h1>View Answers</h1>,[150px] h-24 rounded-lg bg-[var(--surface-bg-tertiary)] flex flex-col justify-center items-center gap-2">
             <p>Total Questions</p>
             <h5>{data.totalQuestion}</h5>
           </div>
@@ -169,12 +172,23 @@ export const LearningSessionOverview = ({
         <Tabs
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
-          onSelect={setSelectedIndex}
+          onSelect={(index) =>
+            tabs[index]?.onClick ? tabs[index]?.onClick : setSelectedIndex
+          }
           tabClassName="rounded-lg py-3"
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />
       </div>
-      <div className="mt-6 mb-4">{tabs[selectedIndex].content}</div>
+      <div className="mt-6 mb-4">{tabs[selectedIndex]?.content ?? <></>}</div>
+
+      {/* <Modal
+        isOpen={isViewAnswersModalOpen}
+        onClose={() => setIsViewAnswersModalOpen(false)}
+        size="lg"
+        className="p-4"
+      >
+        <ViewAnswers testSession={data?.} />
+      </Modal> */}
     </div>
   );
 };
