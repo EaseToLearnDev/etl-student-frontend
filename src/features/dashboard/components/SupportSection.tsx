@@ -43,7 +43,7 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
       >
         <div className="relative p-2 px-4">
           <h5>Contact Support</h5>
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 mt-4">
             <label
               htmlFor="Subject"
               className="!font-medium text-[var(--text-secondary)]"
