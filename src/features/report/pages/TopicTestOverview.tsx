@@ -32,6 +32,7 @@ import Tabs from "../../../components/Tabs";
 import DrillDownComponents from "../components/newreports/DrillDownComponents";
 import type { AnalyticsResponseData } from "../services/loadStudentAnalyticsData";
 import EmptyState from "../../../components/EmptyState";
+import cn from "../../../utils/classNames";
 
 interface TabItem {
   label: string;
@@ -44,7 +45,7 @@ interface TopicTestOverviewProps {
 }
 
 export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
-  if(!data) return <EmptyState title="No Report Data Available" />;
+  if (!data) return <EmptyState title="No Report Data Available" />;
 
   const SectionGraphData = [
     {
@@ -269,11 +270,11 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
     </>
   );
 
-  const ViewAnswersTab = () => (
-    <div className="bg-[var(--surface-bg-secondary)] border border-[var(--border-secondary)] rounded-lg p-6">
-      View Answers
-    </div>
-  );
+  // const ViewAnswersTab = () => (
+  //   <div className="bg-[var(--surface-bg-secondary)] border border-[var(--border-secondary)] rounded-lg p-6">
+  //     View Answers
+  //   </div>
+  // );
 
   const PerformanceInDetailTab = () => (
     <>
@@ -668,10 +669,6 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
       content: <OverallPerformanceTab />,
     },
     {
-      label: "VIEW ANSWERS",
-      content: <ViewAnswersTab />,
-    },
-    {
       label: "PERFORMANCE IN DETAIL",
       content: <PerformanceInDetailTab />,
     },
@@ -827,13 +824,22 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
         </Widget>
       </div>
 
-      <Tabs
-        tabs={tabs.map((t) => t.label)}
-        selectedIndex={selectedIndex}
-        onSelect={setSelectedIndex}
-        tabClassName="rounded-lg py-3"
-        activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
-      />
+      <div className="flex items-center gap-3">
+        <Tabs
+          tabs={tabs.map((t) => t.label)}
+          selectedIndex={selectedIndex}
+          onSelect={setSelectedIndex}
+          tabClassName="rounded-lg py-3"
+          activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
+        />
+        <div
+          className={cn(
+            "border-1 border-[var(--border-tertiary)] rounded-full",
+            "flex justify-center items-center min-w-[100px] max-w-fit px-4 py-2",
+            "select-none cursor-pointer transition-colors duration-150 ease"
+          )}
+        >View Answers</div>
+      </div>
       <div className="mt-10">{tabs[selectedIndex]?.content}</div>
     </div>
   );

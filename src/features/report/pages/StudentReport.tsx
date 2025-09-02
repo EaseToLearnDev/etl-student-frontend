@@ -146,7 +146,8 @@ const StudentReport = () => {
     }
   };
 
-  if(!reportData || !sessionData) return <EmptyState title="No Report Data Available" />;
+  if (!reportData || !sessionData)
+    return <EmptyState title="No Report Data Available" />;
 
   const tabContents = [
     <ReportOverviewPage />,
@@ -225,7 +226,7 @@ const StudentReport = () => {
             selectedTabIndex === 0 ? (
               <ReportOverviewSkeleton />
             ) : (
-              <TableSkeleton /> 
+              <TableSkeleton />
             )
           ) : (
             tabContents[selectedTabIndex]
