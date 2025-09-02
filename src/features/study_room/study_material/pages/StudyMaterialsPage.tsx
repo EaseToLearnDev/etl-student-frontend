@@ -26,6 +26,9 @@ import { Modal } from "../../../../components/Modal";
 import TopicContentPanel from "../components/TopicContentPanel";
 import TextContentModalView from "../components/TextContentModalView";
 import MediaContentModalView from "../components/MediaContentModalVIew";
+import { Skeleton } from "../../../../components/SkeletonLoader";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -42,6 +45,7 @@ const StudyMaterialsPage = () => {
   const contentFilterType = useSMStore((s) => s.contentFilterType);
   const selectedContent = useSMStore((s) => s.selectedContent);
   const textContent = useSMStore((s) => s.textContent);
+  const loading = useLoadingStore((s) => s.loading);
 
   // Actions
   const setTopicTree = useSMStore((s) => s.setTopicTree);
@@ -111,17 +115,25 @@ const StudyMaterialsPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            <TopicTreeView
-              topics={topicTree || []}
-              selectedTopic={selectedTopic}
-              onClickHandler={(t) => setSelectedTopicId(t ? t?.topicId : null)}
-              getId={(t) => t.topicId}
-              getLabel={(t) => t.topicName}
-              getChildren={(t) => t.children}
-            />
+            loading && (!topicTree || topicTree.length === 0) ? (
+              <>
+                <TreeViewSkeleton />
+              </>
+            ) : (
+              <TopicTreeView
+                topics={topicTree || []}
+                selectedTopic={selectedTopic}
+                onClickHandler={(t) =>
+                  setSelectedTopicId(t ? t?.topicId : null)
+                }
+                getId={(t) => t.topicId}
+                getLabel={(t) => t.topicName}
+                getChildren={(t) => t.children}
+              />
+            )
           }
           secondaryContent={
-            topicContentList && selectedTopic ? (
+            !loading && topicContentList && selectedTopic ? (
               <TopicContentPanel
                 setSelectedContent={setSelectedContent}
                 topicContentList={topicContentList}
@@ -129,7 +141,16 @@ const StudyMaterialsPage = () => {
                 contentFilterType={contentFilterType}
               />
             ) : (
-              <></>
+              <>
+                <div className="mt-4 space-y-3 p-4">
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                  <Skeleton height={80} variant="rounded" />
+                </div>
+              </>
             )
           }
           hideSecondary={!selectedTopic || selectedContent !== null}

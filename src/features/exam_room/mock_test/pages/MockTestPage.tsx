@@ -30,6 +30,8 @@ import PreviousTestModalContent from "../../../shared/components/PreviousTestMod
 import StartMockTestModalContent from "../components/StartMockTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import cn from "../../../../utils/classNames";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { Skeleton } from "../../../../components/SkeletonLoader";
 
 // Constants
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
@@ -53,6 +55,8 @@ const MockTestPage = () => {
   const setShowPreviousTestModal = useMTStore(
     (s) => s.setShowPreviousTestModal
   );
+
+  const loading = useLoadingStore((s) => s.loading);
 
   // Prev test store
   const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
@@ -109,28 +113,41 @@ const MockTestPage = () => {
       <div className="w-full h-full overflow-y-auto mt-4">
         <ChildLayout
           primaryContent={
-            <TestCardList
-              tests={
-                selectedTabIndex === 0
-                  ? completeMockTests?.testList
-                  : selectedSubjectTests
-              }
-              infoClickHandler={() => setHideSecondary(false)}
-              onClickHandler={(test) =>
-                selectAndManageTest({
-                  testId: test.id,
-                  selectedTabIndex,
-                  completeMockTests,
-                  subjectSpecificMockTests,
-                  selectedDropdownIndex,
-                  setSelectedTest,
-                  previousRunningTest: prevRunningTest,
-                  setPreviousRunningTest: setPrevRunningTest,
-                  setShowStartTestModal,
-                  setShowPreviousTestModal,
-                })
-              }
-            />
+            !loading ? (
+              <TestCardList
+                tests={
+                  selectedTabIndex === 0
+                    ? completeMockTests?.testList
+                    : selectedSubjectTests
+                }
+                infoClickHandler={() => setHideSecondary(false)}
+                onClickHandler={(test) =>
+                  selectAndManageTest({
+                    testId: test.id,
+                    selectedTabIndex,
+                    completeMockTests,
+                    subjectSpecificMockTests,
+                    selectedDropdownIndex,
+                    setSelectedTest,
+                    previousRunningTest: prevRunningTest,
+                    setPreviousRunningTest: setPrevRunningTest,
+                    setShowStartTestModal,
+                    setShowPreviousTestModal,
+                  })
+                }
+              />
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                </div>
+              </>
+            )
           }
           secondaryContent={<TopicTestInstructions title="Instructions" />}
           hideSecondary={hideSecondary}

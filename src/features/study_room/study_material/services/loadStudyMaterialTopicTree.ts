@@ -6,12 +6,14 @@ import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 /**
  * Loads the study material topic tree for the active student and course.
  */
 export const loadStudyMaterialTopicTree = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData || !activeCourse) {
     return null;
@@ -23,6 +25,8 @@ export const loadStudyMaterialTopicTree = async () => {
   if (!loginId || !token || !templateId) {
     return null;
   }
+
+  setLoading(true);
 
   try {
     const data = (await getTopicTreeView({
@@ -41,5 +45,7 @@ export const loadStudyMaterialTopicTree = async () => {
   } catch (error) {
     console.error("Failed to load topic tree:", error);
     return null;
+  } finally {
+    setLoading(false);
   }
 };

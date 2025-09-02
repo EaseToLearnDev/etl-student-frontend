@@ -31,6 +31,9 @@ import {
   type LearningAnalyticsData,
 } from "../services/loadLearningAnalyticData";
 import ReportOverviewPage from "./ReportOverviewPage";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { TableSkeleton } from "../../../components/TableSkeleton";
+import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -40,7 +43,8 @@ const StudentReport = () => {
     useState<AnalyticsResponseData | null>(null);
   const [learningSessionAnalyticsData, setLearningSessionAnalyticsData] =
     useState<LearningAnalyticsData | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const { loading } = useLoadingStore.getState();
 
   const tabs = [
     "Overview",
@@ -114,8 +118,6 @@ const StudentReport = () => {
         }
       } catch (err) {
         console.error("Error loading report:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -217,9 +219,11 @@ const StudentReport = () => {
       ) : (
         <div className="mt-5">
           {loading ? (
-            <p className="text-center text-[var(--text-tertiary)]">
-              Loading...
-            </p>
+            selectedTabIndex === 0 ? (
+              <ReportOverviewSkeleton />
+            ) : (
+              <TableSkeleton /> 
+            )
           ) : (
             tabContents[selectedTabIndex]
           )}
