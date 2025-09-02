@@ -31,6 +31,7 @@ import CircleProgressBar from "../components/newreports/circularProgressBar";
 import Tabs from "../../../components/Tabs";
 import DrillDownComponents from "../components/newreports/DrillDownComponents";
 import type { AnalyticsResponseData } from "../services/loadStudentAnalyticsData";
+import EmptyState from "../../../components/EmptyState";
 
 interface TabItem {
   label: string;
@@ -43,6 +44,8 @@ interface TopicTestOverviewProps {
 }
 
 export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
+  if(!data) return <EmptyState title="No Report Data Available" />;
+
   const SectionGraphData = [
     {
       name: "Section A",

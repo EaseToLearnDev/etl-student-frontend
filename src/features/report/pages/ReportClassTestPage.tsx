@@ -3,14 +3,17 @@ import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import type { Column } from "../../../components/types";
 import type { TestReportdata } from "./ReportMockTestPage";
 import Button from "../../../components/Button";
-
+import EmptyState from "../../../components/EmptyState";
 
 interface ReportClassTestPageProps {
   data: TestReportdata[];
   onViewMore: (reportData: TestReportdata) => void;
 }
 
-const ReportClassTestPage = ({data, onViewMore} : ReportClassTestPageProps) => {
+const ReportClassTestPage = ({
+  data,
+  onViewMore,
+}: ReportClassTestPageProps) => {
   const columns: Column<any>[] = [
     { header: "Test Title", accessor: "testTitle" },
     { header: "Type", accessor: "testType" },
@@ -31,7 +34,7 @@ const ReportClassTestPage = ({data, onViewMore} : ReportClassTestPageProps) => {
   const classTestData = data.filter((item) => item.testTypeId === 4);
   return (
     <>
-      {classTestData.length > 0 ? (
+      {!classTestData ? (
         <div className="flex">
           <PaginatedTable
             columns={columns}
@@ -40,10 +43,11 @@ const ReportClassTestPage = ({data, onViewMore} : ReportClassTestPageProps) => {
           />
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
-          <ArchiveBoxXMarkIcon className="h-45 w-45 mb-2" />
-          <p>No Class Test Data Available</p>
-        </div>
+        <EmptyState
+          title="No Class Test Data Available"
+          icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
+          className="min-h-[60vh]"
+        />
       )}
     </>
   );

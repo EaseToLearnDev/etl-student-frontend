@@ -75,9 +75,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
       <div className="relative z-30 flex flex-col justify-between h-full w-full p-6 sm:p-10">
         <div>
-          <h3 className="text-white">
-            Welcome Back
-          </h3>
+          <h3 className="text-white">Welcome Back</h3>
           <p className="text-gray-300 mt-2 max-w-[40ch]">
             Discover new courses and keep learning.
           </p>
@@ -141,27 +139,29 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       )}
     >
       {/* Navigation */}
-      <button
-        onClick={() =>
-          setSelectedSlideIndex((prev) =>
-            prev === 0 ? slides.length - 1 : prev - 1
-          )
-        }
-        className="absolute left-3 top-[10px] z-30 p-2 bg-black/10 aspect-square rounded-md text-white hover:bg-black/50 transition"
-      >
-        <ChevronLeftIcon className="w-3 h-3" />
-      </button>
+      <div className="absolute right-0 top-0 z-30 flex items-center gap-4 p-5">
+        <button
+          onClick={() =>
+            setSelectedSlideIndex((prev) =>
+              prev === 0 ? slides.length - 1 : prev - 1
+            )
+          }
+          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+        >
+          <ChevronLeftIcon className="size-4" />
+        </button>
 
-      <button
-        onClick={() =>
-          setSelectedSlideIndex((prev) =>
-            prev === slides.length - 1 ? 0 : prev + 1
-          )
-        }
-        className="absolute right-3 top-[10px] z-30 p-2 bg-black/10 aspect-square rounded-md text-white hover:bg-black/50 transition"
-      >
-        <ChevronRightIcon className="w-3 h-3" />
-      </button>
+        <button
+          onClick={() =>
+            setSelectedSlideIndex((prev) =>
+              prev === slides.length - 1 ? 0 : prev + 1
+            )
+          }
+          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+        >
+          <ChevronRightIcon className="size-4" />
+        </button>
+      </div>
 
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-2">

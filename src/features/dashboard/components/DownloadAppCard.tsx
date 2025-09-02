@@ -21,7 +21,7 @@ export default function DownloadAppCard({
 }: DownloadAppCardProps) {
   return (
     <aside
-      className={`w-full rounded-lg shadow-md p-5 sm:p-6 flexflex-col items-center gap-4 ${className}`}
+      className={`w-full flex flex-col gap-4 ${className}`}
       aria-labelledby="download-card-title"
     >
       <div className="flex flex-col gap-1">
