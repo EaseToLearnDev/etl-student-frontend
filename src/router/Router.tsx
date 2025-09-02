@@ -26,6 +26,7 @@ import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
 import StudentReport from "../features/report/pages/StudentReport";
+import ViewAnswersPage from "../features/test_simulator/pages/ViewAnswersPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -103,7 +104,6 @@ const Router = () => {
         <Route path="exam-room/mock-test" element={<MockTestPage />} />
         <Route path="exam-room/class-test" element={<ClassTestPage />} />
 
-
         <Route path="report" element={<StudentReport />} />
         <Route path="selectcourse" element={<AllCoursesPage />} />
 
@@ -112,6 +112,7 @@ const Router = () => {
         <Route path="payments" element={<PaymentsPage />} />
       </Route>
       <Route path="test-simulator" element={<TestSimulatorPage />} />
+      <Route path="view-answers" element={<ViewAnswersPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

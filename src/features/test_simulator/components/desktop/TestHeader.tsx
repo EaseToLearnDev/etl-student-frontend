@@ -6,7 +6,11 @@ import useTestTimerStore from "../../store/useTestTimerStore";
 /**
  * Renders the test header for the desktop view, displaying the test title and a static timer.
  */
-const TestHeader = () => {
+interface TestHeaderProps {
+  mode: "test" | "answers";
+}
+
+const TestHeader = ({ mode }: TestHeaderProps) => {
   const testTitle = useTestStore((state) => state.testData?.testName) || "";
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const isExpired = useTestTimerStore((state) => state.isExpired);
@@ -20,7 +24,15 @@ const TestHeader = () => {
         <h3 className="text-ellipsis line-clamp-1">{testTitle}</h3>
       </div>
       <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%] xl:w-[25%]">
-        <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
+        <h3>
+          {mode === "test"
+            ? isExpired
+              ? "Time's Up"
+              : isRunning
+              ? formattedTime
+              : ""
+            : ""}
+        </h3>
       </div>
     </div>
   );
