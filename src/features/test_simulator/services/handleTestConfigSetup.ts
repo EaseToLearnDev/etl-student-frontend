@@ -24,10 +24,9 @@ interface HandleTestConfigSetupResponse {
 export const handleTestConfigSetup = ({
   params,
 }: HandleTestConfigSetupParams): HandleTestConfigSetupResponse => {
-  const testId = params.get("testId");
   const testType = params.get("testType");
 
-  if (!testId || !testType) {
+  if (!testType) {
     return {
       testConfig: null,
       error: {
@@ -40,7 +39,7 @@ export const handleTestConfigSetup = ({
 
   return {
     testConfig: {
-      testId: Number(testId),
+      testId: params.get("testId") ? Number(params.get("testId")) : undefined,
       testType: Number(testType),
       testSession: params.get("testSession") ?? undefined,
       questionType: params.get("questionType") as QuestionType,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import cn from "../utils/classNames";
 
 const modalStyles = {
@@ -15,7 +16,6 @@ const modalStyles = {
     xl: "max-w-[60%]",
     full: "max-w-full min-h-screen",
   },
-  // -> modal require extra rounded corner
   rounded: {
     none: "rounded-none",
     sm: "rounded-lg",
@@ -23,35 +23,34 @@ const modalStyles = {
     lg: "rounded-2xl",
     xl: "rounded-3xl",
   },
+  blur: {
+    none: "",
+    sm: "backdrop-blur-sm",
+    md: "backdrop-blur-md",
+    lg: "backdrop-blur-lg",
+    xl: "backdrop-blur-xl",
+  },
 };
 
 export type ModalSize = keyof typeof modalStyles.size;
+export type ModalRounded = keyof typeof modalStyles.rounded;
+export type ModalBlur = keyof typeof modalStyles.blur;
 
 export type ModalProps = {
   children: ReactNode;
-  /** Whether the Modal is open or not */
   isOpen: boolean;
-  /** Called when modal is closed (Escape key and click outside, depending on options) */
   onClose(): void;
-  /** Preset size of modal is sm, DEFAULT, lg, xl, full */
   size?: ModalSize;
-  /** Removes padding from scroll area when modal size is full */
   noGutter?: boolean;
-  /** The rounded variants are: */
-  rounded?: keyof typeof modalStyles.rounded;
-  /** Size prop will not work when you are using customSize prop. Here is the example of using this prop -> customSize={500} */
+  rounded?: ModalRounded;
   customSize?: number;
-  /** Override default CSS style of Modal's overlay */
   overlayClassName?: string;
-  /** Set custom style classes for the Modal container, where you can set custom Modal size and padding and background color */
   containerClassName?: string;
-  /** Set custom style classes for the Modal root element */
   className?: string;
+  /** Controls overlay blur. */
+  blur?: ModalBlur;
 };
 
-/**
- * A fully-managed render-less Modal component. When requiring users to interact with the application, but without jumping to a new page and interrupting the user's workflow, you can use Modal to create a new floating layer over the current page to get user feedback or display information.
- */
 export function Modal({
   children,
   isOpen,
@@ -63,8 +62,9 @@ export function Modal({
   customSize,
   overlayClassName,
   containerClassName,
+  blur = "sm",
 }: React.PropsWithChildren<ModalProps>) {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -84,10 +84,11 @@ export function Modal({
 
   if (!isOpen) return null;
 
-  return (
+  const modalElement = (
     <div
       className={cn(
-        "fixed z-[9999] inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto transition-opacity duration-300",
+        modalStyles.root,
+        "flex items-center justify-center transition-opacity duration-300",
         className
       )}
     >
@@ -95,7 +96,8 @@ export function Modal({
       <div
         onClick={onClose}
         className={cn(
-          "fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-10",
+          "fixed inset-0 bg-black/40 dark:bg-black/60 z-10",
+          modalStyles.blur[blur],
           show ? "opacity-100" : "opacity-0",
           overlayClassName
         )}
@@ -116,4 +118,6 @@ export function Modal({
       </div>
     </div>
   );
+
+  return createPortal(modalElement, document.body);
 }

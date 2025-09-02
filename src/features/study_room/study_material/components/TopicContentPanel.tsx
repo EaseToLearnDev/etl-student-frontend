@@ -8,6 +8,8 @@ import { FiFilter } from "react-icons/fi";
 // Components
 import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
+import { Skeleton } from "../../../../components/SkeletonLoader";
+import EmptyState from "../../../../components/EmptyState";
 
 interface TopicContentPanelProps {
   selectedTopic: Topic;
@@ -25,13 +27,16 @@ const TopicContentPanel = ({
   topicContentList,
   contentFilterType,
 }: TopicContentPanelProps) => {
+  if (!topicContentList || topicContentList.length === 0) {
+    return <EmptyState title="No Content Available" />;
+  }
+
   const filteredContentList =
     contentFilterType === "All"
       ? topicContentList
       : topicContentList?.filter(
           (content) => content.contentType === contentFilterType
         );
-
   return (
     <div className="flex flex-col gap-6 h-full">
       <div className="flex items-center justify-between">
@@ -50,11 +55,19 @@ const TopicContentPanel = ({
             <TopicContentItem
               key={index}
               content={content}
-              setSelectedContent={setSelectedContent}
+              onClickHandler={setSelectedContent}
             />
           ))
         ) : (
-          <></>
+          <>
+            <div className="space-y-3 p-4">
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+              <Skeleton height={80} variant="rounded" />
+            </div>
+          </>
         )}
       </div>
     </div>

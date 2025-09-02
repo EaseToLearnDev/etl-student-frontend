@@ -12,23 +12,121 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
 import { LoginApi } from "./apis/login";
-import type { NavigateFunction } from "react-router";
+import { type NavigateFunction } from "react-router-dom";
+import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
+import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
-export const HandleLogin = async (navigate: NavigateFunction) => {
-  const { email, password, setError, setLoading } = useLoginStore.getState();
+export const HandleLogin = async (
+  navigate: NavigateFunction,
+  loginWith: string
+) => {
+  const { userId, password, setError, setLoading, setToken } =
+    useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
-  try {
-    validateCredentials(email, password);
+  if (loginWith === "password") {
+    try {
+      // validateCredentials(email, password);
 
+      setError("", Severity.None);
+      setLoading(true);
+
+      const data: StudentDataResponse = await LoginApi(userId, password);
+
+      setLoading(false);
+
+      // Map courses
+      const courses = data.courses.map((c) => {
+        const tabs: Record<string, boolean> = {
+          dashboard: !!c.dashboard,
+          report: !!c.report,
+          studyMaterial: !!c.studyMaterial,
+          selfTest: !!c.selfTest,
+          topicTest: !!c.topicTest,
+          mockTest: !!c.mockTest,
+          dynamicMockTest: !!c.dynamicMockTest,
+          classTest: !!c.classTest,
+          teacherHelp: !!c.teacherHelp,
+          tonyHelp: !!c.tonyHelp,
+          otherCourses: !!c.otherCourses,
+        };
+        const course: Course = {
+          templateId: c.templateId,
+          validityId: c.validityId,
+          courseId: c.courseId,
+          packTypeId: c.packTypeId,
+          benchmark: c.benchmark,
+          organisationName: c.organisationName,
+          validTillDate: c.validTillDate,
+          packTypeTitle: c.packTypeTitle,
+          tabs: tabs,
+        };
+        return course;
+      });
+
+      const studentData: StudentData = {
+        openedCourse: data.openedCourse,
+        firstTimeUser: data.firstTimeUser,
+        websiteId: data.websiteId,
+        token: data.token,
+        studentId: data.studentId,
+        studentName: data.studentName,
+        emailId: data.emailId,
+        phoneNo: data.phoneNo,
+        status: data.status,
+        loginId: data.loginId,
+        schools: data.schools,
+        courses: courses,
+        profilePic: data.profilePic,
+        deleteFlag: data.deleteFlag,
+      };
+
+      setStudentData(studentData);
+      setError("Login Successful!", Severity.None);
+
+      // Navigate to dashboard
+      navigate("/dashboard");
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "invalid_credentials") {
+          setError("Invalid email or password", Severity.Alert);
+          setLoading(false);
+        }
+        if (error.message === "invalid_email") {
+          setError("Please enter your email address", Severity.Alert);
+          setLoading(false);
+        }
+        if (error.message === "invalid_password") {
+          setError("Please enter your password", Severity.Alert);
+          setLoading(false);
+        }
+      }
+      setStudentData(null);
+    }
+  } else {
     setError("", Severity.None);
     setLoading(true);
+    try {
+      const res = await verifyMobileSendOtp(userId);
+      setToken(res?.token);
+    } catch (error) {
+      if (error instanceof Error) {
+        if (error.message === "mobile_not_exists") {
+          setError("Invalid Number", Severity.Alert);
+          setLoading(false);
+        }
+      }
+      setStudentData(null);
+    }
+  }
+};
 
-    const data: StudentDataResponse = await LoginApi(email, password);
-
-    setLoading(false);
-
-    // Map courses
-    const courses = data.courses.map((c) => {
+export const handleVerifyOtp = async (otp: string) => {
+  const { token, setError } = useLoginStore.getState();
+  const { setStudentData } = useStudentStore.getState();
+  if (!token) throw new Error("invalid_number");
+  try {
+    const res: StudentDataResponse = await verifyOtpLogin(otp, token);
+    const courses = res.courses.map((c) => {
       const tabs: Record<string, boolean> = {
         dashboard: !!c.dashboard,
         report: !!c.report,
@@ -57,59 +155,44 @@ export const HandleLogin = async (navigate: NavigateFunction) => {
     });
 
     const studentData: StudentData = {
-      openedCourse: data.openedCourse,
-      firstTimeUser: data.firstTimeUser,
-      websiteId: data.websiteId,
-      token: data.token,
-      studentId: data.studentId,
-      studentName: data.studentName,
-      emailId: data.emailId,
-      phoneNo: data.phoneNo,
-      status: data.status,
-      loginId: data.loginId,
-      schools: data.schools,
+      openedCourse: res.openedCourse,
+      firstTimeUser: res.firstTimeUser,
+      websiteId: res.websiteId,
+      token: res.token,
+      studentId: res.studentId,
+      studentName: res.studentName,
+      emailId: res.emailId,
+      phoneNo: res.phoneNo,
+      status: res.status,
+      loginId: res.loginId,
+      schools: res.schools,
       courses: courses,
-      profilePic: data.profilePic,
-      deleteFlag: data.deleteFlag
+      profilePic: res.profilePic,
+      deleteFlag: res.deleteFlag,
     };
 
     setStudentData(studentData);
     setError("Login Successful!", Severity.None);
-
-    // Navigate to dashboard
-    navigate("/dashboard");
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === "invalid_credentials") {
-        setError("Invalid email or password", Severity.Alert);
-        setLoading(false);
-      }
-      if (error.message === "invalid_email") {
-        setError("Please enter your email address", Severity.Alert);
-        setLoading(false);
-      }
-      if (error.message === "invalid_password") {
-        setError("Please enter your password", Severity.Alert);
-        setLoading(false);
-      }
-    }
+    console.log("verification :", error);
+    setError("Invalid Otp Number", Severity.Alert);
     setStudentData(null);
   }
 };
 
-const validateCredentials = (email: string, password: string) => {
-  const cleanEmail = email.trim();
-  const cleanPassword = password.trim();
+// const validateCredentials = (email: string, password: string) => {
+//   const cleanEmail = email.trim();
+//   const cleanPassword = password.trim();
 
-  const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-    cleanEmail
-  );
+//   const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+//     cleanEmail
+//   );
 
-  if (!emailMatch || !emailMatch) {
-    throw new Error("invalid_email");
-  }
+//   if (!emailMatch || !emailMatch) {
+//     throw new Error("invalid_email");
+//   }
 
-  if (!cleanPassword) {
-    throw new Error("invalid_password");
-  }
-};
+//   if (!cleanPassword) {
+//     throw new Error("invalid_password");
+//   }
+// };

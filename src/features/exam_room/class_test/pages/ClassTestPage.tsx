@@ -1,19 +1,24 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
 // Types
 import type { Column } from "../../../../components/types";
 
 // Store
-import { useCTStore } from "../../../../shared/hooks/useCTStore";
+import { useCTStore } from "../../../../global/hooks/useCTStore";
+
+// Services
+import { loadClassTestList } from "../../../../global/services/loadClassTestList";
+import { handleStartTest } from "../../topic_test/services/handleStartTest";
 
 // Components
-import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
-import Button from "../../../../components/Button";
-import ArchiveBoxIcon from "../../../../components/icons/archive-box-icon";
-import { useEffect } from "react";
-import { loadClassTestList } from "../../../../shared/services/loadClassTestList";
 import { Modal } from "../../../../components/Modal";
+import Button from "../../../../components/Button";
+import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
-import { handleStartTest } from "../../topic_test/services/handleStartTest";
-import { useNavigate } from "react-router";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TableSkeleton } from "../../../../components/TableSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -21,6 +26,7 @@ import { useNavigate } from "react-router";
 const ClassTestPage = () => {
   const navigate = useNavigate();
   const testList = useCTStore((s) => s.testList);
+  const loading = useLoadingStore((s) => s.loading);
   const setTestList = useCTStore((s) => s.setTestList);
   const selectedTest = useCTStore((s) => s.selectedTest);
   const setSelectedTest = useCTStore((s) => s.setSelectedTest);
@@ -57,10 +63,13 @@ const ClassTestPage = () => {
     {
       header: "Action",
       render: (row) => (
-        <Button style="primary" onClick={() => {
-          setSelectedTest(row);
-          setShowStartTestModal(true);
-          }}>
+        <Button
+          style="primary"
+          onClick={() => {
+            setSelectedTest(row);
+            setShowStartTestModal(true);
+          }}
+        >
           <p>Start Now</p>
         </Button>
       ),
@@ -76,7 +85,11 @@ const ClassTestPage = () => {
     };
     fetchData();
   }, []);
-  return testList ? (
+
+  return loading ? (
+    <TableSkeleton />
+  ): 
+  (testList ? (
     <div className="flex">
       <PaginatedTable
         columns={columns}
@@ -106,19 +119,20 @@ const ClassTestPage = () => {
             questionType: selectedTest?.questionType,
             totalMarks: selectedTest?.totalMark,
             totalQuestions: selectedTest?.totalQuestion,
-            totalTime: selectedTest?.totalTime
+            totalTime: selectedTest?.totalTime,
           }}
         />
       </Modal>
     </div>
   ) : (
-    <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
-      <div className="flex flex-col gap-2 items-center justify-center">
-        <ArchiveBoxIcon fontSize={100} />
-        <h5>No Class Test Found</h5>
-      </div>
-    </div>
-  );
+    // <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
+    //   <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
+    //     <ArchiveBoxXMarkIcon className="h-45 w-45 mb-2" />
+    //     <p>No Class Tests Available</p>
+    //   </div>
+    // </div>
+    <EmptyState title="No Class Tests Available" />
+  ));
 };
 
 export default ClassTestPage;

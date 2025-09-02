@@ -1,38 +1,37 @@
-// React
-import { useState } from "react";
-
 // Icons
 import { MdChevronLeft } from "react-icons/md";
 
 // Constants
-import {
-  MAX_HEIGHT,
-  MIN_HEIGHT,
-} from "../../../../layouts/child-layout/constants";
+// import {
+//   MAX_HEIGHT,
+//   MIN_HEIGHT,
+// } from "../../../../layouts/child-layout/constants";
 
 // Store
 import useDrawerStore from "../../../../store/useDrawerStore";
 
 // Layouts & Components
-import { useChildLayout } from "../../../../layouts/child-layout/hooks/useChildLayout";
-import BottomNavigationSheet from "../../../../layouts/child-layout/components/BottomNavigationSheet";
+// import { useChildLayout } from "../../../../layouts/child-layout/hooks/useChildLayout";
+// import BottomNavigationSheet from "../../../../layouts/child-layout/components/BottomNavigationSheet";
 import GlobalDrawer from "../../../../components/GlobalDrawer";
 import TestHeader from "./TestHeader";
 import StatusGroup from "../StatusGroup";
-import AiChatPanel from "../AiChatPanel";
+// import AiChatPanel from "../AiChatPanel";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "./ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
+import AiIcon from "../../../../components/icons/ai-icon";
+import { useAiStore } from "../../store/useAiStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
  */
 const MobileTestSimulator = () => {
   // States
-  const [isAiChatOpen, setIsAiChatOpen] = useState(false);
-
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isAiFeatureEnabled = useAiStore(s => s.isAiFeatureEnabled);
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
@@ -40,13 +39,13 @@ const MobileTestSimulator = () => {
   const isRunning = useTestTimerStore((state) => state.isRunning);
 
   // Hooks
-  const {
-    isSecondaryHidden,
-    sheetHeight,
-    dragging,
-    onDragStart,
-    handleSecondaryHide,
-  } = useChildLayout(!isAiChatOpen, () => setIsAiChatOpen(false), 0.9);
+  // const {
+  //   isSecondaryHidden,
+  //   sheetHeight,
+  //   dragging,
+  //   onDragStart,
+  //   handleSecondaryHide,
+  // } = useChildLayout(!isAiChatOpen, () => setIsAiChatOpen(false), 0.9);
 
   const formattedTime = getTimeFromSeconds(remainingSec);
 
@@ -74,25 +73,19 @@ const MobileTestSimulator = () => {
       </div>
 
       {/* Tony AI Floating Button */}
-      <div
+      {isAiFeatureEnabled && <div
         className="fixed bottom-[120px] right-[32px] flex flex-col items-center gap-1"
         onClick={() => {
-          setIsAiChatOpen(true);
+          setIsHelpModalOpen(true);
         }}
       >
-        <div className="cursor-pointer size-[60px] bg-cyan-300 dark:bg-cyan-700 rounded-full flex justify-center items-center">
-          <img
-            src="/tony-logo.svg"
-            alt="Tony AI"
-            width={50}
-            height={50}
-            className="!size-[50px] object-cover"
-          />
+        <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-secondary)] flex justify-center items-center">
+        <AiIcon width={28} height={28}  />
         </div>
         <span className="font-semibold !text-xs">TONY AI</span>
-      </div>
+      </div>}
 
-      {/* Bottom Navigation for tony AI Chat Window */}
+      {/* Bottom Navigation for tony AI Chat Window
       <BottomNavigationSheet
         sheetContent={<AiChatPanel onClose={handleSecondaryHide} />}
         sheetHeight={sheetHeight}
@@ -102,7 +95,7 @@ const MobileTestSimulator = () => {
         handleSheetHidden={handleSecondaryHide}
         isSheetHidden={isSecondaryHidden}
         onDragStart={onDragStart}
-      />
+      /> */}
 
       {/* Trigger for opening the question list side panel */}
       <div

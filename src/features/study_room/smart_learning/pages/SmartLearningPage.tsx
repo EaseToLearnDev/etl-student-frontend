@@ -25,6 +25,10 @@ import SLTestModalContent from "../components/SLTestModalContent";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import type { Topic } from "../../../shared/types";
+import { Skeleton } from "../../../../components/SkeletonLoader";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -63,6 +67,8 @@ const SmartLearningPage = () => {
 
   const testOptions = useSLStore((s) => s.testOptions);
   const setTestOptions = useSLStore((s) => s.setTestOptions);
+
+  const loading = useLoadingStore((s) => s.loading);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
@@ -110,29 +116,45 @@ const SmartLearningPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            <TopicTreeView
-              topics={topicTree || []}
-              selectedTopic={selectedTopic}
-              onClickHandler={(t) => setSelectedTopicId(t ? t?.topicId : null)}
-              getId={(t) => t?.topicId}
-              getLabel={(t) => t?.topicName}
-              getChildren={(t) => t?.children}
-              renderRightSection={(_, isActive) =>
-                isActive && (
-                  <div className="w-7 h-7 rounded-full p-1 overflow-hidden border-2 border-dashed border-[var(--border-primary)]">
-                    <div className="w-full h-full bg-[var(--surface-bg-tertiary)] rounded-full overflow-hidden relative">
-                      <div
-                        className="h-full bg-[var(--sb-ocean-bg-active)] z-4 relative"
-                        style={{ width: `${lastSelfTestPercentage || 0}%` }}
-                      />
+            loading && (!topicTree || topicTree.length === 0) ? (
+              <>
+                <TreeViewSkeleton />
+              </>
+            ) : (
+              <TopicTreeView
+                topics={topicTree || []}
+                selectedTopic={selectedTopic}
+                onClickHandler={(t) =>
+                  setSelectedTopicId(t ? t?.topicId : null)
+                }
+                getId={(t) => t?.topicId}
+                getLabel={(t) => t?.topicName}
+                getChildren={(t) => t?.children}
+                renderRightSection={(_, isActive) =>
+                  isActive && (
+                    <div className="w-7 h-7 rounded-full p-1 overflow-hidden border-2 border-dashed border-[var(--border-primary)]">
+                      <div className="w-full h-full bg-[var(--surface-bg-tertiary)] rounded-full overflow-hidden relative">
+                        <div
+                          className="h-full bg-[var(--sb-ocean-bg-active)] z-4 relative"
+                          style={{ width: `${lastSelfTestPercentage || 0}%` }}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )
-              }
-            />
+                  )
+                }
+              />
+            )
           }
           secondaryContent={
-            selectedTopic ? (
+            loading ? (
+              <>
+                <div className="space-y-3 p-4">
+                  <Skeleton height={300} variant="rounded" />
+                  <Skeleton height={70} variant="text" />
+                  <Skeleton height={70} variant="text" />
+                </div>
+              </>
+            ) : selectedTopic ? (
               <TopicModeSelector
                 selectedTopic={selectedTopic}
                 mode={mode}
@@ -148,7 +170,7 @@ const SmartLearningPage = () => {
                 }
               />
             ) : (
-              <></>
+              <EmptyState title="No Data Available" />
             )
           }
           hideSecondary={

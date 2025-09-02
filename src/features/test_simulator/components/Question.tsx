@@ -17,7 +17,7 @@ interface QuestionProps {
  * Renders a button for a single question in the test simulator.
  * Handles setting the current question when clicked.
  */
-const Question = ({ question, questionNumber }: QuestionProps) => {
+const QuestionCard = ({ question, questionNumber }: QuestionProps) => {
   const setCurrentQuestion = useTestStore((state) => state.setCurrentQuestion);
   return (
     <button
@@ -33,4 +33,4 @@ const Question = ({ question, questionNumber }: QuestionProps) => {
   );
 };
 
-export default Question;
+export default QuestionCard;

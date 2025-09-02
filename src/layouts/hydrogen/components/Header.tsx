@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 // Icons
-import { MdCheck } from "react-icons/md";
+import { MdCheck, MdClose } from "react-icons/md";
 
 // Store
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
@@ -12,8 +12,9 @@ import { useStudentStore } from "../../../features/shared/hooks/useStudentStore"
 import cn from "../../../utils/classNames";
 
 // Services
-import { handleSwitchCourse } from "../../../shared/services/handleSwitchCourse";
-import getValidityFormatted from "../../../shared/services/getValidityFormatted";
+import { handleSwitchCourse } from "../../../global/services/handleSwitchCourse";
+import getValidityFormatted from "../../../global/services/getValidityFormatted";
+import { loadNotificationList } from "../../../global/services/loadNotificationList";
 
 // Components
 import HamburgerButton from "./HamburgerButton";
@@ -21,25 +22,29 @@ import Sidebar from "./Sidebar";
 import HeaderMenuRight from "./HeaderMenuRight";
 import StickyHeader from "./StickyHeader";
 import Select from "../../../components/Select";
-import { loadNotificationList } from "../../../shared/services/loadNotificationList";
+import { Modal } from "../../../components/Modal";
+import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
+import Button from "../../../components/Button";
+import { PiPaperPlaneTiltFill } from "react-icons/pi";
+import { handleStudentInvite } from "../../../global/services/handleStudentInvite";
+import FeedbackModal from "./FeedbackModal";
 
 export default function Header({ className }: { className?: string }) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isCourseSelectionOpen, setIsCourseSelectionOpen] =
-    useState<boolean>(false);
-  const [selectedCourseIndex, setSelectedCourseIndex] = useState<number | null>(
-    null
+
+  const courses = useStudentStore((s) => s.studentData?.courses);
+  const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
+  const teacherLoginId = useInviteTeacherStore((s) => s.teacherLoginId);
+  const setTeacherLoginId = useInviteTeacherStore((s) => s.setTeacherLoginId);
+  const showInviteTeacherModal = useInviteTeacherStore(
+    (s) => s.showInviteTeacherModal
+  );
+  const setShowInviteTeacherModal = useInviteTeacherStore(
+    (s) => s.setShowInviteTeacherModal
   );
 
-  const courses = useStudentStore((state) => state.studentData?.courses);
-
-  // UseEffects
-  useEffect(() => {
-    if (selectedCourseIndex !== null) {
-      handleSwitchCourse(navigate, selectedCourseIndex);
-    }
-  }, [selectedCourseIndex]);
+  const [isCourseSelectionOpen, setIsCourseSelectionOpen] = useState(false);
 
   useEffect(() => {
     loadNotificationList();
@@ -56,9 +61,9 @@ export default function Header({ className }: { className?: string }) {
         <Select
           items={courses || []}
           isOpen={isCourseSelectionOpen}
-          onSelect={setSelectedCourseIndex}
+          onSelect={(index) => handleSwitchCourse({ navigate, index })}
           onToggle={() => setIsCourseSelectionOpen((prev) => !prev)}
-          selectedIndex={selectedCourseIndex ?? 0}
+          selectedIndex={openedCourse ?? 0}
           type="Course"
           className="w-[200px]"
           dropdownClassName="w-[200px]"
@@ -88,6 +93,57 @@ export default function Header({ className }: { className?: string }) {
       </div>
 
       <HeaderMenuRight />
+      <Modal
+        isOpen={showInviteTeacherModal}
+        onClose={() => setShowInviteTeacherModal(false)}
+        size="md"
+        className="p-4"
+      >
+        <div className="relative p-2 px-4">
+          <h5>Invite Teacher</h5>
+          <div className="mt-4 flex flex-col gap-2">
+            <label className="!font-medium text-[var(--text-secondary)]">
+              Teacher User-ID / Email / Mobile
+            </label>
+            <input
+              value={teacherLoginId}
+              onChange={(e) => setTeacherLoginId(e.target.value)}
+              className={cn(
+                "w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+              )}
+              placeholder=" you@example.com"
+            />
+          </div>
+          <div className="flex justify-end mt-4">
+            <div className="flex gap-4 items-center">
+              <Button
+                style="primary"
+                onClick={() => handleStudentInvite({ teacherLoginId })}
+              >
+                <PiPaperPlaneTiltFill size={16} />
+                Invite
+              </Button>
+              <Button
+                style="secondary"
+                onClick={() => setShowInviteTeacherModal(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        </div>
+        <div
+          onClick={() => setShowInviteTeacherModal(false)}
+          className={cn(
+            "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+          )}
+        >
+          <MdClose size={20} />
+        </div>
+      </Modal>
+      <FeedbackModal />
     </StickyHeader>
   );
 }

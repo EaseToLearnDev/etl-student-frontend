@@ -2,28 +2,31 @@ import { create } from "zustand";
 import { Severity, type Error } from "../../../shared/types";
 
 export interface LoginStore {
-  email: string;
+  userId: string;
   password: string;
   error: Error;
   loading: boolean;
+  token: string | null;
 
   setLoading: (v: boolean) => void;
   setError: (message: string, severity: Severity) => void;
-
-  setCredentials: (email: string, password: string) => void;
+  setToken: (token: string | null) => void;
+  setCredentials: (userId: string, password: string) => void;
 }
 
 // TODO: REPLACE ERROR WITH ERROR STORE LATER
 export const useLoginStore = create<LoginStore>((set) => ({
-  email: "",
+  userId: "",
   password: "",
   error: {
     severity: Severity.None,
     message: "",
   },
   loading: false,
+  token: null,
 
   setLoading: (v) => set({ loading: v }),
   setError: (message, severity) => set({ error: { severity, message } }),
-  setCredentials: (email, password) => set({ email, password }),
+  setCredentials: (userId, password) => set({ userId, password }),
+  setToken: (token) => set({token})
 }));

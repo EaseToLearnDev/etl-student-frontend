@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
-import InputOTP from "../../auth/signup/components/InputOTP";
+import InputOTP from "../../../components/InputOTP";
 
 interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
@@ -17,9 +17,9 @@ const VerifyOtpContent = ({ onVerify, onCancel, error }: VerifyOtpContentProps) 
   };
 
   return (
-    <div>
-      <h5 className="text-center mb-3">Verify OTP</h5>
-      <div className="flex flex-col justify-center gap-4">
+    <div className="h-[500px] flex flex-col justify-start lg:justify-center items-center">
+      <h2 className="!font-black text-center">Verify OTP</h2>
+      <div className="flex flex-col justify-center gap-4 mt-6">
         <p className="text-center">
           We have sent OTP, Check your Email / Mobile
         </p>

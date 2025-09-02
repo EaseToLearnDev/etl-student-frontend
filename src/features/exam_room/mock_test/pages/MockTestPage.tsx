@@ -30,6 +30,8 @@ import PreviousTestModalContent from "../../../shared/components/PreviousTestMod
 import StartMockTestModalContent from "../components/StartMockTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import cn from "../../../../utils/classNames";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { Skeleton } from "../../../../components/SkeletonLoader";
 
 // Constants
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
@@ -54,6 +56,8 @@ const MockTestPage = () => {
     (s) => s.setShowPreviousTestModal
   );
 
+  const loading = useLoadingStore((s) => s.loading);
+
   // Prev test store
   const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
@@ -62,7 +66,7 @@ const MockTestPage = () => {
   const [hideSecondary, setHideSecondary] = useState(isMobile);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedDropdownIndex, setSelectedDropdownIndex] = useState(0);
-  const [selectedTabIndex, setSelectedTabIndex] = useState(1);
+  const [selectedTabIndex, setSelectedTabIndex] = useState(0);
 
   // Derived data
   const completeMockTests = testList?.[0] || ({} as MockTestCategory);
@@ -90,6 +94,8 @@ const MockTestPage = () => {
           tabs={TABS}
           selectedIndex={selectedTabIndex}
           onSelect={setSelectedTabIndex}
+          tabClassName="px-5 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
+          activeTabClassName="px-5 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
         />
         {selectedTabIndex === 1 && (
           <Select
@@ -107,28 +113,41 @@ const MockTestPage = () => {
       <div className="w-full h-full overflow-y-auto mt-4">
         <ChildLayout
           primaryContent={
-            <TestCardList
-              tests={
-                selectedTabIndex === 0
-                  ? completeMockTests?.testList
-                  : selectedSubjectTests
-              }
-              infoClickHandler={() => setHideSecondary(false)}
-              onClickHandler={(test) =>
-                selectAndManageTest({
-                  testId: test.id,
-                  selectedTabIndex,
-                  completeMockTests,
-                  subjectSpecificMockTests,
-                  selectedDropdownIndex,
-                  setSelectedTest,
-                  previousRunningTest: prevRunningTest,
-                  setPreviousRunningTest: setPrevRunningTest,
-                  setShowStartTestModal,
-                  setShowPreviousTestModal,
-                })
-              }
-            />
+            !loading ? (
+              <TestCardList
+                tests={
+                  selectedTabIndex === 0
+                    ? completeMockTests?.testList
+                    : selectedSubjectTests
+                }
+                infoClickHandler={() => setHideSecondary(false)}
+                onClickHandler={(test) =>
+                  selectAndManageTest({
+                    testId: test.id,
+                    selectedTabIndex,
+                    completeMockTests,
+                    subjectSpecificMockTests,
+                    selectedDropdownIndex,
+                    setSelectedTest,
+                    previousRunningTest: prevRunningTest,
+                    setPreviousRunningTest: setPrevRunningTest,
+                    setShowStartTestModal,
+                    setShowPreviousTestModal,
+                  })
+                }
+              />
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                  <Skeleton height={100} variant="rounded" />
+                </div>
+              </>
+            )
           }
           secondaryContent={<TopicTestInstructions title="Instructions" />}
           hideSecondary={hideSecondary}
