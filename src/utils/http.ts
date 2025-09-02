@@ -1,5 +1,6 @@
 
 import axios, { type AxiosInstance } from "axios";
+import logout from "./logout";
 
 /**
  * Provides a configured Axios instance.
@@ -47,20 +48,25 @@ export const makeRequest = async (
 export const apiWrapper = async <T>(fn: () => Promise<T>) => {
   try {
     const response = await fn();
+    const data = (response as any)?.data ?? response;
+    if (data.responseTxt === "invalidToken"){
+      logout();
+    }
     return {
       success: true,
-      data: (response as any)?.data ?? response,
+      data: data,
       message: (response as any)?.data?.message || "Success",
     };
   } catch (error: any) {
+    const errorMsg = error?.response?.data?.message || error?.message || "Something went wrong";
+    if (errorMsg === "invalidToken") {
+      logout();
+    }
     console.log("API Error", error);
     return {
       success: false,
       data: null,
-      message:
-        error?.response?.data?.message ||
-        error?.message ||
-        "Something went wrong",
+      message:errorMsg
     };
   }
 };
