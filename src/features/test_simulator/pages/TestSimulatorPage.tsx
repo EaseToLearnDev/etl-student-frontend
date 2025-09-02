@@ -1,6 +1,6 @@
 // React
 import { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -18,10 +18,13 @@ import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import AiHelpModal from "../components/AiHelpModal";
 import { useAiStore } from "../store/useAiStore";
+import { handleTestSubmit } from "../services/handleTestSubmit";
+import { handleContinueLater } from "../services/handleContinueLater";
 
 const TestSimulatorPage = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
 
@@ -94,8 +97,8 @@ const TestSimulatorPage = () => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={() => {}}
-          onContinueLater={() => {}}
+          onSubmit={() => handleTestSubmit(navigate)}
+          onContinueLater={() => handleContinueLater(navigate)}
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
