@@ -54,8 +54,6 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
     };
   } catch (error: any) {
     console.log("API Error", error);
-    localStorage.removeItem("student-storage");
-    window.location.href = "/student/login";
     return {
       success: false,
       data: null,

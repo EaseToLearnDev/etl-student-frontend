@@ -15,10 +15,6 @@ const QuestionNavigator = ({ className }: any) => {
   const setIsSubmissionModalOpen = useTestStore(
     (state) => state.setIsSubmissionModalOpen
   );
-  const setIsContinueLaterModalOpen = useTestStore(
-    (state) => state.setIsContinueLaterModalOpen
-  );
-
   return (
     <div
       className={cn(
@@ -33,12 +29,6 @@ const QuestionNavigator = ({ className }: any) => {
           <div className="flex flex-col gap-3">
             <Button onClick={() => setIsSubmissionModalOpen(true)}>
               Submit
-            </Button>
-            <Button
-              onClick={() => setIsContinueLaterModalOpen(true)}
-              style="secondary"
-            >
-              End Session
             </Button>
           </div>
           <StatusGroup />
