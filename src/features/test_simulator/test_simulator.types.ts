@@ -12,7 +12,7 @@ export interface Question {
   sectionName: string;
   sectionOrder: number;
   sectionTime: number;
-  topicId: string;
+  topicId: number;
   timeSpent?: number;
   correctAnswerMarks: number;
   incorrectAnswerMarks: number;
@@ -109,7 +109,6 @@ export interface TestConfig {
   packTypeTitle?: PackTypeTitle;
 }
 
-
 export interface TestSubmitRequest {
   courseId: number;
   templateId: number;
@@ -140,4 +139,32 @@ export interface TestSubmitRequest {
   schoolName: string;
   className: string;
   helpCounter: number;
+}
+
+export enum AIModalView {
+  Main,
+  AIContent,
+  StudyMaterialContent,
+}
+
+export interface OpenAiSolution {
+  solution: string;
+  questionId: number;
+}
+
+export interface ContentType {
+  id: number;
+  contentTitle: string;
+  contentType: string;
+  contentUrl?: string;
+  description: string;
+  language?: string
+  links: LinkItem[];
+}
+
+export interface LinkItem {
+  title: string;
+  id: string;
+  tag: string;
+  children?: LinkItem[];
 }

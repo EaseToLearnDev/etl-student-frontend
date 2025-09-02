@@ -8,10 +8,9 @@ import PDFIcon from "../../../../components/icons/pdf-solid-icon";
 import PPTIcon from "../../../../components/icons/ppt-solid-icon";
 import VideoIcon from "../../../../components/icons/video-solid-icon";
 
-
 type TopicContentItemProps = {
   content: TopicContentType;
-  setSelectedContent: (content: TopicContentType) => void;
+  onClickHandler?: (content: TopicContentType) => void;
 };
 
 /**
@@ -20,7 +19,7 @@ type TopicContentItemProps = {
  */
 const TopicContentItem = ({
   content,
-  setSelectedContent,
+  onClickHandler,
 }: TopicContentItemProps) => {
   const iconMap: Record<string, ReactNode> = {
     Text: <DocIcon height={74} />,
@@ -33,7 +32,7 @@ const TopicContentItem = ({
 
   return (
     <div
-      onClick={() => setSelectedContent(content)}
+      onClick={() => onClickHandler?.(content)}
       className="flex gap-5 p-3 items-center border-1 border-[var(--border-secondary)] rounded-[8px] cursor-pointer hover:bg-[var(--surface-bg-secondary)]"
     >
       {icon}
@@ -44,9 +43,17 @@ const TopicContentItem = ({
           </h6>
         </div>
         <div className="w-full flex gap-2 items-center">
-          <p className="text-ellipsis line-clamp-2">{content?.contentType}</p>
-          <div className="w-1 h-1 rounded-full bg-[var(--text-primary)]" />
-          <p className="text-ellipsis line-clamp-2">{content?.language}</p>
+          <p className="text-ellipsis line-clamp-2 text-[var(--text-secondary)]">
+            {content?.contentType}
+          </p>
+          {content?.contentType && content?.language ? (
+            <div className="w-1 h-1 rounded-full bg-[var(--text-primary)]" />
+          ) : (
+            <></>
+          )}
+          <p className="text-ellipsis line-clamp-2 text-[var(--text-secondary)]">
+            {content?.language}
+          </p>
         </div>
       </div>
     </div>

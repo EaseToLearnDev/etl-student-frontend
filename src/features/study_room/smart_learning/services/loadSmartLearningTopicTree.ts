@@ -6,12 +6,14 @@ import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 /**
  * Loads the smart learning topic tree for the current student.
  */
 export const loadSmartLearningTopictree = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData || !activeCourse) return null;
 
@@ -20,13 +22,21 @@ export const loadSmartLearningTopictree = async () => {
 
   if (!loginId || !token || !templateId) return null;
 
-  const data = (await getTopicTreeView({
-    type: "learning",
-    mode: 0,
-    loginId,
-    token,
-    templateId,
-  })) as Topic[];
+  setLoading(true);
+  try {
+    const data = (await getTopicTreeView({
+      type: "learning",
+      mode: 0,
+      loginId,
+      token,
+      templateId,
+    })) as Topic[];
 
-  return data ?? null;
+    return data ?? null;
+  } catch (error) {
+    console.error("Error loading smart learning topic tree:", error);
+    return null;
+  } finally {
+    setLoading(false);
+  }
 };

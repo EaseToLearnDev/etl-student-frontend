@@ -5,15 +5,19 @@ import Button from "../../../components/Button";
 import { Modal } from "../../../components/Modal";
 import { useState } from "react";
 import { MdClose } from "react-icons/md";
-import {
-  PiPaperPlaneTiltFill,
-} from "react-icons/pi";
+import { PiPaperPlaneTiltFill } from "react-icons/pi";
+import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
+import { submitStudentFeedback } from "../../../global/services/submitStudentFeedback";
 
 interface SupportSectionProps {
   className?: string;
 }
 
 const SupportSection = ({ className = "" }: SupportSectionProps) => {
+  const subject = useFeedbackStore((state) => state.subject);
+  const details = useFeedbackStore((s) => s.details);
+  const setSubject = useFeedbackStore((state) => state.setSubject);
+  const setDetails = useFeedbackStore((s) => s.setDetails);
   const [openSupportModal, setOpenSupportModal] = useState<boolean>(false);
   return (
     <div className={cn("w-full rounded-lg p-5 shadow-md", className)}>
@@ -39,23 +43,51 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
       >
         <div className="relative p-2 px-4">
           <h5>Contact Support</h5>
+          <div className="flex flex-col gap-1 mt-4">
+            <label
+              htmlFor="Subject"
+              className="!font-medium text-[var(--text-secondary)]"
+            >
+              Subject
+            </label>
+            <input
+              name="subject"
+              className={cn(
+                "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+              )}
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            />
+          </div>
           <div className="mt-4 flex flex-col gap-2">
             <label className="!font-medium text-[var(--text-secondary)]">
               Tell us your query
             </label>
             <textarea
-              name=""
-              id=""
+              name="description"
               rows={4}
               className={cn(
                 "resize-none w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                 "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
               )}
+              value={details}
+              onChange={(e) => setDetails(e.target.value)}
             ></textarea>
           </div>
           <div className="flex justify-end mt-4">
             <div className="flex gap-4 items-center">
-              <Button style="primary">
+              <Button
+                style="primary"
+                onClick={() => {
+                  submitStudentFeedback({
+                    type: "Other",
+                    subject: subject,
+                    details: details,
+                  });
+                  setOpenSupportModal(false);
+                }}
+              >
                 <PiPaperPlaneTiltFill size={16} />
                 Send
               </Button>

@@ -7,10 +7,12 @@ import { useMTStore } from "../hooks/useMTStore";
 
 // Apis
 import { getTopicTreeView } from "../../../shared/apis/treeview.api";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 export const loadMockTestList = async () => {
   const { studentData, activeCourse } = useStudentStore.getState();
   const { setTestList } = useMTStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData || !activeCourse) {
     setTestList(null);
@@ -25,6 +27,7 @@ export const loadMockTestList = async () => {
     return;
   }
 
+  setLoading(true);
   try {
     const list = (await getTopicTreeView({
       type: "mock",
@@ -43,5 +46,7 @@ export const loadMockTestList = async () => {
   } catch (error) {
     console.error("Failed to load mock test list:", error);
     setTestList(null);
+  } finally {
+    setLoading(false);
   }
 };

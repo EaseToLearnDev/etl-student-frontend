@@ -108,6 +108,8 @@
 
   --sb-neutral-content-primary: #ffffff;
   --sb-neutral-content-secondary: #a1a1aa;
+
+  --skeleton-bg: rgb(0, 0, 0, 0.1);
 }
 
 /* Mobile Headers */
@@ -185,6 +187,8 @@ body.dark-mode {
   --sb-neutral-bg-disabled: #09090b;
   --sb-neutral-content-primary: #000000;
   --sb-neutral-content-secondary: #27272a;
+
+  --skeleton-bg: rgba(255, 255, 255, 0.1);
 }
 a,
 button {
