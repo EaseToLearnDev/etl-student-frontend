@@ -58,6 +58,7 @@ export interface TestStore {
 
   getCurrentQuestion: () => Question | null;
   setCurrentQuestion: (question: Question | null) => void;
+  getCurrentQuestionIndex: () => number;
 
   questionResponseMap: Record<number, Response | null>;
   getCurrentResponse: () => Response | null;
@@ -71,6 +72,7 @@ export interface TestStore {
 
   questionStatusMap: Record<number, QuestionStatus>;
   getStatusByQuestionId: (questionId: number) => QuestionStatus | null;
+
   changeStatusByQuestionId: (
     questionId: number,
     status: QuestionStatus
@@ -246,6 +248,18 @@ const useTestStore = create<TestStore>((set, get) => ({
     });
 
     startTimer();
+  },
+
+  getCurrentQuestionIndex: () => {
+    const { testData, getCurrentQuestion } = get();
+    if (!testData) return -1;
+
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return -1;
+
+    return testData.questionSet.findIndex(
+      (q) => q.questionId === currentQuestion.questionId
+    );
   },
 
   // Response Handler

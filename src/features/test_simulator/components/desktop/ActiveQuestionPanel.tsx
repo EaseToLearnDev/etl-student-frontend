@@ -27,6 +27,10 @@ const ActiveQuestionPanel = () => {
   const currentResponse = useTestStore((s) =>
     currentQuestion ? s.questionResponseMap[currentQuestion?.questionId] : null
   );
+  const getCurrentQuestionIndex = useTestStore((state) =>
+    state.getCurrentQuestionIndex()
+  );
+
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
 
   return (
@@ -35,9 +39,12 @@ const ActiveQuestionPanel = () => {
       <div className="flex flex-col gap-10">
         {/* Question Title & Body  */}
         <div className="h-full flex flex-col gap-4">
-          <h5 className="text-[24px]">{currentQuestion?.sectionName ?? "Questions"}</h5>
+          <h5 className="text-[24px]">
+            {currentQuestion?.sectionName ?? "Questions"}
+          </h5>
           <MathJax dynamic>
-            <h5>
+            <h5 className="flex gap-1">
+              {`Q${getCurrentQuestionIndex + 1})`}
               <div
                 className="math-container max-h-[400px] overflow-y-auto"
                 dangerouslySetInnerHTML={{
@@ -52,7 +59,8 @@ const ActiveQuestionPanel = () => {
         {/* Response Choices */}
         <div className="flex flex-col gap-5">
           {currentQuestion?.responseChoice.map((response) => (
-            <div key={response.responseId} className="flex items-center gap-4">
+            <div key={response.responseId} className="flex items-center gap-3">
+              <h6>{`${response?.responseId})`}</h6>
               <Radio
                 text={response.responseText}
                 checked={currentResponse?.responseId === response.responseId}

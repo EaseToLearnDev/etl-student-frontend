@@ -21,9 +21,9 @@ const SubmissionModalContent = ({
       <div className="flex flex-col gap-4">
         <h5 className="!font-bold">Submit Test</h5>
         <h6 className="text-[var(--text-secondary)]">
-          Click <b className="text-[var(--text-primary)]">Submit Now</b> to
+          Click <b className="text-[var(--text-secondary)]">Submit Now</b> to
           finalize your session and view results, or{" "}
-          <b className="text-[var(--text-primary)]">Save & Continue Later</b> if
+          <b className="text-[var(--text-secondary)]">Save & Continue Later</b> if
           you wish to pause and resume it later.
         </h6>
       </div>

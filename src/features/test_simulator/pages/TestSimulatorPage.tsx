@@ -60,7 +60,10 @@ const TestSimulatorPage = () => {
         const data = await loadTestDetails({ testConfig });
         if (data) setTestData(data);
 
-        if (testConfig?.assessmentMode === "advance") {
+        if (
+          testConfig?.assessmentMode === "advance" ||
+          testConfig?.testType !== 1
+        ) {
           startTestTimer(data?.remainingTime ?? 0);
         }
         if (testConfig?.testType === 1) {
@@ -75,11 +78,27 @@ const TestSimulatorPage = () => {
 
     return () => {
       stopQuestionTimer();
-      if (testConfig?.assessmentMode === "advance") {
+      if (
+        testConfig?.assessmentMode === "advance" ||
+        testConfig?.testType !== 1
+      ) {
         stopTestTimer();
       }
     };
   }, []);
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   return (
     <>
