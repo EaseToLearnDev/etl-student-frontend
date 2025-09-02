@@ -60,7 +60,7 @@ const StatusGroup = () => {
     },
   ];
   return (
-    <div className="relative w-full flex flex-wrap items-center justify-center gap-5">
+    <div className="relative w-full grid grid-cols-2 gap-5">
       {statusList.map((status) => {
         const statusTheme = colors[status.theme];
         return (

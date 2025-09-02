@@ -26,6 +26,7 @@ import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
 import StudentReport from "../features/report/pages/StudentReport";
+import ViewAnswers from "../features/test_simulator/components/ViewAnswers";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -102,7 +103,6 @@ const Router = () => {
         <Route path="exam-room/topic-test" element={<TopicTestPage />} />
         <Route path="exam-room/mock-test" element={<MockTestPage />} />
         <Route path="exam-room/class-test" element={<ClassTestPage />} />
-
 
         <Route path="report" element={<StudentReport />} />
         <Route path="selectcourse" element={<AllCoursesPage />} />

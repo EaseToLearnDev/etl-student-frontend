@@ -1,6 +1,6 @@
 // React
 import { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -18,10 +18,13 @@ import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import AiHelpModal from "../components/AiHelpModal";
 import { useAiStore } from "../store/useAiStore";
+import { handleTestSubmit } from "../services/handleTestSubmit";
+import { handleContinueLater } from "../services/handleContinueLater";
 
 const TestSimulatorPage = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
 
@@ -57,7 +60,10 @@ const TestSimulatorPage = () => {
         const data = await loadTestDetails({ testConfig });
         if (data) setTestData(data);
 
-        if (testConfig?.assessmentMode === "advance") {
+        if (
+          testConfig?.assessmentMode === "advance" ||
+          testConfig?.testType !== 1
+        ) {
           startTestTimer(data?.remainingTime ?? 0);
         }
         if (testConfig?.testType === 1) {
@@ -72,20 +78,36 @@ const TestSimulatorPage = () => {
 
     return () => {
       stopQuestionTimer();
-      if (testConfig?.assessmentMode === "advance") {
+      if (
+        testConfig?.assessmentMode === "advance" ||
+        testConfig?.testType !== 1
+      ) {
         stopTestTimer();
       }
     };
   }, []);
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   return (
     <>
       {testError?.id === "not_found" ? (
         <h1>TEST NOT FOUND!</h1>
       ) : !isMobile ? (
-        <DesktopTestSimulator />
+        <DesktopTestSimulator mode="test" />
       ) : (
-        <MobileTestSimulator />
+        <MobileTestSimulator mode="test" />
       )}
       <Modal
         isOpen={isSubmissionModalOpen}
@@ -94,8 +116,8 @@ const TestSimulatorPage = () => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={() => {}}
-          onContinueLater={() => {}}
+          onSubmit={() => handleTestSubmit(navigate)}
+          onContinueLater={() => handleContinueLater(navigate)}
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>

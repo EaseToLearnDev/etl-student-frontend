@@ -239,7 +239,7 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
           <div className="sticky top-0 left-0 w-full p-4 bg-[var(--surface-bg-secondary)] flex justify-between items-center gap-4">
             <div className="flex items-center gap-4">
               <div className="flex justify-center items-center size-8 aspect-square bg-[var(--sb-ocean-bg-active)] rounded-md">
-                <BookOpenIcon width={16} height={16} />
+                <BookOpenIcon width={16} height={16} className="text-white" />
               </div>
               <h5 className="!font-bold">Physics</h5>
             </div>
