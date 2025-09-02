@@ -20,7 +20,7 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
   const setDetails = useFeedbackStore((s) => s.setDetails);
   const [openSupportModal, setOpenSupportModal] = useState<boolean>(false);
   return (
-    <div className={cn("w-full rounded-lg p-5 shadow-md", className)}>
+    <div className={cn("w-full", className)}>
       <h5>Support</h5>
       <p className="mt-2 text-[var(--text-tertiary)]">
         Have any questions or need help? Feel free to reach out to our support
