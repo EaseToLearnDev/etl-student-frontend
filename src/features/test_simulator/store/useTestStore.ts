@@ -5,7 +5,6 @@ import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
   Question,
-  Response,
   SectionUI,
   CurrentPointer,
   TestConfig,
@@ -40,10 +39,18 @@ import {
   updateStatusHandler,
 } from "../services/statusHandlers";
 
+interface Features {
+  timerEnabled: boolean;
+  correctResponseEnabled: boolean;
+  showDynamicStatusEnabled: boolean;
+}
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
   setTestData: (data: TestData | null) => void;
+
+  features: Features;
+  setFeatures: (features: Features) => void;
 
   testConfig: TestConfig | null;
   setTestConfig: (config: TestConfig | null) => void;
@@ -60,9 +67,9 @@ export interface TestStore {
   setCurrentQuestion: (question: Question | null) => void;
   getCurrentQuestionIndex: () => number;
 
-  questionResponseMap: Record<number, Response | null>;
-  getCurrentResponse: () => Response | null;
-  setCurrentResponse: (response: Response | null) => void;
+  questionResponseMap: Record<number, string>;
+  getCurrentResponse: () => string;
+  setCurrentResponse: (response: string) => void;
   clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
@@ -108,6 +115,16 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionStatusMap: {},
   _questionTimerId: null,
   isSubmissionModalOpen: false,
+
+  features: {
+    timerEnabled: false,
+    correctResponseEnabled: false,
+    showDynamicStatusEnabled: false,
+  },
+  setFeatures: (features) =>
+    set({
+      features: features,
+    }),
 
   // Initialize test data
   setTestData: (data) =>
@@ -266,12 +283,14 @@ const useTestStore = create<TestStore>((set, get) => ({
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
-    if (!question) return null;
+    if (!question) return "";
 
-    return getResponseForQuestionHandler({
-      questionId: question.questionId,
-      questionResponseMap,
-    });
+    return (
+      getResponseForQuestionHandler({
+        questionId: question.questionId,
+        questionResponseMap,
+      }) ?? ""
+    );
   },
 
   // Set Current Response Handler
@@ -405,6 +424,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
+  
   // Reset state
   reset: () => {
     const { stopQuestionTimer: stopTimer } = get();
@@ -422,6 +442,11 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionResponseMap: {},
       questionTimeMap: {},
       isSubmissionModalOpen: false,
+      features: {
+        correctResponseEnabled: false,
+        showDynamicStatusEnabled: false,
+        timerEnabled: false,
+      },
     });
   },
 }));

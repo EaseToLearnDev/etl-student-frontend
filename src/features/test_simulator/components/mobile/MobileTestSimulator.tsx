@@ -25,14 +25,10 @@ import { getTimeFromSeconds } from "../../../../utils";
 import AiIcon from "../../../../components/icons/ai-icon";
 import { useAiStore } from "../../store/useAiStore";
 
-interface MobileTestSimulatorProps {
-  mode: "test" | "answers";
-}
-
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
  */
-const MobileTestSimulator = ({ mode }: MobileTestSimulatorProps) => {
+const MobileTestSimulator = () => {
   // States
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
@@ -64,9 +60,9 @@ const MobileTestSimulator = ({ mode }: MobileTestSimulatorProps) => {
         ) : (
           <></>
         )}
-        <h2 className="text-center">
+        <div className="text-center">
           <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
-        </h2>
+        </div>
       </div>
 
       <div className="flex flex-col w-full h-full justify-between gap-2 p-2">

@@ -105,9 +105,9 @@ const TestSimulatorPage = () => {
       {testError?.id === "not_found" ? (
         <h1>TEST NOT FOUND!</h1>
       ) : !isMobile ? (
-        <DesktopTestSimulator mode="test" />
+        <DesktopTestSimulator />
       ) : (
-        <MobileTestSimulator mode="test" />
+        <MobileTestSimulator />
       )}
       <Modal
         isOpen={isSubmissionModalOpen}

@@ -55,8 +55,7 @@ export const handleTestSubmit = (navigate: NavigateFunction) => {
           baseObj.sectionId = item.sectionId;
           baseObj.sectionName = item.sectionName;
         } else {
-          baseObj.studentResponse =
-            questionResponseMap[item.questionId]?.responseId || "";
+          baseObj.studentResponse = questionResponseMap[item.questionId] || "";
         }
 
         return baseObj;

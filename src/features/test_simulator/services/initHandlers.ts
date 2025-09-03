@@ -2,7 +2,6 @@
 import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
-  Response,
   CurrentPointer,
   SectionUI,
   Question,
@@ -10,7 +9,7 @@ import type {
 
 export interface InitializeTestDataResult {
   statusMap: Record<number, QuestionStatus>;
-  responseMap: Record<number, Response | null>;
+  responseMap: Record<number, string>;
   timeMap: Record<number, number>;
   sectionsUI: SectionUI[];
   initialPointer: CurrentPointer;
@@ -25,12 +24,12 @@ export const initializeTestData = ({
   testData: TestData;
 }): InitializeTestDataResult => {
   const statusMap: Record<number, QuestionStatus> = {};
-  const responseMap: Record<number, Response | null> = {};
+  const responseMap: Record<number, string> = {};
   const timeMap: Record<number, number> = {};
 
   testData.questionSet.forEach((q) => {
     statusMap[q.questionId] = QuestionStatus.NOT_VISITED;
-    responseMap[q.questionId] = q.studentResponse ?? null;
+    responseMap[q?.questionId] = q.studentResponse ?? "";
     timeMap[q.questionId] = q.timeSpent ?? 0;
   });
 
