@@ -1,5 +1,5 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
@@ -20,6 +20,8 @@ import AiHelpModal from "../components/AiHelpModal";
 import { useAiStore } from "../store/useAiStore";
 import { handleTestSubmit } from "../services/handleTestSubmit";
 import { handleContinueLater } from "../services/handleContinueLater";
+import TestEndedModalContent from "../components/TestEndedModalContent";
+import FullScreenExitModalContent from "../components/FullSrcreenModal";
 
 const TestSimulatorPage = () => {
   const location = useLocation();
@@ -40,11 +42,16 @@ const TestSimulatorPage = () => {
   const setIsSubmissionModalOpen = useTestStore(
     (s) => s.setIsSubmissionModalOpen
   );
+  const isTestEndedModalOpen = useTestTimerStore((s) => s.isTestEndedModalOpen);
+  // const setIsTestEndedModalOpen = useTestTimerStore((s) => s.setIsTestEndedModalOpen);
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
   const startTestTimer = useTestTimerStore((s) => s.startTestTimer);
   const stopTestTimer = useTestTimerStore((s) => s.stopTestTimer);
   const setIsAiFeatureEnabled = useAiStore((s) => s.setIsAiFeatureEnabled);
+
+  //States
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -87,6 +94,55 @@ const TestSimulatorPage = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'I') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.shiftKey && event.key === 'J') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.shiftKey && event.key === 'C') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.key === 'u') {
+        event.preventDefault();
+        return;
+      }
+    };
+
+    enterFullScreen();
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.addEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const enterFullScreen = async () => {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.warn('Full-screen request failed:', error);
+    }
+  };
+
+  const handleFullScreenChange = async () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(true);
+    }
+  };
+
   // useEffect(() => {
   //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
   //     event.preventDefault();
@@ -121,6 +177,29 @@ const TestSimulatorPage = () => {
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
+
+      <Modal
+        isOpen={isTestEndedModalOpen}
+        onClose={() => undefined}
+        size="lg"
+        className="p-4"
+      >
+        <TestEndedModalContent
+          onSubmit={() => handleTestSubmit(navigate)}
+        />
+      </Modal>
+
+      <Modal size="lg" className="p-4" isOpen={isFullScreen} onClose={() => {
+        setIsFullScreen(false);
+        enterFullScreen();
+      }}>
+        <FullScreenExitModalContent onSubmit={() => handleTestSubmit(navigate)} onReEnter={() => {
+          enterFullScreen();
+          setIsFullScreen(false)
+        }
+        } />
+      </Modal>
+
       <AiHelpModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
