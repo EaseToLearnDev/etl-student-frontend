@@ -50,7 +50,8 @@ const SLTestModalContent = ({
   ];
 
   return (
-    <div className="relative p-2 px-4">
+    <div className="relative p-2 px-4 max-h-[90vh] flex flex-col">
+      {/* Header */}
       <div className="w-full flex flex-col gap-2">
         <Badge
           theme={Theme.Neutral}
@@ -63,22 +64,22 @@ const SLTestModalContent = ({
         </Badge>
         <h5>{topicName || "Characteristic of Living Organism"}</h5>
       </div>
-      {mode === "competitive" ? (
-        <div className="w-full flex justify-center items-center mt-7">
+
+      {/* Tabs */}
+      {mode === "competitive" && (
+        <div className="w-full flex justify-center items-center mt-2">
           <Tabs
             tabs={["Options", "Instructions"]}
             selectedIndex={selectedIndex}
             onSelect={setSelectedIndex}
-            containerClassName="border-2 border-[var(--border-primary)]"
-            tabClassName="w-[100px] sm:w-[150px]"
+            activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
+            tabClassName="w-[100px] sm:w-[150px] border-2 border-[var(--border-primary)]"
           />
         </div>
-      ) : (
-        <></>
       )}
 
-      {/* Tab Content */}
-      <div className="mt-5 min-h-[300px] max-h-[500px] overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4">
+      {/* Scrollable Content */}
+      <div className="mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4">
         {selectedIndex === 0 && mode === "competitive" ? (
           <form
             className="flex flex-col gap-5"
@@ -114,7 +115,8 @@ const SLTestModalContent = ({
           <SmartLearningInstructions learningMode={mode} hideTitle />
         )}
       </div>
-      {/* Action Buttons */}
+
+      {/* Footer */}
       <div className="flex justify-end mt-7">
         <div className="flex gap-4 items-center">
           <Button onClick={onStart}>Start Session</Button>
@@ -123,6 +125,8 @@ const SLTestModalContent = ({
           </Button>
         </div>
       </div>
+
+      {/* Close Button */}
       <div
         onClick={onClose}
         className={cn(
