@@ -105,6 +105,9 @@ export interface TestConfig {
   searchQuery?: string;
   topicId?: number;
   examType?: ExamType;
+  utmSource?: string;
+  courseId?: number;
+  courseUrl?: string;
   assessmentMode?: AssessmentMode;
   packTypeTitle?: PackTypeTitle;
 }
