@@ -2,27 +2,37 @@ import { MdClose } from "react-icons/md";
 import { Modal } from "../../../components/Modal";
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import cn from "../../../utils/classNames";
+import { useEffect, useState } from "react";
+import { webTopicCourses } from "../api/webTopicCourses.api";
+import EmptyState from "../../../components/EmptyState";
+
+interface TopicData{
+    courseId: number;
+    courseTitle: string;
+}
 
 export function GuestCourseCardsModal() {
+  const [topic, setTopic] = useState<TopicData[]>([]);
   const openCourseCardsModal = useGuestStore((s) => s.openCourseCardsModal);
   const setOpenCourseCardsModal = useGuestStore(
     (s) => s.setOpenCourseCardsModal
   );
 
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const { topicId } = testConfig;
-//       try {
-//         const data = await webTopicCourses(topicId);
-//         setTopic(data);
-//       } catch (error) {
-//         console.log("Error Fetching Topic Data: ", error);
-//       }
-//     };
+  useEffect(() => {
+    const fetchData = async () => {
+      //   const { topicId } = testConfig;
+      const topicId = 3428;
+      try {
+        const data: TopicData[] = await webTopicCourses(topicId);
+        setTopic(data);
+      } catch (error) {
+        console.log("Error Fetching Topic Data: ", error);
+      }
+    };
 
-//     fetchData();
-//   }, []);
-const courses: any[] = [];
+    fetchData();
+  }, []);
+
   return (
     <Modal
       isOpen={openCourseCardsModal}
@@ -39,19 +49,23 @@ const courses: any[] = [];
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {courses.map((course, index) => (
-            <div
-              key={index}
-              onClick={() => {}}
-              className={cn(
-                "cursor-pointer rounded-xl border border-[var(--border-primary)]",
-                "bg-[var(--surface-bg-primary)] shadow-md hover:shadow-lg",
-                "p-4 flex flex-col justify-between transition-all"
-              )}
-            >
-              <h3>{course.courseTitle}</h3>
+        {!topic ? (
+          <EmptyState title="No Courses Found" />
+        ) : (
+          topic.map((course, index) => (
+              <div
+                key={index}
+                onClick={() => {}}
+                className={cn(
+                  "cursor-pointer rounded-xl border border-[var(--border-primary)]",
+                  "bg-[var(--surface-bg-primary)] shadow-md hover:shadow-lg",
+                  "p-4 flex flex-col justify-between transition-all"
+                )}
+              >
+                <h5>{course.courseTitle}</h5>
             </div>
-          ))}
+          ))
+        )}
         </div>
         <div
           onClick={() => setOpenCourseCardsModal(false)}

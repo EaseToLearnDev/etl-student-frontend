@@ -18,12 +18,13 @@ interface GuestStore {
   setEmail: (email: string) => void;
   setError: (error: string) => void;
   setToken: (token: string) => void;
+  reset: () => void;
 }
 
 export const useGuestStore = create<GuestStore>((set) => ({
-  showGuestTestSubmitModal: true,
+  showGuestTestSubmitModal: false,
   openVerifyOtp: false,
-  openCourseCardsModal: true,
+  openCourseCardsModal: false,
   token: "",
   name: "",
   mobile: 0,
@@ -33,10 +34,22 @@ export const useGuestStore = create<GuestStore>((set) => ({
   setShowGuestTestSubmitModal: (value) =>
     set({ showGuestTestSubmitModal: value }),
   setOpenVerifyOtp: (value) => set({ openVerifyOtp: value }),
-  setOpenCourseCardsModal: (value) => set({openCourseCardsModal: value}),
+  setOpenCourseCardsModal: (value) => set({ openCourseCardsModal: value }),
   setName: (name) => set({ name }),
   setEmail: (email) => set({ email }),
   setMobile: (mobile) => set({ mobile }),
   setError: (error) => set({ error }),
   setToken: (token) => set({ token }),
+
+  reset: () =>
+    set({
+      showGuestTestSubmitModal: false,
+      openVerifyOtp: false,
+      openCourseCardsModal: false,
+      token: "",
+      name: "",
+      mobile: 0,
+      email: "",
+      error: "",
+    }),
 }));
