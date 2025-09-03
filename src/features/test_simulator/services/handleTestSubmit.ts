@@ -72,6 +72,9 @@ export const handleTestSubmit = (navigate: NavigateFunction) => {
 
   const data = new FormData();
   data.append("ansdetails", JSON.stringify(obj as TestSubmitRequest));
+  if(testConfig?.utmSource) {
+    data.append('source', 'guest');
+  }
 
   const res = testSubmit({ data, loginId, token });
   if (!res) {
