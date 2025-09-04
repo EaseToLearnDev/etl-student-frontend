@@ -9,6 +9,7 @@ import SupportSection from "../components/SupportSection";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
 import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
+import { ActivityList } from "../components/ActivityList";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -28,7 +29,8 @@ const DashboardPage = () => {
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
       {/* Top + Middle section */}
-      <div className="grid grid-cols-1 2xl:grid-cols-[1fr_400px] 2xl:grid-rows-[250px_minmax(300px,1fr)] gap-5">
+      <div className="grid grid-cols-1 2xl:grid-cols-[1fr_400px] 2xl:auto-rows-min gap-5">
+
         {/* Featured Banner (top-left) */}
         <div className="order-1 2xl:col-start-1 2xl:row-start-1">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
@@ -37,7 +39,7 @@ const DashboardPage = () => {
         {/* Jump Back In (bottom-left) */}
         <div className="order-3 2xl:col-start-1 2xl:row-start-2">
           <WidgetCard className="w-full min-h-[300px] max-h-full">
-            <JumpBackInList />
+            <ActivityList />
           </WidgetCard>
         </div>
 
@@ -48,6 +50,11 @@ const DashboardPage = () => {
           </WidgetCard>
         </div>
       </div>
+        <div className="2xl:col-start-1 2xl:row-start-2">
+          <WidgetCard className="w-full min-h-[300px] max-h-full overflow-hidden">
+            <JumpBackInList />
+          </WidgetCard>
+        </div>
 
       {/* Bottom section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 min-h-[250px] max-h-[250px]">
