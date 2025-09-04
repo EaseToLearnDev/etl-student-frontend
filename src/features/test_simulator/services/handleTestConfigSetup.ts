@@ -24,23 +24,12 @@ interface HandleTestConfigSetupResponse {
 export const handleTestConfigSetup = ({
   params,
 }: HandleTestConfigSetupParams): HandleTestConfigSetupResponse => {
-  const testType = params.get("testType");
-
-  if (!testType) {
-    return {
-      testConfig: null,
-      error: {
-        message: "Internal Server Error",
-        severity: Severity.Alert,
-        id: "not_found",
-      },
-    };
-  }
-
   return {
     testConfig: {
       testId: params.get("testId") ? Number(params.get("testId")) : undefined,
-      testType: Number(testType),
+      testType: params.get("testType")
+        ? Number(params.get("testType"))
+        : undefined,
       testSession: params.get("testSession") ?? undefined,
       questionType: params.get("questionType") as QuestionType,
       totalQuestion: params.get("totalQuestion")

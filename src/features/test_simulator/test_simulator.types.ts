@@ -93,8 +93,10 @@ export type PackTypeTitle = "FREE" | "PRO" | "ACE";
 
 export interface TestConfig {
   testId?: number;
-  testType: number;
+  testType?: number;
   testSession?: string;
+  utm_source?: string;
+  testUid?: string;
   questionType?: QuestionType;
   totalQuestion?: number;
   totalTime?: number;
@@ -171,3 +173,5 @@ export interface LinkItem {
   tag: string;
   children?: LinkItem[];
 }
+
+export type SimulatorMode = "guest" | "registered" | "review";

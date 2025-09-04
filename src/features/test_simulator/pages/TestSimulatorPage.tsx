@@ -20,8 +20,9 @@ import AiHelpModal from "../components/AiHelpModal";
 import { useAiStore } from "../store/useAiStore";
 import { handleTestSubmit } from "../services/handleTestSubmit";
 import { handleContinueLater } from "../services/handleContinueLater";
+import type { SimulatorMode } from "../test_simulator.types";
 
-const TestSimulatorPage = () => {
+const TestSimulatorPage = ({mode}: {mode: SimulatorMode}) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ const TestSimulatorPage = () => {
       // Fetch test details
       if (testConfig) {
         setTestConfig(testConfig);
-        const data = await loadTestDetails({ testConfig });
+        const data = await loadTestDetails({ testConfig, mode });
         if (data) setTestData(data);
 
         if (

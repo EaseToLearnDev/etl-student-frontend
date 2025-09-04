@@ -7,7 +7,7 @@ interface Chunk {
   content: React.ReactNode;
 }
 
-export const TestWizard: React.FC = () => {
+const TestWizard = () => {
   const [currentChunk, setCurrentChunk] = useState<number>(0);
   const [chunks, setChunks] = useState<Chunk[]>([]);
   const [searchParams] = useSearchParams();
@@ -285,3 +285,5 @@ export const TestWizard: React.FC = () => {
     </div>
   );
 };
+
+export default TestWizard;
