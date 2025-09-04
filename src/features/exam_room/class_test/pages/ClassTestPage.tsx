@@ -88,8 +88,7 @@ const ClassTestPage = () => {
 
   return loading ? (
     <TableSkeleton />
-  ): 
-  (testList ? (
+  ) : testList ? (
     <div className="flex">
       <PaginatedTable
         columns={columns}
@@ -104,13 +103,14 @@ const ClassTestPage = () => {
       >
         <StartTopicTestModalContent
           testName={selectedTest?.testTitle || ""}
-          onStart={() =>
+          onStart={() => {
             handleStartTest({
               navigate,
               testId: selectedTest?.scheduleId ?? null,
               testType: 4,
-            })
-          }
+            });
+            setShowStartTestModal(false);
+          }}
           onClose={() => setShowStartTestModal(false)}
           details={{
             marksCorrect: selectedTest?.markCorrectAns,
@@ -132,7 +132,7 @@ const ClassTestPage = () => {
     //   </div>
     // </div>
     <EmptyState title="No Class Tests Available" />
-  ));
+  );
 };
 
 export default ClassTestPage;

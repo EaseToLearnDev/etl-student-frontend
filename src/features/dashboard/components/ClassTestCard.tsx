@@ -6,7 +6,7 @@ import { CalendarDaysIcon, ClockIcon } from "@heroicons/react/24/outline";
 
 interface ClassTestCardProps {
   test: ClassTest;
-  onStart?: (id: number) => void;
+  onStart?: (id: ClassTest) => void;
 }
 
 const ClassTestCard = ({ test, onStart }: ClassTestCardProps) => {
@@ -45,7 +45,7 @@ const ClassTestCard = ({ test, onStart }: ClassTestCardProps) => {
       {/* Action */}
       <Button
         style="primary"
-        onClick={() => onStart?.(test.id)}
+        onClick={() => onStart?.(test)}
         className="mt-2"
       >
         Start Test

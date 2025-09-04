@@ -1,5 +1,5 @@
 // Types
-import type { TestConfig, TestData } from "../test_simulator.types";
+import type { SimulatorMode, TestConfig, TestData } from "../test_simulator.types";
 
 // Store
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
@@ -10,6 +10,7 @@ import { testDetails } from "../api/testDetails.api";
 
 interface LoadTestDetailsParams {
   testConfig: TestConfig;
+  mode: SimulatorMode;
 }
 
 /**
@@ -17,6 +18,7 @@ interface LoadTestDetailsParams {
  */
 export const loadTestDetails = async ({
   testConfig,
+  mode,
 }: LoadTestDetailsParams): Promise<TestData | null> => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
@@ -29,6 +31,15 @@ export const loadTestDetails = async ({
   if (!loginId || !token || !templateId) return null;
 
   try {
+  //   switch(mode) {
+  //     case "guest":
+
+  //       break
+  //     case "registered":
+  //       break
+  //     case "review":
+  //       break
+  //   }
     const data: TestData[] = testSession
       ? await testDetailExisting({ testSession, templateId, loginId, token })
       : await testDetails({
