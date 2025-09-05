@@ -27,7 +27,7 @@ export const initializeTestData = ({
   const responseMap: Record<number, string> = {};
   const timeMap: Record<number, number> = {};
 
-  testData.questionSet.forEach((q) => {
+  testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] = QuestionStatus.NOT_VISITED;
     responseMap[q?.questionId] = q.studentResponse ?? "";
     timeMap[q.questionId] = q.timeSpent ?? 0;
@@ -42,11 +42,11 @@ export const initializeTestData = ({
   };
 
   // Mark first question as visited
-  const firstSection = testData.sectionSet.find(
+  const firstSection = testData?.sectionSet?.find(
     (sec) => sec.questionNumbers.length > 0
   );
   if (firstSection) {
-    const firstQId = firstSection.questionNumbers[0].questionId;
+    const firstQId = firstSection?.questionNumbers[0]?.questionId;
     statusMap[firstQId] = QuestionStatus.VISITED;
     initialPointer = {
       currentSectionPos: 0,
@@ -66,7 +66,7 @@ export const initializeTestData = ({
 // Convert raw test data into UI-friendly section structure
 export const convertDataToSections = (data: TestData | null) => {
   if (!data) return [];
-  return data.sectionSet.map((section) => ({
+  return data?.sectionSet?.map((section) => ({
     sectionName: section.sectionName,
     questionList: section.questionNumbers
       .map((qn) => data.questionSet.find((q) => q.questionId === qn.questionId))

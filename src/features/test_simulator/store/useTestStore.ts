@@ -203,7 +203,6 @@ const useTestStore = create<TestStore>((set, get) => ({
       stopQuestionTimer,
     } = get();
     if (!testData) return;
-
     stopQuestionTimer();
 
     const result = goToPrevQuestionHandler({
@@ -246,6 +245,13 @@ const useTestStore = create<TestStore>((set, get) => ({
       stopQuestionTimer: stopTimer,
     } = get();
     if (!testData || !question) return;
+
+    // find section index of target question
+    const targetSectionPos = testData.sectionSet.findIndex((section) =>
+      section.questionNumbers.some((q) => q.questionId === question.questionId)
+    );
+
+    if (targetSectionPos === -1) return;
 
     stopTimer();
 
@@ -424,7 +430,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
-  
+
   // Reset state
   reset: () => {
     const { stopQuestionTimer: stopTimer } = get();

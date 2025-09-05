@@ -166,7 +166,7 @@ export const LearningSessionOverview = () => {
     },
     {
       label: "View Answers",
-      content: <h1>View Answers</h1>,
+      content: <></>,
     },
   ];
 
@@ -213,7 +213,12 @@ export const LearningSessionOverview = () => {
         <Tabs
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
-          onSelect={setSelectedIndex}
+          onSelect={(index) => {
+            if (index === 1) {
+              navigate(`/testview?testSession=ls${testSession}`);
+            }
+            setSelectedIndex(index);
+          }}
           tabClassName="rounded-lg py-3"
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />

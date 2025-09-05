@@ -8,7 +8,7 @@ export interface Question {
   questionDisplayId: string;
   questionType: string;
   questionTypeLabel: string;
-  topicId: string;
+  topicId: number;
   questionBody: string;
   responseChoice: Response[];
   timeSpent?: number;
@@ -46,9 +46,9 @@ export interface SectionUI {
 }
 
 export interface TestData {
-  testId: number;
+  testId: string;
   testName: string;
-  testType: number;
+  testType: number
   testOption: number;
   totalTime: number;
   remainingTime: number;
@@ -103,11 +103,12 @@ export type AssessmentMode = "beginner" | "advance";
 export type PackTypeTitle = "FREE" | "PRO" | "ACE";
 
 export interface TestConfig {
-  testId?: number;
+  templateId?: number;
+  testId?: string;
   testType?: number;
   testSession?: string;
-  utm_source?: string;
   testUid?: string;
+  classTestId?: string;
   questionType?: QuestionType;
   totalQuestion?: number;
   totalTime?: number;
@@ -130,7 +131,7 @@ export interface TestSubmitRequest {
   templateId: number;
   packTypeId: number;
   packTypeTitle: PackTypeTitle;
-  testId: number;
+  testId: string;
   testType: number;
   testOption: number;
   testMode: string;

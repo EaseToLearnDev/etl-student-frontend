@@ -52,7 +52,8 @@ const ClassTestList = () => {
           onStart={() => {
             handleStartTest({
               navigate,
-              testId: selectedTest?.scheduleId ?? null,
+              testId: selectedTest?.testId ?? null,
+              classTestId: selectedTest?.scheduleId,
               testType: 4,
             });
             setShowStartTestModal(false);
