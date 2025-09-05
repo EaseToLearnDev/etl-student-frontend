@@ -1,8 +1,7 @@
 import { makeRequest } from "../../../utils/http";
 
-interface TestDetailExistingParams {
+interface TestResultViewParams {
   testSession: string;
-  templateId: number;
   loginId: string;
   token: string;
 }
@@ -10,19 +9,17 @@ interface TestDetailExistingParams {
 /**
  * Fetches existing test details for a given test session and template.
  */
-export const testDetailExisting = async ({
+export const testResultView = async ({
   testSession,
-  templateId,
   loginId,
   token,
-}: TestDetailExistingParams) => {
-  const res = await makeRequest("get", "/testdetailexisting", null, {
+}: TestResultViewParams) => {
+  const res = await makeRequest("get", "/app/testresultview", null, {
     params: {
       testSession,
-      templateId,
     },
     headers: { loginId, token, device: "web" },
   });
 
-  return res?.data?.obj?.[0] ?? null;
+  return res?.data?.[0] ?? null;
 };

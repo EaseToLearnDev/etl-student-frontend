@@ -1,5 +1,9 @@
 // Types
-import type { TestConfig, TestData } from "../test_simulator.types";
+import type {
+  PackTypeTitle,
+  SimulatorMode,
+  TestConfig,
+} from "../test_simulator.types";
 
 // Store
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
@@ -7,9 +11,12 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 // Apis
 import { testDetailExisting } from "../api/testDetailExisting.api";
 import { testDetails } from "../api/testDetails.api";
+import guestTestDetails from "../api/guestTestDetails.api";
+import { testResultView } from "../api/testResultView.api";
 
 interface LoadTestDetailsParams {
   testConfig: TestConfig;
+  mode: SimulatorMode;
 }
 
 /**
@@ -17,7 +24,8 @@ interface LoadTestDetailsParams {
  */
 export const loadTestDetails = async ({
   testConfig,
-}: LoadTestDetailsParams): Promise<TestData | null> => {
+  mode,
+}: LoadTestDetailsParams) => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse || !testConfig) return null;
@@ -26,19 +34,41 @@ export const loadTestDetails = async ({
   const { templateId } = activeCourse;
   const { testSession } = testConfig;
 
-  if (!loginId || !token || !templateId) return null;
-
   try {
-    const data: TestData[] = testSession
-      ? await testDetailExisting({ testSession, templateId, loginId, token })
-      : await testDetails({
-          testConfig: { ...testConfig, assessmentMode: undefined },
-          templateId,
-          loginId,
-          token,
+    switch (mode) {
+      case "guest":
+        const guestData = await guestTestDetails({
+          ...testConfig,
         });
-
-    return data?.[0] ?? null;
+        return guestData ?? null;
+      case "registered":
+        const packTypeTitle = activeCourse?.packTypeTitle as PackTypeTitle;
+        const registeredData = testSession
+          ? await testDetailExisting({
+              testSession,
+              templateId,
+              loginId,
+              token,
+            })
+          : await testDetails({
+              ...testConfig,
+              templateId,
+              packTypeTitle,
+              examType: 'objective',
+              loginId,
+              token,
+            });
+        return registeredData ?? null;
+      case "review":
+        const reviewData = testSession
+          ? await testResultView({
+              testSession,
+              loginId,
+              token,
+            })
+          : null;
+        return reviewData;
+    }
   } catch (error) {
     console.log("Failed to load test details:", error);
     return null;

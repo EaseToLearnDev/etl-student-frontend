@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   PieChart as RechartsPieChart,
   Pie,
@@ -8,10 +8,16 @@ import {
 import { Widget } from "../components/newreports/Widget";
 import Tabs from "../../../components/Tabs";
 import { tintHexColor } from "../libs/reduceColorsContrast";
-import type { LearningAnalyticsData } from "../services/loadLearningAnalyticData";
+import {
+  loadLearningAnalyticData,
+  type LearningAnalyticsData,
+} from "../services/loadLearningAnalyticData";
 import EmptyState from "../../../components/EmptyState";
-import { Modal } from "../../../components/Modal";
-import ViewAnswers from "../../test_simulator/components/ViewAnswers";
+import { useNavigate, useSearchParams } from "react-router";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { LearningSessionOverviewSkeleton } from "../components/LearningSessonOverviewSkeleton";
+import Button from "../../../components/Button";
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
 // Mock Data Response
 // const mockData = {
@@ -38,15 +44,38 @@ import ViewAnswers from "../../test_simulator/components/ViewAnswers";
 //   unattemptedQuestion: 15,
 // };
 
-interface LearningSessionOverviewProps {
-  data: LearningAnalyticsData;
-}
-
-export const LearningSessionOverview = ({
-  data,
-}: LearningSessionOverviewProps) => {
+export const LearningSessionOverview = () => {
+  const params = useSearchParams();
+  const testSession = params[0].get("testSession");
+  const loading = useLoadingStore((s) => s.loading);
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [isViewAnswersModalOpen, setIsViewAnswersModalOpen] = useState(false);
+  const [data, setData] = useState<LearningAnalyticsData | null>(null);
+
+  const navigate = useNavigate();
+
+  if (!testSession) {
+    return (
+      <EmptyState
+        title="No Test Selected"
+        description="Please go back and choose a test session."
+      />
+    );
+  }
+
+  useEffect(() => {
+    if (!testSession) return;
+    const fetchAnalyticData = async () => {
+      try {
+        const data = await loadLearningAnalyticData(testSession);
+        if (data) setData(data);
+      } catch (error) {
+        console.log("Error Fetching Learning Analytical Data: ", error);
+      }
+    };
+    fetchAnalyticData();
+  }, []);
+
+  if (loading) return <LearningSessionOverviewSkeleton />;
 
   if (!data) return <EmptyState title="No Data Available" />;
 
@@ -137,15 +166,27 @@ export const LearningSessionOverview = ({
     },
     {
       label: "View Answers",
-      onClick: () => setIsViewAnswersModalOpen(true),
+      content: <></>,
     },
   ];
 
   return (
-    <div className="container-wrapper px-10 pt-8">
+    <div className="container-wrapper px-10">
+      <Button
+        onClick={() => {
+          setData(null);
+          navigate("/report");
+        }}
+        style="secondary"
+        className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none mb-3 mt-1"
+      >
+        <ArrowLeftIcon className="w-5 h-5" />
+        <p>Back to Reports</p>
+      </Button>
+
       <Widget title={data.testName} subtitle={data.submitDate}>
         <div className="flex flex-wrap items-center justify-center gap-4 mt-6">
-          <div className="flex-1 min-w-<h1>View Answers</h1>,[150px] h-24 rounded-lg bg-[var(--surface-bg-tertiary)] flex flex-col justify-center items-center gap-2">
+          <div className="flex-1 min-w-[150px] h-24 rounded-lg bg-[var(--surface-bg-tertiary)] flex flex-col justify-center items-center gap-2">
             <p>Total Questions</p>
             <h5>{data.totalQuestion}</h5>
           </div>
@@ -172,23 +213,17 @@ export const LearningSessionOverview = ({
         <Tabs
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
-          onSelect={(index) =>
-            tabs[index]?.onClick ? tabs[index]?.onClick : setSelectedIndex
-          }
+          onSelect={(index) => {
+            if (index === 1) {
+              navigate(`/testview?testSession=ls${testSession}`);
+            }
+            setSelectedIndex(index);
+          }}
           tabClassName="rounded-lg py-3"
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />
       </div>
-      <div className="mt-6 mb-4">{tabs[selectedIndex]?.content ?? <></>}</div>
-
-      {/* <Modal
-        isOpen={isViewAnswersModalOpen}
-        onClose={() => setIsViewAnswersModalOpen(false)}
-        size="lg"
-        className="p-4"
-      >
-        <ViewAnswers testSession={data?.} />
-      </Modal> */}
+      <div className="mt-6 mb-4">{tabs[selectedIndex].content}</div>
     </div>
   );
 };

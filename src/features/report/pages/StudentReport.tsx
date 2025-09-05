@@ -4,48 +4,29 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 // Utils
 import cn from "../../../utils/classNames";
 
-// Icons
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-
 // Components
-import Button from "../../../components/Button";
-import ReportCompetitiveSessionPage from "./ReportCompetitiveSessionPage";
-import ReportTopicTestPage from "./ReportTopicTestPage";
-import ReportMockTestPage from "./ReportMockTestPage";
-import ReportClassTestPage from "./ReportClassTestPage";
 import ReportLearningSessionPage, {
   type LearningSessionData,
 } from "./ReportLearningSessionPage";
-import { TopicTestOverview } from "./TopicTestOverview";
-import { LearningSessionOverview } from "./LearningSessionOverview";
 
 // Services
 import { loadStudentReportData } from "../services/loadStudentReportData";
 import type { TestReportdata } from "./ReportMockTestPage";
-import {
-  LoadStudentAnalyticsData,
-  type AnalyticsResponseData,
-} from "../services/loadStudentAnalyticsData";
-import {
-  loadLearningAnalyticData,
-  type LearningAnalyticsData,
-} from "../services/loadLearningAnalyticData";
 import ReportOverviewPage from "./ReportOverviewPage";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TableSkeleton } from "../../../components/TableSkeleton";
 import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
 import EmptyState from "../../../components/EmptyState";
+import ReportTablePage from "../components/ReportTablePage";
+import { useNavigate } from "react-router";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const [reportData, setReportData] = useState<TestReportdata[]>([]);
   const [sessionData, setSessionData] = useState<LearningSessionData[]>([]);
-  const [analyticsData, setAnalyticsData] =
-    useState<AnalyticsResponseData | null>(null);
-  const [learningSessionAnalyticsData, setLearningSessionAnalyticsData] =
-    useState<LearningAnalyticsData | null>(null);
 
   const { loading } = useLoadingStore.getState();
+  const navigate = useNavigate();
 
   const tabs = [
     "Overview",
@@ -125,28 +106,28 @@ const StudentReport = () => {
     fetchReportData();
   }, []);
 
-  const handleViewMore = async (
-    reportData: TestReportdata | LearningSessionData
-  ) => {
-    const testSession = reportData.testSession;
-    if (reportData.testType === "Learning Session") {
-      try {
-        const data = await loadLearningAnalyticData(testSession);
-        if (data) setLearningSessionAnalyticsData(data);
-      } catch (error) {
-        console.log("Error Fetching Learning Analytical Data: ", error);
-      }
+  const handleViewMore = (reportData: TestReportdata | LearningSessionData) => {
+    const { testSession, testType } = reportData;
+    let type = 0;
+    if(testType === 'Learning Session' || testType === "Competitive Session") {
+      type = 1
+    } else if(testType === "Topic Test") {
+      type = 2;
+    } else if(testType === "Mock Test") {
+      type = 3;
+    } else if(testType === "Class Test") {
+      type = 4;
+    }
+
+    if (testType === "Learning Session") {
+      navigate(`/learning-testanalytics?testSession=${testSession}&testType=${type}`);
     } else {
-      try {
-        const data = await LoadStudentAnalyticsData(testSession);
-        if (data) setAnalyticsData(data);
-      } catch (error) {
-        console.log("Error Fetching Analytical data: ", error);
-      }
+      navigate(`/testanalytics?testSession=${testSession}&testType=${type}`);
     }
   };
 
-  if(!reportData || !sessionData) return <EmptyState title="No Report Data Available" />;
+  if (!reportData || !sessionData)
+    return <EmptyState title="No Report Data Available" />;
 
   const tabContents = [
     <ReportOverviewPage />,
@@ -154,31 +135,39 @@ const StudentReport = () => {
       data={sessionData}
       onViewMore={handleViewMore}
     />,
-    <ReportCompetitiveSessionPage
+    <ReportTablePage
       data={reportData}
       onViewMore={handleViewMore}
+      testTypeId={1}
+      title="Competitive Session"
+      emptyTitle="No Competitive Session Data Available"
     />,
-    <ReportTopicTestPage data={reportData} onViewMore={handleViewMore} />,
-    <ReportMockTestPage data={reportData} onViewMore={handleViewMore} />,
-    <ReportClassTestPage data={reportData} onViewMore={handleViewMore} />,
+    <ReportTablePage
+      data={reportData}
+      onViewMore={handleViewMore}
+      testTypeId={2}
+      title="Topic Test"
+      emptyTitle="No Topic Test Data Available"
+    />,
+    <ReportTablePage
+      data={reportData}
+      onViewMore={handleViewMore}
+      testTypeId={3}
+      title="Mock Test"
+      emptyTitle="No Mock Test Data Available"
+    />,
+    <ReportTablePage
+      data={reportData}
+      onViewMore={handleViewMore}
+      testTypeId={4}
+      title="Class Test"
+      emptyTitle="No Class Test Data Available"
+    />,
   ];
 
   return (
     <div>
-      {analyticsData || learningSessionAnalyticsData ? (
-        <Button
-          onClick={() => {
-            setAnalyticsData(null);
-            setLearningSessionAnalyticsData(null);
-          }}
-          style="secondary"
-          className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none mt-3"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-          <p>Back to Reports</p>
-        </Button>
-      ) : (
-        // Replacing Tabs with scrollable tab bar
+        {/* Replacing Tabs with scrollable tab bar */}
         <div className="relative mt-3">
           <div
             ref={menuRef}
@@ -213,25 +202,18 @@ const StudentReport = () => {
             })}
           </div>
         </div>
-      )}
 
-      {analyticsData ? (
-        <TopicTestOverview data={analyticsData} />
-      ) : learningSessionAnalyticsData ? (
-        <LearningSessionOverview data={learningSessionAnalyticsData} />
-      ) : (
-        <div className="mt-5">
-          {loading ? (
-            selectedTabIndex === 0 ? (
-              <ReportOverviewSkeleton />
-            ) : (
-              <TableSkeleton /> 
-            )
+      <div className="mt-5">
+        {loading ? (
+          selectedTabIndex === 0 ? (
+            <ReportOverviewSkeleton />
           ) : (
-            tabContents[selectedTabIndex]
-          )}
-        </div>
-      )}
+            <TableSkeleton />
+          )
+        ) : (
+          tabContents[selectedTabIndex]
+        )}
+      </div>
     </div>
   );
 };

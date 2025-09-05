@@ -6,6 +6,7 @@ import { type PrevRunningTest } from "../../../shared/types";
 
 // Utils
 import { toQueryString } from "../../../../utils";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 /**
  * Starts a new test session and navigates to the test simulator.
@@ -16,6 +17,9 @@ export const handleStartTest = async (
   selectedTopic: Topic | null,
   testOptions: Record<string, number>
 ) => {
+  const {studentData, activeCourse} = useStudentStore.getState();
+  if(!studentData || !activeCourse) return;
+
   if (selectedTopic) {
     let params = {
       testId: "0",
@@ -31,6 +35,8 @@ export const handleStartTest = async (
       topicId: String(selectedTopic.topicId),
       examType: "objective",
       assessmentMode: mode === "learning" ? "beginner" : "advance",
+      templateId: String(activeCourse?.templateId),
+      packTypeTitle: activeCourse?.packTypeTitle,
     };
 
     const queryString = toQueryString(params);

@@ -6,17 +6,14 @@ import useTestTimerStore from "../../store/useTestTimerStore";
 /**
  * Renders the test header for the desktop view, displaying the test title and a static timer.
  */
-interface TestHeaderProps {
-  mode: "test" | "answers";
-}
-
-const TestHeader = ({ mode }: TestHeaderProps) => {
+const TestHeader = () => {
   const testTitle = useTestStore((state) => state.testData?.testName) || "";
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const isExpired = useTestTimerStore((state) => state.isExpired);
   const isRunning = useTestTimerStore((state) => state.isRunning);
 
   const formattedTime = getTimeFromSeconds(remainingSec);
+  const { timerEnabled } = useTestStore((state) => state.features);
 
   return (
     <div className="flex justify-between">
@@ -25,7 +22,7 @@ const TestHeader = ({ mode }: TestHeaderProps) => {
       </div>
       <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%] xl:w-[25%]">
         <h3>
-          {mode === "test"
+          {timerEnabled
             ? isExpired
               ? "Time's Up"
               : isRunning

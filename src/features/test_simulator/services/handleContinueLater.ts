@@ -68,8 +68,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             })),
             backgroundImg: item.backgroundImg,
             cssName: item.cssName,
-            studentResponse:
-              questionResponseMap[item.questionId]?.responseId || "",
+            studentResponse: questionResponseMap[item.questionId] || "",
           };
 
           if (testData?.testType === 3) {

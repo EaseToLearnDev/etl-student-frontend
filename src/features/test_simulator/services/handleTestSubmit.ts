@@ -55,8 +55,7 @@ export const handleTestSubmit = (navigate: NavigateFunction) => {
           baseObj.sectionId = item.sectionId;
           baseObj.sectionName = item.sectionName;
         } else {
-          baseObj.studentResponse =
-            questionResponseMap[item.questionId]?.responseId || "";
+          baseObj.studentResponse = questionResponseMap[item.questionId] || "";
         }
 
         return baseObj;
@@ -72,6 +71,9 @@ export const handleTestSubmit = (navigate: NavigateFunction) => {
 
   const data = new FormData();
   data.append("ansdetails", JSON.stringify(obj as TestSubmitRequest));
+  if(testConfig?.utmSource) {
+    data.append('source', 'guest');
+  }
 
   const res = testSubmit({ data, loginId, token });
   if (!res) {

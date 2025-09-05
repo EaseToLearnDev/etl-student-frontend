@@ -2,7 +2,6 @@
 import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
-  Response,
   CurrentPointer,
   SectionUI,
   Question,
@@ -10,7 +9,7 @@ import type {
 
 export interface InitializeTestDataResult {
   statusMap: Record<number, QuestionStatus>;
-  responseMap: Record<number, Response | null>;
+  responseMap: Record<number, string>;
   timeMap: Record<number, number>;
   sectionsUI: SectionUI[];
   initialPointer: CurrentPointer;
@@ -25,12 +24,12 @@ export const initializeTestData = ({
   testData: TestData;
 }): InitializeTestDataResult => {
   const statusMap: Record<number, QuestionStatus> = {};
-  const responseMap: Record<number, Response | null> = {};
+  const responseMap: Record<number, string> = {};
   const timeMap: Record<number, number> = {};
 
-  testData.questionSet.forEach((q) => {
+  testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] = QuestionStatus.NOT_VISITED;
-    responseMap[q.questionId] = q.studentResponse ?? null;
+    responseMap[q?.questionId] = q.studentResponse ?? "";
     timeMap[q.questionId] = q.timeSpent ?? 0;
   });
 
@@ -43,11 +42,11 @@ export const initializeTestData = ({
   };
 
   // Mark first question as visited
-  const firstSection = testData.sectionSet.find(
+  const firstSection = testData?.sectionSet?.find(
     (sec) => sec.questionNumbers.length > 0
   );
   if (firstSection) {
-    const firstQId = firstSection.questionNumbers[0].questionId;
+    const firstQId = firstSection?.questionNumbers[0]?.questionId;
     statusMap[firstQId] = QuestionStatus.VISITED;
     initialPointer = {
       currentSectionPos: 0,
@@ -67,7 +66,7 @@ export const initializeTestData = ({
 // Convert raw test data into UI-friendly section structure
 export const convertDataToSections = (data: TestData | null) => {
   if (!data) return [];
-  return data.sectionSet.map((section) => ({
+  return data?.sectionSet?.map((section) => ({
     sectionName: section.sectionName,
     questionList: section.questionNumbers
       .map((qn) => data.questionSet.find((q) => q.questionId === qn.questionId))
