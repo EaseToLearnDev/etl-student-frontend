@@ -33,14 +33,12 @@ const CourseCard = ({
     >
       <img
         src={
-          course.image ??
-          "/logo.svg"
           course.courseImageUrl ??
           // "https://images.hdqwalls.com/wallpapers/bthumb/bmw-m4-gt3-evo-j2.jpg"
           "/logo.svg"
         }
         alt={course.courseTitle}
-        className="h-40 w-full object-cover bg-black"
+        className="h-40 w-full object-contain p-2"
       />
       <div className="flex flex-col gap-2 p-4">
         <div className="flex flex-row items-center justify-between">
