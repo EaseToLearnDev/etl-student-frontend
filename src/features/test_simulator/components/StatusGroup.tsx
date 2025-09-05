@@ -86,25 +86,28 @@ const StatusGroup = () => {
     },
   ];
   return (
-    <div className="relative w-full grid grid-cols-2 gap-5">
-      {(correctResponseEnabled ? reviewStatusList : statusList)?.map(
-        (status) => {
-          const statusTheme = colors[status.theme];
-          return (
-            <div key={status.id} className="flex gap-2 items-center">
-              <div
-                className="size-[24px] aspect-square flex justify-center items-center rounded-full"
-                style={{
-                  border: `solid 1px ${statusTheme.bg.active}`,
-                }}
-              >
-                <span>{status.count}</span>
+    <div>
+      <h6>Questions Status</h6>
+      <div className="mt-4 relative w-full grid grid-cols-2 gap-5">
+        {(correctResponseEnabled ? reviewStatusList : statusList)?.map(
+          (status) => {
+            const statusTheme = colors[status.theme];
+            return (
+              <div key={status.id} className="flex gap-2 items-center">
+                <div
+                  className="size-[24px] aspect-square flex justify-center items-center rounded-full"
+                  style={{
+                    border: `solid 1px ${statusTheme.bg.active}`,
+                  }}
+                >
+                  <span>{status.count}</span>
+                </div>
+                <p>{status.text}</p>
               </div>
-              <p>{status.text}</p>
-            </div>
-          );
-        }
-      )}
+            );
+          }
+        )}
+      </div>
     </div>
   );
 };

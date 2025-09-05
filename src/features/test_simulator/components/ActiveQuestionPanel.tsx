@@ -14,6 +14,7 @@ import {
 import cn from "../../../utils/classNames";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { useNavigate } from "react-router";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -23,7 +24,11 @@ import useIsMobile from "../../../hooks/useIsMobile";
  */
 const ActiveQuestionPanel = () => {
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const { correctResponseEnabled } = useTestStore((s) => s.features);
+  const setIsTeacherSupportModalOpen = useTestStore(
+    (s) => s.setIsTeacherSupportModalOpen
+  );
   const goToPrev = useTestStore((state) => state.goToPrev);
   const goToNext = useTestStore((state) => state.goToNext);
   const markCurrentFoReview = useTestStore(
@@ -120,7 +125,7 @@ const ActiveQuestionPanel = () => {
         {/* Explanation (Review Mode Only) */}
         {correctResponseEnabled && currentQuestion?.explanations ? (
           <MathJax>
-            <WidgetCard title="Explanation">
+            <WidgetCard title="Explanation" className="shadow-none">
               <p className="select-none">
                 <div
                   className="math-container"
@@ -148,20 +153,41 @@ const ActiveQuestionPanel = () => {
         >
           <MdChevronLeft size={22} />
         </div>
-        <Button
-          style="secondary"
-          className="!min-w-[50px]"
-          onClick={clearCurrentResponse}
-        >
-          Clear
-        </Button>
-        <Button
-          style="secondary"
-          className="!min-w-[50px]"
-          onClick={markCurrentFoReview}
-        >
-          Mark For Review
-        </Button>
+        {!correctResponseEnabled ? (
+          <>
+            <Button
+              style="secondary"
+              className="!min-w-[50px]"
+              onClick={clearCurrentResponse}
+            >
+              Clear
+            </Button>
+            <Button
+              style="secondary"
+              className="!min-w-[50px]"
+              onClick={markCurrentFoReview}
+            >
+              Mark For Review
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              style="secondary"
+              className="!min-w-[50px]"
+              onClick={() => setIsTeacherSupportModalOpen(true)}
+            >
+              Teacher Support
+            </Button>
+            <Button
+              style="secondary"
+              className="!min-w-[50px]"
+              onClick={() => navigate(-1)}
+            >
+              Exit
+            </Button>
+          </>
+        )}
         <div
           className={cn(
             "size-[40px] aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",

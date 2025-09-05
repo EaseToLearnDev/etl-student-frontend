@@ -23,6 +23,7 @@ import { handleContinueLater } from "../services/handleContinueLater";
 import type { SimulatorMode } from "../test_simulator.types";
 import TestEndedModalContent from "../components/TestEndedModalContent";
 import FullScreenExitModalContent from "../components/FullSrcreenModal";
+import TeacherSupportModalOpen from "../components/TeacherSupportModalOpen";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -39,6 +40,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const stopQuestionTimer = useTestStore((s) => s.stopQuestionTimer);
   const features = useTestStore((s) => s.features);
   const setFeatures = useTestStore((s) => s.setFeatures);
+  
+  const currentQuestion = useTestStore(s => s.getCurrentQuestion());
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
@@ -47,6 +50,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const isTestEndedModalOpen = useTestTimerStore((s) => s.isTestEndedModalOpen);
   // const setIsTestEndedModalOpen = useTestTimerStore((s) => s.setIsTestEndedModalOpen);
+   const isTeacherSupportModalOpen = useTestStore((s) => s.isTeacherSupportModalOpen);
+   const setIsTeacherSupportModalOpen = useTestStore((s) => s.setIsTeacherSupportModalOpen);
+
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
   const startTestTimer = useTestTimerStore((s) => s.startTestTimer);
@@ -233,6 +239,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
+      <TeacherSupportModalOpen isOpen={isTeacherSupportModalOpen} onClose={() => setIsTeacherSupportModalOpen(false)} questionId={currentQuestion?.questionDisplayId}  />
     </>
   );
 };

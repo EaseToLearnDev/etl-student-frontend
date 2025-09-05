@@ -44,6 +44,7 @@ interface Features {
   correctResponseEnabled: boolean;
   showDynamicStatusEnabled: boolean;
 }
+
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
@@ -95,6 +96,9 @@ export interface TestStore {
   isSubmissionModalOpen: boolean;
   setIsSubmissionModalOpen: (v: boolean) => void;
 
+  isTeacherSupportModalOpen: boolean;
+  setIsTeacherSupportModalOpen: (v: boolean) => void;
+
   reset: () => void;
 }
 
@@ -114,7 +118,6 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionTimeMap: {},
   questionStatusMap: {},
   _questionTimerId: null,
-  isSubmissionModalOpen: false,
 
   features: {
     timerEnabled: false,
@@ -429,7 +432,11 @@ const useTestStore = create<TestStore>((set, get) => ({
     set({ _questionTimerId: null });
   },
 
+  isSubmissionModalOpen: false,
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
+
+  isTeacherSupportModalOpen: false,
+  setIsTeacherSupportModalOpen: (v) => set({ isTeacherSupportModalOpen: v }),
 
   // Reset state
   reset: () => {
