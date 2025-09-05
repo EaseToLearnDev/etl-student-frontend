@@ -7,12 +7,15 @@ interface TestTimerStore {
   isExpired: boolean;
   _testEndMs: number | null;
   _testTimerId: ReturnType<typeof setInterval> | null;
+  isTestEndedModalOpen: boolean
+  
 
   startTestTimer: (durationSec: number) => void;
   pauseTestTimer: () => void;
   resumeTestTimer: () => void;
   stopTestTimer: () => void;
   _tick: () => void;
+  setIsTestEndedModalOpen: (v: boolean) => void;
 }
 
 /**
@@ -26,6 +29,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
   isExpired: false,
   _testEndMs: null,
   _testTimerId: null,
+   isTestEndedModalOpen: false,
 
   // Starts a new countdown timer with the specified duration in seconds.
   // Clears any existing timer and sets up a new interval to tick every second.
@@ -68,6 +72,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
         isExpired: true,
         _testTimerId: null,
       });
+      set({ isTestEndedModalOpen: true})
       return;
     }
 
@@ -96,6 +101,8 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
     startTestTimer(remainingSec);
   },
 
+  setIsTestEndedModalOpen: (v) => set({ isTestEndedModalOpen: v}),
+
   // Completely stops the timer and marks it as expired.
   // Resets remaining time to zero and clears the interval.
   stopTestTimer: () => {
@@ -107,6 +114,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
       _testTimerId: null,
       _testEndMs: null,
       remainingSec: 0,
+      isTestEndedModalOpen: false
     });
   },
 }));

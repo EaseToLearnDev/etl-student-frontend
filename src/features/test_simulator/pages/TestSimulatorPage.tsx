@@ -1,5 +1,5 @@
 // React
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
@@ -21,6 +21,9 @@ import { useAiStore } from "../store/useAiStore";
 import { handleTestSubmit } from "../services/handleTestSubmit";
 import { handleContinueLater } from "../services/handleContinueLater";
 import type { SimulatorMode } from "../test_simulator.types";
+import TestEndedModalContent from "../components/TestEndedModalContent";
+import FullScreenExitModalContent from "../components/FullSrcreenModal";
+import TeacherSupportModalOpen from "../components/TeacherSupportModalOpen";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -37,11 +40,18 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const stopQuestionTimer = useTestStore((s) => s.stopQuestionTimer);
   const features = useTestStore((s) => s.features);
   const setFeatures = useTestStore((s) => s.setFeatures);
+  
+  const currentQuestion = useTestStore(s => s.getCurrentQuestion());
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
     (s) => s.setIsSubmissionModalOpen
   );
+
+  const isTestEndedModalOpen = useTestTimerStore((s) => s.isTestEndedModalOpen);
+  // const setIsTestEndedModalOpen = useTestTimerStore((s) => s.setIsTestEndedModalOpen);
+   const isTeacherSupportModalOpen = useTestStore((s) => s.isTeacherSupportModalOpen);
+   const setIsTeacherSupportModalOpen = useTestStore((s) => s.setIsTeacherSupportModalOpen);
 
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
@@ -51,6 +61,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const reset = useTestStore((s) => s.reset);
   const resetAi = useAiStore((s) => s.reset);
+
+  //States
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -116,6 +129,55 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.ctrlKey && event.shiftKey && event.key === 'I') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.shiftKey && event.key === 'J') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.shiftKey && event.key === 'C') {
+        event.preventDefault();
+        return;
+      }
+
+      if (event.ctrlKey && event.key === 'u') {
+        event.preventDefault();
+        return;
+      }
+    };
+
+    enterFullScreen();
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.addEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
+  const enterFullScreen = async () => {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+    } catch (error) {
+      console.warn('Full-screen request failed:', error);
+    }
+  };
+
+  const handleFullScreenChange = async () => {
+    if (!document.fullscreenElement) {
+      setIsFullScreen(true);
+    }
+  };
+
   // useEffect(() => {
   //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
   //     event.preventDefault();
@@ -150,10 +212,34 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
+
+      <Modal
+        isOpen={isTestEndedModalOpen}
+        onClose={() => undefined}
+        size="lg"
+        className="p-4"
+      >
+        <TestEndedModalContent
+          onSubmit={() => handleTestSubmit(navigate)}
+        />
+      </Modal>
+
+      <Modal size="lg" className="p-4" isOpen={isFullScreen} onClose={() => {
+        setIsFullScreen(false);
+        enterFullScreen();
+      }}>
+        <FullScreenExitModalContent onSubmit={() => handleTestSubmit(navigate)} onReEnter={() => {
+          enterFullScreen();
+          setIsFullScreen(false)
+        }
+        } />
+      </Modal>
+
       <AiHelpModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
+      <TeacherSupportModalOpen isOpen={isTeacherSupportModalOpen} onClose={() => setIsTeacherSupportModalOpen(false)} questionId={currentQuestion?.questionDisplayId}  />
     </>
   );
 };
