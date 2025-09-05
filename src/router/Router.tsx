@@ -117,6 +117,7 @@ const Router = () => {
       </Route>
       <Route path="test-simulator" element={<TestSimulatorPage mode="registered" />} />
       <Route path="guest-testsimulator" element={<TestSimulatorPage mode="guest" />} />
+      <Route path="testview" element={<TestSimulatorPage mode="review" />} />
       <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

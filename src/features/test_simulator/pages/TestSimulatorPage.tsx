@@ -22,7 +22,7 @@ import { handleTestSubmit } from "../services/handleTestSubmit";
 import { handleContinueLater } from "../services/handleContinueLater";
 import type { SimulatorMode } from "../test_simulator.types";
 
-const TestSimulatorPage = ({mode}: {mode: SimulatorMode}) => {
+const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -31,21 +31,26 @@ const TestSimulatorPage = ({mode}: {mode: SimulatorMode}) => {
 
   const setTestData = useTestStore((s) => s.setTestData);
   const testError = useTestStore((s) => s.testError);
-  const testConfig = useTestStore((s) => s.testConfig);
   const setTestConfig = useTestStore((s) => s.setTestConfig);
   const setTestError = useTestStore((s) => s.setTestError);
   const startQuestionTimer = useTestStore((s) => s.startQuestionTimer);
   const stopQuestionTimer = useTestStore((s) => s.stopQuestionTimer);
+  const features = useTestStore((s) => s.features);
+  const setFeatures = useTestStore((s) => s.setFeatures);
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
     (s) => s.setIsSubmissionModalOpen
   );
+
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
   const startTestTimer = useTestTimerStore((s) => s.startTestTimer);
   const stopTestTimer = useTestTimerStore((s) => s.stopTestTimer);
   const setIsAiFeatureEnabled = useAiStore((s) => s.setIsAiFeatureEnabled);
+
+  const reset = useTestStore((s) => s.reset);
+  const resetAi = useAiStore((s) => s.reset);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -61,30 +66,53 @@ const TestSimulatorPage = ({mode}: {mode: SimulatorMode}) => {
         const data = await loadTestDetails({ testConfig, mode });
         if (data) setTestData(data);
 
-        if (
-          testConfig?.assessmentMode === "advance" ||
-          testConfig?.testType !== 1
-        ) {
+        let features;
+        switch (mode) {
+          case "guest":
+          case "registered":
+            features = {
+              correctResponseEnabled: false,
+              showDynamicStatusEnabled: true,
+              timerEnabled:
+                testConfig?.assessmentMode === "advance" ||
+                testConfig?.testType !== 1,
+            };
+            break;
+          case "review":
+            features = {
+              correctResponseEnabled: true,
+              showDynamicStatusEnabled: false,
+              timerEnabled: false,
+            };
+            break;
+        }
+        setFeatures(features);
+
+        if (features?.timerEnabled) {
           startTestTimer(data?.remainingTime ?? 0);
         }
-        if (testConfig?.testType === 1) {
+        if (
+          mode === "review" ||
+          (testConfig?.testType === 1 &&
+            testConfig?.assessmentMode === "beginner")
+        ) {
           setIsAiFeatureEnabled(true);
         }
 
-        startQuestionTimer();
+        if (mode === "guest" || mode === "registered") {
+          startQuestionTimer();
+        }
       }
     };
 
     setupTest();
-
     return () => {
-      stopQuestionTimer();
-      if (
-        testConfig?.assessmentMode === "advance" ||
-        testConfig?.testType !== 1
-      ) {
+      if (features?.timerEnabled) {
         stopTestTimer();
       }
+      stopQuestionTimer();
+      reset();
+      resetAi();
     };
   }, []);
 

@@ -14,7 +14,7 @@ interface Status {
   id: string;
   text: string;
   theme: Theme;
-  count: number;
+  count?: number;
 }
 
 /**
@@ -25,12 +25,18 @@ interface Status {
  * colors and labels.
  */
 const StatusGroup = () => {
+  const { correctResponseEnabled } = useTestStore((s) => s.features);
   const counts = useTestStore(
     useShallow((s) => ({
       notVisited: s.getQuestionCountByStatus(QuestionStatus.NOT_VISITED),
       notAttempted: s.getQuestionCountByStatus(QuestionStatus.NOT_ATTEMPTED),
       attempted: s.getQuestionCountByStatus(QuestionStatus.ATTEMPTED),
-      markedForReview: s.getQuestionCountByStatus(QuestionStatus.MARKED_FOR_REVIEW),
+      markedForReview: s.getQuestionCountByStatus(
+        QuestionStatus.MARKED_FOR_REVIEW
+      ),
+      correct: s.testData?.correctCount,
+      incorrect: s.testData?.incorrectCount,
+      notAnswered: s.testData?.notAnsweredCount,
     }))
   );
   const statusList: Status[] = [
@@ -59,25 +65,46 @@ const StatusGroup = () => {
       count: counts.markedForReview,
     },
   ];
+  const reviewStatusList: Status[] = [
+    {
+      id: "correct",
+      text: "Correct",
+      theme: Theme.GreenHaze,
+      count: counts.correct,
+    },
+    {
+      id: "incorrect",
+      text: "Incorrect",
+      theme: Theme.Valencia,
+      count: counts.incorrect,
+    },
+    {
+      id: "not_answered",
+      text: "Not Answered",
+      theme: Theme.Neutral,
+      count: counts.notAnswered,
+    },
+  ];
   return (
     <div className="relative w-full grid grid-cols-2 gap-5">
-      {statusList.map((status) => {
-        const statusTheme = colors[status.theme];
-        return (
-          <div key={status.id} className="flex gap-2 items-center">
-            <div
-              className="size-[24px] aspect-square flex justify-center items-center rounded-full"
-              style={{
-                background: statusTheme.bg.active,
-                color: statusTheme.content.primary,
-              }}
-            >
-              {status.count}
+      {(correctResponseEnabled ? reviewStatusList : statusList)?.map(
+        (status) => {
+          const statusTheme = colors[status.theme];
+          return (
+            <div key={status.id} className="flex gap-2 items-center">
+              <div
+                className="size-[24px] aspect-square flex justify-center items-center rounded-full"
+                style={{
+                  border: `solid 1px ${statusTheme.bg.active}`,
+                }}
+              >
+                <span>{status.count}</span>
+              </div>
+              <p>{status.text}</p>
             </div>
-            <p>{status.text}</p>
-          </div>
-        );
-      })}
+          );
+        }
+      )}
     </div>
   );
 };

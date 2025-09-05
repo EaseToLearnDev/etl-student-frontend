@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import { toQueryString } from "../utils";
 
 interface Chunk {
   title: string;
@@ -8,15 +9,22 @@ interface Chunk {
 }
 
 const TestWizard = () => {
+  const navigate = useNavigate();
   const [currentChunk, setCurrentChunk] = useState<number>(0);
   const [chunks, setChunks] = useState<Chunk[]>([]);
-  const [searchParams] = useSearchParams();
 
-  // ✅ Params
-  const courseUrl = searchParams.get("courseUrl");
-  const utmSource = searchParams.get("utm_source");
-  const testType = 0;
-  const assessmentMode = "";
+  // Params
+  const params = new URLSearchParams(window.location.search);
+  const courseUrl = params.get("courseUrl");
+  const courseId = params.get("courseId");
+  const utmSource = params.get("utm_source");
+  const deviceType = params.get("device_type");
+  const testUid = params.get("testUid");
+  const testType = params.get("testType") ? Number(params.get("testType")) : 0;
+  const assessmentMode = params.get("assessmentMode");
+  const searchFlag = params.get("searchFlag");
+  const searchQuery = params.get("searchQuery");
+  const topicId = params.get("topicId");
 
   useEffect(() => {
     const handleContextMenu = (e: MouseEvent) => e.preventDefault();
@@ -50,7 +58,9 @@ const TestWizard = () => {
               This Isn't Just a Test. It's the Beginning of Smarter Learning.
             </h5>
             <div className="bg-[var(--border-tertiary)] p-5 rounded-lg my-5 border-l-4 border-[var(--sb-ocean-bg-active)] text-left">
-              <h5 className="text-[var(--text-secondary)] mb-2">🎯 What to expect:</h5>
+              <h5 className="text-[var(--text-secondary)] mb-2">
+                🎯 What to expect:
+              </h5>
               <p className="mb-3">
                 You’re about to take a Mock Test. Go ahead — complete it.
                 <br />
@@ -75,7 +85,9 @@ const TestWizard = () => {
         content: (
           <div className="py-3">
             <div className="my-6 p-4 bg-[var(--border-tertiary)] rounded-lg border-l-4 border-[var(--sb-green-haze-bg-active)]">
-              <h5 className="text-[var(--text-secondary)] mb-2">⏱ Time Management</h5>
+              <h5 className="text-[var(--text-secondary)] mb-2">
+                ⏱ Time Management
+              </h5>
               <p>
                 The clock has been set at server and count down timer at the top
                 right corner of the screen will display left out time to closure
@@ -84,7 +96,9 @@ const TestWizard = () => {
             </div>
 
             <div className="my-6 p-4 bg-[var(--border-tertiary)] rounded-lg border-l-4 border-[var(--sb-green-haze-bg-active)]">
-              <h5 className="text-[var(--text-secondary)] mb-2">📝 Answering Questions</h5>
+              <h5 className="text-[var(--text-secondary)] mb-2">
+                📝 Answering Questions
+              </h5>
               <ul className="list-disc pl-5">
                 <li>Click answer option buttons to select your answer.</li>
                 <li>
@@ -111,7 +125,9 @@ const TestWizard = () => {
             </div>
 
             <div className="my-6 p-4 bg-[var(--border-tertiary)] rounded-lg border-l-4 border-[var(--sb-green-haze-bg-active)]">
-              <h5 className="text-[var(--text-seondary)] mb-2">🧭 Navigation & Review</h5>
+              <h5 className="text-[var(--text-seondary)] mb-2">
+                🧭 Navigation & Review
+              </h5>
               <p>
                 To go to a question, click on the question number on the right
                 side of the screen.
@@ -153,7 +169,9 @@ const TestWizard = () => {
             </div>
 
             <div className="my-6 p-4 bg-[var(--border-tertiary)] rounded-lg border-l-4 border-[var(--sb-green-haze-bg-active)]">
-              <h5 className="text-[var(--text-seondary)] mb-3">⚠️ Important Warnings</h5>
+              <h5 className="text-[var(--text-seondary)] mb-3">
+                ⚠️ Important Warnings
+              </h5>
               <p className="text-[var(--sb-valencia-bg-active)] bg-[var(--sb-valencia-bg-disabled)] p-[10px] rounded-[6px] border-1 my-[10px] border-l-[var(--sb-valencia-bg-active)]">
                 Do Not PRESS any keyboard key once the exam is started. This
                 will LOCK your exam. You can connect with the exam invigilator
@@ -172,7 +190,9 @@ const TestWizard = () => {
         title: "Ready to Start?",
         content: (
           <div className="text-center px-4 py-8 md:py-12">
-            <h4 className="text-[var(--sb-ocean-bg-active)] mb-5">🚀 Ready to begin?</h4>
+            <h4 className="text-[var(--sb-ocean-bg-active)] mb-5">
+              🚀 Ready to begin?
+            </h4>
             <p className="text-[var(--text-secondary)] mb-4">
               Click <strong>Start Test</strong> when you're ready to begin your
               examination.
@@ -205,11 +225,21 @@ const TestWizard = () => {
 
   // Start Test Redirect
   const startTest = () => {
-    let queryString = `?testType=${testType}&utm_source=${utmSource}`;
-    if (courseUrl) queryString += `&courseUrl=${courseUrl}`;
-    if (assessmentMode) queryString += `&assessmentMode=${assessmentMode}`;
+    const queryParams: Record<string, string> = {};
+    if (courseUrl !== null) queryParams.courseUrl = courseUrl;
+    if (courseId !== null) queryParams.courseId = courseId;
+    if (utmSource !== null) queryParams.utm_source = utmSource;
+    if (deviceType !== null) queryParams.device_type = deviceType;
+    if (testUid !== null) queryParams.testUid = testUid;
+    if (testType !== null) queryParams.testType = String(testType);
+    if (assessmentMode !== null) queryParams.assessmentMode = assessmentMode;
+    if (searchFlag !== null) queryParams.searchFlag = searchFlag;
+    if (searchQuery !== null) queryParams.searchQuery = searchQuery;
+    if (topicId !== null) queryParams.topicId = topicId;
 
-    window.location.href = `guest-testsimulator${queryString}`;
+    let queryString = toQueryString(queryParams);
+
+    navigate(`/guest-testsimulator?${queryString}`);
   };
 
   if (chunks.length === 0) {

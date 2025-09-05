@@ -13,6 +13,7 @@ const TestHeader = () => {
   const isRunning = useTestTimerStore((state) => state.isRunning);
 
   const formattedTime = getTimeFromSeconds(remainingSec);
+  const { timerEnabled } = useTestStore((state) => state.features);
 
   return (
     <div className="flex justify-between">
@@ -20,7 +21,15 @@ const TestHeader = () => {
         <h3 className="text-ellipsis line-clamp-1">{testTitle}</h3>
       </div>
       <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%] xl:w-[25%]">
-        <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
+        <h3>
+          {timerEnabled
+            ? isExpired
+              ? "Time's Up"
+              : isRunning
+              ? formattedTime
+              : ""
+            : ""}
+        </h3>
       </div>
     </div>
   );

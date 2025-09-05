@@ -36,7 +36,6 @@ import {
   type AnalyticsResponseData,
 } from "../services/loadStudentAnalyticsData";
 import EmptyState from "../../../components/EmptyState";
-import cn from "../../../utils/classNames";
 import { useNavigate, useSearchParams } from "react-router";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
@@ -51,6 +50,7 @@ interface TabItem {
 export const TestAnalyticsOverview = () => {
   const params = useSearchParams();
   const testSession = params[0].get("testSession");
+  const testType = params[0].get("testType") ? Number(params[0]?.get("testType")) : null;
   const loading = useLoadingStore((s) => s.loading);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -716,6 +716,10 @@ export const TestAnalyticsOverview = () => {
       label: "COMPARATIVE STUDY",
       content: <ComparativeStudyTab />,
     },
+    {
+      label: "View Answers",
+      content: <></>,
+    },
   ];
 
   //   const handleTabChange = (index: number) => {
@@ -874,19 +878,19 @@ export const TestAnalyticsOverview = () => {
         <Tabs
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
-          onSelect={setSelectedIndex}
+          onSelect={(index) => {
+            if (index === 4) {
+              navigate(
+                `/testview?testSession=${
+                  testType === 3 ? "mt" : "st"
+                }${testSession}`
+              );
+            }
+            setSelectedIndex(index);
+          }}
           tabClassName="rounded-lg py-3"
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />
-        <div
-          className={cn(
-            "border-1 border-[var(--border-tertiary)] rounded-full",
-            "flex justify-center items-center min-w-[100px] max-w-fit px-4 py-2",
-            "select-none cursor-pointer transition-colors duration-150 ease"
-          )}
-        >
-          View Answers
-        </div>
       </div>
       <div className="mt-10">{tabs[selectedIndex]?.content}</div>
     </div>

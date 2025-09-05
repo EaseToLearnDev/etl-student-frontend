@@ -108,11 +108,21 @@ const StudentReport = () => {
 
   const handleViewMore = (reportData: TestReportdata | LearningSessionData) => {
     const { testSession, testType } = reportData;
+    let type = 0;
+    if(testType === 'Learning Session' || testType === "Competitive Session") {
+      type = 1
+    } else if(testType === "Topic Test") {
+      type = 2;
+    } else if(testType === "Mock Test") {
+      type = 3;
+    } else if(testType === "Class Test") {
+      type = 4;
+    }
 
     if (testType === "Learning Session") {
-      navigate(`/learning-testanalytics?testSession=${testSession}`);
+      navigate(`/learning-testanalytics?testSession=${testSession}&testType=${type}`);
     } else {
-      navigate(`/testanalytics?testSession=${testSession}`);
+      navigate(`/testanalytics?testSession=${testSession}&testType=${type}`);
     }
   };
 

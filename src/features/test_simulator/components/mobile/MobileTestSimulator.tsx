@@ -19,7 +19,7 @@ import StatusGroup from "../StatusGroup";
 // import AiChatPanel from "../AiChatPanel";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
-import ActiveQuestionPanel from "./ActiveQuestionPanel";
+import ActiveQuestionPanel from "../ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
 import AiIcon from "../../../../components/icons/ai-icon";
