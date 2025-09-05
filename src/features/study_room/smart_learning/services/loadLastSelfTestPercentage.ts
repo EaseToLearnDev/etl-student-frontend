@@ -1,4 +1,5 @@
 // Hooks
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Api
@@ -9,6 +10,7 @@ import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";
  */
 export const loadLastSelfTestPercentage = async (topicName: string) => {
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData || !activeCourse) {
     return null;
@@ -21,6 +23,7 @@ export const loadLastSelfTestPercentage = async (topicName: string) => {
     return null;
   }
 
+  setLoading(true);
   try {
     const percentage = await getLastSelfTestPercentage({
       loginId,
@@ -32,5 +35,7 @@ export const loadLastSelfTestPercentage = async (topicName: string) => {
   } catch (error) {
     console.error("Failed to load last self test percentage:", error);
     return null;
+  } finally {
+    setLoading(false);
   }
 };

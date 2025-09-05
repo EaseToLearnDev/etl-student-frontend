@@ -5,7 +5,6 @@ import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
   Question,
-  Response,
   SectionUI,
   CurrentPointer,
   TestConfig,
@@ -40,10 +39,18 @@ import {
   updateStatusHandler,
 } from "../services/statusHandlers";
 
+interface Features {
+  timerEnabled: boolean;
+  correctResponseEnabled: boolean;
+  showDynamicStatusEnabled: boolean;
+}
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
   setTestData: (data: TestData | null) => void;
+
+  features: Features;
+  setFeatures: (features: Features) => void;
 
   testConfig: TestConfig | null;
   setTestConfig: (config: TestConfig | null) => void;
@@ -58,10 +65,11 @@ export interface TestStore {
 
   getCurrentQuestion: () => Question | null;
   setCurrentQuestion: (question: Question | null) => void;
+  getCurrentQuestionIndex: () => number;
 
-  questionResponseMap: Record<number, Response | null>;
-  getCurrentResponse: () => Response | null;
-  setCurrentResponse: (response: Response | null) => void;
+  questionResponseMap: Record<number, string>;
+  getCurrentResponse: () => string;
+  setCurrentResponse: (response: string) => void;
   clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
@@ -71,6 +79,7 @@ export interface TestStore {
 
   questionStatusMap: Record<number, QuestionStatus>;
   getStatusByQuestionId: (questionId: number) => QuestionStatus | null;
+
   changeStatusByQuestionId: (
     questionId: number,
     status: QuestionStatus
@@ -84,9 +93,7 @@ export interface TestStore {
   stopQuestionTimer: () => void;
 
   isSubmissionModalOpen: boolean;
-  isContinueLaterModalOpen: boolean;
   setIsSubmissionModalOpen: (v: boolean) => void;
-  setIsContinueLaterModalOpen: (v: boolean) => void;
 
   reset: () => void;
 }
@@ -108,7 +115,16 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionStatusMap: {},
   _questionTimerId: null,
   isSubmissionModalOpen: false,
-  isContinueLaterModalOpen: false,
+
+  features: {
+    timerEnabled: false,
+    correctResponseEnabled: false,
+    showDynamicStatusEnabled: false,
+  },
+  setFeatures: (features) =>
+    set({
+      features: features,
+    }),
 
   // Initialize test data
   setTestData: (data) =>
@@ -187,7 +203,6 @@ const useTestStore = create<TestStore>((set, get) => ({
       stopQuestionTimer,
     } = get();
     if (!testData) return;
-
     stopQuestionTimer();
 
     const result = goToPrevQuestionHandler({
@@ -231,6 +246,13 @@ const useTestStore = create<TestStore>((set, get) => ({
     } = get();
     if (!testData || !question) return;
 
+    // find section index of target question
+    const targetSectionPos = testData.sectionSet.findIndex((section) =>
+      section.questionNumbers.some((q) => q.questionId === question.questionId)
+    );
+
+    if (targetSectionPos === -1) return;
+
     stopTimer();
 
     const result = setCurrentQuestionHandler({
@@ -251,16 +273,30 @@ const useTestStore = create<TestStore>((set, get) => ({
     startTimer();
   },
 
+  getCurrentQuestionIndex: () => {
+    const { testData, getCurrentQuestion } = get();
+    if (!testData) return -1;
+
+    const currentQuestion = getCurrentQuestion();
+    if (!currentQuestion) return -1;
+
+    return testData.questionSet.findIndex(
+      (q) => q.questionId === currentQuestion.questionId
+    );
+  },
+
   // Response Handler
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
-    if (!question) return null;
+    if (!question) return "";
 
-    return getResponseForQuestionHandler({
-      questionId: question.questionId,
-      questionResponseMap,
-    });
+    return (
+      getResponseForQuestionHandler({
+        questionId: question.questionId,
+        questionResponseMap,
+      }) ?? ""
+    );
   },
 
   // Set Current Response Handler
@@ -394,7 +430,6 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
-  setIsContinueLaterModalOpen: (v) => set({ isContinueLaterModalOpen: v }),
 
   // Reset state
   reset: () => {
@@ -412,6 +447,12 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap: {},
       questionResponseMap: {},
       questionTimeMap: {},
+      isSubmissionModalOpen: false,
+      features: {
+        correctResponseEnabled: false,
+        showDynamicStatusEnabled: false,
+        timerEnabled: false,
+      },
     });
   },
 }));

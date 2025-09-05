@@ -1,6 +1,6 @@
 // Layouts & Components
 import DesktopChildLayout from "../../../../layouts/child-layout/components/DesktopChildLayout";
-import ActiveQuestionPanel from "./ActiveQuestionPanel";
+import ActiveQuestionPanel from "../ActiveQuestionPanel";
 import TestHeader from "./TestHeader";
 import TestSidePanel from "./TestSidePanel";
 

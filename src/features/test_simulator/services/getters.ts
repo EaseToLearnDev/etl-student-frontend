@@ -2,7 +2,6 @@ import type {
   TestData,
   CurrentPointer,
   Question,
-  Response,
 } from "../test_simulator.types";
 
 export interface GetCurrentQuestionParams {
@@ -35,7 +34,7 @@ export function getResponseForQuestionHandler({
   questionResponseMap,
 }: {
   questionId: number;
-  questionResponseMap: Record<number, Response | null>;
-}): Response | null {
-  return questionResponseMap[questionId] ?? null;
+  questionResponseMap: Record<number, string>;
+}) {
+  return questionResponseMap[questionId] ?? "";
 }

@@ -1,20 +1,19 @@
 import {
   QuestionStatus,
   type Question,
-  type Response,
 } from "../test_simulator.types";
 
 // ------------------SET CURRENT RESPONSE------------------
 
 export interface SetCurrentResponseParams {
   question: Question | null;
-  response: Response | null;
-  questionResponseMap: Record<number, Response | null>;
+  response: string;
+  questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 export interface SetCurrentResponseResult {
-  newResponseMap: Record<number, Response | null>;
+  newResponseMap: Record<number, string>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -49,12 +48,12 @@ export const setCurrentResponseHandler = ({
 
 export interface ClearCurrentResponseParams {
   question: Question | null;
-  questionResponseMap: Record<number, Response | null>;
+  questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 export interface ClearCurrentResponseResult {
-  newResponseMap: Record<number, Response | null>;
+  newResponseMap: Record<number, string>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -71,7 +70,7 @@ export const clearCurrentResponseHandler = ({
   return {
     newResponseMap: {
       ...questionResponseMap,
-      [question.questionId]: null,
+      [question.questionId]: "",
     },
     newStatusMap: {
       ...questionStatusMap,

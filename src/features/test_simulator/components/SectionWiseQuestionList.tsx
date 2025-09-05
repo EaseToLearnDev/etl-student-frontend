@@ -1,4 +1,3 @@
-
 // Store
 import useTestStore from "../store/useTestStore";
 
@@ -16,11 +15,17 @@ interface SectionWiseQuestionListProps {
  * Renders a list of questions grouped by section.
  * Accepts an optional className for custom styling.
  */
-const SectionWiseQuestionList = ({className}: SectionWiseQuestionListProps) => {
+const SectionWiseQuestionList = ({
+  className,
+}: SectionWiseQuestionListProps) => {
   const sections = useTestStore((state) => state.sectionsUI);
-
   return (
-    <div className={cn("flex flex-col gap-5 overflow-y-auto scrollbar-hide", className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-5 overflow-y-auto scrollbar-hide",
+        className
+      )}
+    >
       {sections?.map((section, index) => {
         return (
           <div
@@ -30,7 +35,12 @@ const SectionWiseQuestionList = ({className}: SectionWiseQuestionListProps) => {
             <h6 className="text-center">{section.sectionName}</h6>
             <div className="flex flex-wrap gap-3">
               {section.questionList.map((q, i: number) => (
-                <Question key={q.questionId} question={q} questionNumber={i+1} />
+                <Question
+                  key={q.questionId}
+                  question={q}
+                  questionNumber={i + 1}
+  
+                />
               ))}
             </div>
           </div>

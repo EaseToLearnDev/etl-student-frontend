@@ -10,7 +10,7 @@ export interface TopicContentType {
   contentTitle: string;
   contentType: string;
   contentUrl?: string;
-  language: string;
+  language?: string;
 }
 
 export interface TextContentType {

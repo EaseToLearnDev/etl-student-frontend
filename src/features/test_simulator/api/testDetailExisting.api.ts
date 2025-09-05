@@ -16,7 +16,7 @@ export const testDetailExisting = async ({
   loginId,
   token,
 }: TestDetailExistingParams) => {
-  const res = await makeRequest("get", "/testdetailExisting", null, {
+  const res = await makeRequest("get", "/testdetailexisting", null, {
     params: {
       testSession,
       templateId,
@@ -24,5 +24,5 @@ export const testDetailExisting = async ({
     headers: { loginId, token, device: "web" },
   });
 
-  return res?.data?.obj ?? null;
+  return res?.data?.obj?.[0] ?? null;
 };

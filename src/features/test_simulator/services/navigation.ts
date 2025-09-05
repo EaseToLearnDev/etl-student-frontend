@@ -3,7 +3,6 @@ import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
   CurrentPointer,
-  Response,
   Question,
 } from "../test_simulator.types";
 
@@ -15,7 +14,7 @@ import { updateStatusOnVisit } from "./statusHandlers";
 interface GoToNextParams {
   testData: TestData;
   currentPointer: CurrentPointer;
-  questionResponseMap: Record<number, Response | null | undefined>;
+  questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -85,7 +84,7 @@ export const goToNextQuestionHandler = ({
 interface GoToPrevParams {
   testData: TestData;
   currentPointer: CurrentPointer;
-  questionResponseMap: Record<number, Response | null | undefined>;
+  questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -158,7 +157,7 @@ interface SetCurrentQuestionParams {
   testData: TestData;
   currentPointer: CurrentPointer;
   questionStatusMap: Record<number, QuestionStatus>;
-  questionResponseMap: Record<number, Response | null | undefined>;
+  questionResponseMap: Record<number, string>;
   question: Question;
 }
 

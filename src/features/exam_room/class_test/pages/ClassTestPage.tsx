@@ -1,9 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
-// Icons
-import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
-
 // Types
 import type { Column } from "../../../../components/types";
 
@@ -19,6 +16,9 @@ import { Modal } from "../../../../components/Modal";
 import Button from "../../../../components/Button";
 import PaginatedTable from "../../../../components/PaginatedTable/PaginatedTable";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TableSkeleton } from "../../../../components/TableSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -26,6 +26,7 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 const ClassTestPage = () => {
   const navigate = useNavigate();
   const testList = useCTStore((s) => s.testList);
+  const loading = useLoadingStore((s) => s.loading);
   const setTestList = useCTStore((s) => s.setTestList);
   const selectedTest = useCTStore((s) => s.selectedTest);
   const setSelectedTest = useCTStore((s) => s.setSelectedTest);
@@ -85,7 +86,9 @@ const ClassTestPage = () => {
     fetchData();
   }, []);
 
-  return testList ? (
+  return loading ? (
+    <TableSkeleton />
+  ) : testList ? (
     <div className="flex">
       <PaginatedTable
         columns={columns}
@@ -100,13 +103,15 @@ const ClassTestPage = () => {
       >
         <StartTopicTestModalContent
           testName={selectedTest?.testTitle || ""}
-          onStart={() =>
+          onStart={() => {
             handleStartTest({
               navigate,
-              testId: selectedTest?.scheduleId ?? null,
+              testId: selectedTest?.testId ?? null,
+              classTestId: selectedTest?.scheduleId,
               testType: 4,
-            })
-          }
+            });
+            setShowStartTestModal(false);
+          }}
           onClose={() => setShowStartTestModal(false)}
           details={{
             marksCorrect: selectedTest?.markCorrectAns,
@@ -121,12 +126,13 @@ const ClassTestPage = () => {
       </Modal>
     </div>
   ) : (
-    <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
-      <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
-        <ArchiveBoxXMarkIcon className="h-45 w-45 mb-2" />
-        <p>No Class Tests Available</p>
-      </div>
-    </div>
+    // <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
+    //   <div className="flex flex-col items-center justify-center w-full min-h-[60vh] text-[var(--text-tertiary)]">
+    //     <ArchiveBoxXMarkIcon className="h-45 w-45 mb-2" />
+    //     <p>No Class Tests Available</p>
+    //   </div>
+    // </div>
+    <EmptyState title="No Class Tests Available" />
   );
 };
 

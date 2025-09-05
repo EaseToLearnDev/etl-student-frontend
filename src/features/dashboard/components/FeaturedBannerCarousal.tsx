@@ -11,6 +11,7 @@ import { Modal } from "../../../components/Modal";
 import { MdClose } from "react-icons/md";
 import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
 import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
@@ -21,6 +22,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
   const selectedContent = useSMStore((s) => s.selectedContent);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
+  const mobile = useIsMobile();
 
   const tutorialCards = [
     {
@@ -68,31 +70,35 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     <div key="slide-1" className="relative w-full h-full flex-shrink-0">
       <img
         src="/dashboard_banner.png"
-        className="absolute top-0 left-0 w-full h-full select-none pointer-events-none z-10"
+        className="absolute top-0 left-0 w-full h-full object-cover select-none pointer-events-none z-10"
       />
 
-      <div className="absolute top-0 left-0 w-full h-full z-30 p-10">
-        <h3 className="text-white">Welcome Back</h3>
-        <h6 className="text-gray-300 mt-2 max-w-[60ch]">
-          Discover new courses and keep learning.
-        </h6>
-      </div>
+      <div className="relative z-30 flex flex-col justify-between h-full w-full p-6 sm:p-10">
+        <div>
+          <h3 className="text-white">Welcome Back</h3>
+          <p className="text-gray-300 mt-2 max-w-[40ch]">
+            Discover new courses and keep learning.
+          </p>
+        </div>
 
-      <div className="w-full absolute bottom-0 left-0 z-30 p-10 flex items-center gap-5">
-        <button className="bg-white hover:bg-gray-300 p-4 text-black font-medium rounded-xl transition-all duration-200 ease">
-          Explore Features
-        </button>
-        <button onClick={() => setSelectedSlideIndex(1)} className="text-white">
-          Watch Tutorials
-        </button>
-        {/* Conditionally Render If Profile Incomplete */}
-        <Link
-          to={"/profile"}
-          className="ml-auto border border-white/50 hover:bg-white/10 p-4 rounded-xl flex items-center gap-2 text-white transition-all duration-200 ease"
-        >
-          Complete Profile
-          <ArrowRightIcon width={16} height={16} />
-        </Link>
+        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5">
+          <button className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease">
+            Explore Features
+          </button>
+          <button
+            onClick={() => setSelectedSlideIndex(1)}
+            className="text-white border border-white/40 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl hover:bg-white/10 transition"
+          >
+            Watch Tutorials
+          </button>
+          <Link
+            to={"/profile"}
+            className="sm:ml-auto border border-white/50 hover:bg-white/10 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 text-white transition-all duration-200 ease"
+          >
+            Complete Profile
+            <ArrowRightIcon width={14} height={14} className="sm:w-4 sm:h-4" />
+          </Link>
+        </div>
       </div>
     </div>,
 
@@ -101,7 +107,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       key="slide-2"
       className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center p-10"
     >
-      <div className="grid grid-cols-3 gap-5 w-full h-full select-none">
+      <div className="grid grid-cols-3 gap-5 w-full h-fit select-none">
         {tutorialCards.map((card, i) => (
           <div
             key={i}
@@ -113,7 +119,11 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             </div>
             <div>
               <h6 className="text-lg font-semibold">{card.title}</h6>
-              <p className="text-sm text-gray-200">{card.description}</p>
+              {mobile ? (
+                ""
+              ) : (
+                <p className="text-sm text-gray-200">{card.description}</p>
+              )}
             </div>
           </div>
         ))}
@@ -129,27 +139,29 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       )}
     >
       {/* Navigation */}
-      <button
-        onClick={() =>
-          setSelectedSlideIndex((prev) =>
-            prev === 0 ? slides.length - 1 : prev - 1
-          )
-        }
-        className="absolute left-3 top-[10px] z-30 p-2 bg-black/10 aspect-square rounded-md text-white hover:bg-black/50 transition"
-      >
-        <ChevronLeftIcon className="w-3 h-3" />
-      </button>
+      <div className="absolute right-0 top-0 z-30 flex items-center gap-4 p-5">
+        <button
+          onClick={() =>
+            setSelectedSlideIndex((prev) =>
+              prev === 0 ? slides.length - 1 : prev - 1
+            )
+          }
+          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+        >
+          <ChevronLeftIcon className="size-4" />
+        </button>
 
-      <button
-        onClick={() =>
-          setSelectedSlideIndex((prev) =>
-            prev === slides.length - 1 ? 0 : prev + 1
-          )
-        }
-        className="absolute right-3 top-[10px] z-30 p-2 bg-black/10 aspect-square rounded-md text-white hover:bg-black/50 transition"
-      >
-        <ChevronRightIcon className="w-3 h-3" />
-      </button>
+        <button
+          onClick={() =>
+            setSelectedSlideIndex((prev) =>
+              prev === slides.length - 1 ? 0 : prev + 1
+            )
+          }
+          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+        >
+          <ChevronRightIcon className="size-4" />
+        </button>
+      </div>
 
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-2">
@@ -180,8 +192,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           className="p-4 lg:p-10"
           containerClassName="!h-full !w-full !max-w-full"
         >
-
-           <MediaContentModalView content={selectedContent} />
+          <MediaContentModalView content={selectedContent} />
           <div
             onClick={() => setSelectedContent(null)}
             className={cn(

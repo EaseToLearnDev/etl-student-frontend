@@ -1,6 +1,6 @@
 // React
 import { useEffect } from "react";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -16,35 +16,41 @@ import MobileTestSimulator from "../components/mobile/MobileTestSimulator";
 import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
 import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
-import ContinueLaterModalContent from "../components/ContinueLaterModalContent";
+import AiHelpModal from "../components/AiHelpModal";
+import { useAiStore } from "../store/useAiStore";
+import { handleTestSubmit } from "../services/handleTestSubmit";
+import { handleContinueLater } from "../services/handleContinueLater";
+import type { SimulatorMode } from "../test_simulator.types";
 
-const TestSimulatorPage = () => {
+const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
 
-  const setTestData = useTestStore((state) => state.setTestData);
-  const testError = useTestStore((state) => state.testError);
-  const testConfig = useTestStore((state) => state.testConfig);
-  const setTestConfig = useTestStore((state) => state.setTestConfig);
-  const setTestError = useTestStore((state) => state.setTestError);
-  const startQuestionTimer = useTestStore((state) => state.startQuestionTimer);
-  const stopQuestionTimer = useTestStore((state) => state.stopQuestionTimer);
-  const isSubmissionModalOpen = useTestStore(
-    (state) => state.isSubmissionModalOpen
-  );
+  const setTestData = useTestStore((s) => s.setTestData);
+  const testError = useTestStore((s) => s.testError);
+  const setTestConfig = useTestStore((s) => s.setTestConfig);
+  const setTestError = useTestStore((s) => s.setTestError);
+  const startQuestionTimer = useTestStore((s) => s.startQuestionTimer);
+  const stopQuestionTimer = useTestStore((s) => s.stopQuestionTimer);
+  const features = useTestStore((s) => s.features);
+  const setFeatures = useTestStore((s) => s.setFeatures);
+
+  const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
-    (state) => state.setIsSubmissionModalOpen
+    (s) => s.setIsSubmissionModalOpen
   );
-  const isContinueLaterModalOpen = useTestStore(
-    (state) => state.isContinueLaterModalOpen
-  );
-  const setIsContinueLaterModalOpen = useTestStore(
-    (state) => state.setIsContinueLaterModalOpen
-  );
-  const startTestTimer = useTestTimerStore((state) => state.startTestTimer);
-  const stopTestTimer = useTestTimerStore((state) => state.stopTestTimer);
+
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
+  const startTestTimer = useTestTimerStore((s) => s.startTestTimer);
+  const stopTestTimer = useTestTimerStore((s) => s.stopTestTimer);
+  const setIsAiFeatureEnabled = useAiStore((s) => s.setIsAiFeatureEnabled);
+
+  const reset = useTestStore((s) => s.reset);
+  const resetAi = useAiStore((s) => s.reset);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -57,26 +63,71 @@ const TestSimulatorPage = () => {
       // Fetch test details
       if (testConfig) {
         setTestConfig(testConfig);
-        const data = await loadTestDetails({ testConfig });
+        const data = await loadTestDetails({ testConfig, mode });
         if (data) setTestData(data);
 
-        if (testConfig?.assessmentMode === "advance") {
+        let features;
+        switch (mode) {
+          case "guest":
+          case "registered":
+            features = {
+              correctResponseEnabled: false,
+              showDynamicStatusEnabled: true,
+              timerEnabled:
+                testConfig?.assessmentMode === "advance" ||
+                testConfig?.testType !== 1,
+            };
+            break;
+          case "review":
+            features = {
+              correctResponseEnabled: true,
+              showDynamicStatusEnabled: false,
+              timerEnabled: false,
+            };
+            break;
+        }
+        setFeatures(features);
+
+        if (features?.timerEnabled) {
           startTestTimer(data?.remainingTime ?? 0);
         }
+        if (
+          mode === "review" ||
+          (testConfig?.testType === 1 &&
+            testConfig?.assessmentMode === "beginner")
+        ) {
+          setIsAiFeatureEnabled(true);
+        }
 
-        startQuestionTimer();
+        if (mode === "guest" || mode === "registered") {
+          startQuestionTimer();
+        }
       }
     };
 
     setupTest();
-
     return () => {
-      stopQuestionTimer();
-      if (testConfig?.assessmentMode === "advance") {
+      if (features?.timerEnabled) {
         stopTestTimer();
       }
+      stopQuestionTimer();
+      reset();
+      resetAi();
     };
   }, []);
+
+  // useEffect(() => {
+  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+  //     event.preventDefault();
+  //     event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
+  //   };
+
+  //   window.addEventListener("beforeunload", handleBeforeUnload);
+
+  //   return () => {
+  //     window.removeEventListener("beforeunload", handleBeforeUnload);
+  //   };
+  // }, []);
 
   return (
     <>
@@ -94,21 +145,15 @@ const TestSimulatorPage = () => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={() => {}}
+          onSubmit={() => handleTestSubmit(navigate)}
+          onContinueLater={() => handleContinueLater(navigate)}
           onClose={() => setIsSubmissionModalOpen(false)}
         />
       </Modal>
-      <Modal
-        isOpen={isContinueLaterModalOpen}
-        onClose={() => setIsContinueLaterModalOpen(false)}
-        size="lg"
-        className="p-4"
-      >
-        <ContinueLaterModalContent
-          onSubmit={() => {}}
-          onClose={() => setIsContinueLaterModalOpen(false)}
-        />
-      </Modal>
+      <AiHelpModal
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+      />
     </>
   );
 };

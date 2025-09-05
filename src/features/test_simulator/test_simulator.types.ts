@@ -5,51 +5,62 @@ export interface Response {
 
 export interface Question {
   questionId: number;
-  questionDisplayId: string | number;
+  questionDisplayId: string;
   questionType: string;
   questionTypeLabel: string;
-  sectionId: number;
-  sectionName: string;
-  sectionOrder: number;
-  sectionTime: number;
-  topicId: string;
-  timeSpent?: number;
-  correctAnswerMarks: number;
-  incorrectAnswerMarks: number;
-  notAnswerMarks: number;
+  topicId: number;
   questionBody: string;
   responseChoice: Response[];
+  timeSpent?: number;
+  correctAnswerMarks?: number;
+  incorrectAnswerMarks?: number;
+  notAnswerMarks?: number;
+  marks?: number;
+  studentResponse?: string;
+  correctResponse?: string;
+  explanations?: string;
+  answerStatus?: string; // Correct | Incorrect | NotAnswer
+  sectionId?: number;
+  sectionName?: string;
+  sectionOrder?: number;
+  sectionTime?: number;
   backgroundImg?: string;
   cssName?: string;
   noQuestionAttempt?: number;
-  noQuestion: number;
-  studentResponse?: Response;
+  noQuestion?: number;
+  bloomId: number;
 }
 
 export interface Section {
-  sectionName: string;
+  sectionName?: string;
   questionNumbers: {
     questionIndex: number;
     questionId: number;
+    answerStatus: string;
   }[];
 }
 
 export interface SectionUI {
-  sectionName: string;
+  sectionName?: string;
   questionList: Question[];
 }
 
 export interface TestData {
-  testId: number;
+  testId: string;
   testName: string;
-  testType: number;
+  testType: number
   testOption: number;
   totalTime: number;
-  noQuestionAttempt: number;
   remainingTime: number;
-  lastQuestionIndex: number;
+  lastQuestionIndex?: number;
   sectionLock: string;
   bloom: number;
+
+  notAnsweredCount?: number;
+  incorrectCount?: number;
+  correctCount?: number;
+  noQuestionAttempt?: number;
+  testStatus?: number;
   sectionSet: Section[];
   questionSet: Question[];
 }
@@ -92,9 +103,12 @@ export type AssessmentMode = "beginner" | "advance";
 export type PackTypeTitle = "FREE" | "PRO" | "ACE";
 
 export interface TestConfig {
-  testId: number;
-  testType: number;
+  templateId?: number;
+  testId?: string;
+  testType?: number;
   testSession?: string;
+  testUid?: string;
+  classTestId?: string;
   questionType?: QuestionType;
   totalQuestion?: number;
   totalTime?: number;
@@ -105,17 +119,19 @@ export interface TestConfig {
   searchQuery?: string;
   topicId?: number;
   examType?: ExamType;
+  utmSource?: string;
+  courseId?: number;
+  courseUrl?: string;
   assessmentMode?: AssessmentMode;
   packTypeTitle?: PackTypeTitle;
 }
-
 
 export interface TestSubmitRequest {
   courseId: number;
   templateId: number;
   packTypeId: number;
   packTypeTitle: PackTypeTitle;
-  testId: number;
+  testId: string;
   testType: number;
   testOption: number;
   testMode: string;
@@ -141,3 +157,33 @@ export interface TestSubmitRequest {
   className: string;
   helpCounter: number;
 }
+
+export enum AIModalView {
+  Main,
+  AIContent,
+  StudyMaterialContent,
+}
+
+export interface OpenAiSolution {
+  solution: string;
+  questionId: number;
+}
+
+export interface ContentType {
+  id: number;
+  contentTitle: string;
+  contentType: string;
+  contentUrl?: string;
+  description: string;
+  language?: string;
+  links: LinkItem[];
+}
+
+export interface LinkItem {
+  title: string;
+  id: string;
+  tag: string;
+  children?: LinkItem[];
+}
+
+export type SimulatorMode = "guest" | "registered" | "review";

@@ -103,7 +103,7 @@ export const PlanBody = ({
             selectedTabIndex !== 0 ? "lg:grid-cols-2" : ""
           )}
         >
-          <div className="grid grid-cols-1 overflow-y-auto scrollbar-hide">
+          <div className="grid grid-cols-1 max-h-[350px] overflow-y-auto scrollbar-hide">
             {/* Plans Section */}
             {selectedTabIndex !== 0 ? (
               <WidgetCard className="shadow-none mt-4 lg:mt-0" title="Plans">
@@ -180,7 +180,7 @@ export const PlanBody = ({
 
           {/* Features Section */}
           <WidgetCard
-            className="shadow-none flex flex-col lg:h-[600px] lg:overflow-y-auto scrollbar-hide mb-[50px] lg:mb-0"
+            className="shadow-none flex flex-col lg:h-[400px] lg:overflow-y-auto scrollbar-hide mb-[50px] lg:mb-0"
             title="Features"
           >
             <div className=" flex flex-col gap-4">

@@ -1,3 +1,4 @@
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { analytics } from "../api/analytics.api";
 
@@ -68,22 +69,31 @@ interface SectionPerformanceList {
 }
 
 interface ProgressBarObject {
-    percentage: number;
-    barColor: string;
+  percentage: number;
+  barColor: string;
 }
 
 export const LoadStudentAnalyticsData = async (testSession: string) => {
   const { studentData } = useStudentStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData) return null;
 
   const { loginId, token } = studentData;
 
+  setLoading(true);
+
   try {
-    const data : AnalyticsResponseData = await analytics({ loginId, token, testSession });
+    const data: AnalyticsResponseData = await analytics({
+      loginId,
+      token,
+      testSession,
+    });
     return data;
   } catch (error) {
     console.log("Error Loading Analytics Data: ", error);
     throw error;
+  } finally {
+    setLoading(false);
   }
 };

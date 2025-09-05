@@ -11,9 +11,10 @@ import {
   CartesianGrid,
   XAxis,
 } from "recharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Widget } from "../components/newreports/Widget";
 import {
+  ArrowLeftIcon,
   BoltIcon,
   ChartBarIcon,
   ChartPieIcon,
@@ -30,7 +31,15 @@ import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../components/newreports/circularProgressBar";
 import Tabs from "../../../components/Tabs";
 import DrillDownComponents from "../components/newreports/DrillDownComponents";
-import type { AnalyticsResponseData } from "../services/loadStudentAnalyticsData";
+import {
+  LoadStudentAnalyticsData,
+  type AnalyticsResponseData,
+} from "../services/loadStudentAnalyticsData";
+import EmptyState from "../../../components/EmptyState";
+import { useNavigate, useSearchParams } from "react-router";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
+import Button from "../../../components/Button";
 
 interface TabItem {
   label: string;
@@ -38,11 +47,42 @@ interface TabItem {
   content: React.ReactNode;
 }
 
-interface TopicTestOverviewProps {
-  data: AnalyticsResponseData;
-}
+export const TestAnalyticsOverview = () => {
+  const params = useSearchParams();
+  const testSession = params[0].get("testSession");
+  const testType = params[0].get("testType") ? Number(params[0]?.get("testType")) : null;
+  const loading = useLoadingStore((s) => s.loading);
+  const [data, setData] = useState<AnalyticsResponseData | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
-export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
+  const navigate = useNavigate();
+
+  if (!testSession) {
+    return (
+      <EmptyState
+        title="No Test Selected"
+        description="Please go back and choose a test session."
+      />
+    );
+  }
+
+  useEffect(() => {
+    const fetchAnalyticData = async () => {
+      try {
+        const data = await LoadStudentAnalyticsData(testSession);
+        if (data) setData(data);
+      } catch (error) {
+        console.log("Error Fetching Analytical data: ", error);
+      }
+    };
+
+    fetchAnalyticData();
+  }, []);
+
+  if (loading) return <TestAnalyticsSkeleton />;
+
+  if (!data) return <EmptyState title="No Report Data Available" />;
+
   const SectionGraphData = [
     {
       name: "Section A",
@@ -266,11 +306,11 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
     </>
   );
 
-  const ViewAnswersTab = () => (
-    <div className="bg-[var(--surface-bg-secondary)] border border-[var(--border-secondary)] rounded-lg p-6">
-      View Answers
-    </div>
-  );
+  // const ViewAnswersTab = () => (
+  //   <div className="bg-[var(--surface-bg-secondary)] border border-[var(--border-secondary)] rounded-lg p-6">
+  //     View Answers
+  //   </div>
+  // );
 
   const PerformanceInDetailTab = () => (
     <>
@@ -665,10 +705,6 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
       content: <OverallPerformanceTab />,
     },
     {
-      label: "VIEW ANSWERS",
-      content: <ViewAnswersTab />,
-    },
-    {
       label: "PERFORMANCE IN DETAIL",
       content: <PerformanceInDetailTab />,
     },
@@ -680,16 +716,30 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
       label: "COMPARATIVE STUDY",
       content: <ComparativeStudyTab />,
     },
+    {
+      label: "View Answers",
+      content: <></>,
+    },
   ];
 
   //   const handleTabChange = (index: number) => {
   //     console.log(`Switched to tab: ${tabs[index].label}`);
   //   };
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
   return (
-    <div className="p-2 sm:p-5 md:p-8 container-wrapper">
+    <div className="px-2 mb-3 container-wrapper">
+      <Button
+        onClick={() => {
+          setData(null);
+          navigate("/report");
+        }}
+        style="secondary"
+        className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none mb-3"
+      >
+        <ArrowLeftIcon className="w-5 h-5" />
+        <p>Back to Reports</p>
+      </Button>
+
       <h4 className="text-[var(--text-primary)] mb-5">{data.testName}</h4>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
@@ -824,13 +874,24 @@ export const TopicTestOverview = ({ data }: TopicTestOverviewProps) => {
         </Widget>
       </div>
 
-      <Tabs
-        tabs={tabs.map((t) => t.label)}
-        selectedIndex={selectedIndex}
-        onSelect={setSelectedIndex}
-        tabClassName="rounded-lg py-3"
-        activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
-      />
+      <div className="flex items-center gap-3">
+        <Tabs
+          tabs={tabs.map((t) => t.label)}
+          selectedIndex={selectedIndex}
+          onSelect={(index) => {
+            if (index === 4) {
+              navigate(
+                `/testview?testSession=${
+                  testType === 3 ? "mt" : "st"
+                }${testSession}`
+              );
+            }
+            setSelectedIndex(index);
+          }}
+          tabClassName="rounded-lg py-3"
+          activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
+        />
+      </div>
       <div className="mt-10">{tabs[selectedIndex]?.content}</div>
     </div>
   );

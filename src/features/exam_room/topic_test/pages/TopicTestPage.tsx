@@ -34,6 +34,9 @@ import { Modal } from "../../../../components/Modal";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import Button from "../../../../components/Button";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -66,6 +69,8 @@ const TopicTestPage = () => {
   const setShowPreviousTestModal = useTTStore(
     (s) => s.setShowPreviousTestModal
   );
+
+  const loading = useLoadingStore((s) => s.loading);
 
   // States
   const [hideSecondary, setHideSecondary] = useState<boolean>(
@@ -126,7 +131,9 @@ const TopicTestPage = () => {
       <div className="mt-4 h-full overflow-y-auto">
         <ChildLayout
           primaryContent={
-            showTestList ? (
+            loading ? (
+              <TreeViewSkeleton />
+            ) : showTestList ? (
               <TestCardList
                 tests={testList || []}
                 infoClickHandler={() => {
@@ -144,7 +151,7 @@ const TopicTestPage = () => {
                   });
                 }}
               />
-            ) : (
+            ) : topicTree && topicTree.length > 0 ? (
               <TopicTreeView
                 topics={topicTree || []}
                 selectedTopic={selectedTopic}
@@ -166,6 +173,8 @@ const TopicTestPage = () => {
                   )
                 }
               />
+            ) : (
+              <EmptyState title="No Tests Available" />
             )
           }
           secondaryContent={
@@ -174,7 +183,7 @@ const TopicTestPage = () => {
                 title={capitalizeWords(selectedTopic.topicName)}
               />
             ) : (
-              <></>
+              <EmptyState title="No Instructions Available" />
             )
           }
           hideSecondary={!showTestList || hideSecondary}

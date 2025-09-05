@@ -23,9 +23,18 @@ const modalStyles = {
     lg: "rounded-2xl",
     xl: "rounded-3xl",
   },
+  blur: {
+    none: "",
+    sm: "backdrop-blur-sm",
+    md: "backdrop-blur-md",
+    lg: "backdrop-blur-lg",
+    xl: "backdrop-blur-xl",
+  },
 };
 
 export type ModalSize = keyof typeof modalStyles.size;
+export type ModalRounded = keyof typeof modalStyles.rounded;
+export type ModalBlur = keyof typeof modalStyles.blur;
 
 export type ModalProps = {
   children: ReactNode;
@@ -33,11 +42,13 @@ export type ModalProps = {
   onClose(): void;
   size?: ModalSize;
   noGutter?: boolean;
-  rounded?: keyof typeof modalStyles.rounded;
+  rounded?: ModalRounded;
   customSize?: number;
   overlayClassName?: string;
   containerClassName?: string;
   className?: string;
+  /** Controls overlay blur. */
+  blur?: ModalBlur;
 };
 
 export function Modal({
@@ -51,6 +62,7 @@ export function Modal({
   customSize,
   overlayClassName,
   containerClassName,
+  blur = "sm",
 }: React.PropsWithChildren<ModalProps>) {
   const [show, setShow] = useState(false);
 
@@ -75,7 +87,8 @@ export function Modal({
   const modalElement = (
     <div
       className={cn(
-        "fixed z-[9999] inset-0 flex items-center justify-center overflow-x-hidden overflow-y-auto transition-opacity duration-300",
+        modalStyles.root,
+        "flex items-center justify-center transition-opacity duration-300",
         className
       )}
     >
@@ -83,7 +96,8 @@ export function Modal({
       <div
         onClick={onClose}
         className={cn(
-          "fixed inset-0 bg-black/40 dark:bg-black/60 backdrop-blur-sm z-10",
+          "fixed inset-0 bg-black/40 dark:bg-black/60 z-10",
+          modalStyles.blur[blur],
           show ? "opacity-100" : "opacity-0",
           overlayClassName
         )}
