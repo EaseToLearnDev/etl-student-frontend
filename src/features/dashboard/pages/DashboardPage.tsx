@@ -29,28 +29,28 @@ const DashboardPage = () => {
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
       {/* Top + Middle section */}
-      <div className="grid grid-cols-1 2xl:grid-cols-[1fr_400px] 2xl:auto-rows-min gap-5">
+      <div className="grid grid-cols-1 gap-5">
 
         {/* Featured Banner (top-left) */}
-        <div className="order-1 2xl:col-start-1 2xl:row-start-1">
+        <div className="order-1 xl:col-start-1 xl:row-start-1">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
         </div>
 
         {/* Jump Back In (bottom-left) */}
-        <div className="order-3 2xl:col-start-1 2xl:row-start-2">
+        <div className="order-3 xl:col-start-1 xl:row-start-2">
           <WidgetCard className="w-full min-h-[300px] max-h-full">
             <ActivityList />
           </WidgetCard>
         </div>
 
         {/* Class Tests (right column spanning 2 rows) */}
-        <div className="order-2 2xl:col-start-2 2xl:row-span-2">
+        <div className="order-2 xl:col-start-2 xl:row-span-2">
           <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
             <ClassTestList />
           </WidgetCard>
         </div>
       </div>
-        <div className="2xl:col-start-1 2xl:row-start-2">
+        <div className="xl:col-start-1 xl:row-start-2">
           <WidgetCard className="w-full min-h-[300px] max-h-full overflow-hidden">
             <JumpBackInList />
           </WidgetCard>

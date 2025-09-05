@@ -173,6 +173,7 @@ export interface CourseType {
   courseId: number;
   courseTitle: string;
   courseSubTitle: string;
+  courseImageUrl: string;
   categoryName: string;
   image: string;
   promoList: any[];
