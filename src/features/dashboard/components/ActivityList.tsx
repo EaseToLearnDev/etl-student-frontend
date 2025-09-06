@@ -1,91 +1,75 @@
-import React, { useState } from "react";
+import { useRef, useState } from "react";
 import ContributionChart from "./ContributionChart";
+import Select from "../../../components/Select";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 export const ActivityList = () => {
   //   const [color, setColor] = useState("green");
   const [year, setYear] = useState("2025");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const yearOptions = ["2025", "2024", "2023", "2022", "2021", "2020"];
 
   const handleClickOnDay = (day: any) => {
     console.log(day);
   };
 
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const containerWidth = scrollRef.current.clientWidth;
+      scrollRef.current.scrollBy({
+        left: direction === "left" ? -containerWidth : containerWidth,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
-    // <div className='flex flex-col gap-8  items-center justify-center min-h-screen '>
-    //     <div className='flex items-bottom  gap-4 justify-center '>
-
-    //         <div className="w-34">
-    //             <label
-    //                 htmlFor="choose-year"
-    //                 className="block mb-2 text-sm font-medium text-gray-300"
-    //             >
-    //                 Choose Month
-    //             </label>
-    //             <div className="relative">
-    //                 <select
-    //                     onChange={() => { }}
-    //                     id="choose-theme"
-    //                     name="theme"
-    //                     className="block w-full appearance-none rounded-lg border border-gray-500/30 bg-white/10 py-1 pl-4 pr-10 text-sm text-blue-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-    //                     defaultValue={'green'}
-    //                 >
-    //                     <option value="">--Please choose an option--</option>
-    //                     <option value={'green'}>green</option>
-    //                     <option value={'emerald'}>emerald</option>
-    //                     <option value={'amber'}>amber</option>
-    //                     <option value={'cyan'}>cyan</option>
-    //                     <option value={'fuchsia'}>fuchsia</option>
-    //                     <option value={'rose'}>rose</option>
-    //                 </select>
-    //             </div>
-    //         </div>
-
-    //         <div className='max-w-28 bg-blue-500'>
-    //             <button className='text-white'>
-    //                 <span>&#10094;</span>
-    //             </button>
-    //             <button className='text-white'>
-    //                 <span>&#10095;</span>
-    //             </button>
-    //         </div>
-    //     </div>
-
     <>
-      <div className="w-full mb-4 flex flex-col items-center justify-end">
-        <label
-          htmlFor="choose-year"
-          className="block mb-2 text-[var(--text-secondary)]"
-        >
-          Choose Year
-        </label>
-        <div className="relative flex items-center w-25">
-          <select
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-              setYear(e.target.value)
-            }
-            id="choose-year"
-            name="year"
-            className="block w-full text-center appearance-none rounded-lg border border-gray-500/30 bg-white/10 py-1 text-blue-500 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"
-            defaultValue={"2025"}
+      <div className="w-full mb-4 flex items-start justify-between">
+        <div>
+          <label
+            htmlFor="choose-year"
+            className="block mb-2 text-[var(--text-secondary)]"
           >
-            <option value="">--Please choose an option--</option>
-            <option value="2025">2025</option>``
-            <option value="2024">2024</option>
-            <option value="2023">2023</option>
-            <option value="2022">2022</option>
-            <option value="2021">2021</option>
-            <option value="2020">2020</option>
-          </select>
+            Choose Year
+          </label>
+          <div className="relative flex items-center w-40">
+            <Select
+              type="Year"
+              items={yearOptions}
+              selectedIndex={yearOptions.indexOf(year)}
+              isOpen={isOpen}
+              onToggle={() => setIsOpen(!isOpen)}
+              onSelect={(index) => setYear(yearOptions[index])}
+              className="w-full"
+              dropdownClassName="w-40"
+            />
+          </div>
+        </div>
+        <div className="flex items-center gap-4 text-[var(--text-primary)]">
+          <button
+            onClick={() => scroll("left")}
+            className="size-7 aspect-square hover:bg-[var(--surface-bg-secondary)] flex justify-center items-center border border-[var(--border-secondary)] rounded-md transition"
+          >
+            <ChevronLeftIcon className="size-4" />
+          </button>
+          <button
+            onClick={() => scroll("right")}
+            className="size-7 aspect-square hover:bg-[var(--surface-bg-secondary)] flex justify-center items-center border border-[var(--border-secondary)] rounded-md transition"
+          >
+            <ChevronRightIcon className="size-4" />
+          </button>
         </div>
       </div>
-      {/* <h3 className="text-lg font-semibold">Activity Calendar</h3> */}
-      <div className="w-full max-w-full overflow-x-auto">
-        <ContributionChart
-          // color={color}
-          year={year}
-          onDayClick={handleClickOnDay}
-        />
-      </div>
-      {/* <div className='h-[600px] w-full bg-blue-500'></div> */}
+      <ContributionChart
+        // color={color}
+        year={year}
+        onDayClick={handleClickOnDay}
+        scrollRef={scrollRef}
+      />
     </>
     // <div className='flex items-center  justify-around gap-2 h-12 max-w-[320px]  w-full'>
     //     <button onClick={() => setColor('green')} className={`h-full w-1/6 rounded-lg bg-green-500 `}></button>

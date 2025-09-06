@@ -40,10 +40,12 @@ function ContributionChart({
   color = "green",
   year,
   onDayClick,
+  scrollRef
 }: {
   color?: string;
   year: string;
   onDayClick: (day: ActivityData) => void;
+  scrollRef?: React.RefObject<HTMLDivElement | null>;
 }) {
   const { data, monthLabels } = useActivityStore(color, year);
 
@@ -114,7 +116,7 @@ function ContributionChart({
   ];
 
   return (
-    <div className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto">
+    <div ref={scrollRef} className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto">
       <div
         className="flex text-xs text-[var(--text-tertiary)] text-bold mb-1"
         style={{

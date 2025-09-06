@@ -12,6 +12,7 @@ export interface LoginStore {
   setError: (message: string, severity: Severity) => void;
   setToken: (token: string | null) => void;
   setCredentials: (userId: string, password: string) => void;
+  reset: () => void;
 }
 
 // TODO: REPLACE ERROR WITH ERROR STORE LATER
@@ -28,5 +29,16 @@ export const useLoginStore = create<LoginStore>((set) => ({
   setLoading: (v) => set({ loading: v }),
   setError: (message, severity) => set({ error: { severity, message } }),
   setCredentials: (userId, password) => set({ userId, password }),
-  setToken: (token) => set({token})
+  setToken: (token) => set({ token }),
+
+  reset: () =>
+    set({
+      userId: "",
+      password: "",
+      error: {
+        severity: Severity.None,
+        message: "",
+      },
+      loading: false,
+    }),
 }));

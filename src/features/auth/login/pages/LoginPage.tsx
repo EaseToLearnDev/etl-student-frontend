@@ -31,6 +31,7 @@ const LoginPage = () => {
   const token = useLoginStore((state) => state.token);
   const setToken = useLoginStore((state) => state.setToken);
   const setCredentials = useLoginStore((state) => state.setCredentials);
+  const reset = useLoginStore((state) => state.reset);
 
   const [loginWith, setLoginWith] = useState("password");
 
@@ -86,8 +87,10 @@ const LoginPage = () => {
                       if (index === 0) {
                         setLoginWith("password");
                         setCredentials(userId, "");
+                        reset();
                       } else {
                         setLoginWith("otp");
+                        reset();
                       }
                     }}
                     activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
@@ -152,6 +155,9 @@ const LoginPage = () => {
                     )}
                   </div>
 
+                  {/* Error Message */}
+                  <h6 className="text-red-500 mt-3 text-center">{errorMessage || ""}</h6>
+
                   {/* Submit Button */}
                   <Button
                     style="primary"
@@ -171,8 +177,6 @@ const LoginPage = () => {
                         : "Get OTP"}
                     </h6>
                   </Button>
-                  {/* Error Message */}
-                  <h6 className="text-red-500">{errorMessage || ""}</h6>
 
                   {/* Forget Password Link (only for password login) */}
                   {loginWith === "password" && (

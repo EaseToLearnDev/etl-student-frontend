@@ -107,15 +107,17 @@ export const HandleLogin = async (
     setLoading(true);
     try {
       const res = await verifyMobileSendOtp(userId);
-      setToken(res?.token);
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === "mobile_not_exists") {
-          setError("Invalid Number", Severity.Alert);
-          setLoading(false);
-        }
+      if (res?.responseTxt === "sent_otp") {
+        setToken(res?.obj?.token);
+      } else if (res?.responseTxt === "mobile_not_exists") {
+        setError("Invalid Number", Severity.Alert);
+        setStudentData(null);
       }
+    } catch (error) {
+      setError("Something went wrong. Please try again.", Severity.Alert);
       setStudentData(null);
+    } finally {
+      setLoading(false);
     }
   }
 };
@@ -123,7 +125,10 @@ export const HandleLogin = async (
 export const handleVerifyOtp = async (otp: string) => {
   const { token, setError } = useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
-  if (!token) throw new Error("invalid_number");
+  if (!token) {
+    setError("Invalid Number", Severity.Alert);
+    return;
+  }
   try {
     const res: StudentDataResponse = await verifyOtpLogin(otp, token);
     const courses = res.courses.map((c) => {

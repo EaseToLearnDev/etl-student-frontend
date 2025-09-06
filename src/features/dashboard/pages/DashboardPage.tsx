@@ -16,8 +16,8 @@ import { useToastStore } from "../../../global/hooks/useToastStore";
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
-  const toastData = useToastStore((s) => s.toastData)
-  const showToast = useToastStore((s) => s.showToast)
+  const toastData = useToastStore((s) => s.toastData);
+  const showToast = useToastStore((s) => s.showToast);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,7 +34,6 @@ const DashboardPage = () => {
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
       {/* Top + Middle section */}
       <div className="grid grid-cols-1 gap-5">
-
         {/* Featured Banner (top-left) */}
         <div className="order-1 xl:col-start-1 xl:row-start-1">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
@@ -54,14 +53,13 @@ const DashboardPage = () => {
           </WidgetCard>
         </div>
       </div>
-        <div className="xl:col-start-1 xl:row-start-2">
-          <WidgetCard className="w-full min-h-[300px] max-h-full overflow-hidden">
-            <JumpBackInList />
-          </WidgetCard>
-        </div>
+      {/* <div className="xl:col-start-1 xl:row-start-2"></div> */}
 
       {/* Bottom section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 min-h-[250px] max-h-[250px]">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 min-h-[250px] max-h-[250px]">
+        <WidgetCard>
+          <JumpBackInList />
+        </WidgetCard>
         <WidgetCard>
           <DownloadAppCard />
         </WidgetCard>
