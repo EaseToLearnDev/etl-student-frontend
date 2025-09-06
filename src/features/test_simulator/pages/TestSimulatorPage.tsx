@@ -64,6 +64,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   //States
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const [exitCount, setExitCount] = useState(3);
 
   useEffect(() => {
     const setupTest = async () => {
@@ -155,10 +156,14 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     enterFullScreen();
     document.addEventListener('fullscreenchange', handleFullScreenChange);
     document.addEventListener('keydown', handleKeyDown);
+    // document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleWindowBlur);
 
     return () => {
-      document.addEventListener('fullscreenchange', handleFullScreenChange);
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
       document.removeEventListener('keydown', handleKeyDown);
+      // document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('blur', handleWindowBlur);
     };
   }, []);
 
@@ -174,8 +179,42 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const handleFullScreenChange = async () => {
     if (!document.fullscreenElement) {
-      setIsFullScreen(true);
+      setExitCount((prev) => {
+        const newCount = prev - 1;
+        if (newCount) {
+          setIsFullScreen(true);
+        } else {
+          handleTestSubmit(navigate);
+        }
+        return newCount;
+      });
     }
+  };
+
+  // const handleVisibilityChange = () => {
+  //   if (document.hidden) {
+  //     setExitCount((prev) => {
+  //       const newCount = prev - 1;
+  //       if (newCount) {
+  //         setIsFullScreen(true);
+  //       } else {
+  //         handleTestSubmit(navigate);
+  //       }
+  //       return newCount;
+  //     });
+  //   }
+  // };
+
+  const handleWindowBlur = () => {
+    setExitCount((prev) => {
+      const newCount = prev - 1;
+      if (newCount) {
+        setIsFullScreen(true);
+      } else {
+        handleTestSubmit(navigate);
+      }
+      return newCount;
+    });
   };
 
   // useEffect(() => {
@@ -228,11 +267,14 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         setIsFullScreen(false);
         enterFullScreen();
       }}>
-        <FullScreenExitModalContent onSubmit={() => handleTestSubmit(navigate)} onReEnter={() => {
-          enterFullScreen();
-          setIsFullScreen(false)
-        }
-        } />
+        <FullScreenExitModalContent 
+          onSubmit={() => handleTestSubmit(navigate)} 
+          onReEnter={() => {
+            enterFullScreen();
+            setIsFullScreen(false);
+          }}
+          remainingChances={exitCount}
+        />
       </Modal>
 
       <AiHelpModal
