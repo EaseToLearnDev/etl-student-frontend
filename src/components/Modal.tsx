@@ -67,14 +67,6 @@ export function Modal({
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
-
-  useEffect(() => {
     if (isOpen) {
       requestAnimationFrame(() => setShow(true));
     } else {
