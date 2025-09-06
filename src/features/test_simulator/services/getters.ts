@@ -1,12 +1,12 @@
 import type {
   TestData,
-  CurrentPointer,
+  Pointer,
   Question,
 } from "../test_simulator.types";
 
 export interface GetCurrentQuestionParams {
   testData: TestData;
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
 }
 
 /**
@@ -16,7 +16,7 @@ export function getCurrentQuestionHandler({
   testData,
   currentPointer,
 }: GetCurrentQuestionParams): Question | null {
-  const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+  const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const questionId =

@@ -10,12 +10,19 @@ export const teacherSupportQuestion = async ({
   loginId,
   token,
 }: TeacherSupportQuestionParams) => {
-  const res = await makeRequest("post", "/teacher-support-question", data, {
-    headers: {
-      "Content-Type": "multipart/mixed",
-      loginId,
-      token,
-      device: "web",
-    },
-  });
+  try {
+    const res = await makeRequest("post", "/teacher-support-question", data, {
+      headers: {
+        "Content-Type": "multipart/mixed",
+        loginId,
+        token,
+        device: "web",
+      },
+    });
+
+    return res?.data ?? null;
+  } catch (error) {
+    console.log("Failed to call teacher support question api: ", error);
+    return null;
+  }
 };

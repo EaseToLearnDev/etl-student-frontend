@@ -53,7 +53,6 @@ const CoursesCards = ({
       />
     );
   }
-  console.log(filteredCourses)
   return (
     <div className={cn("grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4")}>
       {filteredCourses.map((course) => {

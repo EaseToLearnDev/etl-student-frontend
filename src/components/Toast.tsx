@@ -24,6 +24,7 @@ interface ToastProps {
   description?: string;
   button?: string;
   duration?: number;
+  onExpire?: () => void;
   className?: string;
 }
 
@@ -64,20 +65,25 @@ export const Toast: React.FC<ToastProps> = ({
   description,
   button,
   duration = 3000,
-  className
+  onExpire,
+  className,
 }) => {
   const [visible, setVisible] = useState(true);
 
   const handleOnClick = () => {
     setVisible(false);
+    onExpire?.();
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
+      onExpire?.();
     }, duration);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [duration]);
 
   if (!visible) return null;

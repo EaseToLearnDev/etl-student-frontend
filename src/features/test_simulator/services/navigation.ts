@@ -2,7 +2,7 @@
 import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
-  CurrentPointer,
+  Pointer,
   Question,
 } from "../test_simulator.types";
 
@@ -13,13 +13,13 @@ import { updateStatusOnVisit } from "./statusHandlers";
 
 interface GoToNextParams {
   testData: TestData;
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
   questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 interface GoToNextResult {
-  newPointer: CurrentPointer;
+  newPointer: Pointer;
   newStatusMap: Record<number, QuestionStatus>;
   reachedEnd: boolean; // true if last question reached
 }
@@ -33,7 +33,7 @@ export const goToNextQuestionHandler = ({
   questionResponseMap,
   questionStatusMap,
 }: GoToNextParams): GoToNextResult | null => {
-  const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+  const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const section = testData.sectionSet[si];
@@ -56,7 +56,7 @@ export const goToNextQuestionHandler = ({
   if (qi + 1 < section.questionNumbers.length) {
     const nextQId = section.questionNumbers[qi + 1].questionId;
     return {
-      newPointer: { currentSectionPos: si, currentQuestionPos: qi + 1 },
+      newPointer: { sectionPos: si, questionPos: qi + 1 },
       newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
       reachedEnd: false,
     };
@@ -68,7 +68,7 @@ export const goToNextQuestionHandler = ({
     if (nextSec?.questionNumbers.length > 0) {
       const nextQId = nextSec.questionNumbers[0].questionId;
       return {
-        newPointer: { currentSectionPos: s, currentQuestionPos: 0 },
+        newPointer: { sectionPos: s, questionPos: 0 },
         newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
         reachedEnd: false,
       };
@@ -83,13 +83,13 @@ export const goToNextQuestionHandler = ({
 
 interface GoToPrevParams {
   testData: TestData;
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
   questionResponseMap: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 interface GoToPrevResult {
-  newPointer: CurrentPointer;
+  newPointer: Pointer;
   newStatusMap: Record<number, QuestionStatus>;
   reachedStart: boolean; // true if first question reached
 }
@@ -103,7 +103,7 @@ export const goToPrevQuestionHandler = ({
   questionResponseMap,
   questionStatusMap,
 }: GoToPrevParams): GoToPrevResult | null => {
-  const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+  const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const section = testData.sectionSet[si];
@@ -126,7 +126,7 @@ export const goToPrevQuestionHandler = ({
   if (qi > 0) {
     const prevQId = section.questionNumbers[qi - 1].questionId;
     return {
-      newPointer: { currentSectionPos: si, currentQuestionPos: qi - 1 },
+      newPointer: { sectionPos: si, questionPos: qi - 1 },
       newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
       reachedStart: false,
     };
@@ -140,8 +140,8 @@ export const goToPrevQuestionHandler = ({
         prevSec.questionNumbers[prevSec.questionNumbers.length - 1].questionId;
       return {
         newPointer: {
-          currentSectionPos: s,
-          currentQuestionPos: prevSec.questionNumbers.length - 1,
+          sectionPos: s,
+          questionPos: prevSec.questionNumbers.length - 1,
         },
         newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
         reachedStart: false,
@@ -155,14 +155,14 @@ export const goToPrevQuestionHandler = ({
 
 interface SetCurrentQuestionParams {
   testData: TestData;
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
   questionStatusMap: Record<number, QuestionStatus>;
   questionResponseMap: Record<number, string>;
   question: Question;
 }
 
 interface SetCurrentQuestionResult {
-  newPointer: CurrentPointer;
+  newPointer: Pointer;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -176,7 +176,7 @@ export const setCurrentQuestionHandler = ({
   questionResponseMap,
   question,
 }: SetCurrentQuestionParams): SetCurrentQuestionResult | null => {
-  const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+  const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const currQId = testData?.sectionSet[si]?.questionNumbers[qi]?.questionId;
@@ -204,8 +204,8 @@ export const setCurrentQuestionHandler = ({
 
   return {
     newPointer: {
-      currentSectionPos: nextSectionIndex,
-      currentQuestionPos: nextQuestionIndex,
+      sectionPos: nextSectionIndex,
+      questionPos: nextQuestionIndex,
     },
     newStatusMap: updateStatusOnVisit(newStatusMap, question.questionId),
   };

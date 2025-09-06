@@ -1,15 +1,11 @@
 // React
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
 import useTestTimerStore from "../store/useTestTimerStore";
 import useTestStore from "../store/useTestStore";
-
-// Services
-import { handleTestConfigSetup } from "../services/handleTestConfigSetup";
-import { loadTestDetails } from "../services/loadTestDetails";
 
 // Layouts and Components
 import MobileTestSimulator from "../components/mobile/MobileTestSimulator";
@@ -23,7 +19,11 @@ import { handleContinueLater } from "../services/handleContinueLater";
 import type { SimulatorMode } from "../test_simulator.types";
 import TestEndedModalContent from "../components/TestEndedModalContent";
 import FullScreenExitModalContent from "../components/FullSrcreenModal";
-import TeacherSupportModalOpen from "../components/TeacherSupportModalOpen";
+import TeacherSupportModal from "../components/TeacherSupportModal";
+import { setupTest } from "../services/setupTest";
+import { useFullscreenProtection } from "../store/useFullScreenProtection";
+import { Toast, ToastType } from "../../../components/Toast";
+import SwitchSectionModal from "../components/SwitchSectionModal";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -40,18 +40,23 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const stopQuestionTimer = useTestStore((s) => s.stopQuestionTimer);
   const features = useTestStore((s) => s.features);
   const setFeatures = useTestStore((s) => s.setFeatures);
-  
-  const currentQuestion = useTestStore(s => s.getCurrentQuestion());
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
     (s) => s.setIsSubmissionModalOpen
   );
 
+  const isSwitchSectionModalOpen = useTestStore(
+    (s) => s.isSwitchSectionModalOpen
+  );
+  const setIsSwitchSectionModalOpen = useTestStore(
+    (s) => s.setIsSwitchSectionModalOpen
+  );
+  const pendingQuestion = useTestStore((s) => s.pendingQuestion);
+  const setPendingQuestion = useTestStore((s) => s.setPendingQuestion);
+  const setCurrentQuestion = useTestStore((s) => s.setCurrentQuestion);
+
   const isTestEndedModalOpen = useTestTimerStore((s) => s.isTestEndedModalOpen);
-  // const setIsTestEndedModalOpen = useTestTimerStore((s) => s.setIsTestEndedModalOpen);
-   const isTeacherSupportModalOpen = useTestStore((s) => s.isTeacherSupportModalOpen);
-   const setIsTeacherSupportModalOpen = useTestStore((s) => s.setIsTeacherSupportModalOpen);
 
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isHelpModalOpen = useAiStore((s) => s.isHelpModalOpen);
@@ -62,63 +67,22 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const reset = useTestStore((s) => s.reset);
   const resetAi = useAiStore((s) => s.reset);
 
-  //States
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false);
+  const { hasExited, reEnter } = useFullscreenProtection(
+    features?.fullScreenEnabled ?? false
+  );
 
   useEffect(() => {
-    const setupTest = async () => {
-      // Test Configuration Setup
-      const { testConfig, error } = handleTestConfigSetup({ params: params });
-
-      // Save Possible Error
-      if (error) setTestError(error);
-
-      // Fetch test details
-      if (testConfig) {
-        setTestConfig(testConfig);
-        const data = await loadTestDetails({ testConfig, mode });
-        if (data) setTestData(data);
-
-        let features;
-        switch (mode) {
-          case "guest":
-          case "registered":
-            features = {
-              correctResponseEnabled: false,
-              showDynamicStatusEnabled: true,
-              timerEnabled:
-                testConfig?.assessmentMode === "advance" ||
-                testConfig?.testType !== 1,
-            };
-            break;
-          case "review":
-            features = {
-              correctResponseEnabled: true,
-              showDynamicStatusEnabled: false,
-              timerEnabled: false,
-            };
-            break;
-        }
-        setFeatures(features);
-
-        if (features?.timerEnabled) {
-          startTestTimer(data?.remainingTime ?? 0);
-        }
-        if (
-          mode === "review" ||
-          (testConfig?.testType === 1 &&
-            testConfig?.assessmentMode === "beginner")
-        ) {
-          setIsAiFeatureEnabled(true);
-        }
-
-        if (mode === "guest" || mode === "registered") {
-          startQuestionTimer();
-        }
-      }
-    };
-
-    setupTest();
+    setupTest(
+      params,
+      mode,
+      setTestError,
+      setTestConfig,
+      setTestData,
+      setFeatures,
+      startTestTimer,
+      setIsAiFeatureEnabled,
+      startQuestionTimer
+    );
     return () => {
       if (features?.timerEnabled) {
         stopTestTimer();
@@ -128,55 +92,6 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       resetAi();
     };
   }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.ctrlKey && event.shiftKey && event.key === 'I') {
-        event.preventDefault();
-        return;
-      }
-
-      if (event.ctrlKey && event.shiftKey && event.key === 'J') {
-        event.preventDefault();
-        return;
-      }
-
-      if (event.ctrlKey && event.shiftKey && event.key === 'C') {
-        event.preventDefault();
-        return;
-      }
-
-      if (event.ctrlKey && event.key === 'u') {
-        event.preventDefault();
-        return;
-      }
-    };
-
-    enterFullScreen();
-    document.addEventListener('fullscreenchange', handleFullScreenChange);
-    document.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      document.addEventListener('fullscreenchange', handleFullScreenChange);
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
-  const enterFullScreen = async () => {
-    try {
-      if (document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen();
-      }
-    } catch (error) {
-      console.warn('Full-screen request failed:', error);
-    }
-  };
-
-  const handleFullScreenChange = async () => {
-    if (!document.fullscreenElement) {
-      setIsFullScreen(true);
-    }
-  };
 
   // useEffect(() => {
   //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -219,27 +134,42 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         size="lg"
         className="p-4"
       >
-        <TestEndedModalContent
-          onSubmit={() => handleTestSubmit(navigate)}
-        />
+        <TestEndedModalContent onSubmit={() => handleTestSubmit(navigate)} />
       </Modal>
 
-      <Modal size="lg" className="p-4" isOpen={isFullScreen} onClose={() => {
-        setIsFullScreen(false);
-        enterFullScreen();
-      }}>
-        <FullScreenExitModalContent onSubmit={() => handleTestSubmit(navigate)} onReEnter={() => {
-          enterFullScreen();
-          setIsFullScreen(false)
-        }
-        } />
+      <Modal size="lg" className="p-4" isOpen={hasExited} onClose={reEnter}>
+        <FullScreenExitModalContent
+          onSubmit={() => handleTestSubmit(navigate)}
+          onReEnter={reEnter}
+        />
       </Modal>
 
       <AiHelpModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
-      <TeacherSupportModalOpen isOpen={isTeacherSupportModalOpen} onClose={() => setIsTeacherSupportModalOpen(false)} questionId={currentQuestion?.questionDisplayId}  />
+      <TeacherSupportModal />
+      <SwitchSectionModal
+        isOpen={isSwitchSectionModalOpen}
+        onClose={() => setIsSwitchSectionModalOpen(false)}
+        onPrimaryClick={() => {
+          setCurrentQuestion(pendingQuestion);
+          startTestTimer(pendingQuestion?.sectionTime ?? 0);
+          setPendingQuestion(null);
+          setIsSwitchSectionModalOpen(false);
+        }}
+      />
+
+      {testError?.message && (
+        <Toast
+          title={testError?.severity}
+          description={testError?.message}
+          key={testError.id}
+          duration={2000}
+          type={ToastType.WARNING}
+          onExpire={() => setTestError(null)}
+        />
+      )}
     </>
   );
 };

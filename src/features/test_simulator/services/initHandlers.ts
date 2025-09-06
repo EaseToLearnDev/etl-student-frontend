@@ -2,7 +2,7 @@
 import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
-  CurrentPointer,
+  Pointer,
   SectionUI,
   Question,
 } from "../test_simulator.types";
@@ -12,7 +12,7 @@ export interface InitializeTestDataResult {
   responseMap: Record<number, string>;
   timeMap: Record<number, number>;
   sectionsUI: SectionUI[];
-  initialPointer: CurrentPointer;
+  initialPointer: Pointer;
 }
 
 /**
@@ -36,9 +36,9 @@ export const initializeTestData = ({
   const sectionsUI = convertDataToSections(testData);
 
   // Default pointer
-  let initialPointer: CurrentPointer = {
-    currentSectionPos: -1,
-    currentQuestionPos: -1,
+  let initialPointer: Pointer = {
+    sectionPos: -1,
+    questionPos: -1,
   };
 
   // Mark first question as visited
@@ -49,8 +49,8 @@ export const initializeTestData = ({
     const firstQId = firstSection?.questionNumbers[0]?.questionId;
     statusMap[firstQId] = QuestionStatus.VISITED;
     initialPointer = {
-      currentSectionPos: 0,
-      currentQuestionPos: 0,
+      sectionPos: 0,
+      questionPos: 0,
     };
   }
 
@@ -71,5 +71,5 @@ export const convertDataToSections = (data: TestData | null) => {
     questionList: section.questionNumbers
       .map((qn) => data.questionSet.find((q) => q.questionId === qn.questionId))
       .filter((q): q is Question => Boolean(q)),
-  }));
+  })) as SectionUI[];
 };

@@ -18,6 +18,4 @@ export const handleStudentInvite = async ({
 
   const data = await studentInvite({ loginId, token, teacherLoginId });
   if (!data) return;
-
-  console.log(data?.responseTxt);
 };

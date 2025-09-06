@@ -1,5 +1,5 @@
 import { QuestionStatus } from "../test_simulator.types";
-import type { TestData, CurrentPointer } from "../test_simulator.types";
+import type { TestData, Pointer } from "../test_simulator.types";
 
 export interface StatusHandlerResult {
   newStatusMap: Record<number, QuestionStatus>;
@@ -14,10 +14,10 @@ export const markForReviewHandler = ({
   questionStatusMap,
 }: {
   testData: TestData;
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
   questionStatusMap: Record<number, QuestionStatus>;
 }): StatusHandlerResult | null => {
-  const { currentSectionPos: si, currentQuestionPos: qi } = currentPointer;
+  const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const currQId = testData.sectionSet[si]?.questionNumbers[qi]?.questionId;

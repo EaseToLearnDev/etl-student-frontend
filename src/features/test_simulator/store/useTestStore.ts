@@ -6,10 +6,11 @@ import type {
   TestData,
   Question,
   SectionUI,
-  CurrentPointer,
+  Pointer,
   TestConfig,
+  Features,
 } from "../test_simulator.types";
-import type { Error } from "../../shared/types";
+import { Severity, type Error } from "../../shared/types";
 
 // Services
 import {
@@ -39,12 +40,6 @@ import {
   updateStatusHandler,
 } from "../services/statusHandlers";
 
-interface Features {
-  timerEnabled: boolean;
-  correctResponseEnabled: boolean;
-  showDynamicStatusEnabled: boolean;
-}
-
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
@@ -57,9 +52,12 @@ export interface TestStore {
   setTestConfig: (config: TestConfig | null) => void;
 
   testError: Error | null;
-  setTestError: (error: Error) => void;
+  setTestError: (error: Error | null) => void;
 
-  currentPointer: CurrentPointer;
+  currentPointer: Pointer;
+
+  pendingQuestion: Question | null;
+  setPendingQuestion: (question: Question | null) => void;
 
   goToNext: () => void;
   goToPrev: () => void;
@@ -67,6 +65,8 @@ export interface TestStore {
   getCurrentQuestion: () => Question | null;
   setCurrentQuestion: (question: Question | null) => void;
   getCurrentQuestionIndex: () => number;
+
+  jumpToQuestion: (question: Question | null) => void;
 
   questionResponseMap: Record<number, string>;
   getCurrentResponse: () => string;
@@ -96,8 +96,8 @@ export interface TestStore {
   isSubmissionModalOpen: boolean;
   setIsSubmissionModalOpen: (v: boolean) => void;
 
-  isTeacherSupportModalOpen: boolean;
-  setIsTeacherSupportModalOpen: (v: boolean) => void;
+  isSwitchSectionModalOpen: boolean;
+  setIsSwitchSectionModalOpen: (v: boolean) => void;
 
   reset: () => void;
 }
@@ -110,9 +110,10 @@ const useTestStore = create<TestStore>((set, get) => ({
   sectionsUI: [],
   testConfig: null,
   testError: null,
+  pendingQuestion: null,
   currentPointer: {
-    currentSectionPos: -1,
-    currentQuestionPos: -1,
+    sectionPos: -1,
+    questionPos: -1,
   },
   questionResponseMap: {},
   questionTimeMap: {},
@@ -123,6 +124,7 @@ const useTestStore = create<TestStore>((set, get) => ({
     timerEnabled: false,
     correctResponseEnabled: false,
     showDynamicStatusEnabled: false,
+    fullScreenEnabled: false,
   },
   setFeatures: (features) =>
     set({
@@ -139,7 +141,7 @@ const useTestStore = create<TestStore>((set, get) => ({
           questionStatusMap: {},
           questionResponseMap: {},
           questionTimeMap: {},
-          currentPointer: { currentSectionPos: -1, currentQuestionPos: -1 },
+          currentPointer: { sectionPos: -1, questionPos: -1 },
         };
       }
 
@@ -160,6 +162,8 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   setTestConfig: (config) => set({ testConfig: config }),
 
+  setPendingQuestion: (question) => set({ pendingQuestion: question }),
+
   // Next Handler
   goToNext: () => {
     const {
@@ -172,6 +176,27 @@ const useTestStore = create<TestStore>((set, get) => ({
     } = get();
     if (!testData) return;
 
+    const isLastQuestionOfSection =
+      currentPointer.questionPos ===
+      testData.sectionSet[currentPointer.sectionPos].questionNumbers.length - 1;
+    const isNotLastSection =
+      currentPointer.sectionPos < testData.sectionSet.length - 1;
+    const isPartiallyLock = testData?.sectionLock === "Partially_Lock";
+
+    // If Section is Partially Locked, Ask User if They want to switch to next section (Irreversible Choice)
+    if (isLastQuestionOfSection && isNotLastSection && isPartiallyLock) {
+      const nextSection = testData.sectionSet[currentPointer.sectionPos + 1];
+      const firstQuestion = nextSection.questionNumbers[0];
+      const pendingQuestion = testData.questionSet.find(
+        (q) => q.questionId === firstQuestion.questionId
+      );
+      // store next question pointer
+      set({
+        pendingQuestion: pendingQuestion,
+        isSwitchSectionModalOpen: true,
+      });
+      return;
+    }
     stopQuestionTimer();
 
     const result = goToNextQuestionHandler({
@@ -206,6 +231,23 @@ const useTestStore = create<TestStore>((set, get) => ({
       stopQuestionTimer,
     } = get();
     if (!testData) return;
+
+    // Check if we are at the very first question of the current section
+    const isAtFirstQuestionOfSection = currentPointer.questionPos === 0;
+    const isNotFirstSection = currentPointer.sectionPos > 0;
+    const isPartiallyLock = testData?.sectionLock === "Partially_Lock";
+
+    if (isAtFirstQuestionOfSection && isNotFirstSection && isPartiallyLock) {
+      set({
+        testError: {
+          message: "You are not allowed to go back to previous section",
+          severity: Severity.Warning,
+          id: "not_allowed",
+        },
+      });
+      return;
+    }
+
     stopQuestionTimer();
 
     const result = goToPrevQuestionHandler({
@@ -224,8 +266,6 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     if (!result.reachedStart) {
       startQuestionTimer();
-    } else {
-      // TODO: disable "Prev" button
     }
   },
 
@@ -255,6 +295,67 @@ const useTestStore = create<TestStore>((set, get) => ({
     );
 
     if (targetSectionPos === -1) return;
+
+    stopTimer();
+
+    const result = setCurrentQuestionHandler({
+      testData,
+      currentPointer,
+      questionStatusMap,
+      questionResponseMap,
+      question,
+    });
+
+    if (!result) return;
+
+    set({
+      currentPointer: result.newPointer,
+      questionStatusMap: result.newStatusMap,
+    });
+
+    startTimer();
+  },
+
+  jumpToQuestion: (question) => {
+    const {
+      testData,
+      currentPointer,
+      questionStatusMap,
+      questionResponseMap,
+      startQuestionTimer: startTimer,
+      stopQuestionTimer: stopTimer,
+    } = get();
+    if (!testData || !question) return;
+
+    const isPartiallyLock = testData?.sectionLock === "Partially_Lock";
+
+    // find section index of target question
+    const targetSectionPos = testData.sectionSet.findIndex((section) =>
+      section.questionNumbers.some((q) => q.questionId === question.questionId)
+    );
+
+    if (targetSectionPos === -1) return;
+
+    // If trying to jump to next section in partially_lock mode, then open switch modal
+    if (isPartiallyLock && targetSectionPos > currentPointer.sectionPos) {
+      set({
+        pendingQuestion: question,
+        isSwitchSectionModalOpen: true,
+      });
+      return;
+    }
+    // If trying to jump to previous section in partially_lock mode, then raise warning
+
+    if (isPartiallyLock && targetSectionPos < currentPointer.sectionPos) {
+      set({
+        testError: {
+          message: "You are not allowed to go back to previous section",
+          severity: Severity.Warning,
+          id: "not_allowed_jump",
+        },
+      });
+      return;
+    }
 
     stopTimer();
 
@@ -435,8 +536,8 @@ const useTestStore = create<TestStore>((set, get) => ({
   isSubmissionModalOpen: false,
   setIsSubmissionModalOpen: (v) => set({ isSubmissionModalOpen: v }),
 
-  isTeacherSupportModalOpen: false,
-  setIsTeacherSupportModalOpen: (v) => set({ isTeacherSupportModalOpen: v }),
+  isSwitchSectionModalOpen: false,
+  setIsSwitchSectionModalOpen: (v) => set({ isSwitchSectionModalOpen: v }),
 
   // Reset state
   reset: () => {
@@ -448,8 +549,8 @@ const useTestStore = create<TestStore>((set, get) => ({
       testError: null,
       sectionsUI: [],
       currentPointer: {
-        currentSectionPos: -1,
-        currentQuestionPos: -1,
+        sectionPos: -1,
+        questionPos: -1,
       },
       questionStatusMap: {},
       questionResponseMap: {},
@@ -459,6 +560,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         correctResponseEnabled: false,
         showDynamicStatusEnabled: false,
         timerEnabled: false,
+        fullScreenEnabled: false,
       },
     });
   },

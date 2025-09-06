@@ -48,7 +48,7 @@ interface QuestionProps {
  */
 const QuestionCard = ({ question, questionNumber, className }: QuestionProps) => {
   const { correctResponseEnabled } = useTestStore((s) => s.features);
-  const setCurrentQuestion = useTestStore((s) => s.setCurrentQuestion);
+  const jumpToQuestion = useTestStore((s) => s.jumpToQuestion);
   const activeQuestion = useTestStore((s) => s.getCurrentQuestion());
   const getStatusByQuestionId = useTestStore((s) => s.getStatusByQuestionId);
 
@@ -63,7 +63,7 @@ const QuestionCard = ({ question, questionNumber, className }: QuestionProps) =>
 
   return (
     <button
-      onClick={() => setCurrentQuestion(question)}
+      onClick={() => jumpToQuestion(question)}
       className={cn(
         "cursor-pointer min-w-[50px] min-h-[50px] max-w-[60px] max-h-[60px] rounded-[16px] flex justify-center items-center border",
         isActive

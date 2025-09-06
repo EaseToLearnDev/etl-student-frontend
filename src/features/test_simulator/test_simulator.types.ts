@@ -65,9 +65,9 @@ export interface TestData {
   questionSet: Question[];
 }
 
-export interface CurrentPointer {
-  currentSectionPos: number | -1;
-  currentQuestionPos: number | -1;
+export interface Pointer {
+  sectionPos: number | -1;
+  questionPos: number | -1;
 }
 
 export enum QuestionStatus {
@@ -187,3 +187,9 @@ export interface LinkItem {
 }
 
 export type SimulatorMode = "guest" | "registered" | "review";
+export interface Features {
+  timerEnabled: boolean;
+  correctResponseEnabled: boolean;
+  showDynamicStatusEnabled: boolean;
+  fullScreenEnabled: boolean;
+}

@@ -15,6 +15,7 @@ import cn from "../../../utils/classNames";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import useIsMobile from "../../../hooks/useIsMobile";
 import { useNavigate } from "react-router";
+import { useTeacherSupportStore } from "../store/useTeacherSupportStore";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -26,7 +27,7 @@ const ActiveQuestionPanel = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
   const { correctResponseEnabled } = useTestStore((s) => s.features);
-  const setIsTeacherSupportModalOpen = useTestStore(
+  const setIsTeacherSupportModalOpen = useTeacherSupportStore(
     (s) => s.setIsTeacherSupportModalOpen
   );
   const goToPrev = useTestStore((state) => state.goToPrev);
@@ -63,8 +64,8 @@ const ActiveQuestionPanel = () => {
             {currentQuestion?.sectionName ?? "Questions"}
           </h5>
           <MathJax dynamic>
-            <h5 className="flex gap-1 max-w-[65ch]">
-              {`Q${getCurrentQuestionIndex + 1})`}
+            <div className="flex gap-1 max-w-[65ch] text-xl">
+              <h5>{`Q${getCurrentQuestionIndex + 1})`}</h5>
               <div
                 className="math-container max-h-[400px] overflow-y-auto"
                 dangerouslySetInnerHTML={{
@@ -73,69 +74,113 @@ const ActiveQuestionPanel = () => {
                     .replace(/[\r\n]+/g, ""),
                 }}
               />
-            </h5>
+            </div>
           </MathJax>
         </div>
-        {/* Response Choices */}
-        <div className="flex flex-col gap-5">
-          {currentQuestion?.responseChoice.map((response) => (
-            <div
-              key={response.responseId}
-              className="flex flex-wrap items-center gap-3"
-            >
-              {/* Response Label (A, B, C, D, etc) */}
-              <h6>{`${response?.responseId}.`}</h6>
 
-              <Radio
-                label={response.responseText}
-                value={response?.responseId}
-                checked={currentResponse === response.responseId}
-                onChange={(e) => {
-                  setCurrentResponse(e.target.value ?? "");
-                }}
+        {/* Response Section */}
+        <div className="flex flex-col gap-5">
+          {/* Case: MCQ */}
+          {currentQuestion?.questionType === "Multiple-Choice" &&
+            currentQuestion?.responseChoice.map((response) => (
+              <div
+                key={response.responseId}
+                className="flex flex-wrap items-center gap-3"
+              >
+                <h6>{`${response?.responseId}.`}</h6>
+                <Radio
+                  label={response.responseText}
+                  value={response?.responseId}
+                  checked={currentResponse === response.responseId}
+                  onChange={(e) => {
+                    setCurrentResponse(e.target.value ?? "");
+                  }}
+                  disabled={correctResponseEnabled}
+                />
+
+                {/* Correct/Incorrect Labels */}
+                {correctResponseEnabled && (
+                  <>
+                    {response?.responseId ===
+                    currentQuestion?.correctResponse ? (
+                      <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
+                        <MdCheck size={16} />
+                        <p className="!font-semibold text-[var(--text-primary)]">
+                          Correct Answer
+                        </p>
+                      </div>
+                    ) : response?.responseId ===
+                      currentQuestion?.studentResponse ? (
+                      <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
+                        <MdClose size={16} />
+                        <p className="!font-semibold text-[var(--text-primary)]">
+                          You Selected Incorrect
+                        </p>
+                      </div>
+                    ) : null}
+                  </>
+                )}
+              </div>
+            ))}
+
+          {/* Case: Fill in the Blank / Integer */}
+          {(currentQuestion?.questionType === "Fill-in-Blank" ||
+            currentQuestion?.questionType === "Integer-Type") && (
+            <div className="flex items-center gap-4">
+              <input
+                type="text"
+                value={currentResponse ?? ""}
+                onChange={(e) => setCurrentResponse(e.target.value)}
                 disabled={correctResponseEnabled}
+                placeholder={"Enter Your Answer"}
+                className="w-full max-w-[300px] px-3 py-2 border rounded-md text-base bg-[var(--surface-bg-primary)]"
               />
-              {/* Correct or Incorrect Labels (Review mode specific) */}
               {correctResponseEnabled && (
                 <>
-                  {response?.responseId === currentQuestion?.correctResponse ? (
+                  {currentQuestion?.studentResponse ===
+                  currentQuestion?.correctResponse ? (
                     <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
                       <MdCheck size={16} />
                       <p className="!font-semibold text-[var(--text-primary)]">
                         Correct Answer
                       </p>
                     </div>
-                  ) : response?.responseId ===
-                    currentQuestion?.studentResponse ? (
-                    <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
-                      <MdClose size={16} />
-                      <p className="!font-semibold text-[var(--text-primary)]">
-                        You Selected Incorrect
-                      </p>
-                    </div>
                   ) : (
-                    <></>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
+                        <MdClose size={16} />
+                        <p className="!font-semibold text-[var(--text-primary)]">
+                          Incorrect Answer
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
+                        <MdCheck size={16} />
+                        <MathJax dynamic>
+                          <p className="!font-semibold text-[var(--text-primary)]">
+                            Correct Answer: {currentQuestion?.correctResponse}
+                          </p>
+                        </MathJax>
+                      </div>
+                    </div>
                   )}
                 </>
               )}
             </div>
-          ))}
+          )}
         </div>
 
         {/* Explanation (Review Mode Only) */}
         {correctResponseEnabled && currentQuestion?.explanations ? (
           <MathJax>
             <WidgetCard title="Explanation" className="shadow-none">
-              <p className="select-none">
-                <div
-                  className="math-container"
-                  dangerouslySetInnerHTML={{
-                    __html: currentQuestion?.explanations
-                      .trim()
-                      .replace(/[\r\n]+/g, ""),
-                  }}
-                />
-              </p>
+              <div
+                className="math-container select-none text-sm"
+                dangerouslySetInnerHTML={{
+                  __html: currentQuestion?.explanations
+                    .trim()
+                    .replace(/[\r\n]+/g, ""),
+                }}
+              />
             </WidgetCard>
           </MathJax>
         ) : (
