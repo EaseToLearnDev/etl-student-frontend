@@ -5,19 +5,30 @@ import Button from "../../../components/Button";
 import { Modal } from "../../../components/Modal";
 import VerifyOtpContent from "./VerifyOtpContent";
 import { handleStudentProfileUpdateDetails } from "../services/handleStudentProfileUpdateDetails";
-import { handleStudentProfileVerifyOtp } from "../services/handleStudentProfileVerifyOtp";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { useProfileStore } from "../hooks/useProfileStore";
+import ConfirmDeleteAccount from "./ConfirmDeleteAccount";
+import DeleteAccountOtpVerifyModal from "./DeleteAccountOtpVerifyModal";
+import AccountRemovalSection from "./AccountRemovalSection";
+import { handleVerifyOtp } from "../services/handleVerifyOtp";
 
 const ProfileContent = () => {
   const { studentData, setStudentData } = useStudentStore.getState();
-  const [editProfile, setEditProfile] = useState(false);
-  const [isVerified, setIsVerified] = useState(false);
-  const [showOtpModal, setShowOtpModal] = useState(false);
-  const [otpType, setOtpType] = useState<"email" | "mobile" | null>(null);
-  const [otpError, setOtpError] = useState<string | null>(null);
-  const [resToken, setResToken] = useState<string | null>(null);
-  const [tokenIdentify, setTokenIdentify] = useState<number | null>(null);
-  const [errors, setErrors] = useState({ email: "", phone: "" });
+
+  const {
+    editProfile,
+    setEditProfile,
+    isVerified,
+    setIsVerified,
+    showOtpModal,
+    setShowOtpModal,
+    setOtpType,
+    otpError,
+    setResToken,
+    setTokenIdentify,
+    errors,
+    setErrors,
+  } = useProfileStore();
 
   if (!studentData) return null;
 
@@ -31,33 +42,35 @@ const ProfileContent = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    if (name === "emailId") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      setErrors((prev) => ({
-        ...prev,
-        email: emailRegex.test(value) ? "" : "Invalid email address",
-      }));
-    }
-
-    if (name === "phoneNo") {
-      const phoneRegex = /^[6-9]\d{9}$/;
-      setErrors((prev) => ({
-        ...prev,
-        phone: phoneRegex.test(value) ? "" : "Invalid phone number",
-      }));
-    }
+    if (name === "emailId") setErrors({ ...errors, email: "" });
+    if (name === "phoneNo") setErrors({ ...errors, phone: "" });
   };
 
   const isPhoneChanged = formData.phoneNo !== studentData.phoneNo;
   const isEmailChanged = formData.emailId !== studentData.emailId;
+  const isNameChanged = formData.studentName !== studentData.studentName;
+  const hasChanges = isPhoneChanged || isEmailChanged || isNameChanged;
 
   const openOtpModal = async (type: "mobile" | "email") => {
+    if (type === "email") {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (!emailRegex.test(formData.emailId)) {
+        setErrors({ ...errors, email: "Invalid email address" });
+        return;
+      }
+    }
+    if (type === "mobile") {
+      const phoneRegex = /^[6-9]\d{9}$/;
+      if (!phoneRegex.test(formData.phoneNo)) {
+        setErrors({ ...errors, phone: "Invalid phone number" });
+        return;
+      }
+    }
     try {
       const res = await handleStudentProfileUpdateDetails({
         newEmailId: formData.emailId,
         newPhoneNo: formData.phoneNo,
       });
-
       if (res) {
         setResToken(res.resToken);
         setTokenIdentify(res.tokenIdentify);
@@ -66,30 +79,6 @@ const ProfileContent = () => {
       }
     } catch (err) {
       console.error("Error requesting OTP:", err);
-    }
-  };
-
-  const handleVerifyOtp = async (otp: string) => {
-    if (!resToken || !tokenIdentify) return;
-
-    try {
-      const verification = await handleStudentProfileVerifyOtp({
-        otpForMobile: otpType === "mobile" ? Number(otp) : undefined,
-        otpForEmail: otpType === "email" ? Number(otp) : undefined,
-        resToken,
-        tokenIdentify,
-      });
-
-      if (verification) {
-        setIsVerified(true);
-        setShowOtpModal(false);
-        setOtpError(null);
-      } else {
-        setOtpError("Invalid OTP. Please try again.");
-      }
-    } catch (err) {
-      console.error("OTP verification failed:", err);
-      setOtpError("Something went wrong. Please try again later.");
     }
   };
 
@@ -117,11 +106,9 @@ const ProfileContent = () => {
 
   return (
     <div>
-      <ProfileHeader
-        editProfile={editProfile}
-        setEditProfile={setEditProfile}
-      />
+      <ProfileHeader />
 
+      {/* Profile Info */}
       <form className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
         <ProfileInput
           name="studentName"
@@ -140,7 +127,11 @@ const ProfileContent = () => {
             error={errors.phone}
           />
           {editProfile && isPhoneChanged && (
-            <Button style="primary" onClick={() => openOtpModal("mobile")}>
+            <Button
+              style="primary"
+              onClick={() => openOtpModal("mobile")}
+              disabled={!!errors.phone}
+            >
               Verify
             </Button>
           )}
@@ -156,7 +147,11 @@ const ProfileContent = () => {
             error={errors.email}
           />
           {editProfile && isEmailChanged && (
-            <Button style="primary" onClick={() => openOtpModal("email")}>
+            <Button
+              style="primary"
+              onClick={() => openOtpModal("email")}
+              disabled={!!errors.email}
+            >
               Verify
             </Button>
           )}
@@ -165,7 +160,13 @@ const ProfileContent = () => {
 
       {editProfile && (
         <div className="flex flex-row justify-end gap-3">
-          <Button style="primary" onClick={handleSave} disabled={!isVerified}>
+          <Button
+            style="primary"
+            onClick={handleSave}
+            disabled={
+              !hasChanges || ((isPhoneChanged || isEmailChanged) && !isVerified)
+            }
+          >
             Save
           </Button>
           <Button style="secondary" onClick={handleCancel}>
@@ -187,6 +188,15 @@ const ProfileContent = () => {
           />
         </Modal>
       )}
+
+      {/* Account Removal Section */}
+      <AccountRemovalSection />
+
+      {/* Confirm Delete Modal */}
+      <ConfirmDeleteAccount />
+
+      {/* OTP Verify Modal for Account Deletion */}
+      <DeleteAccountOtpVerifyModal />
     </div>
   );
 };
