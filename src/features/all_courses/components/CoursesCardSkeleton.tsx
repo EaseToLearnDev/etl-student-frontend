@@ -11,8 +11,6 @@ const CoursesCardSkeleton = () => {
           <Skeleton variant="rounded" width="100%" height="160px" />
           <Skeleton variant="text" width="70%" height="20px" />
           <Skeleton variant="text" width="90%" height="16px" />
-          <Skeleton variant="text" width="40%" height="14px" />
-          <Skeleton variant="rounded" width="100px" height="32px" />
         </div>
       ))}
     </div>
