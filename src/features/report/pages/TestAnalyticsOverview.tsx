@@ -178,7 +178,7 @@ export const TestAnalyticsOverview = () => {
           </div>
         </Widget>
       </div>
-      <div className="flex sm:flex-col lg:flex-row items-center justify-between gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Widget>
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartPieIcon className="w-5 h-5 text-[var(--sb-ocean-bg-active)]" />
@@ -874,7 +874,7 @@ export const TestAnalyticsOverview = () => {
         </Widget>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 overflow-x-auto">
         <Tabs
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}

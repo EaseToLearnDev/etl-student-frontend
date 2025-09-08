@@ -141,7 +141,7 @@ const ProfileHeader = ({ editProfile, setEditProfile }: ProfileHeaderProps) => {
       </div>
 
       {/* Info & Actions */}
-      <div className="mt-14 px-6 pb-6 flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="mt-14 pb-6 flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <h3 className="text-xl font-semibold">{studentData?.studentName}</h3>
