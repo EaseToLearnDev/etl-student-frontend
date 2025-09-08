@@ -137,28 +137,33 @@ export const LearningSessionOverview = () => {
       label: "Performance",
       content: (
         <div className="flex flex-col gap-8">
-          {/* Responsive Grid for Charts */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <Widget title="Overall" className="h-[420px]">
-              {renderPieChart(
-                overallPerformanceData,
-                data.totalQuestion,
-                "Total Questions"
-              )}
+              <div className="flex items-center justify-center h-full">
+                {renderPieChart(
+                  overallPerformanceData,
+                  data.totalQuestion,
+                  "Total Questions"
+                )}
+              </div>
             </Widget>
             <Widget title="With Help" className="h-[420px]">
-              {renderPieChart(
-                withHelpData,
-                data.helpCounter,
-                "Help in Questions"
-              )}
+              <div className="flex items-center justify-center h-full">
+                {renderPieChart(
+                  withHelpData,
+                  data.helpCounter,
+                  "Help in Questions"
+                )}
+              </div>
             </Widget>
             <Widget title="Without Help" className="h-[420px]">
-              {renderPieChart(
-                withoutHelpData,
-                data.totalQuestion - data.helpCounter,
-                "Without Help"
-              )}
+              <div className="flex items-center justify-center h-full">
+                {renderPieChart(
+                  withoutHelpData,
+                  data.totalQuestion - data.helpCounter,
+                  "Without Help"
+                )}
+              </div>
             </Widget>
           </div>
         </div>

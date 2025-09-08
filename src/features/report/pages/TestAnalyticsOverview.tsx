@@ -40,6 +40,7 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
 import Button from "../../../components/Button";
+import { formatMinutesToHHMMSS, parseTimeString } from "../libs/utils";
 
 interface TabItem {
   label: string;
@@ -50,7 +51,9 @@ interface TabItem {
 export const TestAnalyticsOverview = () => {
   const params = useSearchParams();
   const testSession = params[0].get("testSession");
-  const testType = params[0].get("testType") ? Number(params[0]?.get("testType")) : null;
+  const testType = params[0].get("testType")
+    ? Number(params[0]?.get("testType"))
+    : null;
   const loading = useLoadingStore((s) => s.loading);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -85,27 +88,25 @@ export const TestAnalyticsOverview = () => {
 
   const SectionGraphData = [
     {
-      name: "Section A",
+      name: "Full Marks",
       "Full Marks": data.fullMarks,
-      "Obtained Marks": data.marksObtain,
     },
     {
-      name: "Section B",
-      "Full Marks": 100,
-      "Obtained Marks": 48,
+      name: "Marks Obtained",
+      "Obtained Marks": data.marksObtain,
     },
   ];
 
   const averageTimeData = [
     {
-      name: "Time Remaning",
-      "Time Remaning": data.timeRemaining,
-      "Total Time": data.totalTime,
+      name: "Available Time",
+      // "Time Remaning": data.timeRemaining,
+      "Available Time": data.totalTime,
     },
     {
-      name: "Time Taken",
-      "Time Taken": data.timeSpent,
-      "Total Time": data.totalTime,
+      name: "Time Taken on Attempted Questions",
+      "Time Taken": parseTimeString(data.timeSpentMinutes),
+      // "Total Time": data.totalTime,
     },
   ];
 
@@ -135,10 +136,10 @@ export const TestAnalyticsOverview = () => {
     })) || [];
 
   const timeManagement = [
-    { name: "Time Taken", value: data.timeSpent, color: "#8884d8" },
+    { name: "Time Taken", value: data.timeTakenPercent, color: "#8884d8" },
     {
       name: "Time Remaning",
-      value: data.timeRemaining,
+      value: data.timeRemainingPercent,
       color: "#43f4d8",
     },
   ];
@@ -163,15 +164,17 @@ export const TestAnalyticsOverview = () => {
           <div className="flex flex-col gap-4 px-6 py-4">
             <div className="w-full bg-[var(--surface-bg-tertiary)] rounded-full h-6 overflow-hidden relative">
               <div
-                className="h-6 rounded-full transition-all duration-500 flex items-center justify-center text-white text-sm font-medium"
+                className="h-6 rounded-full transition-all duration-500"
                 style={{
                   width: `${data.progressBarObj.percentage}%`,
                   backgroundColor: data.progressBarObj.barColor,
                 }}
-              >
+              />
+              <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)]">
                 {data.progressBarObj.percentage}%
-              </div>
+              </span>
             </div>
+
             <p className="text-[var(--text-secondary)] text-center">
               not upto mark. Continue Learning
             </p>
@@ -179,7 +182,7 @@ export const TestAnalyticsOverview = () => {
         </Widget>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Widget>
+        <Widget className="p-5">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartPieIcon className="w-5 h-5 text-[var(--sb-ocean-bg-active)]" />
             Overall Performance Breakdown
@@ -250,13 +253,13 @@ export const TestAnalyticsOverview = () => {
 
         {/* Section Performance Bar Chart */}
         {sectionPerformanceData.length > 0 && (
-          <Widget>
+          <Widget className="p-5">
             <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
               <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
-              Section Performance Analysis
+              Marks Analysis
             </h5>
 
-            <div className="mt-5 aspect-[1060/860] w-full lg:mt-7">
+            <div className="mt-5 aspect-[1060/1000] h-full w-full lg:mt-7">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   data={SectionGraphData}
@@ -320,8 +323,8 @@ export const TestAnalyticsOverview = () => {
 
   const TimeManagementTab = () => (
     <div>
-      <div className="flex sm:flex-col lg:flex-row items-center justify-between gap-4">
-        <Widget>
+      <div className="flex flex-col lg:flex-row items-start justify-between gap-4">
+        <Widget className="p-5">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartPieIcon className="w-5 h-5 text-[var(--sb-ocean-bg-active)]" />
             Time Distribution
@@ -330,7 +333,7 @@ export const TestAnalyticsOverview = () => {
           <div className="grid grid-cols-1 gap-4">
             {/* Pie Chart */}
             {/* Pie Chart Wrapper */}
-            <div className="relative mx-auto w-[290px] h-[290px] sm:w-[340px] sm:h-[340px]">
+            <div className="relative mx-auto size-[290px] sm:size-[340px]">
               <ResponsiveContainer
                 width="100%"
                 height="100%"
@@ -362,7 +365,7 @@ export const TestAnalyticsOverview = () => {
 
               {/* Center Label */}
               <div className="absolute inset-[96px] sm:inset-[112px] flex flex-col items-center justify-center rounded-full shadow-[0px_4px_20px_0px_#00000029] bg-[var(--surface-bg-primary)]">
-                <p className="text-[var(--text-secondary)] text-xs whitespace-pre-line px-4">
+                <p className="text-[var(--text-secondary)] text-center whitespace-pre-line px-4">
                   Time Taken
                 </p>
                 <h5 className="text-[var(--text-primary)]">{data.timeSpent}</h5>
@@ -390,13 +393,13 @@ export const TestAnalyticsOverview = () => {
           </div>
         </Widget>
 
-        <Widget>
+        <Widget className="p-5">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
-            Section Performance Analysis
+            Average Time Analysis
           </h5>
 
-          <div className="mt-5 aspect-[1060/780] w-full lg:mt-7">
+          <div className="mt-5 aspect-[1060/900] w-full lg:mt-7">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={averageTimeData}
@@ -412,6 +415,11 @@ export const TestAnalyticsOverview = () => {
                 <XAxis tickLine={false} dataKey="name" />
                 <YAxis tickLine={false} />
                 <Tooltip
+                  formatter={(value) =>
+                    typeof value === "number"
+                      ? `${value.toFixed(2)} min`
+                      : `${value} min`
+                  }
                   contentStyle={{
                     backgroundColor: "var(--surface-bg-secondary)",
                     border: "1px solid var(--border-secondary)",
@@ -424,12 +432,12 @@ export const TestAnalyticsOverview = () => {
                 />
                 <Legend />
                 <Bar
-                  dataKey="Time Taken"
+                  dataKey="Available Time"
                   fill={tintHexColor("#5a5fd7", 0.3)}
                   radius={[4, 4, 0, 0]}
                 />
                 <Bar
-                  dataKey="Time Remaning"
+                  dataKey="Time Taken"
                   fill={tintHexColor("#10b981", 0.3)}
                   radius={[4, 4, 0, 0]}
                 />
@@ -452,7 +460,9 @@ export const TestAnalyticsOverview = () => {
                 <h6 className="text-[var(--text-secondary)]">Total Time</h6>
               </div>
             </div>
-            <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">00:50:00</h4>
+            <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">
+              {formatMinutesToHHMMSS(data.totalTime)}
+            </h4>
             <p className="text-[var(--text-tertiary)]">Session duration</p>
           </div>
 
@@ -466,16 +476,21 @@ export const TestAnalyticsOverview = () => {
                 <h6 className="text-[var(--text-secondary)]">Time Taken</h6>
               </div>
             </div>
-            <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">00:00:06</h4>
+            <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">
+              {formatMinutesToHHMMSS(parseTimeString(data.timeSpentMinutes))}
+            </h4>
             <p className="text-[var(--text-tertiary)]">Elapsed time</p>
 
             {/* Progress Bar */}
             <div className="mt-4">
               <div className="w-full rounded-full h-2 bg-[var(--border-tertiary)]">
-                <div className="h-2 rounded-full transition-all duration-500 w-[0.2%] bg-[var(--sb-ocean-bg-active)]"></div>
+                <div
+                  className="h-2 rounded-full transition-all duration-500 bg-[var(--sb-ocean-bg-active)]"
+                  style={{ width: `${data.timeTakenPercent}%` }}
+                ></div>
               </div>
               <p className="text-xs mt-1 text-[var(--text-tertiary)]">
-                0.2% Complete
+                {data.timeTakenPercent}% Complete
               </p>
             </div>
           </div>
@@ -491,17 +506,20 @@ export const TestAnalyticsOverview = () => {
               </div>
             </div>
             <h4 className="mb-2 text-[var(--sb-green-haze-bg-active)]">
-              00:49:54
+              {formatMinutesToHHMMSS(data.timeRemaining)}
             </h4>
             <p className="text-[var(--text-tertiary)]">Time left</p>
 
             {/* Countdown Visual */}
             <div className="mt-4">
               <div className="w-full rounded-full h-2 bg-[var(--border-tertiary)]">
-                <div className="h-2 rounded-full transition-all duration-500 w-[99.8%] bg-[var(--sb-green-haze-bg-active)]"></div>
+                <div
+                  className="h-2 rounded-full transition-all duration-500 bg-[var(--sb-green-haze-bg-active)]"
+                  style={{ width: `${data.timeRemainingPercent}%` }}
+                ></div>
               </div>
               <p className="mt-1 text-[var(--text-tertiary)]">
-                99.8% Remaining
+                {data.timeRemainingPercent}% Remaining
               </p>
             </div>
           </div>
@@ -519,7 +537,7 @@ export const TestAnalyticsOverview = () => {
               </div>
             </div>
             <h3 className="mb-2 text-[var(--sb-valencia-bg-active)]">
-              00:00:00
+              {data.averageSpeedPerQuestionLabel}
             </h3>
             <p className="text-[var(--text-tertiary)]">Per question</p>
 
@@ -545,16 +563,20 @@ export const TestAnalyticsOverview = () => {
           </h5>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center p-4 rounded-lg border border-solid border-[var(--border-primary)] bg-[var(--surface-bg-secondary)]">
-              <h4 className="mb-1 text-[var(--sb-ocean-bg-active)]">50 min</h4>
+              <h4 className="mb-1 text-[var(--sb-ocean-bg-active)]">
+                {data.totalTime} min
+              </h4>
               <p className="text-[var(--text-tertiary)]">Total Duration</p>
             </div>
             <div className="text-center p-4 rounded-lg border border-solid border-[var(--border-primary)] bg-[var(--surface-bg-secondary)]">
-              <h4 className="mb-1 text-[var(--sb-sunglow-bg-active)]">6 sec</h4>
+              <h4 className="mb-1 text-[var(--sb-sunglow-bg-active)]">
+                {data.timeSpentMinutes} min
+              </h4>
               <p className="text-[var(--text-tertiary)]">Time Used</p>
             </div>
             <div className="text-center p-4 rounded-lg border border-solid border-[var(--border-primary)] bg-[var(--surface-bg-secondary)]">
               <h4 className="mb-1 text-[var(--sb-green-haze-bg-active)]">
-                99.8%
+                {data.timeRemainingPercent}%
               </h4>
               <p className="text-[var(--text-tertiary)]">Progress Left</p>
             </div>
