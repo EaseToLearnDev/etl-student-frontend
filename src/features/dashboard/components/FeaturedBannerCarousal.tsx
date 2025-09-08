@@ -82,14 +82,11 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
         </div>
 
         <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5">
-          <button className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease">
-            Explore Features
-          </button>
           <button
+            className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
             onClick={() => setSelectedSlideIndex(1)}
-            className="text-white border border-white/40 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl hover:bg-white/10 transition"
           >
-            Watch Tutorials
+            Explore Features
           </button>
           <Link
             to={"/profile"}

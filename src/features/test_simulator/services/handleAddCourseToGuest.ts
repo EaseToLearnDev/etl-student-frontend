@@ -1,6 +1,6 @@
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { addCourseToGuest } from "../api/addCourseToguest.api";
+import { addCourseToGuest } from "../api/addCourseToGuest.api";
 import useTestStore from "../store/useTestStore";
 
 export const handleAddCourseToGuest = async () => {

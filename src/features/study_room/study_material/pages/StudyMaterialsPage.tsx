@@ -29,6 +29,7 @@ import MediaContentModalView from "../components/MediaContentModalVIew";
 import { Skeleton } from "../../../../components/SkeletonLoader";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
+import NoCopyWrapper from "../../../../global/noCopyWrapper";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -170,9 +171,13 @@ const StudyMaterialsPage = () => {
         >
           <>
             {selectedContent?.contentType === "Text" && textContent ? (
-              <TextContentModalView content={textContent} />
+              <NoCopyWrapper>
+                <TextContentModalView content={textContent} />
+              </NoCopyWrapper>
             ) : (
-              <MediaContentModalView content={selectedContent} />
+              <NoCopyWrapper>
+                <MediaContentModalView content={selectedContent} />
+              </NoCopyWrapper>
             )}
             <div
               onClick={() => setSelectedContent(null)}
