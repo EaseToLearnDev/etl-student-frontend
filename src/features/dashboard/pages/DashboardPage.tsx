@@ -12,12 +12,16 @@ import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunni
 import { ActivityList } from "../components/ActivityList";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
+  const activeCourse = useStudentStore((s) => s.activeCourse);
+
+  const isClassTest = activeCourse?.tabs?.classTest;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,42 +36,51 @@ const DashboardPage = () => {
 
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
-      {/* Top + Middle section */}
-      <div className="grid grid-cols-1 gap-5">
-        {/* Featured Banner (top-left) */}
-        <div className="order-1 xl:col-start-1 xl:row-start-1">
+      {/* Top Section (split into 2 halves) */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+        <div className="flex flex-col gap-5 xl:col-span-2">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
-        </div>
-
-        {/* Jump Back In (bottom-left) */}
-        <div className="order-3 xl:col-start-1 xl:row-start-2">
           <WidgetCard className="w-full min-h-[300px] max-h-full">
             <ActivityList />
           </WidgetCard>
         </div>
 
-        {/* Class Tests (right column spanning 2 rows) */}
-        <div className="order-2 xl:col-start-2 xl:row-span-2">
-          <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
-            <ClassTestList />
-          </WidgetCard>
+        <div className="flex flex-col gap-5 xl:col-span-1">
+          {isClassTest ? (
+            <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
+              <ClassTestList />
+            </WidgetCard>
+          ) : (
+            <>
+              <WidgetCard className="min-h-[250px] max-h-[250px]">
+                <DownloadAppCard />
+              </WidgetCard>
+              <WidgetCard className="h-full">
+                <SupportSection />
+              </WidgetCard>
+            </>
+          )}
         </div>
       </div>
-      {/* <div className="xl:col-start-1 xl:row-start-2"></div> */}
 
-      {/* Bottom section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 min-h-[250px] max-h-[250px]">
+      {/* Bottom Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 min-h-[250px] max-h-[250px]">
         <WidgetCard>
           <JumpBackInList />
         </WidgetCard>
-        <WidgetCard>
-          <DownloadAppCard />
-        </WidgetCard>
-        <WidgetCard>
-          <SupportSection />
-        </WidgetCard>
+        {isClassTest && (
+          <>
+            <WidgetCard>
+              <DownloadAppCard />
+            </WidgetCard>
+            <WidgetCard>
+              <SupportSection />
+            </WidgetCard>
+          </>
+        )}
       </div>
 
+      {/* Toast */}
       {showToast && toastData && (
         <Toast
           {...toastData}

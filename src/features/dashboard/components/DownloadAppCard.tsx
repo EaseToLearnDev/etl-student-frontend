@@ -31,7 +31,7 @@ export default function DownloadAppCard({
 
       {/* content */}
       <div className="flex-1 min-w-0">
-        <div className="mt-4 flex flex-col gap-3">
+        <div className="flex flex-col gap-3">
           {/* iOS button */}
           <div
             className="max-w-[300px] inline-flex items-center gap-3 justify-between px-4 py-2 rounded-lg border border-[var(--border-secondary)] shadow-sm hover:shadow focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors"

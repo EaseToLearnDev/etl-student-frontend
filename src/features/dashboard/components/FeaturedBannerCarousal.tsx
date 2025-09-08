@@ -104,14 +104,14 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       key="slide-2"
       className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center p-10"
     >
-      <div className="grid grid-cols-3 gap-5 w-full h-fit select-none">
+      <div className="grid grid-cols-3 gap-5 w-full select-none">
         {tutorialCards.map((card, i) => (
           <div
             key={i}
             onClick={() => setSelectedContent(card.content)}
             className="border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
           >
-            <div className="w-10 h-10 flex bg-white/10 rounded-md justify-center items-center text-2xl">
+            <div className="w-8 h-8 flex bg-white/10 rounded-md justify-center items-center text-2xl">
               {card.icon}
             </div>
             <div>
@@ -136,14 +136,14 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       )}
     >
       {/* Navigation */}
-      <div className="absolute right-0 top-0 z-30 flex items-center gap-4 p-5">
+      <div className="absolute top-2 right-3 z-30 flex items-center gap-3">
         <button
           onClick={() =>
             setSelectedSlideIndex((prev) =>
               prev === 0 ? slides.length - 1 : prev - 1
             )
           }
-          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition"
         >
           <ChevronLeftIcon className="size-4" />
         </button>
@@ -154,7 +154,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               prev === slides.length - 1 ? 0 : prev + 1
             )
           }
-          className="size-7 aspect-square flex justify-center items-center border border-white/20 hover:bg-white/10 text-white rounded-md transition"
+          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition"
         >
           <ChevronRightIcon className="size-4" />
         </button>
