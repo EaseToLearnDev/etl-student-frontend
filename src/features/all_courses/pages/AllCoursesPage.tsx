@@ -15,18 +15,18 @@ import CoursesCards from "../components/CoursesCards";
 import { FilterCourses } from "../components/FilterCourses";
 import { Modal } from "../../../components/Modal";
 import { PlanDetails } from "../components/PlanDetails";
+import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
  */
 const AllCoursesPage = () => {
-
   const isMobile = useIsMobile();
-  const reset = useCoursesStore(s => s.reset);
+  const reset = useCoursesStore((s) => s.reset);
   const search = useCoursesStore((s) => s.search);
   const setSearch = useCoursesStore((s) => s.setSearch);
-  // const loading = useCoursesStore((s) => s.loading);
-  // const setLoading = useCoursesStore((s) => s.setLoading);
+  const loading = useCoursesStore((s) => s.loading);
+  const setLoading = useCoursesStore((s) => s.setLoading);
   const isPlanModalOpen = useCoursesStore((s) => s.isPlanModalOpen);
   const setIsPlanModalOpen = useCoursesStore((s) => s.setIsPlanModalOpen);
   const courseList = useCoursesStore((s) => s.courseList);
@@ -43,15 +43,20 @@ const AllCoursesPage = () => {
   );
 
   useEffect(() => {
+    setLoading(true);
     const fetchCourses = async () => {
-      const data = await fetchCategoryAndCourses();
+      try {
+        const data = await fetchCategoryAndCourses();
 
-      const courses = extractCourses(data);
-      if (courses && courses.length > 0) {
-        setCourseList(courses);
-      }
-      if (data) {
-        setCategoryList(data);
+        const courses = extractCourses(data);
+        if (courses && courses.length > 0) {
+          setCourseList(courses);
+        }
+        if (data) {
+          setCategoryList(data);
+        }
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -76,17 +81,21 @@ const AllCoursesPage = () => {
       {/* Main Layout */}
       <ChildLayout
         primaryContent={
-          <CoursesCards
-            search={search}
-            courseList={courseList || []}
-            selectedCourse={selectedCourse}
-            hideSecondary={hideSecondary}
-            selectedCategories={selectedCategories || []}
-            onCourseClick={(course) => {
-              setSelectedCourse(course);
-              setIsPlanModalOpen(true);
-            }}
-          />
+          loading ? (
+            <CoursesCardSkeleton />
+          ) : (
+            <CoursesCards
+              search={search}
+              courseList={courseList || []}
+              selectedCourse={selectedCourse}
+              hideSecondary={hideSecondary}
+              selectedCategories={selectedCategories || []}
+              onCourseClick={(course) => {
+                setSelectedCourse(course);
+                setIsPlanModalOpen(true);
+              }}
+            />
+          )
         }
         secondaryContent={
           <FilterCourses
