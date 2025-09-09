@@ -1,5 +1,5 @@
 // React
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type JSX } from "react";
 
 // Utils
 import cn from "../../../utils/classNames";
@@ -19,6 +19,7 @@ import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkelet
 import EmptyState from "../../../components/EmptyState";
 import ReportTablePage from "../components/ReportTablePage";
 import { useNavigate } from "react-router";
+import { loadTablsForReports } from "../services/loadTabsForReports";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -28,14 +29,7 @@ const StudentReport = () => {
   const { loading } = useLoadingStore.getState();
   const navigate = useNavigate();
 
-  const tabs = [
-    "Overview",
-    "Learning Session",
-    "Competitive Session",
-    "Topic Tests",
-    "Mock Tests",
-    "Class Tests",
-  ];
+  const tabs = ["Overview", ...loadTablsForReports()];
 
   // Indicator logic
   const menuRef = useRef<HTMLDivElement>(null);
@@ -109,18 +103,20 @@ const StudentReport = () => {
   const handleViewMore = (reportData: TestReportdata | LearningSessionData) => {
     const { testSession, testType } = reportData;
     let type = 0;
-    if(testType === 'Learning Session' || testType === "Competitive Session") {
-      type = 1
-    } else if(testType === "Topic Test") {
+    if (testType === "Learning Session" || testType === "Competitive Session") {
+      type = 1;
+    } else if (testType === "Topic Test") {
       type = 2;
-    } else if(testType === "Mock Test") {
+    } else if (testType === "Mock Test") {
       type = 3;
-    } else if(testType === "Class Test") {
+    } else if (testType === "Class Test") {
       type = 4;
     }
 
     if (testType === "Learning Session") {
-      navigate(`/learning-testanalytics?testSession=${testSession}&testType=${type}`);
+      navigate(
+        `/learning-testanalytics?testSession=${testSession}&testType=${type}`
+      );
     } else {
       navigate(`/testanalytics?testSession=${testSession}&testType=${type}`);
     }
@@ -129,79 +125,88 @@ const StudentReport = () => {
   if (!reportData || !sessionData)
     return <EmptyState title="No Report Data Available" />;
 
-  const tabContents = [
-    <ReportOverviewPage />,
-    <ReportLearningSessionPage
-      data={sessionData}
-      onViewMore={handleViewMore}
-    />,
-    <ReportTablePage
-      data={reportData}
-      onViewMore={handleViewMore}
-      testTypeId={1}
-      title="Competitive Session"
-      emptyTitle="No Competitive Session Data Available"
-    />,
-    <ReportTablePage
-      data={reportData}
-      onViewMore={handleViewMore}
-      testTypeId={2}
-      title="Topic Test"
-      emptyTitle="No Topic Test Data Available"
-    />,
-    <ReportTablePage
-      data={reportData}
-      onViewMore={handleViewMore}
-      testTypeId={3}
-      title="Mock Test"
-      emptyTitle="No Mock Test Data Available"
-    />,
-    <ReportTablePage
-      data={reportData}
-      onViewMore={handleViewMore}
-      testTypeId={4}
-      title="Class Test"
-      emptyTitle="No Class Test Data Available"
-    />,
-  ];
+  const tabContentsMap: Record<string, JSX.Element> = {
+    Overview: <ReportOverviewPage />,
+    "Learning Sessions": (
+      <ReportLearningSessionPage
+        data={sessionData}
+        onViewMore={handleViewMore}
+      />
+    ),
+    "Competitive Sessions": (
+      <ReportTablePage
+        data={reportData}
+        onViewMore={handleViewMore}
+        testTypeId={1}
+        title="Competitive Sessions"
+        emptyTitle="No Competitive Session Data Available"
+      />
+    ),
+    "Topic Tests": (
+      <ReportTablePage
+        data={reportData}
+        onViewMore={handleViewMore}
+        testTypeId={2}
+        title="Topic Tests"
+        emptyTitle="No Topic Test Data Available"
+      />
+    ),
+    "Mock Tests": (
+      <ReportTablePage
+        data={reportData}
+        onViewMore={handleViewMore}
+        testTypeId={3}
+        title="Mock Tests"
+        emptyTitle="No Mock Test Data Available"
+      />
+    ),
+    "Class Tests": (
+      <ReportTablePage
+        data={reportData}
+        onViewMore={handleViewMore}
+        testTypeId={4}
+        title="Class Tests"
+        emptyTitle="No Class Test Data Available"
+      />
+    ),
+  };
 
   return (
     <div>
-        {/* Replacing Tabs with scrollable tab bar */}
-        <div className="relative mt-3">
+      <div className="relative mt-3">
+        <div
+          ref={menuRef}
+          className="relative flex gap-3 items-center border-b border-b-[var(--border-tertiary)] overflow-x-auto scrollbar-hide"
+        >
+          {/* Moving indicator */}
           <div
-            ref={menuRef}
-            className="relative flex gap-3 items-center border-b border-b-[var(--border-tertiary)] overflow-x-auto scrollbar-hide"
-          >
-            {/* Moving indicator */}
-            <div
-              className="absolute bottom-0 h-[2px] bg-[var(--sb-ocean-bg-active)] transition-transform duration-300 ease-in-out"
-              style={{
-                transform: `translateX(${indicatorStyle.x || 0}px) scaleX(${
-                  (indicatorStyle.scaleX || 1) / 100
-                })`,
-                width: "100px",
-                transformOrigin: "left",
-              }}
-            />
-            {tabs.map((tab, index) => {
-              const isActive = selectedTabIndex === index;
-              return (
-                <button
-                  key={tab}
-                  data-index={index}
-                  onClick={() => setSelectedTabIndex(index)}
-                  className={cn(
-                    "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
-                    isActive && "text-[var(--sb-ocean-bg-active)]"
-                  )}
-                >
-                  {tab}
-                </button>
-              );
-            })}
-          </div>
+            className="absolute bottom-0 h-[2px] bg-[var(--sb-ocean-bg-active)] transition-transform duration-300 ease-in-out"
+            style={{
+              transform: `translateX(${indicatorStyle.x || 0}px) scaleX(${
+                (indicatorStyle.scaleX || 1) / 100
+              })`,
+              width: "100px",
+              transformOrigin: "left",
+            }}
+          />
+          {tabs.map((tab, index) => {
+            const isActive = selectedTabIndex === index;
+            return (
+              <button
+                key={tab}
+                data-index={index}
+                onClick={() => setSelectedTabIndex(index)}
+                className={cn(
+                  "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
+                  isActive && "text-[var(--sb-ocean-bg-active)]"
+                )}
+              >
+                {tab}
+              </button>
+            );
+          })}
         </div>
+      </div>
 
       <div className="mt-5">
         {loading ? (
@@ -211,7 +216,7 @@ const StudentReport = () => {
             <TableSkeleton />
           )
         ) : (
-          tabContents[selectedTabIndex]
+          tabContentsMap[tabs[selectedTabIndex]]
         )}
       </div>
     </div>
