@@ -171,11 +171,11 @@ const StudyMaterialsPage = () => {
         >
           <>
             {selectedContent?.contentType === "Text" && textContent ? (
-              <NoCopyWrapper>
+              <NoCopyWrapper className="w-full h-full">
                 <TextContentModalView content={textContent} />
               </NoCopyWrapper>
             ) : (
-              <NoCopyWrapper>
+              <NoCopyWrapper className="w-full h-full">
                 <MediaContentModalView content={selectedContent} />
               </NoCopyWrapper>
             )}

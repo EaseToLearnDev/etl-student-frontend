@@ -9,7 +9,7 @@ import { useCTStore } from "../../../../global/hooks/useCTStore";
 
 // Services
 import { loadClassTestList } from "../../../../global/services/loadClassTestList";
-import { handleStartTest } from "../../topic_test/services/handleStartTest";
+import { handleStartTest } from "../../shared/services/handleStartTest";
 
 // Components
 import { Modal } from "../../../../components/Modal";

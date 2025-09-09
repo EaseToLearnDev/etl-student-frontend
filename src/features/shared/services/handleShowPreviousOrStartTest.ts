@@ -4,29 +4,31 @@ import type { PrevRunningTest } from "../types";
 // Api
 import { loadPreviousRunningTest } from "./loadPreviousRunningTest";
 
-interface ManageTestModalParams {
+interface HandleShowPreviousOrStartTestParams {
   previousRunningTest: PrevRunningTest | null;
   setPreviousRunningTest: (previousTest: PrevRunningTest) => void;
-  setShowStartTestModal: (v: boolean) => void;
   setShowPreviousTestModal: (v: boolean) => void;
+  startTestCallback: () => void;
 }
 /**
  * Manages the display logic for test modals based on the previous running test status.
  */
-export const manageTestModal = async ({
+export const handleShowPreviousOrStartTest = async ({
   previousRunningTest,
   setPreviousRunningTest,
-  setShowStartTestModal,
   setShowPreviousTestModal,
-}: ManageTestModalParams) => {
+  startTestCallback,
+}: HandleShowPreviousOrStartTestParams) => {
   const data = previousRunningTest
     ? previousRunningTest
     : await loadPreviousRunningTest();
 
-  if (data && data.responseTxt !== "failed") {
+  if (!data) return;
+
+  if (data.responseTxt === "success") {
     setPreviousRunningTest(data);
     setShowPreviousTestModal(true);
   } else {
-    setShowStartTestModal(true);
+    startTestCallback();
   }
 };

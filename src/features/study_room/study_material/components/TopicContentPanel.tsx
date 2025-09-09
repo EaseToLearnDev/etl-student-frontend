@@ -45,11 +45,18 @@ const TopicContentPanel = ({
         </h6>
         <div className="flex gap-4">
           <FilterDropdown>
-            <FiFilter size={20} className="cursor-pointer" />
+            <div className="relative">
+              <FiFilter size={20} className="cursor-pointer" />
+              {contentFilterType !== "All" ? (
+                <div className="absolute top-0 right-0 w-2 h-2 aspect-square rounded-full bg-[var(--sb-ocean-bg-active)]" />
+              ) : (
+                <></>
+              )}
+            </div>
           </FilterDropdown>
         </div>
       </div>
-      <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-thin">
+      <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-hide">
         {filteredContentList?.length && filteredContentList?.length > 0 ? (
           filteredContentList?.map((content, index) => (
             <TopicContentItem

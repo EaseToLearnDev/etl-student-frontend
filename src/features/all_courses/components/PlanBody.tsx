@@ -70,7 +70,7 @@ export const PlanBody = ({
     if (effectivePlan[selectedTabIndex]?.list?.length > 0) {
       setSelectedPlanId(effectivePlan[selectedTabIndex].list[0].packId);
     }
-  }, [selectedTabIndex, effectivePlan, setSelectedPlanId]);
+  }, [selectedTabIndex]);
 
   const handlePromoSubmit = (e: React.FormEvent) => {
     e.preventDefault();

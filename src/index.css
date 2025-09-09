@@ -406,6 +406,8 @@ math {
 .font-black {
   font-weight: 900 !important;
 }
+
+/* Scrollbar Styles Begin */
 .scrollbar-hide {
   --webkit-scrollbar-width: none; /* Chrome, Safari, and Opera */
   --webkit-scrollbar: none; /* Chrome, Safari, and Opera */
@@ -413,5 +415,26 @@ math {
   -ms-overflow-style: none; /* IE 10+ */
 }
 .scrollbar-thin {
+  --webkit-scrollbar-width: thin;
   scrollbar-width: thin; /* Firefox */
 }
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar {
+  width: 4px !important;
+  height: 4px;
+}
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--border-secondary) !important; 
+  border-radius: 40px !important;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-primary) !important; 
+}
+/* Scrollbar Styles End */

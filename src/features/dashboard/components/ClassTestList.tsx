@@ -8,7 +8,7 @@ import { Modal } from "../../../components/Modal";
 import StartTopicTestModalContent from "../../exam_room/shared/components/StartTopicTestModalContent";
 import { useNavigate } from "react-router";
 import type { ClassTest } from "../../../global/types/classTest.types";
-import { handleStartTest } from "../../exam_room/topic_test/services/handleStartTest";
+import { handleStartTest } from "../../exam_room/shared/services/handleStartTest";
 
 /**
  * Renders a list of class test cards using data from the CT store.

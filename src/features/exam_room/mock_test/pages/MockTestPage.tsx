@@ -6,7 +6,9 @@ import { useNavigate } from "react-router";
 import type { MockTestCategory } from "../../../shared/types";
 
 // Hooks
+import cn from "../../../../utils/classNames";
 import useIsMobile from "../../../../hooks/useIsMobile";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 // Store
 import { useMTStore } from "../hooks/useMTStore";
@@ -14,24 +16,22 @@ import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Services
 import { loadMockTestList } from "../services/loadMocktestList";
-import { handleNewTestModal } from "../../../shared/services/handleNewTestModal";
 import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
-import { selectAndManageTest } from "../services/selectAndManageTest";
-import { handleStartTest } from "../../topic_test/services/handleStartTest";
+import { selectAndShowStartTestModal } from "../services/selectAndShowStartTestModal";
+import { handleStartTest } from "../../shared/services/handleStartTest";
+import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
 
 // Layouts & Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicTestInstructions from "../../topic_test/components/TopicTestInstructions";
-import TestCardList from "../../../shared/components/TestCardList";
-import Tabs from "../../../../components/Tabs";
 import Select from "../../../../components/Select";
 import { Modal } from "../../../../components/Modal";
-import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
+import Tabs from "../../../../components/Tabs";
 import StartMockTestModalContent from "../components/StartMockTestModalContent";
-import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
-import cn from "../../../../utils/classNames";
-import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { Skeleton } from "../../../../components/SkeletonLoader";
+import TestCardList from "../../../shared/components/TestCardList";
+import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
+import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 
 // Constants
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
@@ -59,8 +59,8 @@ const MockTestPage = () => {
   const loading = useLoadingStore((s) => s.loading);
 
   // Prev test store
-  const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
-  const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
+  const previousRunningTest = usePrevTestStore((s) => s.prevRunningTest);
+  const setPreviousRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
 
   // Local state
   const [hideSecondary, setHideSecondary] = useState(isMobile);
@@ -122,17 +122,14 @@ const MockTestPage = () => {
                 }
                 infoClickHandler={() => setHideSecondary(false)}
                 onClickHandler={(test) =>
-                  selectAndManageTest({
+                  selectAndShowStartTestModal({
                     testId: test.id,
                     selectedTabIndex,
                     completeMockTests,
                     subjectSpecificMockTests,
                     selectedDropdownIndex,
                     setSelectedTest,
-                    previousRunningTest: prevRunningTest,
-                    setPreviousRunningTest: setPrevRunningTest,
                     setShowStartTestModal,
-                    setShowPreviousTestModal,
                   })
                 }
               />
@@ -165,10 +162,16 @@ const MockTestPage = () => {
           <StartMockTestModalContent
             test={selectedTest}
             onStart={() =>
-              handleStartTest({
-                navigate,
-                testId: selectedTest?.mocktestId ?? null,
-                testType: 3,
+              handleShowPreviousOrStartTest({
+                previousRunningTest,
+                setPreviousRunningTest,
+                setShowPreviousTestModal,
+                startTestCallback: () =>
+                  handleStartTest({
+                    navigate,
+                    testId: selectedTest?.mocktestId ?? null,
+                    testType: 3,
+                  }),
               })
             }
             onClose={() => setShowStartTestModal(false)}
@@ -185,10 +188,16 @@ const MockTestPage = () => {
               totalTime: selectedTest?.testTotalTime,
             }}
             onStart={() =>
-              handleStartTest({
-                navigate,
-                testId: selectedTest?.mocktestId ?? null,
-                testType: 3,
+              handleShowPreviousOrStartTest({
+                previousRunningTest,
+                setPreviousRunningTest,
+                setShowPreviousTestModal,
+                startTestCallback: () =>
+                  handleStartTest({
+                    navigate,
+                    testId: selectedTest?.mocktestId ?? null,
+                    testType: 3,
+                  }),
               })
             }
             onClose={() => setShowStartTestModal(false)}
@@ -205,11 +214,15 @@ const MockTestPage = () => {
       >
         <PreviousTestModalContent
           onStart={() =>
-            handleNewTestModal(setShowStartTestModal, setShowPreviousTestModal)
+            handleStartTest({
+              navigate,
+              testId: selectedTest?.mocktestId ?? null,
+              testType: 3,
+            })
           }
-          onResume={() => handleResumeTest(navigate, prevRunningTest)}
+          onResume={() => handleResumeTest(navigate, previousRunningTest)}
           onClose={() => setShowPreviousTestModal(false)}
-          testName={prevRunningTest?.testName || ""}
+          testName={previousRunningTest?.testName || ""}
         />
       </Modal>
     </div>

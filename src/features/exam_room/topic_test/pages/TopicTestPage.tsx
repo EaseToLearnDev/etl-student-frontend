@@ -10,8 +10,9 @@ import { type Topic } from "../../../shared/types";
 
 // Store & Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
-import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { useTTStore } from "../store/useTTStore";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Utils
 import { capitalizeWords } from "../../../../utils";
@@ -20,10 +21,9 @@ import { capitalizeWords } from "../../../../utils";
 import { loadTopicTree } from "../services/loadTopicTree";
 import { loadTopicTestList } from "../services/loadTopicTestList";
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
-import { manageTestModal } from "../../../shared/services/manageTestModal";
-import { handleNewTestModal } from "../../../shared/services/handleNewTestModal";
+import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
 import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
-import { handleStartTest } from "../services/handleStartTest";
+import { handleStartTest } from "../../shared/services/handleStartTest";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -34,7 +34,6 @@ import { Modal } from "../../../../components/Modal";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import Button from "../../../../components/Button";
-import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
 
@@ -57,8 +56,8 @@ const TopicTestPage = () => {
   const setSelectedTopicId = useTTStore((s) => s.setSelectedTopicId);
   const setTestList = useTTStore((s) => s.setTestList);
 
-  const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
-  const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
+  const previousRunningTest = usePrevTestStore((s) => s.prevRunningTest);
+  const setPreviousRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
 
   const testList = useTTStore((s) => s.testList);
   const selectedTest = useTTStore((s) => s.selectedTest);
@@ -113,14 +112,14 @@ const TopicTestPage = () => {
     <div className="h-full flex flex-col flex-grow">
       <div className="flex items-center gap-2">
         {selectedTopic && testList && testList?.length > 0 && (
-            <Button
-          onClick={resetSelectedTopic}
-          style="secondary"
-          className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-          <p>Go Back</p>
-        </Button>
+          <Button
+            onClick={resetSelectedTopic}
+            style="secondary"
+            className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none"
+          >
+            <ArrowLeftIcon className="w-5 h-5" />
+            <p>Go Back</p>
+          </Button>
         )}
         <h5 className="!font-semibold pl-2 items-end text-ellipsis line-clamp-2">
           {selectedTopic && testList && testList?.length > 0
@@ -143,12 +142,7 @@ const TopicTestPage = () => {
                   const selectedTest =
                     testList?.find((t) => t.mockTestId === test.id) ?? null;
                   setSelectedTest(selectedTest);
-                  manageTestModal({
-                    previousRunningTest: prevRunningTest,
-                    setPreviousRunningTest: setPrevRunningTest,
-                    setShowStartTestModal,
-                    setShowPreviousTestModal,
-                  });
+                  setShowStartTestModal(true);
                 }}
               />
             ) : topicTree && topicTree.length > 0 ? (
@@ -202,10 +196,16 @@ const TopicTestPage = () => {
         <StartTopicTestModalContent
           testName={selectedTest?.mockTestTitle || ""}
           onStart={() =>
-            handleStartTest({
-              navigate,
-              testId: selectedTest?.mockTestId ?? null,
-              testType: 2,
+            handleShowPreviousOrStartTest({
+              previousRunningTest,
+              setPreviousRunningTest,
+              setShowPreviousTestModal,
+              startTestCallback: () =>
+                handleStartTest({
+                  navigate,
+                  testId: selectedTest?.mockTestId ?? null,
+                  testType: 2,
+                }),
             })
           }
           onClose={() => setShowStartTestModal(false)}
@@ -229,11 +229,15 @@ const TopicTestPage = () => {
       >
         <PreviousTestModalContent
           onStart={() =>
-            handleNewTestModal(setShowStartTestModal, setShowPreviousTestModal)
+            handleStartTest({
+              navigate,
+              testId: selectedTest?.mockTestId ?? null,
+              testType: 2,
+            })
           }
-          onResume={() => handleResumeTest(navigate, prevRunningTest)}
+          onResume={() => handleResumeTest(navigate, previousRunningTest)}
           onClose={() => setShowPreviousTestModal(false)}
-          testName={prevRunningTest?.testName || ""}
+          testName={previousRunningTest?.testName || ""}
         />
       </Modal>
     </div>

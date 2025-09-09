@@ -12,9 +12,8 @@ import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
 // Services
 import { loadSmartLearningTopictree } from "../services/loadSmartLearningTopicTree";
 import { loadLastSelfTestPercentage } from "../services/loadLastSelfTestPercentage";
-import { manageTestModal } from "../../../shared/services/manageTestModal";
+import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
 import { handleResumeTest, handleStartTest } from "../services/handleTest";
-import { handleNewTestModal } from "../../../shared/services/handleNewTestModal";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -160,14 +159,7 @@ const SmartLearningPage = () => {
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
-                onClickHandler={() =>
-                  manageTestModal({
-                    previousRunningTest,
-                    setPreviousRunningTest,
-                    setShowStartTestModal,
-                    setShowPreviousTestModal,
-                  })
-                }
+                onClickHandler={() => setShowStartTestModal(true)}
               />
             ) : (
               <EmptyState title="No Data Available" />
@@ -193,7 +185,13 @@ const SmartLearningPage = () => {
           testOptions={testOptions}
           setTestOptions={setTestOptions}
           onStart={() =>
-            handleStartTest(navigate, mode, selectedTopic, testOptions)
+            handleShowPreviousOrStartTest({
+              previousRunningTest,
+              setPreviousRunningTest,
+              setShowPreviousTestModal,
+              startTestCallback: () =>
+                handleStartTest(navigate, mode, selectedTopic, testOptions),
+            })
           }
           onClose={() => setShowStartTestModal(false)}
           topicName={selectedTopic?.topicName || ""}
@@ -209,7 +207,7 @@ const SmartLearningPage = () => {
       >
         <PreviousTestModalContent
           onStart={() =>
-            handleNewTestModal(setShowStartTestModal, setShowPreviousTestModal)
+            handleStartTest(navigate, mode, selectedTopic, testOptions)
           }
           onResume={() => {
             handleResumeTest(navigate, previousRunningTest);
