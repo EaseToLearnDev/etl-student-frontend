@@ -256,7 +256,7 @@ export const TestAnalyticsOverview = () => {
           <Widget className="p-5">
             <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
               <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
-              Marks Analysis
+              Result
             </h5>
 
             <div className="mt-5 aspect-[1060/1000] h-full w-full lg:mt-7">
@@ -324,7 +324,7 @@ export const TestAnalyticsOverview = () => {
   const TimeManagementTab = () => (
     <div>
       <div className="flex flex-col lg:flex-row items-start justify-between gap-4">
-        <Widget className="p-5">
+        <Widget className="p-5 flex-1 h-[560px]">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartPieIcon className="w-5 h-5 text-[var(--sb-ocean-bg-active)]" />
             Time Distribution
@@ -350,7 +350,7 @@ export const TestAnalyticsOverview = () => {
                     paddingAngle={4}
                     data={timeManagement}
                     cornerRadius={6}
-                    label
+                    label={false}
                   >
                     {timeManagement.map((entry, index) => (
                       <Cell
@@ -393,56 +393,58 @@ export const TestAnalyticsOverview = () => {
           </div>
         </Widget>
 
-        <Widget className="p-5">
+        <Widget className="p-5 flex-1 h-[560px] flex flex-col">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
             Average Time Analysis
           </h5>
 
-          <div className="mt-5 aspect-[1060/900] w-full lg:mt-7">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={averageTimeData}
-                barSize={24}
-                margin={{ left: -10 }}
-                className="[&_.recharts-cartesian-grid-vertical]:opacity-0"
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  fill="transparent"
-                  stroke="var(--border-primary)"
-                />
-                <XAxis tickLine={false} dataKey="name" />
-                <YAxis tickLine={false} />
-                <Tooltip
-                  formatter={(value) =>
-                    typeof value === "number"
-                      ? `${value.toFixed(2)} min`
-                      : `${value} min`
-                  }
-                  contentStyle={{
-                    backgroundColor: "var(--surface-bg-secondary)",
-                    border: "1px solid var(--border-secondary)",
-                    color: "var(--text-primary)",
-                    borderRadius: 8,
-                    boxShadow: "0 6px 24px rgba(0,0,0,0.15)",
-                  }}
-                  cursor={{ fill: "rgba(0, 0, 0, 0.2)" }}
-                  wrapperStyle={{ outline: "none" }}
-                />
-                <Legend />
-                <Bar
-                  dataKey="Available Time"
-                  fill={tintHexColor("#5a5fd7", 0.3)}
-                  radius={[4, 4, 0, 0]}
-                />
-                <Bar
-                  dataKey="Time Taken"
-                  fill={tintHexColor("#10b981", 0.3)}
-                  radius={[4, 4, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+          <div className="flex-1 flex items-center justify-center">
+            <div className="mt-5 h-[400px] w-full lg:mt-7">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={averageTimeData}
+                  barSize={24}
+                  margin={{ left: -10 }}
+                  className="[&_.recharts-cartesian-grid-vertical]:opacity-0"
+                >
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    fill="transparent"
+                    stroke="var(--border-primary)"
+                  />
+                  <XAxis tickLine={false} dataKey="name" />
+                  <YAxis tickLine={false} />
+                  <Tooltip
+                    formatter={(value) =>
+                      typeof value === "number"
+                        ? `${value.toFixed(2)} min`
+                        : `${value} min`
+                    }
+                    contentStyle={{
+                      backgroundColor: "var(--surface-bg-secondary)",
+                      border: "1px solid var(--border-secondary)",
+                      color: "var(--text-primary)",
+                      borderRadius: 8,
+                      boxShadow: "0 6px 24px rgba(0,0,0,0.15)",
+                    }}
+                    cursor={{ fill: "rgba(0, 0, 0, 0.2)" }}
+                    wrapperStyle={{ outline: "none" }}
+                  />
+                  <Legend />
+                  <Bar
+                    dataKey="Available Time"
+                    fill={tintHexColor("#5a5fd7", 0.3)}
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="Time Taken"
+                    fill={tintHexColor("#10b981", 0.3)}
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </div>
         </Widget>
       </div>
