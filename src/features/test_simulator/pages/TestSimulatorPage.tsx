@@ -22,8 +22,9 @@ import FullScreenExitModalContent from "../components/FullSrcreenModal";
 import TeacherSupportModal from "../components/TeacherSupportModal";
 import { setupTest } from "../services/setupTest";
 import { useFullscreenProtection } from "../store/useFullScreenProtection";
-import { Toast, ToastType } from "../../../components/Toast";
+import { Toast } from "../../../components/Toast";
 import SwitchSectionModal from "../components/SwitchSectionModal";
+import { ToastType } from "../../shared/types";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();

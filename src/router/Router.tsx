@@ -29,6 +29,7 @@ import StudentReport from "../features/report/pages/StudentReport";
 import { LearningSessionOverview } from "../features/report/pages/LearningSessionOverview";
 import { TestAnalyticsOverview } from "../features/report/pages/TestAnalyticsOverview";
 import TestWizard from "../components/TestWizard";
+import ForgetPasswordPage from "../features/auth/forgetPassword/pages/ForgetPasswordPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -41,6 +42,14 @@ const Router = () => {
         element={
           <PublicRoute>
             <LoginPage />
+          </PublicRoute>
+        }
+      />
+       <Route
+        path="/forget-password"
+        element={
+          <PublicRoute>
+            <ForgetPasswordPage />
           </PublicRoute>
         }
       />

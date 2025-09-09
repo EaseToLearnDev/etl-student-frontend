@@ -106,6 +106,7 @@ const FeedbackModal = () => {
         <div className="flex justify-end mt-7">
           <div className="flex gap-4 items-center">
             <Button
+            disabled={!subject.trim()}
               onClick={() => {
                 submitStudentFeedback({
                   type: feedbackTypes ? feedbackTypes[typeIdx].title : "",

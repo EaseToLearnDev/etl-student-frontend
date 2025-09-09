@@ -23,7 +23,7 @@ export const TestAnalyticsSkeleton = () => {
         </div>
       </Widget>
 
-      <div className="flex sm:flex-col lg:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-4">
 
         <Widget>
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
@@ -48,7 +48,7 @@ export const TestAnalyticsSkeleton = () => {
           </div>
         </Widget>
 
-        <Widget>
+        <Widget className="h-[480px]">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
             Section Performance Analysis
