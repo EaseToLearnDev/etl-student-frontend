@@ -7,7 +7,7 @@ import { useStudentStore } from "../features/shared/hooks/useStudentStore";
 const logout = () => {
   const { reset } = useStudentStore.getState();
   reset();
-  window.location.href = "/";
+  window.location.href = "/login";
 };
 
 export default logout;
