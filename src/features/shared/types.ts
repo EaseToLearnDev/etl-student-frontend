@@ -227,11 +227,33 @@ export interface OptionalFlagsList {
   optionLabel: string;
 }
 
-
 export interface PrevRunningTest {
   responseTxt: string;
   testMode?: string;
   testName?: string;
   testSession?: string;
   testType?: number;
+}
+
+export interface InputField {
+  id: string;
+  data: string;
+  error: string;
+}
+
+export enum ToastType {
+  SUCCESS = "success",
+  DANGER = "danger",
+  PRIMARY = "primary",
+  WARNING = "warning",
+  PATCH = "patch",
+}
+
+export interface ToastData {
+  type?: ToastType;
+  title: string;
+  description?: string;
+  button?: string;
+  duration?: number;
+  redirect?: string;
 }

@@ -116,7 +116,7 @@ function ContributionChart({
   ];
 
   return (
-    <div ref={scrollRef} className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto">
+    <div ref={scrollRef} className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4">
       <div
         className="flex text-xs text-[var(--text-tertiary)] text-bold mb-1"
         style={{

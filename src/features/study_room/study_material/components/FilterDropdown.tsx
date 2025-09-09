@@ -31,7 +31,7 @@ const FilterList = ({
   };
   return (
     <div className="w-full flex flex-col items-center gap-2 p-1">
-      {(["All", "PPT", "PDF", "Video"] as FilterType[]).map((filter) => (
+      {(["All", "Text","PPT", "PDF", "Video"] as FilterType[]).map((filter) => (
         <div
           onClick={() => handleClick(filter)}
           key={filter}

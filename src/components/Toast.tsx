@@ -9,15 +9,7 @@ import {
 import cn from "../utils/classNames";
 import Button from "./Button";
 import { BiError } from "react-icons/bi";
-
-export enum ToastType {
-  SUCCESS = "success",
-  DANGER = "danger",
-  PRIMARY = "primary",
-  WARNING = "warning",
-  PATCH = "patch",
-}
-
+import { ToastType } from "../features/shared/types";
 interface ToastProps {
   type?: ToastType;
   title: string;
