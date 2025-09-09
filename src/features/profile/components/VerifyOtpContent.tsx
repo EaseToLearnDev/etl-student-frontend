@@ -8,7 +8,11 @@ interface VerifyOtpContentProps {
   error?: string | null;
 }
 
-const VerifyOtpContent = ({ onVerify, onCancel, error }: VerifyOtpContentProps) => {
+const VerifyOtpContent = ({
+  onVerify,
+  onCancel,
+  error,
+}: VerifyOtpContentProps) => {
   const [otp, setOtp] = useState("");
 
   const handleVerify = () => {

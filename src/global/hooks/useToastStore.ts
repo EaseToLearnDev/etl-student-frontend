@@ -1,14 +1,6 @@
 import { create } from "zustand";
-import type { ToastType } from "../../components/Toast";
+import type { ToastData } from "../../features/shared/types";
 
-interface ToastData {
-  type?: ToastType;
-  title: string;
-  description?: string;
-  button?: string;
-  duration?: number;
-  redirect?: string;
-}
 
 interface ToastState {
   showToast: boolean;

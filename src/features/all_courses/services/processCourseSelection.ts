@@ -1,8 +1,7 @@
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { handleFreeCourse } from "../services/handleFreeCourse";
 import { handlePaymentButton } from "../services/handlePaymentButton";
-import type { Course, CourseResponse } from "../../shared/types";
-import { ToastType } from "../../../components/Toast";
+import { ToastType, type Course, type CourseResponse } from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 
 export const processCourseSelection = async ({
