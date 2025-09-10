@@ -444,3 +444,14 @@ math {
   background: var(--sb-ocean-bg-hover);
   color: white;
 }
+
+/*  */
+img {
+  image-rendering: auto;
+  image-rendering: smooth;            /* Firefox */
+  image-rendering: -webkit-optimize-contrast; /* Safari/Chrome */
+  image-rendering: -moz-crisp-edges;  /* Older Firefox */
+  image-rendering: -o-crisp-edges;    /* Older Opera */
+  image-rendering: pixelated;         /* To force pixelation if wanted */
+  image-rendering: optimizeQuality;   /* Deprecated but still in use in some contexts */
+}

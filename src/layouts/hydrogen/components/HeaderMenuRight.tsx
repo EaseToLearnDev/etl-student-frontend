@@ -9,13 +9,14 @@ const HeaderMenuRight = () => {
   const studentName = useStudentStore(
     (state) => state.studentData?.studentName
   );
+  const profilePic = useStudentStore((state) => state.studentData?.profilePic);
   return (
     <div className="relative ms-auto flex items-center gap-2 text-[var(--text-primary)] xs:gap-3 xl:gap-4 justify-end">
       <NotificationDropdown>
         <button
           aria-label="Notification"
           className={cn(
-            "flex justify-center items-center relative h-[34px] w-[34px] backdrop-blur-md bg-[var(--surface-bg-secondary)] shadow-sm sm:w-10 md:h-9 md:w-9",
+            "flex justify-center items-center relative h-9 w-9 backdrop-blur-md bg-[var(--surface-bg-secondary)] shadow-sm",
             "focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px rounded-md outline-none"
           )}
         >
@@ -24,12 +25,25 @@ const HeaderMenuRight = () => {
       </NotificationDropdown>
       <ProfileMenuDropDown>
         <button
-          className={
-            "w-9 shrink-0 overflow-hidden rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px sm:w-10"
-          }
+          className={cn(
+            "overflow-hidden rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px",
+            profilePic ? "w-9 h-9" : "w-10 h-10"
+          )}
         >
-          <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-secondary)] rounded-full flex justify-center items-center">
-            <p className="!font-bold"> {studentName?.split(" ")?.map((w) => w[0] || "")}</p>
+          <div className="w-full h-full aspect-square bg-[var(--surface-bg-secondary)] flex justify-center items-center overflow-hidden">
+            {profilePic ? (
+              <img
+                width={32}
+                height={32}
+                src={profilePic}
+                className="w-full h-full object-cover"
+                style={{ imageRendering: "crisp-edges" }}
+              />
+            ) : (
+              <p className="!font-bold">
+                {studentName?.split(" ")?.map((w) => w[0] || "")}
+              </p>
+            )}
           </div>
         </button>
       </ProfileMenuDropDown>

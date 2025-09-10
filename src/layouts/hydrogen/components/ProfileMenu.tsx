@@ -91,25 +91,23 @@ const DropdownMenu = () => {
   const studentName = useStudentStore((s) => s.studentData?.studentName);
   const emailId = useStudentStore((s) => s.studentData?.emailId);
 
-  const setShowInviteTeacherModal = useInviteTeacherStore((s) => s.setShowInviteTeacherModal);
+  const setShowInviteTeacherModal = useInviteTeacherStore(
+    (s) => s.setShowInviteTeacherModal
+  );
   const setShowFeedbackModal = useFeedbackStore((s) => s.setShowFeedbackModal);
-  const setShowStudentRatingModal = useRatingCourseStore((s) => s.setShowStudentRatingModal)
+  const setShowStudentRatingModal = useRatingCourseStore(
+    (s) => s.setShowStudentRatingModal
+  );
 
   return (
     <div className="w-64 text-left rtl:text-right">
       <div className="flex items-center border-b border-[var(--border-primary)] px-6 pb-5 pt-6">
-        <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-          <p className="!font-bold">
-            {studentName?.split(" ")?.map((w) => w[0] || "")}
-          </p>
-        </div>
         <div className="ms-3">
           <h6 className="font-semibold --text-[var(--text-primary)]">
             {studentName}
           </h6>
           <p
-            className="text-[var(--text-secondary)] w-40 overflow-hidden text-ellipsis whitespace-nowrap"
-            title={emailId}
+            className="text-[var(--text-secondary)] w-50 overflow-hidden text-ellipsis whitespace-nowrap"
           >
             {emailId}
           </p>
