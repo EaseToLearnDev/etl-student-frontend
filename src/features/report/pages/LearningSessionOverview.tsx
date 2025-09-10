@@ -98,11 +98,13 @@ export const LearningSessionOverview = () => {
         </RechartsPieChart>
       </ResponsiveContainer>
 
-      <div className="absolute inset-[96px] sm:inset-[112px] flex flex-col items-center justify-center rounded-full shadow-[0px_4px_20px_0px_#00000029] bg-[var(--surface-bg-primary)]">
-        <p className="text-center text-[var(--text-secondary)] whitespace-pre-line px-4">
-          {label}
-        </p>
-        <h5 className="text-[var(--text-primary)]">{total}</h5>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] flex flex-col items-center justify-center rounded-full shadow-[0px_4px_20px_0px_#00000029] bg-[var(--surface-bg-primary)]">
+          <p className="text-center text-[var(--text-secondary)] whitespace-pre-line px-4">
+            {label}
+          </p>
+          <h5 className="text-[var(--text-primary)]">{total}</h5>
+        </div>
       </div>
     </div>
   );
@@ -203,6 +205,28 @@ export const LearningSessionOverview = () => {
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />
       </div>
+
+      <Widget title="Progress" className="w-full mt-5">
+        <div className="flex flex-col gap-4 px-6 py-4">
+          <div className="w-full bg-[var(--surface-bg-tertiary)] rounded-full h-6 overflow-hidden relative">
+            <div
+              className="h-6 rounded-full transition-all duration-500"
+              style={{
+                width: `${data.progressBarObj.percentage}%`,
+                backgroundColor: data.progressBarObj.barColor,
+              }}
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)]">
+              {data.progressBarObj.percentage}%
+            </span>
+          </div>
+
+          <p className="text-[var(--text-secondary)] text-center">
+            not upto mark. Continue Learning
+          </p>
+        </div>
+      </Widget>
+
       <div className="mt-6 mb-4">{tabs[selectedIndex].content}</div>
     </div>
   );
