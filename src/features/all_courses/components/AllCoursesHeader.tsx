@@ -10,8 +10,8 @@ import useIsMobile from "../../../hooks/useIsMobile";
 interface AllCoursesHeaderProps {
   search: string;
   setSearch: (value: string) => void;
-  selectedCategories: CategoryType[];
-  setSelectedCategories: (categories: CategoryType[]) => void;
+  selectedCategory: CategoryType | null;
+  setSelectedCategory: (category: CategoryType) => void;
   isFilterSectionOpen: boolean;
   onClickFilter: () => void;
   setHideSecondary: (v: boolean) => void;
@@ -23,7 +23,7 @@ interface AllCoursesHeaderProps {
 const AllCoursesHeader = ({
   search,
   setSearch,
-  selectedCategories,
+  selectedCategory,
   setHideSecondary,
 }: AllCoursesHeaderProps) => {
   const isMobile = useIsMobile();
@@ -48,10 +48,8 @@ const AllCoursesHeader = ({
               onClick={() => setHideSecondary(false)}
             >
               <FiFilter size={20} />
-              {selectedCategories && selectedCategories?.length > 0 ? (
-                <div className="w-5 h-5 aspect-square absolute -top-1 -right-1 bg-[var(--sb-ocean-bg-active)] rounded-full flex justify-center items-center">
-                  <span className="text-white">{selectedCategories?.length}</span>
-                </div>
+              {selectedCategory ? (
+                <div className="w-4 h-4 aspect-square absolute -top-1 -right-1 bg-[var(--sb-ocean-bg-active)] rounded-full flex justify-center items-center" />
               ) : (
                 <></>
               )}

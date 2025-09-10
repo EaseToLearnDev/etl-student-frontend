@@ -33,8 +33,8 @@ const AllCoursesPage = () => {
   const setCourseList = useCoursesStore((s) => s.setCourseList);
   const categoryList = useCoursesStore((s) => s.categoryList);
   const setCategoryList = useCoursesStore((s) => s.setCategoryList);
-  const selectedCategories = useCoursesStore((s) => s.selectedCategories);
-  const setSelectedCategories = useCoursesStore((s) => s.setSelectedCategories);
+  const selectedCategory = useCoursesStore((s) => s.selectedCategory);
+  const setSelectedCategory = useCoursesStore((s) => s.setSelectedCategory);
   const selectedCourse = useCoursesStore((s) => s.selectedCourse);
   const setSelectedCourse = useCoursesStore((s) => s.setSelectedCourse);
 
@@ -73,8 +73,8 @@ const AllCoursesPage = () => {
         setSearch={setSearch}
         onClickFilter={() => setHideSecondary(!hideSecondary)}
         isFilterSectionOpen={!hideSecondary}
-        selectedCategories={selectedCategories || []}
-        setSelectedCategories={setSelectedCategories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
         setHideSecondary={setHideSecondary}
       />
 
@@ -89,7 +89,7 @@ const AllCoursesPage = () => {
               courseList={courseList || []}
               selectedCourse={selectedCourse}
               hideSecondary={hideSecondary}
-              selectedCategories={selectedCategories || []}
+              selectedCategory={selectedCategory}
               onCourseClick={(course) => {
                 setSelectedCourse(course);
                 setIsPlanModalOpen(true);
@@ -100,8 +100,8 @@ const AllCoursesPage = () => {
         secondaryContent={
           <FilterCourses
             categories={categoryList || []}
-            selectedCategories={selectedCategories || []}
-            setSelectedCategories={setSelectedCategories}
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
             setHideSecondary={setHideSecondary}
           />
         }

@@ -12,6 +12,7 @@ import { MdClose } from "react-icons/md";
 import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
 import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { isProfileComplete } from "../services/isProfileComplete";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
@@ -81,20 +82,26 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           </p>
         </div>
 
-        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5">
+        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
           <button
             className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
             onClick={() => setSelectedSlideIndex(1)}
           >
             Explore Features
           </button>
-          <Link
-            to={"/profile"}
-            className="sm:ml-auto border border-white/50 hover:bg-white/10 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 text-white transition-all duration-200 ease"
-          >
-            Complete Profile
-            <ArrowRightIcon width={14} height={14} className="sm:w-4 sm:h-4" />
-          </Link>
+          {!isProfileComplete() && (
+            <Link
+              to={"/profile"}
+              className="sm:ml-auto border border-white/50 hover:bg-white/10 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 text-white transition-all duration-200 ease"
+            >
+              Complete Profile
+              <ArrowRightIcon
+                width={14}
+                height={14}
+                className="sm:w-4 sm:h-4"
+              />
+            </Link>
+          )}
         </div>
       </div>
     </div>,

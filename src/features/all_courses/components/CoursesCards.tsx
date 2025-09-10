@@ -17,7 +17,7 @@ interface CoursesCardsProps {
   courseList: CourseType[];
   selectedCourse: CourseType | null;
   hideSecondary: boolean;
-  selectedCategories: CategoryType[];
+  selectedCategory: CategoryType | null;
   onCourseClick?: (course: CourseType) => void;
 }
 
@@ -28,7 +28,7 @@ const CoursesCards = ({
   search,
   courseList,
   selectedCourse,
-  selectedCategories,
+  selectedCategory,
   onCourseClick,
 }: CoursesCardsProps) => {
   const { studentData } = useStudentStore.getState();
@@ -38,36 +38,41 @@ const CoursesCards = ({
       course.courseSubTitle.toLowerCase().includes(search.toLowerCase());
 
     const matchesCategory =
-      selectedCategories.length === 0 ||
-      selectedCategories.some(
-        (cat) => cat.categoryName === course.categoryName
-      );
+      !selectedCategory ||
+      selectedCategory.categoryName === course.categoryName;
+
     return matchesSearch && matchesCategory;
   });
 
   if (filteredCourses.length === 0) {
     return (
-      <EmptyState 
+      <EmptyState
         title="No courses found"
         icon={<ArchiveBoxIcon width={100} height={100} />}
       />
     );
   }
   return (
-    <div className={cn("grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4")}>
+    <div
+      className={cn("grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4")}
+    >
       {filteredCourses.map((course) => {
-        const existingCourse = studentData?.courses?.find((c) => c.courseId === course.courseId);
-        const status = existingCourse ? `Enrolled: ${existingCourse?.packTypeTitle}` : '';
+        const existingCourse = studentData?.courses?.find(
+          (c) => c.courseId === course.courseId
+        );
+        const status = existingCourse
+          ? `Enrolled: ${existingCourse?.packTypeTitle}`
+          : "";
         return (
-        <CourseCard
-          key={course?.courseId}
-          course={course}
-          onClick={() => onCourseClick?.(course)}
-          status={status}
-          isActive={selectedCourse?.courseId === course?.courseId}
-        />
-      )}
-      )}
+          <CourseCard
+            key={course?.courseId}
+            course={course}
+            onClick={() => onCourseClick?.(course)}
+            status={status}
+            isActive={selectedCourse?.courseId === course?.courseId}
+          />
+        );
+      })}
     </div>
   );
 };

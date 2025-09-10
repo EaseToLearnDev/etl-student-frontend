@@ -16,8 +16,8 @@ interface CoursesState {
   categoryList: CategoryType[] | null;
   setCategoryList: (categories: CategoryType[]) => void;
 
-  selectedCategories: CategoryType[] | null;
-  setSelectedCategories: (categories: CategoryType[] | null) => void;
+  selectedCategory: CategoryType | null;
+  setSelectedCategory: (category: CategoryType | null) => void;
 
   loading: boolean;
   setLoading: (loading: boolean) => void;
@@ -51,7 +51,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   search: "",
   courseList: null,
   categoryList: null,
-  selectedCategories: null,
+  selectedCategory: null,
   loading: false,
   selectedCourse: null,
   isPlanModalOpen: false,
@@ -64,8 +64,8 @@ export const useCoursesStore = create<CoursesState>((set) => ({
 
   setCategoryList: (categories) => set({ categoryList: categories }),
 
-  setSelectedCategories: (categories) =>
-    set({ selectedCategories: categories }),
+  setSelectedCategory: (category) =>
+    set({ selectedCategory: category }),
 
   setLoading: (loading) => set({ loading }),
 
@@ -93,7 +93,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
       search: "",
       courseList: null,
       categoryList: null,
-      selectedCategories: null,
+      selectedCategory: null,
       loading: false,
       selectedCourse: null,
       isPlanModalOpen: false,

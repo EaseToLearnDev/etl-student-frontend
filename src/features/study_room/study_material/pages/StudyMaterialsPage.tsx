@@ -136,7 +136,10 @@ const StudyMaterialsPage = () => {
           secondaryContent={
             !loading && topicContentList && selectedTopic ? (
               <TopicContentPanel
-                setSelectedContent={setSelectedContent}
+                setSelectedContent={(content) => {
+                  setSelectedContent(content);
+                  setTextContent(null);
+                }}
                 topicContentList={topicContentList}
                 selectedTopic={selectedTopic}
                 contentFilterType={contentFilterType}
@@ -164,7 +167,10 @@ const StudyMaterialsPage = () => {
       {selectedContent && (
         <Modal
           isOpen={selectedContent !== null}
-          onClose={() => setSelectedContent(null)}
+          onClose={() => {
+            setSelectedContent(null);
+            setTextContent(null);
+          }}
           size="xl"
           className="p-4 lg:p-10"
           containerClassName="!h-full !w-full !max-w-full"
