@@ -107,15 +107,22 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   //   };
   // }, []);
 
+  // Empty State
+  // if (!testData) {
+  //   return (
+  //     <EmptyState
+  //       title="Internal Server Error"
+  //       icon={<ExclamationTriangleIcon width={100} height={100} />}
+  //       className="min-h-screen"
+  //       buttonText="Go Back!"
+  //       onClick={() => navigate(-1)}
+  //     />
+  //   );
+  // }
+
   return (
     <>
-      {testError?.id === "not_found" ? (
-        <h1>TEST NOT FOUND!</h1>
-      ) : !isMobile ? (
-        <DesktopTestSimulator />
-      ) : (
-        <MobileTestSimulator />
-      )}
+      {!isMobile ? <DesktopTestSimulator /> : <MobileTestSimulator />}
       <Modal
         isOpen={isSubmissionModalOpen}
         onClose={() => setIsSubmissionModalOpen(false)}
