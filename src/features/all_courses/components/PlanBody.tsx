@@ -99,14 +99,32 @@ export const PlanBody = ({
         {/* Body Section Start*/}
         <div
           className={cn(
-            "p-4 flex flex-col lg:flex-row gap-4 max-h-full lg:max-h-[600px] overflow-y-auto pb-[50px] mb-[50px] lg:pb-[100px] lg:mb-[100px]",
+            "p-4 flex flex-col-reverse lg:flex-row gap-4 max-h-full lg:max-h-[600px] overflow-y-auto pb-[50px] mb-[50px] lg:pb-[100px] lg:mb-[100px]",
             selectedTabIndex !== 0 ? "lg:grid-cols-2" : ""
           )}
         >
+          {/* Features Section */}
+          <WidgetCard
+            className="w-full flex-1 shadow-none flex flex-col max-h-full overflow-y-auto scrollbar-hide mb-[50px] lg:mb-0"
+            title="Features"
+          >
+            <div className=" flex flex-col gap-4">
+              {features?.map((feat, idx) => (
+                <PlanFeature
+                  key={idx}
+                  feature={feat}
+                  packIdx={selectedTabIndex}
+                />
+              ))}
+            </div>
+          </WidgetCard>
           <div className="flex-1 grid grid-cols-1 gap-5 overflow-y-auto scrollbar-hide max-h-full">
             {/* Plans Section */}
             {selectedTabIndex !== 0 ? (
-              <WidgetCard className="shadow-none mt-4 lg:mt-0 max-h-[400px] overflow-y-auto scrollbar-hide" title="Plans">
+              <WidgetCard
+                className="shadow-none mt-4 lg:mt-0 max-h-[400px] overflow-y-auto scrollbar-hide"
+                title="Plans"
+              >
                 <div className="flex flex-col gap-3 mt-4">
                   {effectivePlan?.[selectedTabIndex]?.list.map((plan, idx) => (
                     <PlanCard
@@ -177,22 +195,6 @@ export const PlanBody = ({
               </WidgetCard>
             ) : null}
           </div>
-
-          {/* Features Section */}
-          <WidgetCard
-            className="flex-1 shadow-none flex flex-col max-h-full overflow-y-auto scrollbar-hide mb-[50px] lg:mb-0"
-            title="Features"
-          >
-            <div className=" flex flex-col gap-4">
-              {features?.map((feat, idx) => (
-                <PlanFeature
-                  key={idx}
-                  feature={feat}
-                  packIdx={selectedTabIndex}
-                />
-              ))}
-            </div>
-          </WidgetCard>
         </div>
         {/* Body Section End */}
 
