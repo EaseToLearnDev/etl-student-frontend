@@ -6,9 +6,11 @@ import type { StudentData } from "../../shared/types";
 
 // Icons
 import { BiEdit } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
 
 // Hooks
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { useProfileStore } from "../hooks/useProfileStore";
 
 // Services
 import { LoadProfilePic } from "../services/LoadProfilePic";
@@ -19,12 +21,15 @@ import Button from "../../../components/Button";
 import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
-import { useProfileStore } from "../hooks/useProfileStore";
+import cn from "../../../utils/classNames";
+import useDarkModeStore from "../../../store/useDarkModeStore";
 
 const ProfileHeader = () => {
+  const darkMode = useDarkModeStore((state) => state.darkMode);
   const { editProfile, setEditProfile } = useProfileStore.getState();
+  const profilePic = useProfileStore((state) => state.profilePic);
+  const setProfilePic = useProfileStore((state) => state.setProfilePic);
 
-  const [profilePic, setprofilePic] = useState<string | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const { studentData, setStudentData } = useStudentStore.getState();
@@ -38,7 +43,7 @@ const ProfileHeader = () => {
         ...(studentData as StudentData),
         profilePic: fileUrl,
       });
-      setprofilePic(fileUrl);
+      setProfilePic(fileUrl);
       setIsPopoverOpen(false);
     }
   };
@@ -46,7 +51,7 @@ const ProfileHeader = () => {
   const handleRemoveImage = async () => {
     const res = await removeProfilePic();
     if (res.responseTxt === "success") {
-      setprofilePic(null);
+      setProfilePic(null);
       setStudentData({
         ...(studentData as StudentData),
         profilePic: "",
@@ -55,29 +60,30 @@ const ProfileHeader = () => {
     }
   };
 
-  const defaultImage =
-    "https://png.pngtree.com/png-vector/20231208/ourmid/pngtree-animated-3d-student-boy-with-empty-space-png-image_11095095.png";
-
-  const bannerImage =
-    "https://img.freepik.com/free-photo/nobody-exterior-wall-page-empty_1258-257.jpg";
-
   return (
     <div className="w-full bg-[var(--surface-bg-primary)] rounded-lg">
       <div
-        className="h-40 bg-gray-700 relative rounded-t-xl"
-        style={{
-          backgroundImage: `url(${bannerImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
+        className={cn(
+          "h-40 relative rounded-t-xl",
+          darkMode ? "bg-[var(--surface-bg-secondary)]" : "bg-gray-700"
+        )}
       >
         <div className="absolute -bottom-12 left-6">
           <div className="relative">
-            <img
-              src={profilePic || studentData?.profilePic || defaultImage}
-              alt="Profile"
-              className="w-24 h-24 rounded-full bg-white object-cover border-2 border-white shadow-lg"
-            />
+            <div className="w-24 h-24 aspect-square rounded-full bg-[var(--surface-bg-secondary)] flex justify-center items-center overflow-hidden">
+              {profilePic || studentData?.profilePic ? (
+                <img
+                  src={profilePic || studentData?.profilePic}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full bg-white object-cover border-2 border-white shadow-lg"
+                />
+              ) : (
+                <FaUser
+                  size={70}
+                  className="-mb-8 text-[var(--text-tertiary)]"
+                />
+              )}
+            </div>
 
             <Popover
               open={isPopoverOpen}

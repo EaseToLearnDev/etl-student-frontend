@@ -1,75 +1,60 @@
-import { useState } from "react";
-import ProfileHeader from "./ProfileHeader";
-import ProfileInput from "./ProfileInput";
-import Button from "../../../components/Button";
-import { Modal } from "../../../components/Modal";
-import VerifyOtpContent from "./VerifyOtpContent";
-import { handleStudentProfileUpdateDetails } from "../services/handleStudentProfileUpdateDetails";
+// React imports
+import { useEffect } from "react";
+// Hooks
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
+
+// Services
+import { handleStudentProfileUpdateDetails } from "../services/handleStudentProfileUpdateDetails";
+import { handleVerifyOtp } from "../services/handleVerifyOtp";
+import { validateField } from "../services/validateField";
+
+// Components
+import Button from "../../../components/Button";
+import InputField from "../../../components/InputField";
+import { Modal } from "../../../components/Modal";
+import AccountRemovalSection from "./AccountRemovalSection";
 import ConfirmDeleteAccount from "./ConfirmDeleteAccount";
 import DeleteAccountOtpVerifyModal from "./DeleteAccountOtpVerifyModal";
-import AccountRemovalSection from "./AccountRemovalSection";
-import { handleVerifyOtp } from "../services/handleVerifyOtp";
+import ProfileHeader from "./ProfileHeader";
+import VerifyOtpContent from "./VerifyOtpContent";
 
+/**
+ * Renders the main profile content section for viewing and editing student profile details.
+ */
 const ProfileContent = () => {
-  const { studentData, setStudentData } = useStudentStore.getState();
+  const studentData = useStudentStore((state) => state.studentData);
+  const setStudentData = useStudentStore((state) => state.setStudentData);
 
-  const {
-    editProfile,
-    setEditProfile,
-    isVerified,
-    setIsVerified,
-    showOtpModal,
-    setShowOtpModal,
-    setOtpType,
-    otpError,
-    setResToken,
-    setTokenIdentify,
-    errors,
-    setErrors,
-  } = useProfileStore();
+  const editProfile = useProfileStore((state) => state.editProfile);
+  const setEditProfile = useProfileStore((state) => state.setEditProfile);
+  const isVerified = useProfileStore((state) => state.isVerified);
+  const setIsVerified = useProfileStore((state) => state.setIsVerified);
+  const showOtpModal = useProfileStore((state) => state.showOtpModal);
+  const setShowOtpModal = useProfileStore((state) => state.setShowOtpModal);
+  const setOtpType = useProfileStore((state) => state.setOtpType);
+  const otpError = useProfileStore((state) => state.otpError);
+  const setResToken = useProfileStore((state) => state.setResToken);
+  const setTokenIdentify = useProfileStore((state) => state.setTokenIdentify);
+  const studentName = useProfileStore((state) => state.studentName);
+  const setStudentName = useProfileStore((state) => state.setStudentName);
+  const emailId = useProfileStore((state) => state.emailId);
+  const setEmailId = useProfileStore((state) => state.setEmailId);
+  const phoneNo = useProfileStore((state) => state.phoneNo);
+  const setPhoneNo = useProfileStore((state) => state.setPhoneNo);
 
   if (!studentData) return null;
 
-  const [formData, setFormData] = useState({
-    studentName: studentData?.studentName ?? "N/A",
-    phoneNo: studentData?.phoneNo ?? "N/A",
-    emailId: studentData?.emailId ?? "N/A",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-
-    if (name === "emailId") setErrors({ ...errors, email: "" });
-    if (name === "phoneNo") setErrors({ ...errors, phone: "" });
-  };
-
-  const isPhoneChanged = formData.phoneNo !== studentData.phoneNo;
-  const isEmailChanged = formData.emailId !== studentData.emailId;
-  const isNameChanged = formData.studentName !== studentData.studentName;
+  const isPhoneChanged = phoneNo.data !== studentData.phoneNo;
+  const isEmailChanged = emailId.data !== studentData.emailId;
+  const isNameChanged = studentName.data !== studentData.studentName;
   const hasChanges = isPhoneChanged || isEmailChanged || isNameChanged;
 
   const openOtpModal = async (type: "mobile" | "email") => {
-    if (type === "email") {
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailRegex.test(formData.emailId)) {
-        setErrors({ ...errors, email: "Invalid email address" });
-        return;
-      }
-    }
-    if (type === "mobile") {
-      const phoneRegex = /^[6-9]\d{9}$/;
-      if (!phoneRegex.test(formData.phoneNo)) {
-        setErrors({ ...errors, phone: "Invalid phone number" });
-        return;
-      }
-    }
     try {
       const res = await handleStudentProfileUpdateDetails({
-        newEmailId: formData.emailId,
-        newPhoneNo: formData.phoneNo,
+        newEmailId: emailId.data,
+        newPhoneNo: phoneNo.data,
       });
       if (res) {
         setResToken(res.resToken);
@@ -85,24 +70,29 @@ const ProfileContent = () => {
   const handleSave = () => {
     setStudentData({
       ...studentData,
-      studentName: formData.studentName,
-      phoneNo: formData.phoneNo,
-      emailId: formData.emailId,
+      studentName: studentName.data,
+      phoneNo: phoneNo.data,
+      emailId: emailId.data,
     });
     setEditProfile(false);
     setIsVerified(false);
   };
 
-  const handleCancel = () => {
-    setFormData({
-      studentName: studentData.studentName ?? "N/A",
-      phoneNo: studentData.phoneNo ?? "N/A",
-      emailId: studentData.emailId ?? "N/A",
+  const handleReset = () => {
+    setStudentName({
+      ...studentName,
+      data: studentData?.studentName ?? "N/A",
+      error: "",
     });
+    setPhoneNo({ ...phoneNo, data: studentData?.phoneNo ?? "N/A", error: "" });
+    setEmailId({ ...emailId, data: studentData?.emailId ?? "N/A", error: "" });
     setEditProfile(false);
-    setErrors({ email: "", phone: "" });
     setIsVerified(false);
   };
+
+  useEffect(() => {
+    handleReset();
+  }, []);
 
   return (
     <div>
@@ -110,47 +100,67 @@ const ProfileContent = () => {
 
       {/* Profile Info */}
       <form className="grid sm:grid-cols-1 lg:grid-cols-2 gap-3">
-        <ProfileInput
-          name="studentName"
+        <InputField
           label="Student Name"
-          value={formData.studentName}
-          readOnly={!editProfile}
-          onChange={handleChange}
+          value={studentName.data}
+          disabled={!editProfile}
+          info={{ msg: studentName.error, type: "error" }}
+          placeholder="Enter Student Name"
+          onChange={(e) =>
+            setStudentName({ ...studentName, data: e.target.value })
+          }
         />
-        <div>
-          <ProfileInput
-            name="phoneNo"
+        <div className="flex flex-col gap-2">
+          <InputField
             label="Mobile Number"
-            value={formData.phoneNo}
-            readOnly={!editProfile}
-            onChange={handleChange}
-            error={errors.phone}
+            value={phoneNo.data}
+            disabled={!editProfile}
+            onChange={(e) => {
+              const inputValue = e.target.value.trim();
+
+              if (isNaN(Number(inputValue))) return;
+
+              const newPhoneNo = { ...phoneNo, data: inputValue };
+
+              setPhoneNo(newPhoneNo);
+              validateField(newPhoneNo, setPhoneNo, "mobile");
+            }}
+            info={{ msg: phoneNo.error, type: "error" }}
+            type="text"
+            placeholder="Enter Your Mobile"
           />
           {editProfile && isPhoneChanged && (
             <Button
               style="primary"
               onClick={() => openOtpModal("mobile")}
-              disabled={!!errors.phone}
+              disabled={!!phoneNo.error}
+              className="w-min"
             >
               Verify
             </Button>
           )}
         </div>
-        <div>
-          <ProfileInput
-            name="emailId"
+        <div className="flex flex-col gap-2">
+          <InputField
             label="Email Address"
             type="email"
-            value={formData.emailId}
-            readOnly={!editProfile}
-            onChange={handleChange}
-            error={errors.email}
+            value={emailId.data}
+            disabled={!editProfile}
+            onChange={(e) => {
+              const newEmailId = { ...emailId, data: e.target.value.trim() };
+
+              setEmailId(newEmailId);
+              validateField(newEmailId, setEmailId, "email");
+            }}
+            info={{ msg: emailId.error, type: "error" }}
+            placeholder="Enter Your Email Id"
           />
           {editProfile && isEmailChanged && (
             <Button
               style="primary"
               onClick={() => openOtpModal("email")}
-              disabled={!!errors.email}
+              disabled={!!emailId.error}
+              className="w-min"
             >
               Verify
             </Button>
@@ -169,7 +179,7 @@ const ProfileContent = () => {
           >
             Save
           </Button>
-          <Button style="secondary" onClick={handleCancel}>
+          <Button style="secondary" onClick={handleReset}>
             Cancel
           </Button>
         </div>

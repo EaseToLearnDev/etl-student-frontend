@@ -235,7 +235,7 @@ export interface PrevRunningTest {
   testType?: number;
 }
 
-export interface InputField {
+export interface InputFieldType {
   id: string;
   data: string;
   error: string;

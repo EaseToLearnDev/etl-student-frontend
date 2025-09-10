@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { InputFieldType } from "../../shared/types";
 
 interface ProfileState {
   editProfile: boolean;
@@ -9,12 +10,22 @@ interface ProfileState {
   resToken: string | null;
   tokenIdentify: number | null;
   errors: { email: string; phone: string };
-
+  
   // Account delete states
   deleteAccountProgress: boolean;
   deleteAccountToken: string;
   confirmDeleteOpen: boolean;
   deleteError: string | null;
+  
+  studentName: InputFieldType;
+  phoneNo: InputFieldType;
+  emailId: InputFieldType;
+  profilePic: string | null;
+
+  setStudentName: (studentName: InputFieldType) => void;
+  setPhoneNo: (phoneNo: InputFieldType) => void;
+  setEmailId: (emailId: InputFieldType) => void;
+  setProfilePic: (profilePic: string | null) => void;
 
   // Actions
   setEditProfile: (value: boolean) => void;
@@ -31,7 +42,7 @@ interface ProfileState {
   setConfirmDeleteOpen: (value: boolean) => void;
   setDeleteError: (msg: string | null) => void;
 
-  resetProfile: () => void;
+  reset: () => void;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -43,11 +54,33 @@ export const useProfileStore = create<ProfileState>((set) => ({
   resToken: null,
   tokenIdentify: null,
   errors: { email: "", phone: "" },
-
+  
+  studentName: {
+    id: "studentName",
+    data: "",
+    error: "",
+  },
+  phoneNo: {
+    id: "phoneNo",
+    data: "",
+    error: "",
+  },
+  emailId: {
+    id: "emailId",
+    data: "",
+    error: "",
+  },
+  profilePic: null,
+  
   deleteAccountProgress: false,
   deleteAccountToken: "",
   confirmDeleteOpen: false,
   deleteError: null,
+
+  setStudentName: (studentName) => set({ studentName }),
+  setEmailId: (emailId) => set({ emailId }),
+  setPhoneNo: (phoneNo) => set({ phoneNo }),
+  setProfilePic: (profilePic) => set({profilePic}),
 
   setEditProfile: (value) => set({ editProfile: value }),
   setIsVerified: (value) => set({ isVerified: value }),
@@ -63,7 +96,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   setConfirmDeleteOpen: (value) => set({ confirmDeleteOpen: value }),
   setDeleteError: (msg) => set({ deleteError: msg }),
 
-  resetProfile: () =>
+  reset: () =>
     set({
       editProfile: false,
       isVerified: false,
@@ -77,5 +110,22 @@ export const useProfileStore = create<ProfileState>((set) => ({
       deleteAccountToken: "",
       confirmDeleteOpen: false,
       deleteError: null,
+
+      studentName: {
+        id: "studentName",
+        data: "",
+        error: "",
+      },
+      phoneNo: {
+        id: "phoneNo",
+        data: "",
+        error: "",
+      },
+      emailId: {
+        id: "emailId",
+        data: "",
+        error: "",
+      },
+      profilePic: null,
     }),
 }));

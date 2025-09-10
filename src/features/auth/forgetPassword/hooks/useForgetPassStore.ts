@@ -1,12 +1,12 @@
-import { type InputField } from "../../../shared/types";
+import { type InputFieldType } from "../../../shared/types";
 import { create } from "zustand";
 import { ForgetPasswordPhase, type TokenType } from "../forgetPassword.types";
 
 export interface ForgetPassStore {
-  userId: InputField;
-  otp: InputField;
-  password: InputField;
-  confirmPassword: InputField;
+  userId: InputFieldType;
+  otp: InputFieldType;
+  password: InputFieldType;
+  confirmPassword: InputFieldType;
   token: TokenType | null;
   loading: boolean;
   currentPhase: ForgetPasswordPhase;
@@ -15,10 +15,10 @@ export interface ForgetPassStore {
   setToken: (token: TokenType | null) => void;
 
   setCurrentPhase: (index: ForgetPasswordPhase) => void;
-  setUserId: (userId: InputField) => void;
-  setOtp: (otp: InputField) => void;
-  setPassword: (pass: InputField) => void;
-  setConfirmPassword: (confirmPass: InputField) => void;
+  setUserId: (userId: InputFieldType) => void;
+  setOtp: (otp: InputFieldType) => void;
+  setPassword: (pass: InputFieldType) => void;
+  setConfirmPassword: (confirmPass: InputFieldType) => void;
 
   reset: () => void;
 }

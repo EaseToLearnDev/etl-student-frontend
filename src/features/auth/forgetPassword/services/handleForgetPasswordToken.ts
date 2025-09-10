@@ -1,14 +1,14 @@
 import {
   ToastType,
-  type InputField,
+  type InputFieldType,
   type ToastData,
 } from "../../../shared/types";
 import createForgetPasswordToken from "../apis/createForgetPasswordToken.api";
 import type { TokenType } from "../forgetPassword.types";
 
 interface HandleForgetPasswordTokenParams {
-  userId: InputField;
-  setUserId: (userId: InputField) => void;
+  userId: InputFieldType;
+  setUserId: (userId: InputFieldType) => void;
   setToken: (token: TokenType | null) => void;
   setToast: (data: ToastData) => void;
   setLoading: (v: boolean) => void;

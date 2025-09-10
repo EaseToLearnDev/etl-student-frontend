@@ -438,3 +438,9 @@ math {
   background: var(--border-primary) !important; 
 }
 /* Scrollbar Styles End */
+
+/* Text Selection Styles */
+::selection {
+  background: var(--sb-ocean-bg-hover);
+  color: white;
+}

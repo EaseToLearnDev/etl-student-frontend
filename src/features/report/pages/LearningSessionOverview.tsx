@@ -19,31 +19,6 @@ import { LearningSessionOverviewSkeleton } from "../components/LearningSessonOve
 import Button from "../../../components/Button";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 
-// Mock Data Response
-// const mockData = {
-//   correctQuestion: 4,
-//   helpCounter: 2,
-//   incorrectQuestion: 1,
-//   overallResultList: [
-//     { y: 20, name: "Correct: 4/20", color: "#46d39a" },
-//     { y: 5, name: "Incorrect: 1/20", color: "#e55759" },
-//     { y: 75, name: "Unattempted: 15/20", color: "#f59e0b" },
-//   ],
-//   progressBarObj: { percentage: 11.11, barColor: "red" },
-//   resultWithHelpList: [
-//     { y: 100, name: "Correct: 2/2", color: "#46d39a" },
-//     { y: 0, name: "Incorrect: 0/2", color: "#e55759" },
-//   ],
-//   resultWithoutHelpList: [
-//     { y: 66.67, name: "Correct: 2/3", color: "#46d39a" },
-//     { y: 33.33, name: "Incorrect: 1/3", color: "#e55759" },
-//   ],
-//   submitDate: "04-08-2025",
-//   testName: "KINETIC THEORY OF GASES",
-//   totalQuestion: 20,
-//   unattemptedQuestion: 15,
-// };
-
 export const LearningSessionOverview = () => {
   const params = useSearchParams();
   const testSession = params[0].get("testSession");

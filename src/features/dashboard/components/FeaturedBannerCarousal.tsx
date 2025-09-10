@@ -143,7 +143,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               prev === 0 ? slides.length - 1 : prev - 1
             )
           }
-          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition"
+          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition border border-white/30"
         >
           <ChevronLeftIcon className="size-4" />
         </button>
@@ -154,7 +154,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               prev === slides.length - 1 ? 0 : prev + 1
             )
           }
-          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition"
+          className="size-7 aspect-square flex justify-center items-center hover:bg-white/10 text-white rounded-md transition border border-white/30"
         >
           <ChevronRightIcon className="size-4" />
         </button>
@@ -168,7 +168,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             onClick={() => setSelectedSlideIndex(i)}
             className={cn(
               "w-3 h-3 aspect-square rounded-full transition-colors",
-              selectedSlideIndex === i ? "bg-black/50" : "bg-black/20"
+              selectedSlideIndex === i ? "bg-white/50" : "bg-white/20"
             )}
           />
         ))}
