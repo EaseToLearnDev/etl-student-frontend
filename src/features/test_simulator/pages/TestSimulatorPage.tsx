@@ -25,6 +25,8 @@ import { useFullscreenProtection } from "../store/useFullScreenProtection";
 import { Toast } from "../../../components/Toast";
 import SwitchSectionModal from "../components/SwitchSectionModal";
 import { ToastType } from "../../shared/types";
+import { useGuestStore } from "../../../global/hooks/useGuestStore";
+import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -68,6 +70,13 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const reset = useTestStore((s) => s.reset);
   const resetAi = useAiStore((s) => s.reset);
 
+  const setShowGuestTestSubmitModal = useGuestStore(
+    (s) => s.setShowGuestTestSubmitModal
+  );
+
+  const testMode = useTestStore((s) => s.testMode);
+  const setMode = useTestStore((s) => s.setMode);
+
   const { hasExited, reEnter } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
   );
@@ -82,7 +91,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       setFeatures,
       startTestTimer,
       setIsAiFeatureEnabled,
-      startQuestionTimer
+      startQuestionTimer,
+      setMode
     );
     return () => {
       if (features?.timerEnabled) {
@@ -120,6 +130,14 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   //   );
   // }
 
+  const ManageTestSubmit = () => {
+    if (testMode === "guest") {
+      setShowGuestTestSubmitModal(true);
+    } else {
+      handleTestSubmit(navigate);
+    }
+  };
+
   return (
     <>
       {!isMobile ? <DesktopTestSimulator /> : <MobileTestSimulator />}
@@ -142,12 +160,12 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         size="lg"
         className="p-4"
       >
-        <TestEndedModalContent onSubmit={() => handleTestSubmit(navigate)} />
+        <TestEndedModalContent onSubmit={ManageTestSubmit} />
       </Modal>
 
       <Modal size="lg" className="p-4" isOpen={hasExited} onClose={reEnter}>
         <FullScreenExitModalContent
-          onSubmit={() => handleTestSubmit(navigate)}
+          onSubmit={ManageTestSubmit}
           onReEnter={reEnter}
         />
       </Modal>
@@ -167,6 +185,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           setIsSwitchSectionModalOpen(false);
         }}
       />
+
+      <GuestTestSubmitModal />
 
       {testError?.message && (
         <Toast

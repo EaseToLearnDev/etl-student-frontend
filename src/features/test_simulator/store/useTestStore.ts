@@ -56,6 +56,9 @@ export interface TestStore {
 
   currentPointer: Pointer;
 
+  testMode: string | null;
+  setMode: (mode: string) => void;
+
   pendingQuestion: Question | null;
   setPendingQuestion: (question: Question | null) => void;
 
@@ -111,6 +114,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   testConfig: null,
   testError: null,
   pendingQuestion: null,
+  testMode: null,
   currentPointer: {
     sectionPos: -1,
     questionPos: -1,
@@ -163,6 +167,8 @@ const useTestStore = create<TestStore>((set, get) => ({
   setTestConfig: (config) => set({ testConfig: config }),
 
   setPendingQuestion: (question) => set({ pendingQuestion: question }),
+
+  setMode: (mode) => set({ testMode: mode }),
 
   // Next Handler
   goToNext: () => {

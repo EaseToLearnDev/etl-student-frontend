@@ -17,7 +17,8 @@ export const setupTest = async (
   setFeatures: (features: Features) => void,
   startTestTimer: (timer: number) => void,
   setIsAiFeatureEnabled: (v: boolean) => void,
-  startQuestionTimer: () => void
+  startQuestionTimer: () => void,
+  setMode: (mode: string) => void
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -28,6 +29,7 @@ export const setupTest = async (
   // Fetch test details
   if (testConfig) {
     setTestConfig(testConfig);
+    setMode(mode)
     const data = (await loadTestDetails({
       testConfig,
       mode,

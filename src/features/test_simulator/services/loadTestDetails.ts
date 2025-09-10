@@ -28,12 +28,6 @@ export const loadTestDetails = async ({
 }: LoadTestDetailsParams) => {
   const { studentData, activeCourse } = useStudentStore.getState();
 
-  if (!studentData || !activeCourse || !testConfig) return null;
-
-  const { loginId, token } = studentData;
-  const { templateId } = activeCourse;
-  const { testSession } = testConfig;
-
   try {
     switch (mode) {
       case "guest":
@@ -42,29 +36,31 @@ export const loadTestDetails = async ({
         });
         return guestData ?? null;
       case "registered":
+        if (!studentData || !activeCourse || !testConfig) return null;
         const packTypeTitle = activeCourse?.packTypeTitle as PackTypeTitle;
-        const registeredData = testSession
+        const registeredData = testConfig?.testSession
           ? await testDetailExisting({
-              testSession,
-              templateId,
-              loginId,
-              token,
+              testSession: testConfig?.testSession,
+              templateId: activeCourse?.templateId,
+              loginId: studentData?.loginId,
+              token: studentData?.token,
             })
           : await testDetails({
               ...testConfig,
-              templateId,
+              templateId: activeCourse?.templateId,
               packTypeTitle,
-              examType: 'objective',
-              loginId,
-              token,
+              examType: "objective",
+              loginId: studentData?.loginId,
+              token: studentData?.token,
             });
         return registeredData ?? null;
       case "review":
-        const reviewData = testSession
+        if (!studentData || !activeCourse || !testConfig) return null;
+        const reviewData = testConfig?.testSession
           ? await testResultView({
-              testSession,
-              loginId,
-              token,
+              testSession: testConfig?.testSession,
+              loginId: studentData?.loginId,
+              token: studentData?.token,
             })
           : null;
         return reviewData;
