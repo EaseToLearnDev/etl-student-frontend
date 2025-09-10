@@ -108,10 +108,11 @@ export interface StudentData {
 }
 
 export interface School {
-  schoolName: string;
-  className: string;
-  schoolId: number;
-  classId: number;
+  schoolName?: string;
+  className?: string;
+  schoolId?: number;
+  classId?: number;
+  admissionNumber?: string;
 }
 
 export interface Course {

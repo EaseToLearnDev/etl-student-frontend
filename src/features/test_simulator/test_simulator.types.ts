@@ -48,14 +48,16 @@ export interface SectionUI {
 export interface TestData {
   testId: string;
   testName: string;
-  testType: number
+  testType: number;
   testOption: number;
   totalTime: number;
   remainingTime: number;
   lastQuestionIndex?: number;
   sectionLock: string;
-  bloom: number;
-
+  
+  bloom?: number;
+  subject?: string;
+  scheduleId?: string;
   notAnsweredCount?: number;
   incorrectCount?: number;
   correctCount?: number;
@@ -156,6 +158,17 @@ export interface TestSubmitRequest {
   schoolName: string;
   className: string;
   helpCounter: number;
+}
+
+export interface TestSubmitResponse {
+  responseTxt: string;
+  message: string;
+  obj: {
+    testSession: string;
+    examType: ExamType;
+    testMode: string;
+    testType: number;
+  };
 }
 
 export enum AIModalView {
