@@ -11,7 +11,7 @@ const HeaderMenuRight = () => {
   );
   const profilePic = useStudentStore((state) => state.studentData?.profilePic);
   return (
-    <div className="relative ms-auto flex items-center gap-2 text-[var(--text-primary)] xs:gap-3 xl:gap-4 justify-end">
+    <div className="relative ml-2 md:ms-auto flex items-center gap-2 text-[var(--text-primary)] xs:gap-3 xl:gap-4 justify-end">
       <NotificationDropdown>
         <button
           aria-label="Notification"

@@ -6,7 +6,7 @@ interface HandlePaymentButtonProps {
   courseId: number;
   courseTitle: string;
   packId: number;
-  apiQuery: string;
+  promoCode?: string;
 }
 
 export const handlePaymentButton = ({
@@ -14,7 +14,7 @@ export const handlePaymentButton = ({
   courseId,
   courseTitle,
   packId,
-  apiQuery,
+  promoCode,
 }: HandlePaymentButtonProps) => {
   const { studentData } = useStudentStore.getState();
 
@@ -27,7 +27,7 @@ export const handlePaymentButton = ({
       courseId,
       courseTitle,
       packId,
-      apiQuery,
+      promoCode,
       loginId,
       token,
     });

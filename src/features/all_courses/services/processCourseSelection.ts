@@ -1,7 +1,11 @@
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { handleFreeCourse } from "../services/handleFreeCourse";
 import { handlePaymentButton } from "../services/handlePaymentButton";
-import { ToastType, type Course, type CourseResponse } from "../../shared/types";
+import {
+  ToastType,
+  type Course,
+  type CourseResponse,
+} from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 
 export const processCourseSelection = async ({
@@ -12,15 +16,18 @@ export const processCourseSelection = async ({
   code,
   navigate,
 }: {
-  option: number;
-  courseId: number;
-  courseTitle: string;
-  selectedPlanId: number | null;
-  code: string;
+  option?: number;
+  courseId?: number;
+  courseTitle?: string;
+  selectedPlanId?: number | null;
+  code?: string;
   navigate: (path: string) => void;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
   const { setToast } = useToastStore.getState();
+
+  if (!courseId || !courseTitle || !option) return;
+
   if (!studentData) return console.error("No student data found");
 
   // ---------------- Free course flow ----------------
@@ -70,45 +77,80 @@ export const processCourseSelection = async ({
   if (!selectedPlanId) return console.warn("Please select a plan first");
 
   try {
-    const res = await handlePaymentButton({
+    const data = await handlePaymentButton({
       option,
       courseId,
       courseTitle,
       packId: selectedPlanId,
-      apiQuery: code ? `&promoCode=${code}` : "",
+      promoCode: code ?? "",
     });
-
+    // OPTION 3 FLOW
     if (option === 3) {
       // mobile in-app flow
       window.location.href =
-        `inapppayment?orderId=${res.orderId}&token=${res.token}` +
-        `&amount=${res.amount}&firstname=${studentData.studentName}` +
+        `inapppayment?orderId=${data.orderId}&token=${data.token}` +
+        `&amount=${data.amount}&firstname=${studentData.studentName}` +
         `&email=${studentData.emailId}&phone=${studentData.phoneNo}` +
-        `&productinfo=${res.productinfo}`;
+        `&productinfo=${data.productinfo}`;
       return;
     }
 
-    // PayU form flow
-    let form = document.forms.namedItem("pgform") as HTMLFormElement | null;
-    if (!form) return console.error("PayU form not found in DOM");
+    // OPTION 2 FLOW
 
-    form.key.value = res.key;
-    form.txnid.value = res.token;
-    form.amount.value = res.amount;
-    form.firstname.value = studentData.studentName;
-    form.email.value = studentData.emailId;
-    form.phone.value = studentData.phoneNo;
-    form.productinfo.value = res.productinfo;
-    form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
-    form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
-    // setToast({
-    //     type: ToastType.DANGER,
-    //     title: "Payment Failed",
-    //     description: "Something went wrong with your payment. Please try again.",
-    //   });
-    form.hash.value = res.hashCode;
+    if (option === 2 && data.amount > 0) {
+      // PayU form flow
+      let form = document.forms.namedItem("pgform") as HTMLFormElement | null;
+      if (!form) return console.error("PayU form not found in DOM");
 
-    form.submit();
+      form.key.value = data.key;
+      form.txnid.value = data.token;
+      form.amount.value = data.amount;
+      form.firstname.value = studentData.studentName;
+      form.email.value = studentData.emailId;
+      form.phone.value = studentData.phoneNo;
+      form.productinfo.value = data.productinfo;
+      form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
+      form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
+      // setToast({
+      //     type: ToastType.DANGER,
+      //     title: "Payment Failed",
+      //     description: "Something went wrong with your payment. Please try again.",
+      //   });
+      form.hash.value = data.hashCode;
+
+      form.submit();
+    } else if (data.organisations.length > 0) {
+      const courses: Course[] = data.organisations.map((c: CourseResponse) => ({
+        templateId: c.templateId,
+        validityId: c.validityId,
+        courseId: c.courseId,
+        packTypeId: c.packTypeId,
+        benchmark: c.benchmark,
+        organisationName: c.organisationName,
+        validTillDate: c.validTillDate,
+        packTypeTitle: c.packTypeTitle,
+        tabs: {
+          dashboard: !!c.dashboard,
+          report: !!c.report,
+          studyMaterial: !!c.studyMaterial,
+          selfTest: !!c.selfTest,
+          topicTest: !!c.topicTest,
+          mockTest: !!c.mockTest,
+          dynamicMockTest: !!c.dynamicMockTest,
+          classTest: !!c.classTest,
+          teacherHelp: !!c.teacherHelp,
+          tonyHelp: !!c.tonyHelp,
+          otherCourses: !!c.otherCourses,
+        },
+      }));
+
+      const purchasedCourse = courses?.find((c) => c.courseId === courseId);
+      const openedCourse = purchasedCourse
+        ? courses.indexOf(purchasedCourse)
+        : 0;
+      setStudentData({ ...studentData, courses, openedCourse });
+      return navigate("/dashboard");
+    }
   } catch (err) {
     console.error("Error directing to Payment Gateway:", err);
   }
