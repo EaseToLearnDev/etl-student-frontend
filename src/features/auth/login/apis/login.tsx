@@ -1,10 +1,6 @@
 import { makeRequest } from "../../../../utils/http";
 
-export const LoginApi = async (email: string, password: string) => {
-  const data = new FormData();
-  data.append("userId", email);
-  data.append("password", password);
-  data.append("device", "web");
+export const login = async (data: FormData) => {
   const headers = {
     "Content-Type": "multipart/mixed",
   };

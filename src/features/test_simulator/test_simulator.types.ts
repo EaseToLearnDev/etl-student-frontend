@@ -78,6 +78,7 @@ export enum QuestionStatus {
   NOT_VISITED = "not_visited",
   VISITED = "visited",
   MARKED_FOR_REVIEW = "marked_for_review",
+  ANSWERED_AND_REVIEW = "answered_and_review",
   HELP = "help",
 }
 

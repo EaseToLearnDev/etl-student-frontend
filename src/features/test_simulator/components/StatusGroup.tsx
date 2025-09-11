@@ -34,6 +34,7 @@ const StatusGroup = () => {
       markedForReview: s.getQuestionCountByStatus(
         QuestionStatus.MARKED_FOR_REVIEW
       ),
+      answeredAndReview: s.getQuestionCountByStatus(QuestionStatus.ANSWERED_AND_REVIEW),
       correct: s.testData?.correctCount,
       incorrect: s.testData?.incorrectCount,
       notAnswered: s.testData?.notAnsweredCount,
@@ -43,27 +44,32 @@ const StatusGroup = () => {
     {
       id: "not-visited",
       text: "Not Visited",
-      theme: Theme.Sakura,
+      theme: Theme.Neutral,
       count: counts.notVisited,
     },
     {
       id: "not-attempted",
       text: "Not Attempted",
-      theme: Theme.Pumpkin,
+      theme: Theme.Valencia,
       count: counts.notAttempted,
     },
     {
       id: "attempted",
       text: "Attempted",
-      theme: Theme.Ocean,
+      theme: Theme.GreenHaze,
       count: counts.attempted,
     },
     {
       id: "marked-for-review",
       text: "Marked for Review",
-      theme: Theme.Sunglow,
+      theme: Theme.Amethyst,
       count: counts.markedForReview,
     },
+    {
+      id: 'answered-and-review',
+      text: 'Answered & Review',
+      theme: Theme.Amethyst
+    }
   ];
   const reviewStatusList: Status[] = [
     {

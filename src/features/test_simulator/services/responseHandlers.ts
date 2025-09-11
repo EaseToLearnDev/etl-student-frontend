@@ -28,9 +28,14 @@ export const setCurrentResponseHandler = ({
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
 
-  const newStatus = response
-    ? QuestionStatus.ATTEMPTED
-    : QuestionStatus.NOT_ATTEMPTED;
+  const isMarkedForReview = questionStatusMap[question?.questionId] === QuestionStatus.MARKED_FOR_REVIEW;
+
+  let newStatus: QuestionStatus;
+  if (response) {
+    newStatus = isMarkedForReview ? QuestionStatus.ANSWERED_AND_REVIEW : QuestionStatus.ATTEMPTED;
+  } else {
+    newStatus = QuestionStatus.NOT_ATTEMPTED;
+  }
 
   return {
     newResponseMap: {

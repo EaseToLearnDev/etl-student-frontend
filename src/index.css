@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 @import "tailwindcss";
 
 /* Import Fonts */
@@ -76,6 +76,15 @@
 
   --sb-sakura-content-primary: #ffffff;
   --sb-sakura-content-secondary: #fea7ca;
+
+  /* SB Amethyst Theme */
+  --sb-amethyst-bg-active: #8b5cf6;
+  --sb-amethyst-bg-hover: #a78bfa;
+  --sb-amethyst-bg-on-press: #6d28d9;
+  --sb-amethyst-bg-disabled: #ede9fe;
+
+  --sb-amethyst-content-primary: #ffffff;
+  --sb-amethyst-content-secondary: #a78bfa;
 
   --sb-pumpkin-bg-active: #f07225;
   --sb-pumpkin-bg-hover: #f38e44;
@@ -180,6 +189,9 @@ body.dark-mode {
 
   --sb-green-haze-bg-disabled: #03301d;
   --sb-green-haze-content-secondary: #13683f;
+
+  --sb-amethyst-bg-disabled: #2d1b69;
+  --sb-amethyst-content-secondary: #6d28d9;
 
   --sb-neutral-bg-active: #fafafa;
   --sb-neutral-bg-hover: #e4e4e7;
@@ -429,13 +441,13 @@ math {
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--border-secondary) !important; 
+  background: var(--border-secondary) !important;
   border-radius: 40px !important;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--border-primary) !important; 
+  background: var(--border-primary) !important;
 }
 /* Scrollbar Styles End */
 
@@ -448,10 +460,10 @@ math {
 /*  */
 img {
   image-rendering: auto;
-  image-rendering: smooth;            /* Firefox */
+  image-rendering: smooth; /* Firefox */
   image-rendering: -webkit-optimize-contrast; /* Safari/Chrome */
-  image-rendering: -moz-crisp-edges;  /* Older Firefox */
-  image-rendering: -o-crisp-edges;    /* Older Opera */
-  image-rendering: pixelated;         /* To force pixelation if wanted */
-  image-rendering: optimizeQuality;   /* Deprecated but still in use in some contexts */
+  image-rendering: -moz-crisp-edges; /* Older Firefox */
+  image-rendering: -o-crisp-edges; /* Older Opera */
+  image-rendering: pixelated; /* To force pixelation if wanted */
+  image-rendering: optimizeQuality; /* Deprecated but still in use in some contexts */
 }

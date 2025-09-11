@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 // Types
 import {
   Severity,
@@ -11,14 +12,15 @@ import { useLoginStore } from "./hooks/useLoginStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
-import { LoginApi } from "./apis/login";
+import { login } from "./apis/login";
 import { type NavigateFunction } from "react-router-dom";
 import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
 import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
 export const HandleLogin = async (
   navigate: NavigateFunction,
-  loginWith: string
+  loginWith: string,
+  deviceType: string | null
 ) => {
   const { userId, password, setError, setLoading, setToken } =
     useLoginStore.getState();
@@ -30,7 +32,26 @@ export const HandleLogin = async (
       setError("", Severity.None);
       setLoading(true);
 
-      const data: StudentDataResponse = await LoginApi(userId, password);
+      const formData = new FormData();
+      formData.append("userId", userId);
+      formData.append("password", password);
+      formData.append("device", "web");
+
+      const data: StudentDataResponse = await login(formData);
+
+      Cookies.set(
+        "accountDetails",
+        JSON.stringify({
+          sid: data?.studentId,
+          studentId: data?.studentId,
+          loginId: data?.loginId,
+          token: data?.token,
+          studentName: data?.studentName,
+          mobile: data?.phoneNo,
+          email: data?.emailId,
+        })
+      );
+      Cookies.set("token", `"${data?.token}"`);
 
       setLoading(false);
 
@@ -80,8 +101,13 @@ export const HandleLogin = async (
         deleteFlag: data.deleteFlag,
       };
 
+      if (deviceType && deviceType.length > 0) {
+        studentData.deviceType = deviceType;
+      } else {
+        studentData.deviceType = "android";
+      }
+
       setStudentData(studentData);
-      setError("Login Successful!", Severity.None);
 
       // Navigate to dashboard
       navigate("/dashboard");

@@ -104,7 +104,8 @@ export interface StudentData {
   profilePic: string;
   deleteFlag: number;
   schools: School[];
-  courses: Course[];
+  courses?: Course[];
+  deviceType?: string;
 }
 
 export interface School {
@@ -145,6 +146,7 @@ export interface CourseResponse {
   dynamicMockTest: number;
   classTest: number;
   teacherHelp: number;
+  teacherHelpcourse: any;
   tonyHelp: number;
   otherCourses: number;
 }

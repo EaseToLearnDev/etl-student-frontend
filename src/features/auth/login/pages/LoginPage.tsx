@@ -35,6 +35,8 @@ const LoginPage = () => {
 
   const [loginWith, setLoginWith] = useState("password");
 
+  const deviceType = new URLSearchParams(location.search).get("device_type");
+
   return (
     // Main container
     <div
@@ -123,9 +125,13 @@ const LoginPage = () => {
                         )}
                         required
                         value={userId}
-                        onChange={(e) =>
-                          setCredentials(e.target.value, password)
-                        }
+                        onChange={(e) => {
+                          const inputValue = e.target.value.trim();
+                          if (loginWith === "otp") {
+                            if (isNaN(Number(inputValue))) return;
+                          }
+                          setCredentials(e.target.value, password);
+                        }}
                       />
                     </div>
 
@@ -156,7 +162,9 @@ const LoginPage = () => {
                   </div>
 
                   {/* Error Message */}
-                  <h6 className="text-red-500 mt-3 text-center">{errorMessage || ""}</h6>
+                  <h6 className="text-red-500 mt-3 text-center">
+                    {errorMessage || ""}
+                  </h6>
 
                   {/* Submit Button */}
                   <Button
@@ -166,7 +174,7 @@ const LoginPage = () => {
                     onClick={
                       loading
                         ? undefined
-                        : () => HandleLogin(navigate, loginWith)
+                        : () => HandleLogin(navigate, loginWith, deviceType)
                     }
                   >
                     <h6 className="!font-semibold">

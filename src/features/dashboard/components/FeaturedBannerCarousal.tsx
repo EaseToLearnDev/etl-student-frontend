@@ -13,6 +13,7 @@ import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
 import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
 import useIsMobile from "../../../hooks/useIsMobile";
 import { isProfileComplete } from "../services/isProfileComplete";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
@@ -20,6 +21,7 @@ interface FeaturedBannerCarousalProps {
 
 const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
   const [selectedSlideIndex, setSelectedSlideIndex] = useState<number>(0);
+  const studentName = useStudentStore(state => state.studentData?.studentName);
 
   const selectedContent = useSMStore((s) => s.selectedContent);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
@@ -76,7 +78,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
       <div className="relative z-30 flex flex-col justify-between h-full w-full p-6 sm:p-10">
         <div>
-          <h3 className="text-white">Welcome Back</h3>
+          <h3 className="text-white">Welcome {studentName?.split(" ")?.[0]}</h3>
           <p className="text-gray-300 mt-2 max-w-[40ch]">
             Discover new courses and keep learning.
           </p>

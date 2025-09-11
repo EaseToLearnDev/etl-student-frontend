@@ -18,6 +18,7 @@ export enum Theme {
   Pumpkin = "pumpkin",
   Valencia = "valencia",
   GreenHaze = "greenHaze",
+  Amethyst = "amethyst",
   Neutral = "neutral",
 }
 
@@ -94,6 +95,18 @@ export const colors: ThemePallete = {
     content: {
       primary: "var(--sb-green-haze-content-primary)",
       secondary: "var(--sb-green-haze-content-secondary)",
+    },
+  },
+  [Theme.Amethyst]: {
+    bg: {
+      active: "var(--sb-amethyst-bg-active)",
+      hover: "var(--sb-amethyst-bg-hover)",
+      onPress: "var(--sb-amethyst-bg-on-press)",
+      disabled: "var(--sb-amethyst-bg-disabled)",
+    },
+    content: {
+      primary: "var(--sb-amethyst-content-primary)",
+      secondary: "var(--sb-amethyst-content-secondary)",
     },
   },
   [Theme.Neutral]: {

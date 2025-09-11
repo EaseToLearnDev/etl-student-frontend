@@ -11,17 +11,34 @@ export interface StatusHandlerResult {
 export const markForReviewHandler = ({
   testData,
   currentPointer,
+  questionResponseMap,
   questionStatusMap,
 }: {
   testData: TestData;
   currentPointer: Pointer;
+  questionResponseMap?: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }): StatusHandlerResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
 
   const currQId = testData.sectionSet[si]?.questionNumbers[qi]?.questionId;
-  if (!currQId) return null;
+  const currentQuestion = testData.questionSet.find(
+    (q) => q.questionId === currQId
+  );
+  if (!currQId || !currentQuestion) return null;
+
+  // let newStatus: QuestionStatus;
+  // const response = questionResponseMap[qi];
+
+  //   const isMarkedForReview = questionStatusMap[currQId] === QuestionStatus.MARKED_FOR_REVIEW;
+  //   const isAnsweredAndReview = questionStatusMap[currQId] === QuestionStatus.ANSWERED_AND_REVIEW;
+
+  //   if(isMarkedForReview) {
+  //     newStatus = 
+  // } else {
+
+  // }
 
   return {
     newStatusMap: {
