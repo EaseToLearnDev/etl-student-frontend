@@ -264,6 +264,7 @@ export interface ToastData {
   title: string;
   description?: string;
   button?: string;
+  onClick?: () => void;
   duration?: number;
   redirect?: string;
 }

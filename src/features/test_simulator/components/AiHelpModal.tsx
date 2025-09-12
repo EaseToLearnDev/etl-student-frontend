@@ -29,6 +29,7 @@ const Main = () => {
   const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
   const loading = useLoadingStore((s) => s.loading);
   const currentQuestion = useTestStore((s) => s.getCurrentQuestion());
+  const incrementHelpCount = useTestStore((s) => s.incrementHelpCount);
   const setSolution = useAiStore((s) => s.setSolution);
 
   return (
@@ -62,6 +63,7 @@ const Main = () => {
             (v) => {
               setSolution(v ? v : "");
               setCurrentModalView(AIModalView.AIContent);
+              incrementHelpCount();
             }
           )
         }

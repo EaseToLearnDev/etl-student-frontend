@@ -1,4 +1,5 @@
 // import { useGuestStore } from "../../../global/hooks/useGuestStore";
+import { type NavigateFunction } from "react-router";
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
@@ -6,7 +7,7 @@ import { ToastType, type Course } from "../../shared/types";
 import { addCourseToGuest } from "../api/addCourseToGuest.api";
 import useTestStore from "../store/useTestStore";
 
-export const handleAddCourseToGuest = async () => {
+export const handleAddCourseToGuest = async (navigate: NavigateFunction) => {
   const { studentData, setStudentData } = useStudentStore.getState();
   const { testData } = useTestStore.getState();
   // const { setOpenCourseCardsModal } = useGuestStore.getState();
@@ -31,9 +32,10 @@ export const handleAddCourseToGuest = async () => {
     const res = await addCourseToGuest({ data, loginId, token });
     if (res.responseTxt === "CourseAlreadyExists") {
       setToast({
-        title: "You have already attempted free trail test",
+        title: "You have already attempted free trial test",
         description: "You must Upgrade your account to give more tests",
         button: "Upgrade",
+        onClick: () => navigate(`/selectcourse?cid=${courseId}`),
         type: ToastType.PATCH,
         duration: 10000,
       });
@@ -41,7 +43,7 @@ export const handleAddCourseToGuest = async () => {
       return;
     }
     if (res.responseTxt === "success") {
-      const courses = res.obj.map((c: any) => {
+      const courses: Course[] = res.obj.map((c: any) => {
         const tabs: Record<string, boolean> = {
           dashboard: !!c.dashboard,
           report: !!c.report,
@@ -69,14 +71,23 @@ export const handleAddCourseToGuest = async () => {
         return course;
       });
 
+      let openedCourse = courses?.length - 1;
+      if (courseId) {
+        const foundCourse = courses?.find((c) => c.courseId === courseId);
+        openedCourse = foundCourse
+          ? courses.indexOf(foundCourse)
+          : courses?.length - 1;
+      }
+
       setStudentData({
         ...studentData,
         courses: courses,
+        openedCourse,
       });
       return res;
     }
   } catch (error) {
     console.log("Error Adding Courses: ");
-    return null
+    return null;
   }
 };

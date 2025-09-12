@@ -10,7 +10,13 @@ import type { NavigateFunction } from "react-router";
  * Handles the logic for continuing the test session later by saving the current test state.
  */
 export const handleContinueLater = async (navigate: NavigateFunction) => {
-  const { testData, questionResponseMap, testConfig } = useTestStore.getState();
+  const {
+    testData,
+    questionResponseMap,
+    testConfig,
+    questionTimeMap,
+    helpCount,
+  } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData) return;
@@ -57,7 +63,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             questionType: item.questionType,
             questionTypeLabel: item.questionTypeLabel,
             topicId: item.topicId,
-            timeSpent: item.timeSpent,
+            timeSpent: questionTimeMap[item.questionId] || 0,
+            studentResponse: questionResponseMap[item.questionId] || "",
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,
@@ -68,7 +75,6 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             })),
             backgroundImg: item.backgroundImg,
             cssName: item.cssName,
-            studentResponse: questionResponseMap[item.questionId] || "",
           };
 
           if (testData?.testType === 3) {
@@ -93,7 +99,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   data.append("testType", String(testData?.testType));
   data.append("testId", String(testData?.testId));
   data.append("testDetail", JSON.stringify(testDetail));
-  data.append("helpCounter", "0");
+  data.append("helpCounter", String(helpCount));
   data.append("testMode", testMode);
 
   const res = await testStop({ data, loginId, token });

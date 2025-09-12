@@ -77,6 +77,7 @@ const LoginPage = () => {
                 onCancel={() => setToken(null)}
                 onVerify={handleVerifyOtp}
                 error={errorMessage}
+                secondaryTitle="Change Number"
               />
             ) : (
               <>

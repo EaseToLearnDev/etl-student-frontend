@@ -45,6 +45,10 @@ export interface TestStore {
   sectionsUI: SectionUI[];
   setTestData: (data: TestData | null) => void;
 
+  helpCount: number;
+  setHelpCount: (n: number) => void;
+  incrementHelpCount: () => void;
+
   features: Features;
   setFeatures: (features: Features) => void;
 
@@ -123,6 +127,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionTimeMap: {},
   questionStatusMap: {},
   _questionTimerId: null,
+  helpCount: 0,
 
   features: {
     timerEnabled: false,
@@ -134,6 +139,12 @@ const useTestStore = create<TestStore>((set, get) => ({
     set({
       features: features,
     }),
+
+  setHelpCount: (n) => set({ helpCount: n }),
+  incrementHelpCount: () => {
+    const { helpCount } = get();
+    set({ helpCount: helpCount + 1 });
+  },
 
   // Initialize test data
   setTestData: (data) =>
@@ -568,6 +579,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         timerEnabled: false,
         fullScreenEnabled: false,
       },
+      helpCount: 0,
     });
   },
 }));

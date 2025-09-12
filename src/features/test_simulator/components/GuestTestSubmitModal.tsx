@@ -40,7 +40,7 @@ export const GuestTestSubmitModal = () => {
     const checkRes = await loadVerifyOtp({ courseUrl, utmSource, otp });
 
     if (checkRes) {
-      const res = await handleAddCourseToGuest();
+      const res = await handleAddCourseToGuest(navigate);
       if (res.responseTxt === "success") {
         handleTestSubmit(navigate);
       }

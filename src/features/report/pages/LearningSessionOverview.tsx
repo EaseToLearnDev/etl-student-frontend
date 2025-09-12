@@ -212,12 +212,12 @@ export const LearningSessionOverview = () => {
             <div
               className="h-6 rounded-full transition-all duration-500"
               style={{
-                width: `${data.progressBarObj.percentage}%`,
-                backgroundColor: data.progressBarObj.barColor,
+                width: `${data?.progressBarObj?.percentage ?? 0}%`,
+                backgroundColor: data?.progressBarObj?.barColor ?? "",
               }}
             />
             <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)]">
-              {data.progressBarObj.percentage}%
+              {data?.progressBarObj?.percentage ?? 0}%
             </span>
           </div>
 

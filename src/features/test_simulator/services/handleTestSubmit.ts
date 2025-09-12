@@ -13,7 +13,7 @@ import { ToastType } from "../../shared/types";
  * Handles the submission of a test by collecting relevant test, student, and course data,
  */
 export const handleTestSubmit = async (navigate: NavigateFunction) => {
-  const { testData, testConfig, questionResponseMap } = useTestStore.getState();
+  const { testData, testConfig, questionResponseMap, questionTimeMap, helpCount } = useTestStore.getState();
   const { setToast } = useToastStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
 
@@ -53,12 +53,13 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
         const baseObj: any = {
           questionId: item.questionId,
           topicId: item.topicId,
-          timeSpent: item.timeSpent,
+          timeSpent: questionTimeMap[item.questionId] || 0,
           correctAnswerMarks: item.correctAnswerMarks,
           incorrectAnswerMarks: item.incorrectAnswerMarks,
           notAnswerMarks: item.notAnswerMarks,
-          bloomId: 0,
+          bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
+          studentResponse: questionResponseMap[item.questionId] || ""
         };
 
         if (testData?.testType === 3) {
@@ -66,10 +67,9 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           baseObj.sectionName = item.sectionName;
         }
 
-        baseObj.studentResponse = questionResponseMap[item.questionId] || "";
         return baseObj;
       }) ?? [],
-    helpCounter: 0,
+    helpCounter: helpCount,
   };
   const { schools } = studentData;
   if (schools && schools.length > 0) {

@@ -16,6 +16,7 @@ interface ToastProps {
   description?: string;
   button?: string;
   duration?: number;
+  onClick?: () => void;
   onExpire?: () => void;
   className?: string;
 }
@@ -58,6 +59,7 @@ export const Toast: React.FC<ToastProps> = ({
   button,
   duration = 3000,
   onExpire,
+  onClick,
   className,
 }) => {
   const [visible, setVisible] = useState(true);
@@ -99,6 +101,7 @@ export const Toast: React.FC<ToastProps> = ({
               <Button
                 style="secondary"
                 className={`hover:bg-opacity-80 w-fit mt-2 px-3 py-1 rounded ${colorMap[type]}`}
+                onClick={onClick}
               >
                 <p className="font-medium">{button}</p>
               </Button>

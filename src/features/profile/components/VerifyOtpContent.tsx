@@ -6,12 +6,14 @@ interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
   onCancel?: () => void;
   error?: string | null;
+  secondaryTitle?: string;
 }
 
 const VerifyOtpContent = ({
   onVerify,
   onCancel,
   error,
+  secondaryTitle = "Cancel",
 }: VerifyOtpContentProps) => {
   const [otp, setOtp] = useState("");
 
@@ -38,7 +40,7 @@ const VerifyOtpContent = ({
             Verify
           </Button>
           <Button style="secondary" onClick={onCancel}>
-            Cancel
+            {secondaryTitle}
           </Button>
         </div>
       </div>
