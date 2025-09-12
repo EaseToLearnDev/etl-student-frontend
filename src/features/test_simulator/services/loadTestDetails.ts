@@ -34,7 +34,8 @@ export const loadTestDetails = async ({
         const guestData = await guestTestDetails({
           ...testConfig,
         });
-        return guestData ?? null;
+        //  this is an object {courseId, list: []}
+        return {...guestData?.list?.[0], courseId: guestData?.courseId };
       case "registered":
         if (!studentData || !activeCourse || !testConfig) return null;
         const packTypeTitle = activeCourse?.packTypeTitle as PackTypeTitle;

@@ -45,7 +45,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testMode: testMode,
     totalTime: testData?.totalTime,
     remainingTime: testData?.remainingTime,
-    totalQuestion: testConfig?.totalQuestion ?? 0,
+    totalQuestion: testData?.questionSet?.length ?? 0,
     testTitle: testData?.testName,
     bloom: testData?.bloom,
     questionSet:
@@ -58,19 +58,17 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           incorrectAnswerMarks: item.incorrectAnswerMarks,
           notAnswerMarks: item.notAnswerMarks,
           bloomId: 0,
-          noQuestionAttempt: testData?.noQuestionAttempt ?? 0,
+          noQuestionAttempt: item.noQuestionAttempt ?? 0,
         };
 
         if (testData?.testType === 3) {
           baseObj.sectionId = item.sectionId;
           baseObj.sectionName = item.sectionName;
-        } else {
-          baseObj.studentResponse = questionResponseMap[item.questionId] || "";
         }
 
+        baseObj.studentResponse = questionResponseMap[item.questionId] || "";
         return baseObj;
       }) ?? [],
-    noQuestionAttempt: testData?.noQuestionAttempt ?? 0,
     helpCounter: 0,
   };
   const { schools } = studentData;
@@ -112,7 +110,6 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   })) as TestSubmitResponse;
 
   if (!resData || resData?.responseTxt !== "success") {
-    console.log("Failed to submit test");
     setToast({
       title: "Something Went Wrong!",
       description: "Failed to submit test.",

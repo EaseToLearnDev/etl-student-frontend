@@ -5,10 +5,11 @@ import cn from "../../../utils/classNames";
 import { useEffect, useState } from "react";
 import { webTopicCourses } from "../api/webTopicCourses.api";
 import EmptyState from "../../../components/EmptyState";
+import useTestStore from "../store/useTestStore";
 
-interface TopicData{
-    courseId: number;
-    courseTitle: string;
+interface TopicData {
+  courseId: number;
+  courseTitle: string;
 }
 
 export function GuestCourseCardsModal() {
@@ -17,11 +18,14 @@ export function GuestCourseCardsModal() {
   const setOpenCourseCardsModal = useGuestStore(
     (s) => s.setOpenCourseCardsModal
   );
+  const testData = useTestStore((s) => s.testData);
 
   useEffect(() => {
     const fetchData = async () => {
-      //   const { topicId } = testConfig;
-      const topicId = 3428;
+      const topicId = testData?.questionSet[0].topicId;
+      if (!topicId) {
+        return null;
+      }
       try {
         const data: TopicData[] = await webTopicCourses(topicId);
         setTopic(data);
@@ -49,10 +53,10 @@ export function GuestCourseCardsModal() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {!topic ? (
-          <EmptyState title="No Courses Found" />
-        ) : (
-          topic.map((course, index) => (
+          {!topic ? (
+            <EmptyState title="No Courses Found" />
+          ) : (
+            topic.map((course, index) => (
               <div
                 key={index}
                 onClick={() => {}}
@@ -63,9 +67,9 @@ export function GuestCourseCardsModal() {
                 )}
               >
                 <h5>{course.courseTitle}</h5>
-            </div>
-          ))
-        )}
+              </div>
+            ))
+          )}
         </div>
         <div
           onClick={() => setOpenCourseCardsModal(false)}

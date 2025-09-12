@@ -5,13 +5,12 @@ import { handleVerifyOtpAccountDeleteRequest } from "../services/handleVerifyOtp
 import VerifyOtpContent from "./VerifyOtpContent";
 
 const DeleteAccountOtpVerifyModal = () => {
-  const { studentData, setStudentData } = useStudentStore.getState();
-  const {
-    deleteAccountToken,
-    setDeleteAccountToken,
-    deleteError,
-    setDeleteError,
-  } = useProfileStore.getState();
+  const studentData = useStudentStore((s) => s.studentData);
+  const setStudentData = useStudentStore((s) => s.setStudentData);
+  const deleteAccountToken = useProfileStore((s) => s.deleteAccountToken);
+  const setDeleteAccountToken = useProfileStore((s) => s.setDeleteAccountToken);
+  const deleteError = useProfileStore((s) => s.deleteError);
+  const setDeleteError = useProfileStore((s) => s.setDeleteError);
 
   if (!studentData) return null;
 

@@ -13,6 +13,7 @@ export const addCourseToGuest = async ({
 }: AddCourseToGuestRequest) => {
   const res = await makeRequest("post", "/add-course-toguest", data, {
     headers: {
+      'Content-Type': 'multipart/mixed',
       loginId: loginId,
       token: token,
       device: "web",

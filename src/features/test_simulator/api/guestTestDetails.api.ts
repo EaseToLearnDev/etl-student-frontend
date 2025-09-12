@@ -27,7 +27,7 @@ export const guestTestDetails = async ({
         "Content-Type": "multipart/mixed",
       },
     });
-    return res?.data?.obj?.list?.[0] ?? null;
+    return res?.data?.obj ?? null;
   } catch (error) {
     console.log("Failed to call guest test api: ", error);
     return null;

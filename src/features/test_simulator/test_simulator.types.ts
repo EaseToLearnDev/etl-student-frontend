@@ -46,6 +46,7 @@ export interface SectionUI {
 }
 
 export interface TestData {
+  courseId: number;
   testId: string;
   testName: string;
   testType: number;

@@ -16,7 +16,6 @@ export const handleSendOtp = async () => {
       const data = new FormData();
       data.append("mobile", String(mobile));
       const res = await sendOtp(data);
-      console.log(res);
       if (res.responseTxt === "sent_otp") {
         setToken(res?.obj.token);
         setOpenVerifyOtp(true);

@@ -27,6 +27,7 @@ import SwitchSectionModal from "../components/SwitchSectionModal";
 import { ToastType } from "../../shared/types";
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -76,6 +77,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const testMode = useTestStore((s) => s.testMode);
   const setMode = useTestStore((s) => s.setMode);
+
+  const showToast = useToastStore((s) => s.showToast);
+  const toastData = useToastStore((s) => s.toastData);
 
   const { hasExited, reEnter } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
@@ -198,6 +202,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           onExpire={() => setTestError(null)}
         />
       )}
+
+      {showToast && toastData && <Toast {...toastData} key={toastData.title} />}
     </>
   );
 };

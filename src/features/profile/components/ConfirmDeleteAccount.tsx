@@ -4,13 +4,11 @@ import { useProfileStore } from "../hooks/useProfileStore";
 import { handleDeleteStudentAccount } from "../services/handleDeleteStudentAccount";
 
 const ConfirmDeleteAccount = () => {
-  const {
-    confirmDeleteOpen,
-    deleteAccountProgress,
-    setConfirmDeleteOpen,
-    setDeleteAccountProgress,
-    setDeleteAccountToken,
-  } = useProfileStore.getState();
+  const confirmDeleteOpen = useProfileStore(s => s.confirmDeleteOpen);
+  const deleteAccountProgress = useProfileStore(s => s.deleteAccountProgress);
+  const setConfirmDeleteOpen = useProfileStore(s => s.setConfirmDeleteOpen);
+  const setDeleteAccountProgress = useProfileStore(s => s.setDeleteAccountProgress);
+  const setDeleteAccountToken = useProfileStore(s => s.setDeleteAccountToken);
 
   const handleDeleteRequest = async () => {
     try {

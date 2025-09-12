@@ -1,11 +1,13 @@
 import Button from "../../../components/Button";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
+import ConfirmDeleteAccount from "./ConfirmDeleteAccount";
+import DeleteAccountOtpVerifyModal from "./DeleteAccountOtpVerifyModal";
 
 const AccountRemovalSection = () => {
-  const { studentData } = useStudentStore.getState();
-  const { setConfirmDeleteOpen } = useProfileStore.getState();
-  
+  const studentData = useStudentStore((s) => s.studentData);
+  const setConfirmDeleteOpen = useProfileStore((s) => s.setConfirmDeleteOpen);
+
   return (
     <div className="mt-10 pt-5 border-t border-[var(--border-primary)]">
       <h3 className="text-[var(--sb-valencia-bg-active)]">Account Removal</h3>
@@ -29,6 +31,12 @@ const AccountRemovalSection = () => {
           Delete Account
         </Button>
       )}
+
+      {/* Confirm Delete Modal */}
+      <ConfirmDeleteAccount />
+
+      {/* OTP Verify Modal for Account Deletion */}
+      <DeleteAccountOtpVerifyModal />
     </div>
   );
 };

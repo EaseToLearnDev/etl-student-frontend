@@ -51,10 +51,10 @@ export const TestAnalyticsSkeleton = () => {
         <Widget className="h-[480px]">
           <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
             <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
-            Section Performance Analysis
+            Result
           </h5>
           <div className="space-y-4">
-            <Skeleton variant="rectangular" height={200} width="100%" />
+            <Skeleton variant="rectangular" height={380} width="100%" />
           </div>
         </Widget>
       </div>

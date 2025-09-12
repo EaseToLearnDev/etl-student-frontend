@@ -40,8 +40,10 @@ export const GuestTestSubmitModal = () => {
     const checkRes = await loadVerifyOtp({ courseUrl, utmSource, otp });
 
     if (checkRes) {
-      await handleAddCourseToGuest();
-      handleTestSubmit(navigate);
+      const res = await handleAddCourseToGuest();
+      if (res.responseTxt === "success") {
+        handleTestSubmit(navigate);
+      }
     } else {
       setError("Error Submitting the Test");
     }
@@ -84,12 +86,20 @@ export const GuestTestSubmitModal = () => {
               </label>
               <input
                 name="mobile"
+                maxLength={10}
                 className={cn(
                   "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                   "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
                 )}
                 value={mobile === 0 ? "" : mobile}
-                onChange={(e) => setMobile(Number(e.target.value))}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === "") {
+                    setMobile(0);
+                  } else if (!isNaN(Number(val))) {
+                    setMobile(Number(val));
+                  }
+                }}
               />
             </div>
 

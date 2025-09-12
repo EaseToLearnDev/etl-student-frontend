@@ -14,8 +14,6 @@ import Button from "../../../components/Button";
 import InputField from "../../../components/InputField";
 import { Modal } from "../../../components/Modal";
 import AccountRemovalSection from "./AccountRemovalSection";
-import ConfirmDeleteAccount from "./ConfirmDeleteAccount";
-import DeleteAccountOtpVerifyModal from "./DeleteAccountOtpVerifyModal";
 import ProfileHeader from "./ProfileHeader";
 import VerifyOtpContent from "./VerifyOtpContent";
 
@@ -201,12 +199,6 @@ const ProfileContent = () => {
 
       {/* Account Removal Section */}
       <AccountRemovalSection />
-
-      {/* Confirm Delete Modal */}
-      <ConfirmDeleteAccount />
-
-      {/* OTP Verify Modal for Account Deletion */}
-      <DeleteAccountOtpVerifyModal />
     </div>
   );
 };

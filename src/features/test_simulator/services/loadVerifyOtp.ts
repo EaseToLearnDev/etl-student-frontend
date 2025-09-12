@@ -32,10 +32,10 @@ export const loadVerifyOtp = async ({
     data.append("device", "web");
 
     const res = await guestVerifyOtpSignup(data);
-    console.log(res);
+    
     if (res.responseTxt === "invalid_otp") {
       setError("Invalid Otp");
-      return false;
+      return null;
     }
 
     const responseData: StudentDataResponse = res.obj;
@@ -79,14 +79,20 @@ export const loadVerifyOtp = async ({
       status: responseData.status,
       loginId: responseData.loginId,
       schools: responseData.schools,
-      courses: courses,
+      courses: courses ?? [],
       profilePic: responseData.profilePic,
       deleteFlag: responseData.deleteFlag,
     };
 
     setStudentData(studentData);
+    //  if(courses.length === 0) {
+    //   setOpenCourseCardsModal(true);
+    //   return null;
+    //  }
+
     return res;
   } catch (error) {
     console.log("Error Submitting Test: ", error);
+    return null;
   }
 };

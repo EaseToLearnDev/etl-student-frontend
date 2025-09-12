@@ -20,6 +20,7 @@ import {
   ChartPieIcon,
   CheckCircleIcon,
   ClockIcon,
+  NoSymbolIcon,
   PresentationChartLineIcon,
   StarIcon,
   TrophyIcon,
@@ -65,6 +66,8 @@ export const TestAnalyticsOverview = () => {
       <EmptyState
         title="No Test Selected"
         description="Please go back and choose a test session."
+        buttonText="Go Back!"
+        onClick={() => navigate("/report")}
       />
     );
   }
@@ -161,24 +164,32 @@ export const TestAnalyticsOverview = () => {
     <>
       <div className="mb-3">
         <Widget title="Progress" className="w-full">
-          <div className="flex flex-col gap-4 px-6 py-4">
-            <div className="w-full bg-[var(--surface-bg-tertiary)] rounded-full h-6 overflow-hidden relative">
-              <div
-                className="h-6 rounded-full transition-all duration-500"
-                style={{
-                  width: `${data.progressBarObj.percentage}%`,
-                  backgroundColor: data.progressBarObj.barColor,
-                }}
-              />
-              <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)]">
-                {data.progressBarObj.percentage}%
-              </span>
-            </div>
+          {data?.progressBarObj ? (
+            <div className="flex flex-col gap-4 px-6 py-4">
+              <div className="w-full bg-[var(--surface-bg-tertiary)] rounded-full h-6 overflow-hidden relative">
+                <div
+                  className="h-6 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${data.progressBarObj.percentage}%`,
+                    backgroundColor: data.progressBarObj.barColor,
+                  }}
+                />
+                <span className="absolute inset-0 flex items-center justify-center text-[var(--text-primary)]">
+                  {data.progressBarObj.percentage}%
+                </span>
+              </div>
 
-            <p className="text-[var(--text-secondary)] text-center">
-              not upto mark. Continue Learning
-            </p>
-          </div>
+              <p className="text-[var(--text-secondary)] text-center">
+                not upto mark. Continue Learning
+              </p>
+            </div>
+          ) : (
+            <EmptyState
+              icon={<NoSymbolIcon width={80} height={80} />}
+              title="Progress Not Available"
+              className="mb-2"
+            />
+          )}
         </Widget>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -252,13 +263,12 @@ export const TestAnalyticsOverview = () => {
         </Widget>
 
         {/* Section Performance Bar Chart */}
-        {sectionPerformanceData.length > 0 && (
-          <Widget className="p-5">
-            <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
-              <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
-              Result
-            </h5>
-
+        <Widget className="p-5">
+          <h5 className="text-[var(--text-primary)] mb-4 flex items-center gap-2">
+            <ChartBarIcon className="w-5 h-5 text-[#5a5fd7]" />
+            Result
+          </h5>
+          {sectionPerformanceData.length > 0 && (
             <div className="mt-5 aspect-[1060/1000] h-full w-full lg:mt-7">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -303,8 +313,8 @@ export const TestAnalyticsOverview = () => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          </Widget>
-        )}
+          )}
+        </Widget>
       </div>
     </>
   );
@@ -479,7 +489,9 @@ export const TestAnalyticsOverview = () => {
               </div>
             </div>
             <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">
-              {formatMinutesToHHMMSS(parseTimeString(data.timeSpentMinutes))}
+              {data.timeSpentMinutes
+                ? formatMinutesToHHMMSS(parseTimeString(data.timeSpentMinutes))
+                : "00:00:00"}
             </h4>
             <p className="text-[var(--text-tertiary)]">Elapsed time</p>
 
@@ -488,11 +500,11 @@ export const TestAnalyticsOverview = () => {
               <div className="w-full rounded-full h-2 bg-[var(--border-tertiary)]">
                 <div
                   className="h-2 rounded-full transition-all duration-500 bg-[var(--sb-ocean-bg-active)]"
-                  style={{ width: `${data.timeTakenPercent}%` }}
+                  style={{ width: `${data.timeTakenPercent ?? 0}%` }}
                 ></div>
               </div>
               <p className="text-xs mt-1 text-[var(--text-tertiary)]">
-                {data.timeTakenPercent}% Complete
+                {data.timeTakenPercent ?? 0}% Complete
               </p>
             </div>
           </div>
@@ -508,7 +520,9 @@ export const TestAnalyticsOverview = () => {
               </div>
             </div>
             <h4 className="mb-2 text-[var(--sb-green-haze-bg-active)]">
-              {formatMinutesToHHMMSS(data.timeRemaining)}
+              {data.timeRemaining
+                ? formatMinutesToHHMMSS(data.timeRemaining)
+                : "00:00:00"}
             </h4>
             <p className="text-[var(--text-tertiary)]">Time left</p>
 
@@ -517,11 +531,11 @@ export const TestAnalyticsOverview = () => {
               <div className="w-full rounded-full h-2 bg-[var(--border-tertiary)]">
                 <div
                   className="h-2 rounded-full transition-all duration-500 bg-[var(--sb-green-haze-bg-active)]"
-                  style={{ width: `${data.timeRemainingPercent}%` }}
+                  style={{ width: `${data.timeRemainingPercent ?? 0}%` }}
                 ></div>
               </div>
               <p className="mt-1 text-[var(--text-tertiary)]">
-                {data.timeRemainingPercent}% Remaining
+                {data.timeRemainingPercent ?? 0}% Remaining
               </p>
             </div>
           </div>
@@ -780,7 +794,7 @@ export const TestAnalyticsOverview = () => {
               </h4>
               <p className="text-[var(--text-tertiary)] flex items-center gap-1">
                 <PresentationChartLineIcon className="w-4 h-4" />
-                {data.percentageMarks}%
+                {data.percentageMarks ?? 0}%
               </p>
             </div>
             <div className="relative">
@@ -840,7 +854,7 @@ export const TestAnalyticsOverview = () => {
                 <p className="text-[var(--text-tertiary)]">Incorrect Answers</p>
               </div>
               <h3 className="text-[var(--text-primary)] mt-4 mb-6">
-                {data.incorrectAnswers}
+                {data.incorrectAnswers ?? "N/A"}
               </h3>
               <p className="text-[var(--text-tertiary)] flex items-center gap-1">
                 <StarIcon className="w-4 h-4" />
@@ -874,7 +888,7 @@ export const TestAnalyticsOverview = () => {
                 <p className="text-[var(--text-tertiary)]">Time Spent</p>
               </div>
               <h3 className="text-[var(--text-primary)] mt-4 mb-6">
-                {data.spentTimeLabel}
+                {data.spentTimeLabel ?? "N/A"}
               </h3>
               <p className="text-[var(--text-tertiary)] flex items-center gap-1">
                 <ClockIcon className="w-4 h-4" />
