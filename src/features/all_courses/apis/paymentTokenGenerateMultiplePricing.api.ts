@@ -5,7 +5,7 @@ interface PaymentTokenGenerateRequest {
   courseId: number;
   courseTitle: string;
   packId: number;
-  apiQuery: string;
+  promoCode?: string;
   loginId: string;
   token: string;
 }
@@ -15,28 +15,31 @@ export const paymentTokenGenerateMultiplePricing = async ({
   courseId,
   courseTitle,
   packId,
-  apiQuery,
+  promoCode,
   loginId,
   token,
 }: PaymentTokenGenerateRequest) => {
+  const options: Record<string, Record<string, any>> = {
+    headers: {
+      loginId: loginId,
+      token: token,
+      device: "web",
+    },
+    params: {
+      opt: option,
+      courseId: courseId,
+      courseTitle: courseTitle,
+      packId: packId,
+    },
+  };
+  if (promoCode && promoCode.length > 0) {
+    options.params.promoCode = promoCode;
+  }
   const res = await makeRequest(
     "get",
     "/paymenttokengenerate-multiple-pricing",
     null,
-    {
-      params: {
-        opt: option,
-        courseId: courseId,
-        courseTitle: courseTitle,
-        packId: packId,
-        apiQuery
-      },
-      headers: {
-        loginId: loginId,
-        token: token,
-        device: "web",
-      },
-    }
+    options
   );
 
   return res?.data ?? null;

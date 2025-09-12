@@ -16,6 +16,7 @@ import { FilterCourses } from "../components/FilterCourses";
 import { Modal } from "../../../components/Modal";
 import { PlanDetails } from "../components/PlanDetails";
 import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
+import { resetPromocode } from "../services/resetPromocode";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
@@ -42,6 +43,8 @@ const AllCoursesPage = () => {
     isMobile ? true : false
   );
 
+  const courseId = new URLSearchParams(location.search).get("cid");
+
   useEffect(() => {
     setLoading(true);
     const fetchCourses = async () => {
@@ -51,6 +54,17 @@ const AllCoursesPage = () => {
         const courses = extractCourses(data);
         if (courses && courses.length > 0) {
           setCourseList(courses);
+          const numCourseId = Number(courseId);
+          if (!isNaN(numCourseId)) {
+            const preSelectedCourse = courses?.find(
+              (c) => c.courseId === numCourseId
+            );
+            if (preSelectedCourse) {
+              setSelectedCourse(preSelectedCourse);
+              setIsPlanModalOpen(true);
+              resetPromocode();
+            }
+          }
         }
         if (data) {
           setCategoryList(data);
@@ -93,6 +107,7 @@ const AllCoursesPage = () => {
               onCourseClick={(course) => {
                 setSelectedCourse(course);
                 setIsPlanModalOpen(true);
+                resetPromocode();
               }}
             />
           )

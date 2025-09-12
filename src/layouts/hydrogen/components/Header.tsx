@@ -1,9 +1,6 @@
 // React
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-
-// Store
-import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
+import { useLocation } from "react-router";
 
 // Utils
 import cn from "../../../utils/classNames";

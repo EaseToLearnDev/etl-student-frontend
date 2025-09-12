@@ -7,19 +7,18 @@ interface PlanDetailsProps {
   course: CourseType;
   onClose: () => void;
 }
-
 export const PlanDetails = ({ course, onClose }: PlanDetailsProps) => {
-  const features = course.featuresList;
+  const features = course?.featuresList;
   return (
     <div className="relative">
       <PlanBody
         features={features}
-        coursePlan={course.twoPriceList}
-        courseTitle={course.courseTitle}
-        courseId={course.courseId}
+        coursePlan={course?.twoPriceList}
+        courseTitle={course?.courseTitle}
+        courseId={course?.courseId}
       />
       <div
-        onClick={onClose}
+        onClick={() => onClose()}
         className={cn(
           "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
           " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"

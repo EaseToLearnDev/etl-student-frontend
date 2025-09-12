@@ -21,7 +21,7 @@ export const useStudentStore = create<StudentStore>()(
       activeCourse: null,
 
       setStudentData: (data) => {
-        const activeCourse = data?.courses[data?.openedCourse];
+        const activeCourse = data?.courses ? data?.courses[data?.openedCourse] : null;
         set({ studentData: data, activeCourse });
       },
 

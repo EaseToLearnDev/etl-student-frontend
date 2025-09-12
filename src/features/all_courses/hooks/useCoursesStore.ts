@@ -25,6 +25,9 @@ interface CoursesState {
   selectedCourse: CourseType | null;
   setSelectedCourse: (course: CourseType | null) => void;
 
+  payableAmount: number | null;
+  setPayableAmount: (i: number | null) => void;
+
   // PlanBody states
   selectedTabIndex: number;
   setSelectedTabIndex: (i: number) => void;
@@ -73,6 +76,9 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   selectedTabIndex: 1,
   setSelectedTabIndex: (i) => set({ selectedTabIndex: i }),
 
+  payableAmount: null,
+  setPayableAmount: (i) => set({payableAmount: i}),
+
   code: "",
   setCode: (c) => set({ code: c }),
 
@@ -97,5 +103,6 @@ export const useCoursesStore = create<CoursesState>((set) => ({
       loading: false,
       selectedCourse: null,
       isPlanModalOpen: false,
+      payableAmount: null,
     }),
 }));

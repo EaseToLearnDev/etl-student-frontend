@@ -173,21 +173,22 @@ export interface CategoryType {
 }
 
 export interface CourseType {
-  courseId: number;
-  courseTitle: string;
-  courseSubTitle: string;
-  courseImageUrl: string;
-  categoryName: string;
-  image: string;
-  promoList: any[];
+  courseId?: number;
+  courseTitle?: string;
+  courseSubTitle?: string;
+  courseImageUrl?: string;
+  categoryName?: string;
+  image?: string;
+  promoList?: any[];
   featuresList?: FeaturesList[];
-  twoPriceList: PriceList[];
+  twoPriceList?: PriceList[];
+  priceList?: PriceDetailsList[];
 }
 
 export interface PriceList {
   packType: string;
   list: PriceDetailsList[];
-  index: number;
+  index?: number;
 }
 
 export interface PriceDetailsList {
@@ -195,8 +196,14 @@ export interface PriceDetailsList {
   description: string;
   discount: number;
   packId: number;
-  retailPrice: number;
-  salePrice: number;
+  retailPrice: number | {
+    source: string;
+    parsedValue: number;
+  };
+  salePrice: number | {
+    source: string;
+    parsedValue: number;
+  };
   title: string;
   validityDate: string;
   validityDuration: number;

@@ -10,7 +10,7 @@ import { handleSwitchCourse } from "../../../global/services/handleSwitchCourse"
 import Select from "../../../components/Select";
 import { MdCheck } from "react-icons/md";
 import getValidityFormatted from "../../../global/services/getValidityFormatted";
-import Button from "../../../components/Button";
+import { getCourseAccessStatus } from "../../../global/services/upgrade";
 
 interface CourseMenuProps {
   isOpen: boolean;
@@ -24,7 +24,17 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
   const navigate = useNavigate();
 
   const courses = useStudentStore((s) => s.studentData?.courses);
+  const deviceType = useStudentStore((s) => s.studentData?.deviceType);
   const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
+
+  const course = courses?.[openedCourse ?? 0];
+  const status = course
+    ? getCourseAccessStatus(
+        course.validTillDate,
+        course.packTypeTitle,
+        course.organisationName
+      )
+    : "accessible";
 
   return (
     <div className="flex items-center gap-2">
@@ -35,8 +45,8 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
         onToggle={onToggle}
         selectedIndex={openedCourse ?? 0}
         type="Course"
-        className="w-[200px]"
-        dropdownClassName="w-[200px]"
+        className="w-[120px] sm:w-[200px]"
+        dropdownClassName="w-[120px] sm:w-[200px]"
         getItemLabel={(item) => item.organisationName}
         renderItem={(item, _, isSelected) => (
           <div className="w-full flex items-center gap-2 justify-between">
@@ -60,14 +70,16 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
           </div>
         )}
       />
-      {courses && (
+      {deviceType !== "ios" && course && status !== "accessible" && (
         <Link
-          to={`/selectcourse?cid=${courses[openedCourse ?? 0]?.courseId}`}
+          to={`/selectcourse?cid=${course?.courseId}`}
           className="relative group cursor-pointer"
         >
-          <div className="absolute -inset-1 bg-[var(--sb-ocean-bg-active)]/80 rounded-lg blur-md opacity-80 transition duration-200 group-hover:opacity-100"></div>
-          <div className="relative px-4 py-2 bg-[var(--sb-ocean-bg-active)] ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
-            <p className="text-[var(--text-primary)]">Upgrade</p>
+          <div className="absolute -inset-0.5 bg-gradient-to-tr from-[var(--sb-pumpkin-bg-active)] to-[var(--sb-ocean-bg-active)] rounded-lg blur-sm opacity-80 transition duration-200 group-hover:opacity-100"></div>
+          <div className="relative px-4 py-2 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
+            <p className="text-black">
+              {status === "renew" ? "Renew" : "Upgrade"}
+            </p>
           </div>
         </Link>
       )}

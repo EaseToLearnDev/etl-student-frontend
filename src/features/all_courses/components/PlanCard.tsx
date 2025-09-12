@@ -1,5 +1,9 @@
-import cn from "../../../utils/classNames";
+// Types
 import type { PriceDetailsList } from "../../shared/types";
+
+// Utils
+import cn from "../../../utils/classNames";
+import { getPriceValue } from "../utils/getPrice";
 
 interface PlanCardProps {
   plan: PriceDetailsList;
@@ -8,10 +12,13 @@ interface PlanCardProps {
 }
 
 export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
+  const salePrice = getPriceValue(plan.salePrice);
+  const retailPrice = getPriceValue(plan.retailPrice);
+
   return (
     <div
       onClick={onSelect}
-      className={`w-full rounded-2xl cursor-pointer overflow-hidden min-h-[120px] flex flex-col items-start justify-start border-1 transition
+      className={`w-full rounded-2xl cursor-pointer overflow-hidden min-h-[100px] flex flex-col items-start justify-start border-1 transition
         ${
           selected
             ? "border-[var(--sb-ocean-bg-active)]/70"
@@ -38,7 +45,7 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
             <h5 className="text-[var(--text-primary)] m-0">{plan?.title}</h5>
           </div>
           <h6 className="text-[var(--text-primary)]">
-            Total: ₹ {plan?.salePrice}
+            Total: ₹ {salePrice}
           </h6>
         </div>
 
@@ -51,19 +58,19 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
               plan?.discount ? "line-through" : "no-underline"
             }`}
           >
-            ₹ {plan?.retailPrice}
+            ₹ {retailPrice}
           </span>
         </div>
       </div>
 
       {/* Bottom Section */}
-      <div className="flex-[0.4] w-full h-full p-5 bg-[var(--sb-ocean-bg-disabled)]">
+      <div className="flex-[0.4] w-full h-full px-4 py-2 bg-[var(--sb-ocean-bg-disabled)]">
         <div className="w-full flex gap-4 items-center justify-between">
           <p className="text-[var(--sb-ocean-bg-active)] max-w-[28ch]">
             {plan?.description || ""}
           </p>
           <p className="text-[var(--text-secondary)]">
-            {`₹${Math.floor(plan?.salePrice / plan?.validityDuration)}/day`}
+            {`₹${Math.floor(salePrice / plan?.validityDuration)}/day`}
           </p>
         </div>
       </div>
