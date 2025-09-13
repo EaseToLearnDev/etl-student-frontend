@@ -11,7 +11,7 @@ const DesktopTestSimulator = () => {
   return (
     <div className="h-screen flex flex-col flex-grow gap-5 p-8">
       <TestHeader />
-      <div className="h-full overflow-y-auto">
+      <div className="h-full overflow-y-auto relative">
         <DesktopChildLayout
           primaryContent={<ActiveQuestionPanel />}
           secondaryContent={<TestSidePanel />}

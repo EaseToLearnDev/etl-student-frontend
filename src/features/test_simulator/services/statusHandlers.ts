@@ -11,12 +11,10 @@ export interface StatusHandlerResult {
 export const markForReviewHandler = ({
   testData,
   currentPointer,
-  questionResponseMap,
   questionStatusMap,
 }: {
   testData: TestData;
   currentPointer: Pointer;
-  questionResponseMap?: Record<number, string>;
   questionStatusMap: Record<number, QuestionStatus>;
 }): StatusHandlerResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
@@ -28,22 +26,22 @@ export const markForReviewHandler = ({
   );
   if (!currQId || !currentQuestion) return null;
 
-  // let newStatus: QuestionStatus;
-  // const response = questionResponseMap[qi];
-
-  //   const isMarkedForReview = questionStatusMap[currQId] === QuestionStatus.MARKED_FOR_REVIEW;
-  //   const isAnsweredAndReview = questionStatusMap[currQId] === QuestionStatus.ANSWERED_AND_REVIEW;
-
-  //   if(isMarkedForReview) {
-  //     newStatus = 
-  // } else {
-
-  // }
+  
+  const questionStatus = questionStatusMap[currQId];
+  console.log(questionStatus)
+  let newStatus = QuestionStatus.VISITED;
+  if(questionStatus === QuestionStatus.VISITED || questionStatus === QuestionStatus.NOT_ATTEMPTED) {
+    newStatus = QuestionStatus.MARKED_FOR_REVIEW
+  } else if (questionStatus === QuestionStatus.ATTEMPTED) {
+    newStatus = QuestionStatus.ANSWERED_AND_REVIEW
+  } else if (questionStatus === QuestionStatus.ANSWERED_AND_REVIEW) {
+    newStatus = QuestionStatus.ATTEMPTED
+  }
 
   return {
     newStatusMap: {
       ...questionStatusMap,
-      [currQId]: QuestionStatus.MARKED_FOR_REVIEW,
+      [currQId]: newStatus,
     },
   };
 };

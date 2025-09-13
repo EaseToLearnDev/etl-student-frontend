@@ -22,16 +22,11 @@ import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "../ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
-import AiIcon from "../../../../components/icons/ai-icon";
-import { useAiStore } from "../../store/useAiStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
  */
 const MobileTestSimulator = () => {
-  // States
-  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
-  const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
@@ -71,21 +66,6 @@ const MobileTestSimulator = () => {
         {/* Active Question Section */}
         <ActiveQuestionPanel />
       </div>
-
-      {/* Tony AI Floating Button */}
-      {isAiFeatureEnabled && (
-        <div
-          className="fixed bottom-[120px] right-[32px] flex flex-col items-center gap-1"
-          onClick={() => {
-            setIsHelpModalOpen(true);
-          }}
-        >
-          <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-secondary)] flex justify-center items-center">
-            <AiIcon width={28} height={28} />
-          </div>
-          <span className="font-semibold !text-xs">TONY AI</span>
-        </div>
-      )}
 
       {/* Bottom Navigation for tony AI Chat Window
       <BottomNavigationSheet

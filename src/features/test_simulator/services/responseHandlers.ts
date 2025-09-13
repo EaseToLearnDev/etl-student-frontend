@@ -1,7 +1,4 @@
-import {
-  QuestionStatus,
-  type Question,
-} from "../test_simulator.types";
+import { QuestionStatus, type Question } from "../test_simulator.types";
 
 // ------------------SET CURRENT RESPONSE------------------
 
@@ -28,11 +25,19 @@ export const setCurrentResponseHandler = ({
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
 
-  const isMarkedForReview = questionStatusMap[question?.questionId] === QuestionStatus.MARKED_FOR_REVIEW;
+  const isMarkedForReview =
+    questionStatusMap[question?.questionId] ===
+    QuestionStatus.MARKED_FOR_REVIEW;
+  const isAnsweredAndReview =
+    questionStatusMap[question?.questionId] ===
+    QuestionStatus.ANSWERED_AND_REVIEW;
 
   let newStatus: QuestionStatus;
   if (response) {
-    newStatus = isMarkedForReview ? QuestionStatus.ANSWERED_AND_REVIEW : QuestionStatus.ATTEMPTED;
+    newStatus =
+      isMarkedForReview || isAnsweredAndReview
+        ? QuestionStatus.ANSWERED_AND_REVIEW
+        : QuestionStatus.ATTEMPTED;
   } else {
     newStatus = QuestionStatus.NOT_ATTEMPTED;
   }
@@ -72,6 +77,12 @@ export const clearCurrentResponseHandler = ({
 }: ClearCurrentResponseParams): ClearCurrentResponseResult | null => {
   if (!question) return null;
 
+  let newStatus = QuestionStatus.NOT_ATTEMPTED;
+
+  if(questionStatusMap[question.questionId] === QuestionStatus.ANSWERED_AND_REVIEW) {
+    newStatus = QuestionStatus.MARKED_FOR_REVIEW;
+  }
+
   return {
     newResponseMap: {
       ...questionResponseMap,
@@ -79,7 +90,7 @@ export const clearCurrentResponseHandler = ({
     },
     newStatusMap: {
       ...questionStatusMap,
-      [question.questionId]: QuestionStatus.NOT_ATTEMPTED,
+      [question.questionId]: newStatus,
     },
   };
 };

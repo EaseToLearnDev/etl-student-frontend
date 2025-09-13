@@ -9,13 +9,13 @@ import cn from "../../../utils/classNames";
 import { colors, Theme } from "../../../utils/colors";
 
 /* ---------------------------- Theme Mappings ---------------------------- */
-const statusThemeMap: Record<QuestionStatus, Theme> = {
-  [QuestionStatus.NOT_VISITED]: Theme.Sakura,
-  [QuestionStatus.NOT_ATTEMPTED]: Theme.Pumpkin,
-  [QuestionStatus.ATTEMPTED]: Theme.Ocean,
-  [QuestionStatus.MARKED_FOR_REVIEW]: Theme.Sunglow,
-  [QuestionStatus.VISITED]: Theme.Neutral,
-  [QuestionStatus.HELP]: Theme.Valencia,
+const statusThemeMap: Record<string, Theme> = {
+  [QuestionStatus.NOT_VISITED]: Theme.Neutral,
+  [QuestionStatus.VISITED]: Theme.Ocean,
+  [QuestionStatus.NOT_ATTEMPTED]: Theme.Valencia,
+  [QuestionStatus.ATTEMPTED]: Theme.GreenHaze,
+  [QuestionStatus.MARKED_FOR_REVIEW]: Theme.Amethyst,
+  [QuestionStatus.ANSWERED_AND_REVIEW]: Theme.Amethyst,
 };
 
 const reviewThemeMap: Record<string, Theme> = {
@@ -46,7 +46,11 @@ interface QuestionProps {
  * Renders a button for a single question in the test simulator.
  * Handles setting the current question when clicked.
  */
-const QuestionCard = ({ question, questionNumber, className }: QuestionProps) => {
+const QuestionCard = ({
+  question,
+  questionNumber,
+  className,
+}: QuestionProps) => {
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   const jumpToQuestion = useTestStore((s) => s.jumpToQuestion);
   const activeQuestion = useTestStore((s) => s.getCurrentQuestion());
@@ -57,7 +61,9 @@ const QuestionCard = ({ question, questionNumber, className }: QuestionProps) =>
   // Determine theme
   const theme: Theme = correctResponseEnabled
     ? reviewThemeMap[question.answerStatus ?? "NotAnswer"]
-    : statusThemeMap[getStatusByQuestionId(question.questionId) ?? QuestionStatus.NOT_VISITED];
+    : statusThemeMap[
+        getStatusByQuestionId(question.questionId) ?? QuestionStatus.NOT_VISITED
+      ];
 
   const themeColors = colors[theme];
 
@@ -65,18 +71,23 @@ const QuestionCard = ({ question, questionNumber, className }: QuestionProps) =>
     <button
       onClick={() => jumpToQuestion(question)}
       className={cn(
-        "cursor-pointer min-w-[50px] min-h-[50px] max-w-[60px] max-h-[60px] rounded-[16px] flex justify-center items-center border",
-        isActive
-          ? "font-bold bg-[var(--surface-bg-secondary)]"
-          : "hover:bg-[var(--surface-bg-secondary)] focus:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)]",
+        "relative cursor-pointer min-w-[50px] min-h-[50px] max-w-[60px] max-h-[60px] rounded-[16px] flex justify-center items-center border",
+        "hover:bg-[var(--surface-bg-secondary)] focus:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)]",
         className
       )}
       style={{
         borderColor: themeColors.bg.active,
-        backgroundColor: isActive ? getActiveBg(themeColors.bg.active) : undefined,
+        backgroundColor: isActive
+          ? getActiveBg(themeColors.bg.active)
+          : undefined,
       }}
     >
       <span>Q{questionNumber}</span>
+      {!correctResponseEnabled &&
+        getStatusByQuestionId(question?.questionId) ===
+          QuestionStatus.ANSWERED_AND_REVIEW && (
+          <div className="absolute top-0 right-0 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
+        )}
     </button>
   );
 };
