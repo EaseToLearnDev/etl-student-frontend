@@ -75,7 +75,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
           to={`/selectcourse?cid=${course?.courseId}`}
           className="relative group cursor-pointer"
         >
-          <div className="absolute -inset-0.5 bg-gradient-to-tr from-[var(--sb-pumpkin-bg-active)] to-[var(--sb-ocean-bg-active)] rounded-lg blur-sm opacity-80 transition duration-200 group-hover:opacity-100"></div>
+          <div className="absolute -inset-0.5 gradient rounded-lg blur-sm opacity-80 transition duration-200 group-hover:opacity-100"></div>
           <div className="relative px-4 py-2 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
             <p className="text-black">
               {status === "renew" ? "Renew" : "Upgrade"}

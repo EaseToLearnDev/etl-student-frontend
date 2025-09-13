@@ -467,3 +467,23 @@ img {
   image-rendering: pixelated; /* To force pixelation if wanted */
   image-rendering: optimizeQuality; /* Deprecated but still in use in some contexts */
 }
+
+
+.gradient {
+  background-image: linear-gradient(
+    45deg,
+    hsl(23deg 87% 54%) 0%,
+    hsl(13deg 94% 60%) 18%,
+    hsl(3deg 99% 65%) 26%,
+    hsl(352deg 100% 64%) 33%,
+    hsl(343deg 98% 62%) 39%,
+    hsl(335deg 93% 60%) 44%,
+    hsl(327deg 83% 58%) 50%,
+    hsl(318deg 70% 56%) 56%,
+    hsl(304deg 54% 54%) 61%,
+    hsl(285deg 57% 57%) 67%,
+    hsl(264deg 65% 62%) 74%,
+    hsl(239deg 72% 65%) 82%,
+    hsl(214deg 90% 49%) 100%
+  );
+}

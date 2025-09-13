@@ -17,6 +17,7 @@ import { Modal } from "../../../components/Modal";
 import { PlanDetails } from "../components/PlanDetails";
 import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
 import { resetPromocode } from "../services/resetPromocode";
+import UpdateEmailModal from "../components/UpdateEmailModal";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
@@ -30,6 +31,12 @@ const AllCoursesPage = () => {
   const setLoading = useCoursesStore((s) => s.setLoading);
   const isPlanModalOpen = useCoursesStore((s) => s.isPlanModalOpen);
   const setIsPlanModalOpen = useCoursesStore((s) => s.setIsPlanModalOpen);
+  const isUpdateEmailModalOpen = useCoursesStore(
+    (s) => s.isUpdateEmailModalOpen
+  );
+  const setIsUpdateEmailModalOpen = useCoursesStore(
+    (s) => s.setIsUpdateEmailModalOpen
+  );
   const courseList = useCoursesStore((s) => s.courseList);
   const setCourseList = useCoursesStore((s) => s.setCourseList);
   const categoryList = useCoursesStore((s) => s.categoryList);
@@ -140,6 +147,11 @@ const AllCoursesPage = () => {
           onClose={() => setIsPlanModalOpen(false)}
         />
       </Modal>
+
+      <UpdateEmailModal
+        isOpen={isUpdateEmailModalOpen}
+        onClose={() => setIsUpdateEmailModalOpen(false)}
+      />
     </div>
   );
 };

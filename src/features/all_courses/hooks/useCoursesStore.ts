@@ -10,6 +10,9 @@ interface CoursesState {
   isPlanModalOpen: boolean;
   setIsPlanModalOpen: (v: boolean) => void;
 
+  isUpdateEmailModalOpen: boolean;
+  setIsUpdateEmailModalOpen: (v: boolean) => void;
+
   courseList: CourseType[] | null;
   setCourseList: (courses: CourseType[]) => void;
 
@@ -58,17 +61,19 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   loading: false,
   selectedCourse: null,
   isPlanModalOpen: false,
+  isUpdateEmailModalOpen: false,
 
   setSearch: (search) => set({ search }),
 
   setIsPlanModalOpen: (v) => set({ isPlanModalOpen: v }),
 
+  setIsUpdateEmailModalOpen: (v) => set({ isUpdateEmailModalOpen: v }),
+
   setCourseList: (courses) => set({ courseList: courses }),
 
   setCategoryList: (categories) => set({ categoryList: categories }),
 
-  setSelectedCategory: (category) =>
-    set({ selectedCategory: category }),
+  setSelectedCategory: (category) => set({ selectedCategory: category }),
 
   setLoading: (loading) => set({ loading }),
 
@@ -77,7 +82,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   setSelectedTabIndex: (i) => set({ selectedTabIndex: i }),
 
   payableAmount: null,
-  setPayableAmount: (i) => set({payableAmount: i}),
+  setPayableAmount: (i) => set({ payableAmount: i }),
 
   code: "",
   setCode: (c) => set({ code: c }),

@@ -43,10 +43,13 @@ const ProfileContent = () => {
 
   if (!studentData) return null;
 
-  const isPhoneChanged = phoneNo.data !== studentData.phoneNo;
-  const isEmailChanged = emailId.data !== studentData.emailId;
-  const isNameChanged = studentName.data !== studentData.studentName;
+  const isPhoneChanged = phoneNo?.data?.trim() !== studentData?.phoneNo?.trim();
+  const isEmailChanged = emailId?.data?.trim() !== studentData?.emailId?.trim();
+  const isNameChanged =
+    studentName?.data?.trim() !== studentData?.studentName?.trim();
   const hasChanges = isPhoneChanged || isEmailChanged || isNameChanged;
+  console.log("from local storage:", studentData?.emailId);
+  console.log("from profile page state:", emailId?.data);
 
   const openOtpModal = async (type: "mobile" | "email") => {
     try {

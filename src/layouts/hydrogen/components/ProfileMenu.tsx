@@ -1,5 +1,5 @@
 // React
-import { useState, type ReactElement, type RefObject } from "react";
+import { useEffect, useState, type ReactElement, type RefObject } from "react";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
@@ -33,6 +33,10 @@ export default function ProfileMenuDropDown({
 }) {
   const isMobile = useIsMobile();
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   return (
     <Popover
@@ -106,9 +110,7 @@ const DropdownMenu = () => {
           <h6 className="font-semibold --text-[var(--text-primary)]">
             {studentName}
           </h6>
-          <p
-            className="text-[var(--text-secondary)] w-50 overflow-hidden text-ellipsis whitespace-nowrap"
-          >
+          <p className="text-[var(--text-secondary)] w-50 overflow-hidden text-ellipsis whitespace-nowrap">
             {emailId}
           </p>
         </div>

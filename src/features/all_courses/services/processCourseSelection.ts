@@ -7,6 +7,7 @@ import {
   type CourseResponse,
 } from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { useCoursesStore } from "../hooks/useCoursesStore";
 
 export const processCourseSelection = async ({
   option,
@@ -24,6 +25,7 @@ export const processCourseSelection = async ({
   navigate: (path: string) => void;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
+  const {setIsUpdateEmailModalOpen} = useCoursesStore.getState();
   const { setToast } = useToastStore.getState();
 
   if (!courseId || !courseTitle || !option) return;
@@ -75,6 +77,13 @@ export const processCourseSelection = async ({
 
   // ---------------- Paid course flow ----------------
   if (!selectedPlanId) return console.warn("Please select a plan first");
+  
+  const {emailId} = studentData;
+
+  if(!emailId) {
+    setIsUpdateEmailModalOpen(true);
+    return;
+  }
 
   try {
     const data = await handlePaymentButton({
@@ -111,11 +120,6 @@ export const processCourseSelection = async ({
       form.productinfo.value = data.productinfo;
       form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
       form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
-      // setToast({
-      //     type: ToastType.DANGER,
-      //     title: "Payment Failed",
-      //     description: "Something went wrong with your payment. Please try again.",
-      //   });
       form.hash.value = data.hashCode;
 
       form.submit();

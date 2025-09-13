@@ -46,9 +46,9 @@ export const HandleLogin = async (
           studentId: data?.studentId,
           loginId: data?.loginId,
           token: data?.token,
-          studentName: data?.studentName,
-          mobile: data?.phoneNo,
-          email: data?.emailId,
+          studentName: data?.studentName ?? "",
+          mobile: data?.phoneNo ?? "",
+          email: data?.emailId ?? "",
         })
       );
       Cookies.set("token", `"${data?.token}"`);
@@ -90,15 +90,15 @@ export const HandleLogin = async (
         websiteId: data.websiteId,
         token: data.token,
         studentId: data.studentId,
-        studentName: data.studentName,
-        emailId: data.emailId,
-        phoneNo: data.phoneNo,
-        status: data.status,
-        loginId: data.loginId,
-        schools: data.schools,
+        studentName: data?.studentName ?? "",
+        emailId: data?.emailId ?? "",
+        phoneNo: data?.phoneNo ?? "",
+        status: data?.status,
+        loginId: data?.loginId,
+        schools: data?.schools,
         courses: courses,
-        profilePic: data.profilePic,
-        deleteFlag: data.deleteFlag,
+        profilePic: data?.profilePic ?? "",
+        deleteFlag: data?.deleteFlag
       };
 
       if (deviceType && deviceType.length > 0) {
@@ -157,6 +157,23 @@ export const handleVerifyOtp = async (otp: string) => {
   }
   try {
     const res: StudentDataResponse = await verifyOtpLogin(otp, token);
+
+        Cookies.set(
+        "accountDetails",
+        JSON.stringify({
+          sid: res?.studentId,
+          studentId: res?.studentId,
+          loginId: res?.loginId,
+          token: res?.token,
+          studentName: res?.studentName ?? "",
+          mobile: res?.phoneNo ?? "",
+          email: res?.emailId ?? "",
+        })
+      );
+      Cookies.set("token", `"${res?.token}"`);
+
+
+
     const courses = res.courses.map((c) => {
       const tabs: Record<string, boolean> = {
         dashboard: !!c.dashboard,
@@ -191,9 +208,9 @@ export const handleVerifyOtp = async (otp: string) => {
       websiteId: res.websiteId,
       token: res.token,
       studentId: res.studentId,
-      studentName: res.studentName,
-      emailId: res.emailId,
-      phoneNo: res.phoneNo,
+      studentName: res?.studentName ?? "",
+      emailId: res?.emailId ?? "",
+      phoneNo: res?.phoneNo ?? "",
       status: res.status,
       loginId: res.loginId,
       schools: res.schools,
@@ -210,20 +227,3 @@ export const handleVerifyOtp = async (otp: string) => {
     setStudentData(null);
   }
 };
-
-// const validateCredentials = (email: string, password: string) => {
-//   const cleanEmail = email.trim();
-//   const cleanPassword = password.trim();
-
-//   const emailMatch = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-//     cleanEmail
-//   );
-
-//   if (!emailMatch || !emailMatch) {
-//     throw new Error("invalid_email");
-//   }
-
-//   if (!cleanPassword) {
-//     throw new Error("invalid_password");
-//   }
-// };
