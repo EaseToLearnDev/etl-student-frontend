@@ -35,11 +35,14 @@ export const loadTestDetails = async ({
           ...testConfig,
         });
         //  this is an object {courseId, list: []}
-        return {...guestData?.list?.[0], courseId: guestData?.courseId };
+        if(guestData?.list?.[0]) {
+          return {data: {...guestData?.list?.[0], courseId: guestData?.courseId }, error: null}
+        }
+        return {data: null , error: {id: 'failed', message: 'Failed to load guest test'}};
       case "registered":
         if (!studentData || !activeCourse || !testConfig) return null;
         const packTypeTitle = activeCourse?.packTypeTitle as PackTypeTitle;
-        const registeredData = testConfig?.testSession
+        const res = testConfig?.testSession
           ? await testDetailExisting({
               testSession: testConfig?.testSession,
               templateId: activeCourse?.templateId,
@@ -54,7 +57,14 @@ export const loadTestDetails = async ({
               loginId: studentData?.loginId,
               token: studentData?.token,
             });
-        return registeredData ?? null;
+
+        if(res.responseTxt.includes('Maximum number')) {
+          return {data: null, error: {id: 'limit_reached', message: res?.responseTxt}};
+        }
+        if(res?.obj?.[0]) {
+          return {data: res?.obj?.[0], error: null};
+        }
+        return {data: null, error: {id: 'failed', message: 'Failed to load test'}};
       case "review":
         if (!studentData || !activeCourse || !testConfig) return null;
         const reviewData = testConfig?.testSession
@@ -64,7 +74,10 @@ export const loadTestDetails = async ({
               token: studentData?.token,
             })
           : null;
-        return reviewData;
+        if(reviewData){
+          return {data: reviewData, error: null}
+        }
+        return {data: null, error: {id: "failed", message: "Failed to Load Reviews Data"}};
     }
   } catch (error) {
     console.log("Failed to load test details:", error);

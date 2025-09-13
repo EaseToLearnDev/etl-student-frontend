@@ -15,7 +15,6 @@ import type { TestReportdata } from "./ReportMockTestPage";
 import ReportOverviewPage from "./ReportOverviewPage";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TableSkeleton } from "../../../components/TableSkeleton";
-import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
 import EmptyState from "../../../components/EmptyState";
 import ReportTablePage from "../components/ReportTablePage";
 import { useNavigate } from "react-router";
@@ -208,13 +207,10 @@ const StudentReport = () => {
         </div>
       </div>
 
+      {/* <ReportOverviewSkeleton /> */}
       <div className="mt-5">
-        {loading ? (
-          selectedTabIndex === 0 ? (
-            <ReportOverviewSkeleton />
-          ) : (
-            <TableSkeleton />
-          )
+        {loading && selectedTabIndex != 0 ? (
+          <TableSkeleton />
         ) : (
           tabContentsMap[tabs[selectedTabIndex]]
         )}

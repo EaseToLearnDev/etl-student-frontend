@@ -24,5 +24,5 @@ export const testDetailExisting = async ({
     headers: { loginId, token, device: "web" },
   });
 
-  return res?.data?.obj?.[0] ?? null;
+  return res?.data ?? null;
 };

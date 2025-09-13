@@ -12,13 +12,18 @@ import BorderedCard from "../../../components/BorderedCard";
 import PerformanceBarChart from "../components/PerformanceBarChart";
 import PerformancePieChart from "../components/PerformancePieChart";
 import EmptyState from "../../../components/EmptyState";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
 
 const ReportOverviewPage = () => {
   const overviewData = useReportOverviewStore((s) => s.overviewData);
   const setOverviewData = useReportOverviewStore((s) => s.setOverviewData);
+  const reset = useReportOverviewStore((s) => s.reset);
+  const loading = useLoadingStore((s) => s.loading);
 
   // useEffects
   useEffect(() => {
+    reset();
     const fetchData = async () => {
       const list = await loadDashboardData();
       if (list) {
@@ -44,7 +49,12 @@ const ReportOverviewPage = () => {
       };
     }) || [];
 
-    if(!parseReportValues || !overviewData) return <EmptyState title="No Overview Data Available" />;
+  if (loading) return <ReportOverviewSkeleton />;
+
+  if (!parseReportValues || !overviewData)
+    return (
+      <EmptyState title="No Overview Data Available" className="min-h-[60vh]" />
+    );
 
   return (
     <div className="px-5 pb-5 h-full flex flex-col flex-grow scrollbar-hide overflow-y-auto">

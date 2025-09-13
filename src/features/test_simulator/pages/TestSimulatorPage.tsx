@@ -28,6 +28,10 @@ import { ToastType } from "../../shared/types";
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { Spinner } from "../../../components/Spinner";
+import EmptyState from "../../../components/EmptyState";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -35,6 +39,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const navigate = useNavigate();
 
   const params = new URLSearchParams(location.search);
+
+  const activeCourse = useStudentStore((s) => s.activeCourse);
 
   const setTestData = useTestStore((s) => s.setTestData);
   const testError = useTestStore((s) => s.testError);
@@ -81,6 +87,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const showToast = useToastStore((s) => s.showToast);
   const toastData = useToastStore((s) => s.toastData);
 
+  const loading = useLoadingStore((s) => s.loading);
+  const setLoading = useLoadingStore((s) => s.setLoading);
+
   const { hasExited, reEnter } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
   );
@@ -96,7 +105,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       startTestTimer,
       setIsAiFeatureEnabled,
       startQuestionTimer,
-      setMode
+      setMode,
+      setLoading
     );
     return () => {
       if (features?.timerEnabled) {
@@ -141,6 +151,22 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       handleTestSubmit(navigate);
     }
   };
+
+  if (loading) {
+    return <Spinner description="Please Wait!" />;
+  }
+
+  if (testError?.id === "limit_reached") {
+    return (
+      <EmptyState
+        title="Limit Reached!"
+        description={testError.message}
+        buttonText="Upgrade"
+        onClick={() => navigate(`/selectcourse?cid=${activeCourse?.courseId}`)}
+        className="min-h-screen"
+      />
+    );
+  }
 
   return (
     <>

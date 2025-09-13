@@ -61,7 +61,7 @@ export const testDetails = async ({
       },
     });
 
-    return res?.data?.obj?.[0] ?? null;
+    return res?.data ?? null;
   } catch (error) {
     console.log("Failed to call test api: ", error);
     return null;

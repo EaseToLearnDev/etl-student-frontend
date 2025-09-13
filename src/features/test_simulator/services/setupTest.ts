@@ -1,4 +1,5 @@
 import type { Error } from "../../shared/types";
+import { Severity } from "../../shared/types";
 import type {
   Features,
   SimulatorMode,
@@ -18,7 +19,8 @@ export const setupTest = async (
   startTestTimer: (timer: number) => void,
   setIsAiFeatureEnabled: (v: boolean) => void,
   startQuestionTimer: () => void,
-  setMode: (mode: string) => void
+  setMode: (mode: string) => void,
+  setLoading: (loading: boolean) => void
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -29,11 +31,27 @@ export const setupTest = async (
   // Fetch test details
   if (testConfig) {
     setTestConfig(testConfig);
-    setMode(mode)
-    const data = (await loadTestDetails({
+    setMode(mode);
+    setLoading(true);
+    const result = await loadTestDetails({
       testConfig,
       mode,
-    })) as TestData | null;
+    });
+
+    if (!result) {
+      setError({ id: "unknown_error", message: "Failed to load test details.", severity: Severity.Alert });
+      setLoading(false);
+      return null;
+    }
+    
+    const { data, error }: { data: TestData | null, error: { id: string; message: string } | null } = result;
+    
+    if (error?.id === "limit_reached") {
+      setError({ id: error?.id, message: error.message, severity: Severity.Alert });
+      setLoading(false);
+      return null;
+    }
+
     if (data) setTestData(data);
 
     let features;
@@ -77,6 +95,7 @@ export const setupTest = async (
     }
 
     setFeatures(features);
+    setLoading(false);
 
     if (mode === "guest" || mode === "registered") {
       startQuestionTimer();
