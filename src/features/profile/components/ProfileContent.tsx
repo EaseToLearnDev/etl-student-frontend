@@ -79,11 +79,11 @@ const ProfileContent = () => {
   const handleReset = () => {
     setStudentName({
       ...studentName,
-      data: studentData?.studentName ?? "N/A",
+      data: studentData?.studentName ?? "",
       error: "",
     });
-    setPhoneNo({ ...phoneNo, data: studentData?.phoneNo ?? "N/A", error: "" });
-    setEmailId({ ...emailId, data: studentData?.emailId ?? "N/A", error: "" });
+    setPhoneNo({ ...phoneNo, data: studentData?.phoneNo ?? "", error: "" });
+    setEmailId({ ...emailId, data: studentData?.emailId ?? "", error: "" });
     setEditProfile(false);
     setIsVerified(false);
   };
