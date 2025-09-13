@@ -16,6 +16,9 @@ import WidgetCard from "../../report/components/newreports/WidgetCard";
 import useIsMobile from "../../../hooks/useIsMobile";
 import { useNavigate } from "react-router";
 import { useTeacherSupportStore } from "../store/useTeacherSupportStore";
+import { QuestionStatus } from "../test_simulator.types";
+import { useAiStore } from "../store/useAiStore";
+import AiIcon from "../../../components/icons/ai-icon";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -45,15 +48,23 @@ const ActiveQuestionPanel = () => {
   const getCurrentQuestionIndex = useTestStore((state) =>
     state.getCurrentQuestionIndex()
   );
+  const questionStatusMap = useTestStore((s) => s.questionStatusMap);
+  const currentQuestionStatus = currentQuestion
+    ? questionStatusMap[currentQuestion.questionId]
+    : null;
 
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
+
+  // Ai Store
+  const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
+  const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
 
   return (
     <div
       className={cn(
         isMobile
           ? "flex flex-1 flex-col w-full h-full bg-[var(--surface-bg-primary)] rounded-[20px] p-5 justify-between"
-          : "h-full flex flex-col justify-between"
+          : "h-full flex flex-col justify-between relative"
       )}
     >
       {/* Active Question Panel */}
@@ -213,7 +224,10 @@ const ActiveQuestionPanel = () => {
               className="!min-w-[50px]"
               onClick={markCurrentFoReview}
             >
-              Mark For Review
+              {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
+              currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
+                ? "Unmark Review"
+                : "Mark for Review"}
             </Button>
           </>
         ) : (
@@ -244,6 +258,21 @@ const ActiveQuestionPanel = () => {
           <MdChevronRight size={22} />
         </div>
       </div>
+
+      {/* Tony AI Floating Button */}
+      {isAiFeatureEnabled && (
+        <div
+          className={cn("flex flex-col items-center gap-1", isMobile ? "fixed bottom-[120px] right-[32px]" : "absolute bottom-4 right-8")}
+          onClick={() => {
+            setIsHelpModalOpen(true);
+          }}
+        >
+          <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
+            <AiIcon width={28} height={28} />
+          </div>
+          <span className="font-semibold !text-xs">TONY AI</span>
+        </div>
+      )}
     </div>
   );
 };

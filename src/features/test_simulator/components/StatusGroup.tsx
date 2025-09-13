@@ -34,7 +34,9 @@ const StatusGroup = () => {
       markedForReview: s.getQuestionCountByStatus(
         QuestionStatus.MARKED_FOR_REVIEW
       ),
-      answeredAndReview: s.getQuestionCountByStatus(QuestionStatus.ANSWERED_AND_REVIEW),
+      answeredAndReview: s.getQuestionCountByStatus(
+        QuestionStatus.ANSWERED_AND_REVIEW
+      ),
       correct: s.testData?.correctCount,
       incorrect: s.testData?.incorrectCount,
       notAnswered: s.testData?.notAnsweredCount,
@@ -66,10 +68,10 @@ const StatusGroup = () => {
       count: counts.markedForReview,
     },
     {
-      id: 'answered-and-review',
-      text: 'Answered & Review',
-      theme: Theme.Amethyst
-    }
+      id: "answered-and-review",
+      text: "Answered & Review",
+      theme: Theme.Amethyst,
+    },
   ];
   const reviewStatusList: Status[] = [
     {
@@ -101,12 +103,16 @@ const StatusGroup = () => {
             return (
               <div key={status.id} className="flex gap-2 items-center">
                 <div
-                  className="size-[24px] aspect-square flex justify-center items-center rounded-full"
+                  className="relative size-[24px] aspect-square flex justify-center items-center rounded-full"
                   style={{
                     border: `solid 1px ${statusTheme.bg.active}`,
                   }}
                 >
                   <span>{status.count}</span>
+                  {!correctResponseEnabled &&
+                    status.id === "answered-and-review" && (
+                      <div className="absolute top-0 right-0 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
+                    )}
                 </div>
                 <p>{status.text}</p>
               </div>
