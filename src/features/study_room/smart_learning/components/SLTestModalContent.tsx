@@ -97,20 +97,20 @@ const SLTestModalContent = ({
                 </label>
                 <input
                   type="text"
-                  maxLength={2}
-                  name={field.id}
-                  className={cn(
-                    "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                    "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
-                  )}
-                  value={testOptions[field.id]}
+                  className="flex px-4 py-3 rounded-lg border border-[var(--border-secondary)] text-base"
+                  value={testOptions[field.id] ?? 0}
                   onChange={(e) => {
                     const val = e.target.value;
+                    const re = /^-?\d{0,2}(?:\.\d{0,6})?$/;
+
                     if (isNaN(Number(val))) return;
-                    setTestOptions({
-                      ...testOptions,
-                      [field.id]: Number(e.target.value) ?? -1,
-                    });
+
+                    if (val === "" || re.test(val)) {
+                      setTestOptions({
+                        ...testOptions,
+                        [field.id]: Number(val),
+                      });
+                    }
                   }}
                 />
               </div>
