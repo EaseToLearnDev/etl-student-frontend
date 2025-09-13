@@ -34,8 +34,8 @@ const CoursesCards = ({
   const { studentData } = useStudentStore.getState();
   const filteredCourses = courseList.filter((course) => {
     const matchesSearch =
-      course.courseTitle.toLowerCase().includes(search.toLowerCase()) ||
-      course.courseSubTitle.toLowerCase().includes(search.toLowerCase());
+      course?.courseTitle?.toLowerCase().includes(search?.toLowerCase()) ||
+      course?.courseSubTitle?.toLowerCase().includes(search?.toLowerCase());
 
     const matchesCategory =
       !selectedCategory ||

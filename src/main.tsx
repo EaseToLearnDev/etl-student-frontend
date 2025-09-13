@@ -7,7 +7,7 @@ import { MathJaxContext } from "better-react-mathjax";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter basename="/student">
+    <BrowserRouter basename="/">
       <MathJaxContext>
         <App />
       </MathJaxContext>
