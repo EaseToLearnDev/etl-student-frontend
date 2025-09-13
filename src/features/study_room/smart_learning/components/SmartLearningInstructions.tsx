@@ -13,49 +13,84 @@ const SmartLearningInstructions = ({
   learningMode,
   hideTitle = false,
 }: SmartLearningInstructionsProps) => {
-
   return learningMode === "learning" ? (
     <div className="flex flex-col gap-3">
-      {!hideTitle && <h5 className="font-semibold">Learning Mode Instruction</h5>}
-      <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
-        <p>
-          Welcome to Learning Mode, your dedicated practice space designed to
-          help you learn at your own pace and build confidence before taking
-          real-time tests.
-        </p>
-        <p>Here's what makes Learning Mode special:</p>
-        <ol
-          type="a"
-          className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4"
-        >
-          {learningRules.map((rule, index) => (
-            <li key={index}>{rule}</li>
-          ))}
-        </ol>
-        <p>
-          This mode is perfect for building strong foundations, reviewing
-          mistakes, and learning through practice - all without pressure.
-        </p>
-      </div>
+      {!hideTitle ? (
+        <>
+          <h5 className="font-semibold">Learning Mode Instruction</h5>
+          <p>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
+            delectus, fugit quae ad ex facere exercitationem cum ea inventore
+            corporis blanditiis deleniti error id rem!
+          </p>
+        </>
+      ) : (
+        <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
+          <p>
+            Welcome to Learning Mode, your dedicated practice space designed to
+            help you learn at your own pace and build confidence before taking
+            real-time tests.
+          </p>
+          <p>Here's what makes Learning Mode special:</p>
+          <ol
+            type="a"
+            className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4 mb-4"
+          >
+            {learningRules.map((rule, index) => (
+              <li
+                key={index}
+                className="flex items-start gap-2 rounded-lg bg-[var(--surface-bg-hover)] text-[var(--text-primary)]"
+              >
+                <p className="text-[var(--sb-ocean-bg-active)]">
+                  {String.fromCharCode(97 + index)}.
+                </p>
+                <p className="flex-1">{rule}</p>
+              </li>
+            ))}
+          </ol>
+          <p>
+            This mode is perfect for building strong foundations, reviewing
+            mistakes, and learning through practice - all without pressure.
+          </p>
+        </div>
+      )}
     </div>
   ) : (
     <div className="flex flex-col gap-3">
-      {!hideTitle && <h5 className="font-semibold">Competitive Mode Instruction</h5>}
-      <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
-        <p>
-          The clock has been set at server and count down timer at the top right
-          corner of the screen will display left out time to closure from where
-          you can monitor time you have to complete the exam.
-        </p>
-        <ol
-          type="a"
-          className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4"
-        >
-          {competitiveRules.map((rule, index) => (
-            <li key={index}>{rule}</li>
-          ))}
-        </ol>
-      </div>
+      {!hideTitle ? (
+        <>
+          <h5 className="font-semibold">Competitive Mode Instruction</h5>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum,
+            architecto consectetur. Optio corporis nisi facilis molestiae non
+            quod rerum laborum inventore? Voluptas magnam animi saepe.
+          </p>
+        </>
+      ) : (
+        <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
+          <p>
+            The clock has been set at server and count down timer at the top
+            right corner of the screen will display left out time to closure
+            from where you can monitor time you have to complete the exam.
+          </p>
+          <ol
+            type="a"
+            className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4 mb-4"
+          >
+            {competitiveRules.map((rule, index) => (
+              <li
+                key={index}
+                className="flex items-start gap-2 rounded-lg bg-[var(--surface-bg-hover)] text-[var(--text-primary)]"
+              >
+                <p className="text-[var(--sb-ocean-bg-active)]">
+                  {String.fromCharCode(97 + index)}.
+                </p>
+                <p className="flex-1">{rule}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
     </div>
   );
 };

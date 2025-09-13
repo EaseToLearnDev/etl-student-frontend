@@ -62,7 +62,9 @@ const SLTestModalContent = ({
             {mode === "learning" ? "Learning Mode" : "Competitive Mode"}
           </span>
         </Badge>
-        <h5>{topicName || "Characteristic of Living Organism"}</h5>
+        <h5 className="text-[var(--sb-ocean-bg-active)]">
+          {topicName || "Characteristic of Living Organism"}
+        </h5>
       </div>
 
       {/* Tabs */}
@@ -95,18 +97,21 @@ const SLTestModalContent = ({
                 </label>
                 <input
                   type="text"
+                  maxLength={2}
                   name={field.id}
                   className={cn(
                     "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                     "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
                   )}
                   value={testOptions[field.id]}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (isNaN(Number(val))) return;
                     setTestOptions({
                       ...testOptions,
                       [field.id]: Number(e.target.value) ?? -1,
-                    })
-                  }
+                    });
+                  }}
                 />
               </div>
             ))}
