@@ -17,11 +17,12 @@ import logout from "../../../utils/logout";
 import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
-import { RiUserSettingsFill } from "react-icons/ri";
 import { Link } from "react-router";
 import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
 import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
 import { useRatingCourseStore } from "../../../global/hooks/useRatingCourseStore";
+import ThemeToggle from "../../../components/ThemeToggle";
+import Button from "../../../components/Button";
 
 export default function ProfileMenuDropDown({
   children,
@@ -87,9 +88,14 @@ const menuItems = [
   },
   {
     name: "Settings",
-    href: "/settings",
-    icon: <RiUserSettingsFill />,
+    href: "#",
+    // icon: <RiUserSettingsFill />,
   },
+  // {
+  //   name: "Settings",
+  //   href: "/settings",
+  //   icon: <RiUserSettingsFill />,
+  // },
 ];
 const DropdownMenu = () => {
   const studentName = useStudentStore((s) => s.studentData?.studentName);
@@ -117,54 +123,63 @@ const DropdownMenu = () => {
       </div>
 
       <div className="grid px-3.5 py-3.5 font-medium text-[var(--text-primary)] text-base">
-        {menuItems.map((item) =>
-          item.name === "Invite Teacher" ? (
-            <button
-              key={item.name}
-              onClick={() => setShowInviteTeacherModal(true)}
-              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
-            >
-              <span className="text-[var(--text-secondary)]">{item.icon}</span>
-              {item.name}
-            </button>
-          ) : item.name === "Feedback" ? (
-            <button
-              key={item.name}
-              onClick={() => setShowFeedbackModal(true)}
-              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
-            >
-              <span className="text-[var(--text-secondary)]">{item.icon}</span>
-              {item.name}
-            </button>
-          ) : item.name === "Rating a Course" ? (
-            <button
-              key={item.name}
-              onClick={() => setShowStudentRatingModal(true)}
-              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
-            >
-              <span className="text-[var(--text-secondary)]">{item.icon}</span>
-              {item.name}
-            </button>
-          ) : (
-            <Link
-              key={item.name}
-              to={item.href}
-              className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
-            >
-              <span className="text-[var(--text-secondary)]">{item.icon}</span>
-              {item.name}
-            </Link>
-          )
-        )}
+        {menuItems.map((item, index) => (
+          <div key={index}>
+            {item.name === "Invite Teacher" ? (
+              <button
+                onClick={() => setShowInviteTeacherModal(true)}
+                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+              >
+                <span className="text-[var(--text-secondary)]">
+                  {item.icon}
+                </span>
+                {item.name}
+              </button>
+            ) : item.name === "Feedback" ? (
+              <button
+                onClick={() => setShowFeedbackModal(true)}
+                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+              >
+                <span className="text-[var(--text-secondary)]">
+                  {item.icon}
+                </span>
+                {item.name}
+              </button>
+            ) : item.name === "Rating a Course" ? (
+              <button
+                onClick={() => setShowStudentRatingModal(true)}
+                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+              >
+                <span className="text-[var(--text-secondary)]">
+                  {item.icon}
+                </span>
+                {item.name}
+              </button>
+            ) : item.name === "Settings" ? (
+              <ThemeToggle />
+            ) : (
+              <Link
+                to={item.href}
+                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+              >
+                <span className="text-[var(--text-secondary)]">
+                  {item.icon}
+                </span>
+                {item.name}
+              </Link>
+            )}
+          </div>
+        ))}
       </div>
 
-      <div className="border-t border-[var(--border-primary)] px-6 pb-6 pt-5">
-        <button
+      <div className="border-t border-[var(--border-primary)] text-center px-2 pb-4 pt-3">
+        <Button
+          style="secondary"
           onClick={logout}
-          className="h-auto w-full flex gap-2 text-base text-start justify-start p-0 font-medium text-[var(--text-primary)] outline-none focus-visible:ring-0"
+          className="w-full bg-[var(--sb-valencia-bg-active)] hover:bg-[var(--sb-valencia-bg-hover)] text-white text-center justify-center p-2 rounded-lg outline-none"
         >
           Log Out
-        </button>
+        </Button>
       </div>
     </div>
   );
