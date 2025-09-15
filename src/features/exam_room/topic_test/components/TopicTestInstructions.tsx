@@ -12,7 +12,7 @@ type TopicTestInstructionsProps = {
 const TopicTestInstructions = ({ title }: TopicTestInstructionsProps) => {
   return (
     <div>
-      <h5 className="text-xl font-bold text-[var(--text-primary )] border-b pb-2 mb-4">
+      <h5 className="text-[var(--text-primary )] border-b pb-2 mb-4">
         Instructions
       </h5>
 
