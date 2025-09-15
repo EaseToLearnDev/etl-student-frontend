@@ -1,10 +1,6 @@
 // Constants
 import { competitiveRules } from "../../../shared/constants";
 
-// Utils
-import { capitalizeWords } from "../../../../utils";
-
-
 type TopicTestInstructionsProps = {
   title?: string;
 };
@@ -16,21 +12,37 @@ type TopicTestInstructionsProps = {
 const TopicTestInstructions = ({ title }: TopicTestInstructionsProps) => {
   return (
     <div>
-      {title && <h5>{capitalizeWords(title)}</h5>}
-      <div className="mt-[30px] flex flex-col gap-3">
-        <p className="font-semibold">Topic Test Instruction</p>
-        <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
+      <h5 className="text-xl font-bold text-[var(--text-primary )] border-b pb-2 mb-4">
+        Instructions
+      </h5>
+
+      {title && (
+        <p className="font-semibold text-[var(--sb-ocean-bg-active)] mb-2">
+          {title} Instructions
+        </p>
+      )}
+      <div className="space-y-5">
+        <div className="text-[var(--text-secondary)] leading-relaxed">
           <p>
-            The clock has been set at server and count down timer at the top
-            right corner of the screen will display left out time to closure
-            from where you can monitor time you have to complete the exam
+            The clock has been set at the server, and the countdown timer at the
+            top-right corner of the screen will display the remaining time until
+            closure. You can monitor the time you have left to complete the
+            exam.
           </p>
           <ol
             type="a"
-            className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4"
+            className="list-[lower-alpha] list-inside mt-3 space-y-2"
           >
             {competitiveRules.map((rule, index) => (
-              <li key={index}>{rule}</li>
+              <li
+                key={index}
+                className="flex items-start gap-2 rounded-lg bg-[var(--surface-bg-hover)] text-[var(--text-primary)]"
+              >
+                <p className="text-[var(--sb-ocean-bg-active)]">
+                  {String.fromCharCode(97 + index)}.
+                </p>
+                <p className="flex-1">{rule}</p>
+              </li>
             ))}
           </ol>
         </div>

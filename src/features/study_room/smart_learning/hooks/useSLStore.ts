@@ -58,7 +58,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
     totalQuestion: 20,
     totalTime: 60,
     marksCorrectAns: 1,
-    marksIncorrectAns: -1,
+    marksIncorrectAns: -0.25,
     marksNotAttempted: 0,
   },
 
@@ -91,7 +91,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
         totalQuestion: 20,
         totalTime: 60,
         marksCorrectAns: 1,
-        marksIncorrectAns: -1,
+        marksIncorrectAns: -0.25,
         marksNotAttempted: 0,
       },
     }),
