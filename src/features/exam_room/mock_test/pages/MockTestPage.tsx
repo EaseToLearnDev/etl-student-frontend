@@ -146,7 +146,7 @@ const MockTestPage = () => {
               </>
             )
           }
-          secondaryContent={<TopicTestInstructions title="Mock Test" />}
+          secondaryContent={<TopicTestInstructions title="Mock Test" className="mb-12" />}
           hideSecondary={hideSecondary}
           onSecondaryHide={() => setHideSecondary(true)}
         />

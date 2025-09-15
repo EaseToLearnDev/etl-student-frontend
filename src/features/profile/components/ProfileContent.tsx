@@ -1,5 +1,5 @@
 // React imports
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 // Hooks
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
@@ -41,6 +41,8 @@ const ProfileContent = () => {
   const phoneNo = useProfileStore((state) => state.phoneNo);
   const setPhoneNo = useProfileStore((state) => state.setPhoneNo);
 
+  const [verifyType, setVerifyType] = useState<"mobile" | "email" | null>(null);
+
   if (!studentData) return null;
 
   const isPhoneChanged = phoneNo?.data?.trim() !== studentData?.phoneNo?.trim();
@@ -51,7 +53,7 @@ const ProfileContent = () => {
   console.log("from local storage:", studentData?.emailId);
   console.log("from profile page state:", emailId?.data);
 
-  const openOtpModal = async (type: "mobile" | "email") => {
+  const openOtpModal = async () => {
     try {
       const res = await handleStudentProfileUpdateDetails({
         newEmailId: emailId.data,
@@ -60,7 +62,7 @@ const ProfileContent = () => {
       if (res) {
         setResToken(res.resToken);
         setTokenIdentify(res.tokenIdentify);
-        setOtpType(type);
+        setOtpType(verifyType);
         setShowOtpModal(true);
       }
     } catch (err) {
@@ -133,7 +135,10 @@ const ProfileContent = () => {
           {editProfile && isPhoneChanged && (
             <Button
               style="primary"
-              onClick={() => openOtpModal("mobile")}
+              onClick={() => {
+                openOtpModal();
+                setVerifyType("mobile");
+              }}
               disabled={!!phoneNo.error}
               className="w-min"
             >
@@ -159,7 +164,10 @@ const ProfileContent = () => {
           {editProfile && isEmailChanged && (
             <Button
               style="primary"
-              onClick={() => openOtpModal("email")}
+              onClick={() => {
+                openOtpModal();
+                setVerifyType("email");
+              }}
               disabled={!!emailId.error}
               className="w-min"
             >
@@ -195,6 +203,7 @@ const ProfileContent = () => {
           <VerifyOtpContent
             onCancel={() => setShowOtpModal(false)}
             onVerify={handleVerifyOtp}
+            onResend={() => openOtpModal()}
             error={otpError}
           />
         </Modal>

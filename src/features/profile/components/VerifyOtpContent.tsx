@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import InputOTP from "../../../components/InputOTP";
 
 interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
   onCancel?: () => void;
+  onResend?: () => void;
   error?: string | null;
   secondaryTitle?: string;
 }
@@ -12,10 +13,25 @@ interface VerifyOtpContentProps {
 const VerifyOtpContent = ({
   onVerify,
   onCancel,
+  onResend,
   error,
   secondaryTitle = "Cancel",
 }: VerifyOtpContentProps) => {
   const [otp, setOtp] = useState("");
+  const [countdown, setCountdown] = useState(30);
+
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
+
+  const handleResend = () => {
+    setCountdown(30);
+    onResend?.();
+  };
 
   const handleVerify = () => {
     if (!otp || otp.length < 6) return;
@@ -43,6 +59,20 @@ const VerifyOtpContent = ({
             {secondaryTitle}
           </Button>
         </div>
+      </div>
+      <div className="text-center mt-4">
+        {countdown > 0 ? (
+          <p className="text-[var(--text-tertiary)]">
+            You can resend OTP in {countdown} seconds
+          </p>
+        ) : (
+          <button
+            onClick={handleResend}
+            className="text-[var(--sb-ocean-bg-active)] hover:underline"
+          >
+            Resend OTP
+          </button>
+        )}
       </div>
     </div>
   );

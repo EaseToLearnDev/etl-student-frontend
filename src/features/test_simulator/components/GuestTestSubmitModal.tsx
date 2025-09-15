@@ -150,6 +150,7 @@ export const GuestTestSubmitModal = () => {
         <VerifyOtpContent
           onVerify={handleVerifyOtp}
           onCancel={() => setOpenVerifyOtp(false)}
+          onResend={() => handleSendOtp()}
           error={error}
         />
       )}

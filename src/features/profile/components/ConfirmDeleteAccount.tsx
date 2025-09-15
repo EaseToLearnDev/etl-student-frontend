@@ -1,30 +1,13 @@
 import Button from "../../../components/Button";
 import { Modal } from "../../../components/Modal";
 import { useProfileStore } from "../hooks/useProfileStore";
-import { handleDeleteStudentAccount } from "../services/handleDeleteStudentAccount";
+import { handleDeleteRequest } from "../services/handleDeleteRequest";
 
 const ConfirmDeleteAccount = () => {
-  const confirmDeleteOpen = useProfileStore(s => s.confirmDeleteOpen);
-  const deleteAccountProgress = useProfileStore(s => s.deleteAccountProgress);
-  const setConfirmDeleteOpen = useProfileStore(s => s.setConfirmDeleteOpen);
-  const setDeleteAccountProgress = useProfileStore(s => s.setDeleteAccountProgress);
-  const setDeleteAccountToken = useProfileStore(s => s.setDeleteAccountToken);
-
-  const handleDeleteRequest = async () => {
-    try {
-      setDeleteAccountProgress(true);
-      const res = await handleDeleteStudentAccount();
-      if (res.responseTxt === "success") {
-        setDeleteAccountToken(res?.obj?.token);
-      }
-    } catch (error) {
-      console.log("Delete Request Failed: ", error);
-    } finally {
-      setDeleteAccountProgress(false);
-      setConfirmDeleteOpen(false);
-    }
-  };
-
+  const confirmDeleteOpen = useProfileStore((s) => s.confirmDeleteOpen);
+  const deleteAccountProgress = useProfileStore((s) => s.deleteAccountProgress);
+  const setConfirmDeleteOpen = useProfileStore((s) => s.setConfirmDeleteOpen);
+  
   return (
     <Modal
       isOpen={confirmDeleteOpen}

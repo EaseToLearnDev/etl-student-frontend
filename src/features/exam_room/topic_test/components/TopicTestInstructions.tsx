@@ -3,15 +3,16 @@ import { competitiveRules } from "../../../shared/constants";
 
 type TopicTestInstructionsProps = {
   title?: string;
+  className?: string; 
 };
 
 /**
  * Renders the instructions for a topic test, including the topic name,
  * a general instruction about the timer, and a list of competitive rules.
  */
-const TopicTestInstructions = ({ title }: TopicTestInstructionsProps) => {
+const TopicTestInstructions = ({ title, className }: TopicTestInstructionsProps) => {
   return (
-    <div>
+    <div className={className}>
       <h5 className="text-[var(--text-primary )] border-b pb-2 mb-4">
         Instructions
       </h5>

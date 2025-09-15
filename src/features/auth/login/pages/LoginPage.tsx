@@ -76,6 +76,7 @@ const LoginPage = () => {
               <VerifyOtpContent
                 onCancel={() => setToken(null)}
                 onVerify={handleVerifyOtp}
+                onResend={() => HandleLogin(navigate, loginWith, deviceType)}
                 error={errorMessage}
                 secondaryTitle="Change Number"
               />

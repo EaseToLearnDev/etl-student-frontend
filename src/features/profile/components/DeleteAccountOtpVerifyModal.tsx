@@ -1,6 +1,7 @@
 import { Modal } from "../../../components/Modal";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
+import { handleDeleteRequest } from "../services/handleDeleteRequest";
 import { handleVerifyOtpAccountDeleteRequest } from "../services/handleVerifyOtpAccountDeleteRequest";
 import VerifyOtpContent from "./VerifyOtpContent";
 
@@ -25,6 +26,7 @@ const DeleteAccountOtpVerifyModal = () => {
       setDeleteError("Invalid OTP. Please Try Again");
     }
   };
+
   return (
     <Modal
       isOpen={!!deleteAccountToken}
@@ -34,6 +36,7 @@ const DeleteAccountOtpVerifyModal = () => {
       <VerifyOtpContent
         onVerify={handleVerifyDeleteOtp}
         onCancel={() => setDeleteAccountToken("")}
+        onResend={() => handleDeleteRequest()}
       />
       {deleteError && (
         <p className="text-[var(--sb-valencia-bg-active)] mt-2">
