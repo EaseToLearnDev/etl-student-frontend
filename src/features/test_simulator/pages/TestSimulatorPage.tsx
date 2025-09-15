@@ -32,7 +32,7 @@ import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { getCourseAccessStatus } from "../../../global/services/upgrade";
+import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -96,7 +96,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const course = courses?.[openedCourse ?? 0];
   const status = course
-    ? getCourseAccessStatus(
+    ? getActiveCourseAccessStatus(
         course.validTillDate,
         course.packTypeTitle,
         course.organisationName

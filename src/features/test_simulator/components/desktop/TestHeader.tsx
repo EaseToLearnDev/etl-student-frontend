@@ -17,10 +17,10 @@ const TestHeader = () => {
 
   return (
     <div className="flex justify-between">
-      <div className="md:w-[60%] lg:w-[70%] xl:w-[75%]">
+      <div className="md:w-[60%] lg:w-[70%]">
         <h3 className="text-ellipsis line-clamp-1">{testTitle}</h3>
       </div>
-      <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%] xl:w-[25%]">
+      <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%]">
         <h3>
           {timerEnabled
             ? isExpired

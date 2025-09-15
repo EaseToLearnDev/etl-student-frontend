@@ -32,7 +32,7 @@ const TopicProgressChart = ({ progress }: TopicProgressChartProps) => {
     afterDraw: (chart) => {
       const { ctx, width, height } = chart;
       ctx.save();
-      ctx.font = "bold 32px sans-serif";
+      ctx.font = "bold 24px sans-serif";
       ctx.fillStyle = progressColor;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -68,7 +68,7 @@ const TopicProgressChart = ({ progress }: TopicProgressChartProps) => {
   };
 
   return (
-    <div className="w-full max-w-[290px] mx-auto aspect-[2/1] relative">
+    <div className="w-full max-w-[290px]  md:max-w-[200px] mx-auto aspect-[2/1] relative">
       <Doughnut key={progress} data={data} options={options} plugins={[centerTextPlugin]} />
     </div>
   );

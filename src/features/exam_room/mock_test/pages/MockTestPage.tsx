@@ -32,6 +32,9 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import TestCardList from "../../../shared/components/TestCardList";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+import UpgradeModal from "../../../shared/components/UpgradeModal";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 
 // Constants
 const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
@@ -77,6 +80,11 @@ const MockTestPage = () => {
     [subjectSpecificMockTests, selectedDropdownIndex]
   );
 
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(
+    (s) => s.setIsUpgradeModalOpen
+  );
+
   useEffect(() => {
     loadMockTestList();
   }, []);
@@ -86,7 +94,7 @@ const MockTestPage = () => {
       {/* Tabs + Subject Filter */}
       <div
         className={cn(
-          "flex flex-col lg:flex-row lg:items-center gap-4 justify-between md:w-[60%] lg:w-[70%] xl:w-[75%]",
+          "flex flex-col lg:flex-row lg:items-center gap-4 justify-between md:w-[60%] lg:w-[70%]",
           !isMobile ? " pr-5" : ""
         )}
       >
@@ -121,17 +129,19 @@ const MockTestPage = () => {
                     : selectedSubjectTests
                 }
                 infoClickHandler={() => setHideSecondary(false)}
-                onClickHandler={(test) =>
-                  selectAndShowStartTestModal({
-                    testId: test.id,
-                    selectedTabIndex,
-                    completeMockTests,
-                    subjectSpecificMockTests,
-                    selectedDropdownIndex,
-                    setSelectedTest,
-                    setShowStartTestModal,
-                  })
-                }
+                onClickHandler={(test) => {
+                  getActiveCourseAccessStatus() === "renew"
+                    ? setIsUpgradeModalOpen(true)
+                    : selectAndShowStartTestModal({
+                        testId: test.id,
+                        selectedTabIndex,
+                        completeMockTests,
+                        subjectSpecificMockTests,
+                        selectedDropdownIndex,
+                        setSelectedTest,
+                        setShowStartTestModal,
+                      });
+                }}
               />
             ) : (
               <>
@@ -146,7 +156,9 @@ const MockTestPage = () => {
               </>
             )
           }
-          secondaryContent={<TopicTestInstructions title="Mock Test" className="mb-12" />}
+          secondaryContent={
+            <TopicTestInstructions title="Mock Test" className="mb-12" />
+          }
           hideSecondary={hideSecondary}
           onSecondaryHide={() => setHideSecondary(true)}
         />
@@ -225,6 +237,12 @@ const MockTestPage = () => {
           testName={previousRunningTest?.testName || ""}
         />
       </Modal>
+
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
     </div>
   );
 };

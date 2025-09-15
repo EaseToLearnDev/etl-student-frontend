@@ -82,7 +82,7 @@ const menuItems = [
     icon: <MdFeedback />,
   },
   {
-    name: "Rating a Course",
+    name: "Rate a Course",
     href: "#",
     icon: <MdStar />,
   },
@@ -145,7 +145,7 @@ const DropdownMenu = () => {
                 </span>
                 {item.name}
               </button>
-            ) : item.name === "Rating a Course" ? (
+            ) : item.name === "Rate a Course" ? (
               <button
                 onClick={() => setShowStudentRatingModal(true)}
                 className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"

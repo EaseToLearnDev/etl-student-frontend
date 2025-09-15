@@ -19,9 +19,8 @@ const SmartLearningInstructions = ({
         <>
           <h5 className="font-semibold">Learning Mode Instruction</h5>
           <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Suscipit
-            delectus, fugit quae ad ex facere exercitationem cum ea inventore
-            corporis blanditiis deleniti error id rem!
+            This mode is perfect for building strong foundations, reviewing
+            mistakes, and learning through practice — all without pressure.
           </p>
         </>
       ) : (
@@ -48,10 +47,6 @@ const SmartLearningInstructions = ({
               </li>
             ))}
           </ol>
-          <p>
-            This mode is perfect for building strong foundations, reviewing
-            mistakes, and learning through practice - all without pressure.
-          </p>
         </div>
       )}
     </div>
@@ -61,17 +56,19 @@ const SmartLearningInstructions = ({
         <>
           <h5 className="font-semibold">Competitive Mode Instruction</h5>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum,
-            architecto consectetur. Optio corporis nisi facilis molestiae non
-            quod rerum laborum inventore? Voluptas magnam animi saepe.
+            This mode simulates real exam conditions, helping you practice under
+            timed pressure and assess your performance against a competitive
+            benchmark. Use this mode to sharpen your accuracy, speed, and
+            decision-making skills.
           </p>
         </>
       ) : (
         <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
           <p>
-            The clock has been set at server and count down timer at the top
-            right corner of the screen will display left out time to closure
-            from where you can monitor time you have to complete the exam.
+            The clock has been set at the server, and the countdown timer in the
+            top-right corner of the screen will display the remaining time to
+            completion. Keep track of it to ensure you finish the exam within
+            the allotted time.
           </p>
           <ol
             type="a"

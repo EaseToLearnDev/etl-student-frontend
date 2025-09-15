@@ -28,6 +28,9 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import UpgradeModal from "../../../shared/components/UpgradeModal";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -64,6 +67,10 @@ const SmartLearningPage = () => {
   const showStartTestModal = useSLStore((s) => s.showStartTestModal);
   const setShowStartTestModal = useSLStore((s) => s.setShowStartTestModal);
 
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(
+    (s) => s.setIsUpgradeModalOpen
+  );
   const testOptions = useSLStore((s) => s.testOptions);
   const setTestOptions = useSLStore((s) => s.setTestOptions);
 
@@ -159,7 +166,11 @@ const SmartLearningPage = () => {
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
-                onClickHandler={() => setShowStartTestModal(true)}
+                onClickHandler={() => {
+                  getActiveCourseAccessStatus() === "renew"
+                    ? setIsUpgradeModalOpen(true)
+                    : setShowStartTestModal(true);
+                }}
               />
             ) : (
               <EmptyState title="No Data Available" />
@@ -216,6 +227,11 @@ const SmartLearningPage = () => {
           testName={previousRunningTest?.testName || ""}
         />
       </Modal>
+
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
     </div>
   );
 };

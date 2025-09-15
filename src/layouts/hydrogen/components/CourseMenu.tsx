@@ -10,7 +10,7 @@ import { handleSwitchCourse } from "../../../global/services/handleSwitchCourse"
 import Select from "../../../components/Select";
 import { MdCheck } from "react-icons/md";
 import getValidityFormatted from "../../../global/services/getValidityFormatted";
-import { getCourseAccessStatus } from "../../../global/services/upgrade";
+import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 
 interface CourseMenuProps {
   isOpen: boolean;
@@ -29,7 +29,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
 
   const course = courses?.[openedCourse ?? 0];
   const status = course
-    ? getCourseAccessStatus(
+    ? getActiveCourseAccessStatus(
         course.validTillDate,
         course.packTypeTitle,
         course.organisationName

@@ -19,6 +19,9 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TableSkeleton } from "../../../../components/TableSkeleton";
 import EmptyState from "../../../../components/EmptyState";
+import UpgradeModal from "../../../shared/components/UpgradeModal";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -32,6 +35,10 @@ const ClassTestPage = () => {
   const setSelectedTest = useCTStore((s) => s.setSelectedTest);
   const showStartTestModal = useCTStore((s) => s.showStartTestModal);
   const setShowStartTestModal = useCTStore((s) => s.setShowStartTestModal);
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(
+    (s) => s.setIsUpgradeModalOpen
+  );
 
   const columns: Column<any>[] = [
     {
@@ -67,7 +74,9 @@ const ClassTestPage = () => {
           style="primary"
           onClick={() => {
             setSelectedTest(row);
-            setShowStartTestModal(true);
+            getActiveCourseAccessStatus() === "renew"
+              ? setIsUpgradeModalOpen(true)
+              : setShowStartTestModal(true);
           }}
         >
           <p>Start Now</p>
@@ -124,6 +133,11 @@ const ClassTestPage = () => {
           }}
         />
       </Modal>
+      {/* Upgrade Modal */}
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
     </div>
   ) : (
     // <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">

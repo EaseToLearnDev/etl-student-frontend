@@ -11,6 +11,7 @@ interface CourseCardProps {
   onClick: (course: CourseType) => void;
   status?: string;
   isActive?: boolean;
+  className?: string;
 }
 
 /**
@@ -21,6 +22,7 @@ const CourseCard = ({
   onClick,
   status,
   isActive = false,
+  className = ""
 }: CourseCardProps) => {
   return (
     <div
@@ -30,7 +32,8 @@ const CourseCard = ({
         "shadow-md transition hover:scale-105 transform cursor-pointer",
         isActive
           ? "border-[var(--sb-ocean-bg-active)]"
-          : " border-[var(--border-secondary)]"
+          : " border-[var(--border-secondary)]",
+          className
       )}
     >
       <div className="h-40 overflow-hidden flex justify-center items-center">

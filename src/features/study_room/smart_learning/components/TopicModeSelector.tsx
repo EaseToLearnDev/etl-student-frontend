@@ -29,7 +29,7 @@ const TopicModeSelector = ({
   const isLearning = mode === "learning";
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="relative flex flex-col w-full h-full">
       {/* Header */}
       <div className="flex items-center justify-center">
         <h6 className="!font-semibold text-center">
@@ -64,15 +64,11 @@ const TopicModeSelector = ({
         </Button>
       </div>
 
-      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] scrollbar-thin">
+      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">
         <SmartLearningInstructions learningMode={mode} />
       </div>
-      <div className="px-[10px] py-[20px] mt-auto">
-        <Button
-          className="w-full"
-          style="primary"
-          onClick={onClickHandler}
-        >
+      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-[var(--surface-bg-primary)]">
+        <Button className="w-full" style="primary" onClick={onClickHandler}>
           Continue
         </Button>
       </div>

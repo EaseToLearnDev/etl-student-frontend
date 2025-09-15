@@ -28,7 +28,7 @@ export const processCourseSelection = async ({
   const {setIsUpdateEmailModalOpen} = useCoursesStore.getState();
   const { setToast } = useToastStore.getState();
 
-  if (!courseId || !courseTitle || !option) return;
+  if (!courseId || !option) return;
 
   if (!studentData) return console.error("No student data found");
 
@@ -67,8 +67,11 @@ export const processCourseSelection = async ({
           otherCourses: !!c.otherCourses,
         },
       }));
-
-      setStudentData({ ...studentData, courses });
+       const purchasedCourse = courses?.find((c) => c.courseId === courseId);
+      const openedCourse = purchasedCourse
+        ? courses.indexOf(purchasedCourse)
+        : 0;
+      setStudentData({ ...studentData, courses, openedCourse });
       return navigate("/dashboard");
     } catch (err) {
       return console.error("Error enrolling in free course:", err);
@@ -86,6 +89,7 @@ export const processCourseSelection = async ({
   }
 
   try {
+    if(!courseTitle) return;
     const data = await handlePaymentButton({
       option,
       courseId,

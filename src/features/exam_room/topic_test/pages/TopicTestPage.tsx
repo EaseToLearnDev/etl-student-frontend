@@ -36,6 +36,9 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 import Button from "../../../../components/Button";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import UpgradeModal from "../../../shared/components/UpgradeModal";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -68,6 +71,9 @@ const TopicTestPage = () => {
   const setShowPreviousTestModal = useTTStore(
     (s) => s.setShowPreviousTestModal
   );
+
+  const isUpgradeModalOpen = useUpgradeModalStore(s => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(s => s.setIsUpgradeModalOpen);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -142,7 +148,7 @@ const TopicTestPage = () => {
                   const selectedTest =
                     testList?.find((t) => t.mockTestId === test.id) ?? null;
                   setSelectedTest(selectedTest);
-                  setShowStartTestModal(true);
+                  getActiveCourseAccessStatus() === "renew" ? setIsUpgradeModalOpen(true) : setShowStartTestModal(true);
                 }}
               />
             ) : topicTree && topicTree.length > 0 ? (
@@ -240,6 +246,9 @@ const TopicTestPage = () => {
           testName={previousRunningTest?.testName || ""}
         />
       </Modal>
+
+      {/* Upgrade Modal */}
+      <UpgradeModal isOpen={isUpgradeModalOpen} onClose={() => setIsUpgradeModalOpen(false)} />
     </div>
   );
 };

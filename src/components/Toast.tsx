@@ -57,7 +57,7 @@ export const Toast: React.FC<ToastProps> = ({
   title,
   description,
   button,
-  duration = 3000,
+  duration = 5000,
   onExpire,
   onClick,
   className,

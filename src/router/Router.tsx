@@ -31,6 +31,7 @@ import { TestAnalyticsOverview } from "../features/report/pages/TestAnalyticsOve
 import TestWizard from "../components/TestWizard";
 import ForgetPasswordPage from "../features/auth/forgetPassword/pages/ForgetPasswordPage";
 import LoginDirectPage from "../features/auth/login/pages/LoginDirectPage";
+import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCoursePage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -54,7 +55,7 @@ const Router = () => {
           </PublicRoute>
         }
       />
-       <Route
+      <Route
         path="/forget-password"
         element={
           <PublicRoute>
@@ -130,13 +131,23 @@ const Router = () => {
         <Route path="settings" element={<SettingsPage />} />
         <Route path="profile" element={<ProfilePage />} />
         <Route path="payments" element={<PaymentsPage />} />
-        <Route path="learning-testanalytics" element={<LearningSessionOverview />} />
+        <Route
+          path="learning-testanalytics"
+          element={<LearningSessionOverview />}
+        />
         <Route path="testanalytics" element={<TestAnalyticsOverview />} />
       </Route>
-      <Route path="test-simulator" element={<TestSimulatorPage mode="registered" />} />
-      <Route path="guest-testsimulator" element={<TestSimulatorPage mode="guest" />} />
+      <Route
+        path="test-simulator"
+        element={<TestSimulatorPage mode="registered" />}
+      />
+      <Route
+        path="guest-testsimulator"
+        element={<TestSimulatorPage mode="guest" />}
+      />
       <Route path="testview" element={<TestSimulatorPage mode="review" />} />
       <Route path="guest-testbegin" element={<TestWizard />} />
+      <Route path="selectyourcourse" element={<SelectYourCoursePage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

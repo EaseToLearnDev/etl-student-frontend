@@ -17,7 +17,8 @@ const HeaderMenuRight = () => {
           aria-label="Notification"
           className={cn(
             "flex justify-center items-center relative h-9 w-9 backdrop-blur-md bg-[var(--surface-bg-secondary)] shadow-sm",
-            "focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px rounded-md outline-none"
+            "focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px rounded-md outline-none",
+            "hover:scale-105 transition-all duration-200 ease"
           )}
         >
           <RingBellSolidIcon className="h-[18px] w-auto" />
@@ -26,11 +27,17 @@ const HeaderMenuRight = () => {
       <ProfileMenuDropDown>
         <button
           className={cn(
-            "overflow-hidden rounded-full outline-none focus-visible:ring-[1.5px] focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px",
+            "overflow-hidden rounded-full p-0.5 border-2 hover:scale-105 transition-all duration-200 ease border-[var(--sb-ocean-bg-active)] outline-none focus-visible:ring-[1.5px]",
+            "focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px shadow-sm",
             profilePic ? "w-9 h-9" : "w-10 h-10"
           )}
         >
-          <div className="w-full h-full aspect-square bg-[var(--surface-bg-secondary)] flex justify-center items-center overflow-hidden">
+          <div
+            className={cn(
+              "w-full h-full aspect-square rounded-full bg-[var(--surface-bg-secondary)]",
+              "flex justify-center items-center overflow-hidden"
+            )}
+          >
             {profilePic ? (
               <img
                 width={32}

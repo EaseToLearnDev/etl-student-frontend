@@ -6,6 +6,7 @@ import type { CategoryType } from "../../shared/types";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
+import cn from "../../../utils/classNames";
 
 interface AllCoursesHeaderProps {
   search: string;
@@ -15,6 +16,7 @@ interface AllCoursesHeaderProps {
   isFilterSectionOpen: boolean;
   onClickFilter: () => void;
   setHideSecondary: (v: boolean) => void;
+  className?: string;
 }
 
 /**
@@ -25,10 +27,11 @@ const AllCoursesHeader = ({
   setSearch,
   selectedCategory,
   setHideSecondary,
+  className = "",
 }: AllCoursesHeaderProps) => {
   const isMobile = useIsMobile();
   return (
-    <div className="relative p-4 flex flex-col gap-2 md:w-[60%] lg:w-[70%] xl:w-[75%]">
+    <div className={cn("relative p-4 flex flex-col gap-2 md:w-[60%] lg:w-[70%]", className)}>
       <div className="flex flex-col lg:flex-row gap-3 justify-between lg:items-center">
         <h3>Select Course</h3>
         <div className="flex items-center gap-4">
