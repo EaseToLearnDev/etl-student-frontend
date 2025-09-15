@@ -32,6 +32,7 @@ import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { getCourseAccessStatus } from "../../../global/services/upgrade";
 
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
@@ -89,6 +90,18 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const loading = useLoadingStore((s) => s.loading);
   const setLoading = useLoadingStore((s) => s.setLoading);
+
+  const courses = useStudentStore((s) => s.studentData?.courses);
+  const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
+
+  const course = courses?.[openedCourse ?? 0];
+  const status = course
+    ? getCourseAccessStatus(
+        course.validTillDate,
+        course.packTypeTitle,
+        course.organisationName
+      )
+    : "";
 
   const { hasExited, reEnter } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
@@ -161,7 +174,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       <EmptyState
         title="Limit Reached!"
         description={testError.message}
-        buttonText="Upgrade"
+        buttonText={status}
         onClick={() => navigate(`/selectcourse?cid=${activeCourse?.courseId}`)}
         className="min-h-screen"
       />
