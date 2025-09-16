@@ -40,7 +40,7 @@ function ContributionChart({
   color = "green",
   year,
   onDayClick,
-  scrollRef
+  scrollRef,
 }: {
   color?: string;
   year: string;
@@ -116,7 +116,10 @@ function ContributionChart({
   ];
 
   return (
-    <div ref={scrollRef} className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4">
+    <div
+      ref={scrollRef}
+      className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4"
+    >
       <div
         className="flex text-xs text-[var(--text-tertiary)] text-bold mb-1"
         style={{
@@ -134,7 +137,7 @@ function ContributionChart({
         })}
       </div>
       <div className="flex flex-col justify-start gap-4">
-        <div className="flex items-start justify-start gap-2   h-[calc(7*clamp(0.8rem,1.2vw,1rem)+6*0.25rem)]">
+        <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(0.8rem,1.2vw,1rem)+6*0.25rem)]">
           <div className="flex flex-col justify-between items-start  text-xs h-full text-[var(--text-tertiary)] text-bold">
             {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
               <div key={i} className="">
@@ -163,16 +166,15 @@ function ContributionChart({
             })}
           </div>
         </div>
-
-        <div className="flex items-center justify-end gap-3 text-xs text-[var(--text-tertiary)] text-bold">
-          <span>Less</span>
-          <div className="flex items-center justify-center gap-1">
-            {legendColors.map((c, i) => (
-              <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
-            ))}
-          </div>
-          <span>More</span>
+      </div>
+      <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">
+        <span>Less</span>
+        <div className="flex items-center justify-center gap-1">
+          {legendColors.map((c, i) => (
+            <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
+          ))}
         </div>
+        <span>More</span>
       </div>
     </div>
   );

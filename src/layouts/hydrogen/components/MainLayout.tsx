@@ -18,7 +18,7 @@ export default function HydrogenLayout() {
           >
             <div className="flex flex-col gap-4 h-full">
               <TopMenu />
-              <div className="flex-1 min-h-0 overflow-auto">
+              <div className="flex-1 min-h-0 overflow-auto scrollbar-hide">
                 <Outlet />
               </div>
             </div>

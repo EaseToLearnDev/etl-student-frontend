@@ -162,7 +162,6 @@ const SmartLearningPage = () => {
               </>
             ) : selectedTopic ? (
               <TopicModeSelector
-                selectedTopic={selectedTopic}
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}

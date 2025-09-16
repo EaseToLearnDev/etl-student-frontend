@@ -74,7 +74,7 @@ export const LearningSessionOverview = () => {
 
   const renderPieChart = (data: any[], total: number, label: string) => (
     <div className="relative mx-auto w-[290px] h-[290px] sm:w-[340px] sm:h-[340px]">
-      <ResponsiveContainer width="100%" height="100%" className="relative z-10">
+      <ResponsiveContainer width="100%" height="100%" className="relative z-0">
         <RechartsPieChart>
           <Pie
             cx="50%"
@@ -98,13 +98,30 @@ export const LearningSessionOverview = () => {
         </RechartsPieChart>
       </ResponsiveContainer>
 
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center z-10">
         <div className="w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] flex flex-col items-center justify-center rounded-full shadow-[0px_4px_20px_0px_#00000029] bg-[var(--surface-bg-primary)]">
           <p className="text-center text-[var(--text-secondary)] whitespace-pre-line px-4">
             {label}
           </p>
           <h5 className="text-[var(--text-primary)]">{total}</h5>
         </div>
+      </div>
+      <div className="flex flex-col justify-center space-y-4">
+        {data.map((item, index) => (
+          <div
+            key={index}
+            className="flex items-center justify-between p-3 bg-[var(--surface-bg-tertiary)] rounded-lg"
+          >
+            <div className="flex items-center gap-3">
+              <p
+                className="h-3 w-3 rounded-full flex-shrink-0"
+                style={{ backgroundColor: item.color }}
+              />
+              <p className="text-[var(--text-secondary)]">{item.name}</p>
+            </div>
+            <p className="text-[var(--text-primary)]">{item.value}%</p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -115,7 +132,7 @@ export const LearningSessionOverview = () => {
       content: (
         <div className="flex flex-col gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Widget title="Overall" className="h-[420px]">
+            <Widget title="Overall" className="h-[600px]">
               <div className="flex items-center justify-center h-full">
                 {renderPieChart(
                   overallPerformanceData,
@@ -124,7 +141,7 @@ export const LearningSessionOverview = () => {
                 )}
               </div>
             </Widget>
-            <Widget title="With Help" className="h-[420px]">
+            <Widget title="With Help" className="h-[600px]">
               <div className="flex items-center justify-center h-full">
                 {renderPieChart(
                   withHelpData,
@@ -133,7 +150,7 @@ export const LearningSessionOverview = () => {
                 )}
               </div>
             </Widget>
-            <Widget title="Without Help" className="h-[420px]">
+            <Widget title="Without Help" className="h-[600px]">
               <div className="flex items-center justify-center h-full">
                 {renderPieChart(
                   withoutHelpData,
@@ -153,7 +170,7 @@ export const LearningSessionOverview = () => {
   ];
 
   return (
-    <div className="container-wrapper px-10">
+    <div className="px-4">
       <Button
         onClick={() => {
           setData(null);

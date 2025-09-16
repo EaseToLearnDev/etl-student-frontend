@@ -5,11 +5,10 @@
 import Button from "../../../../components/Button";
 import TopicProgressChart from "./topic-progress-chart/TopicProgressChart";
 import SmartLearningInstructions from "./SmartLearningInstructions";
-import type { Topic } from "../../../shared/types";
 import type { ModeType } from "../sl.types";
+import Tabs from "../../../../components/Tabs";
 
 interface TopicModeSelectorProps {
-  selectedTopic: Topic;
   lastSelfTestPercentage: number;
   mode: ModeType;
   setMode: (mode: ModeType) => void;
@@ -20,48 +19,34 @@ interface TopicModeSelectorProps {
  * TopicModeSelector component allows users to start in either "Learning Mode" or "Competitive Mode" for a given topic.
  */
 const TopicModeSelector = ({
-  selectedTopic,
   lastSelfTestPercentage,
   mode,
   setMode,
   onClickHandler,
 }: TopicModeSelectorProps) => {
-  const isLearning = mode === "learning";
+  // const isLearning = mode === "learning";
+  const selectedIndex = mode === "learning" ? 0 : 1;
 
   return (
     <div className="relative flex flex-col w-full h-full">
-      {/* Header */}
-      <div className="flex items-center justify-center">
-        <h6 className="!font-semibold text-center">
-          {selectedTopic?.topicName}
-        </h6>
+      {/* Mode selection section */}
+      <div className="flex justify-center mb-3">
+        <Tabs
+          tabs={["Learning Mode", "Competitive Mode"]}
+          selectedIndex={selectedIndex}
+          onSelect={(index) =>
+            setMode(index === 0 ? "learning" : "competitive")
+          }
+          containerClassName="flex-wrap justify-center"
+          tabClassName="px-3 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
+          activeTabClassName="px-3 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
+        />
       </div>
 
       {/* Progress section */}
-      <div className="flex flex-col items-center gap-5 mt-5">
+      <div className="flex flex-col items-center gap-5">
         <p className="text-center font-semibold">Topic Progress</p>
         <TopicProgressChart progress={lastSelfTestPercentage ?? 0} />
-      </div>
-      {/* Mode selection section */}
-      <div className="mt-5 flex flex-col md:flex-row md:flex-wrap items-center gap-[12px]">
-        <Button
-          className="flex-1 w-full md:min-w-[150px]"
-          style={isLearning ? "primary" : "secondary"}
-          onClick={() => {
-            setMode("learning");
-          }}
-        >
-          Learning Mode
-        </Button>
-        <Button
-          className="flex-1 w-full md:min-w-[150px]"
-          style={!isLearning ? "primary" : "secondary"}
-          onClick={() => {
-            setMode("competitive");
-          }}
-        >
-          Competitive Mode
-        </Button>
       </div>
 
       <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">
@@ -69,7 +54,7 @@ const TopicModeSelector = ({
       </div>
       <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-[var(--surface-bg-primary)]">
         <Button className="w-full" style="primary" onClick={onClickHandler}>
-          Continue
+          Next
         </Button>
       </div>
     </div>

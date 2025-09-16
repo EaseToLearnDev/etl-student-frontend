@@ -64,7 +64,7 @@ const Select = <T,>({
       : "Select an option";
 
   return (
-    <div className={cn("relative inline-block text-left", className)}>
+    <div className={cn("relative z-99 inline-block text-left", className)}>
       <button
         ref={buttonRef}
         onClick={onToggle}

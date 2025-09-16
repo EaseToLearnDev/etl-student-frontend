@@ -17,7 +17,7 @@ const SmartLearningInstructions = ({
     <div className="flex flex-col gap-3">
       {!hideTitle ? (
         <>
-          <h5 className="font-semibold">Learning Mode Instruction</h5>
+          <h6 className="font-semibold">Instructions</h6>
           <p>
             This mode is perfect for building strong foundations, reviewing
             mistakes, and learning through practice — all without pressure.
@@ -54,7 +54,7 @@ const SmartLearningInstructions = ({
     <div className="flex flex-col gap-3">
       {!hideTitle ? (
         <>
-          <h5 className="font-semibold">Competitive Mode Instruction</h5>
+          <h6 className="font-semibold">Instructions</h6>
           <p>
             This mode simulates real exam conditions, helping you practice under
             timed pressure and assess your performance against a competitive
