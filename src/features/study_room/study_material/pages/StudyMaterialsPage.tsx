@@ -30,6 +30,9 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import NoCopyWrapper from "../../../../global/noCopyWrapper";
+import UpgradeModal from "../../../shared/components/UpgradeModal";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -57,6 +60,11 @@ const StudyMaterialsPage = () => {
   const setTextContent = useSMStore((s) => s.setTextContent);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(
+    (s) => s.setIsUpgradeModalOpen
+  );
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {
@@ -137,6 +145,10 @@ const StudyMaterialsPage = () => {
             !loading && topicContentList && selectedTopic ? (
               <TopicContentPanel
                 setSelectedContent={(content) => {
+                  if (getActiveCourseAccessStatus() === "renew") {
+                    setIsUpgradeModalOpen(true);
+                    return;
+                  }
                   setSelectedContent(content);
                   setTextContent(null);
                 }}
@@ -189,7 +201,7 @@ const StudyMaterialsPage = () => {
               onClick={() => setSelectedContent(null)}
               className={cn(
                 "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-                " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
               )}
             >
               <MdClose size={20} />
@@ -197,6 +209,11 @@ const StudyMaterialsPage = () => {
           </>
         </Modal>
       )}
+
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
     </div>
   );
 };

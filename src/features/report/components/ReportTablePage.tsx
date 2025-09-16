@@ -4,12 +4,13 @@ import type { Column } from "../../../components/types";
 import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
 import type { TestReportdata } from "../pages/ReportMockTestPage";
+import { MdArrowRight } from "react-icons/md";
 
 interface ReportTablePageProps {
   data: TestReportdata[];
   onViewMore: (reportData: TestReportdata) => void;
   testTypeId: number;
-  title: string;
+  title?: string;
   emptyTitle: string;
 }
 
@@ -22,26 +23,28 @@ const ReportTablePage = ({
 }: ReportTablePageProps) => {
   const columns: Column<any>[] = [
     { header: "Test Title", accessor: "testTitle" },
-    { header: "Type", accessor: "testType" },
-    { header: "Date/Time", accessor: "date" },
+    { header: "Date", accessor: "date" },
     { header: "Total Questions", accessor: "totalQuestions" },
     { header: "Full Marks", accessor: "fullMarks" },
     { header: "Marks Obtain", accessor: "marksObtain" },
     { header: "Time Spent", accessor: "timeSpent" },
     {
-      header: "Action",
+      header: "Actions",
       render: (row) => (
-        <Button style="primary" onClick={() => onViewMore(row)}>
-          <p>View Details</p>
+        <Button style="secondary" className="rounded-full font-[500]" onClick={() => onViewMore(row)}>
+          View Details
+          <MdArrowRight size={16} />
         </Button>
       ),
     },
   ];
 
-  let filteredData = []
+  let filteredData = [];
 
-  if(testTypeId === 1) {
-    filteredData = data.filter((item) => item.testType === "Competitive Session");
+  if (testTypeId === 1) {
+    filteredData = data.filter(
+      (item) => item.testType === "Competitive Session"
+    );
   } else {
     filteredData = data.filter((item) => item.testTypeId === testTypeId);
   }
@@ -54,6 +57,7 @@ const ReportTablePage = ({
             columns={columns}
             header={<h5>{title}</h5>}
             data={filteredData}
+            onRowClick={(row) => onViewMore(row)}
           />
         </div>
       ) : (

@@ -13,6 +13,8 @@ interface PaginatedTableProps<T> {
   data: T[];
   header?: React.ReactNode;
   itemsPerPage?: number;
+  onRowClick?: (row: T, index: number) => void;
+  rowClassName?: string | ((row: T, index: number) => string);
 }
 
 const PaginatedTable = <T,>({
@@ -20,6 +22,8 @@ const PaginatedTable = <T,>({
   data,
   header,
   itemsPerPage = 5,
+  onRowClick,
+  rowClassName,
 }: PaginatedTableProps<T>) => {
   const {
     currentPage,
@@ -34,7 +38,12 @@ const PaginatedTable = <T,>({
   return (
     <div className="flex-1 border-1 border-[var(--border-primary)] rounded-lg overflow-hidden">
       {header && <div className="p-6 pb-5">{header}</div>}
-      <Table columns={columns} data={paginatedData} />
+      <Table
+        columns={columns}
+        data={paginatedData}
+        onRowClick={onRowClick}
+        rowClassName={rowClassName}
+      />
 
       {/* Pagination Controls */}
       <div className="flex justify-end items-center py-2 px-6">

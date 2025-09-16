@@ -1,8 +1,9 @@
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
 import type { Column } from "../../../components/types";
 import { ChartBarIcon } from "@heroicons/react/24/outline";
-import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
+import Button from "../../../components/Button";
+import { MdArrowRight } from "react-icons/md";
 
 export interface LearningSessionData {
   testTitle: string;
@@ -31,11 +32,7 @@ const ReportLearningSessionPage = ({
       accessor: "testTitle",
     },
     {
-      header: "Type",
-      accessor: "testType",
-    },
-    {
-      header: "Date/Time",
+      header: "Date",
       accessor: "date",
     },
     {
@@ -55,20 +52,18 @@ const ReportLearningSessionPage = ({
       accessor: "incorrect",
     },
     {
-      header: "Unattempted",
-      accessor: "unattempted",
-    },
-    {
-      header: "Action",
+      header: "Actions",
       render: (row) => (
-        <Button style="primary" onClick={() => onViewMore(row)}>
-          <p>View Details</p>
-          {/* <ArrowRightIcon className="w-4 h-4 ml-2" /> */}
+        <Button style="secondary" className="rounded-full font-[500]" onClick={() => onViewMore(row)}>
+          View Details
+          <MdArrowRight size={16} />
         </Button>
       ),
     },
   ];
-  const learningSessionData = data.filter((item) => item.testType === "Learning Session");
+  const learningSessionData = data.filter(
+    (item) => item.testType === "Learning Session"
+  );
   return (
     <>
       {learningSessionData.length > 0 ? (
@@ -77,6 +72,7 @@ const ReportLearningSessionPage = ({
             columns={columns}
             header={<h5>Learning Session</h5>}
             data={learningSessionData}
+            onRowClick={(row) => onViewMore(row)}
           />
         </div>
       ) : (

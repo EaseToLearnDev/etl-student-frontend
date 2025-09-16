@@ -171,7 +171,8 @@ const StudentReport = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
+      {/* Tabs */}
       <div className="relative mt-3">
         <div
           ref={menuRef}
@@ -207,8 +208,8 @@ const StudentReport = () => {
         </div>
       </div>
 
-      {/* <ReportOverviewSkeleton /> */}
-      <div className="mt-5">
+      {/* Content (only this scrolls) */}
+      <div className="mt-5 flex-1 overflow-y-auto">
         {loading && selectedTabIndex != 0 ? (
           <TableSkeleton />
         ) : (
