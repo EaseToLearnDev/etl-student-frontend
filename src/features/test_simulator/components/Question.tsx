@@ -69,7 +69,7 @@ const QuestionCard = ({
       style={{
         borderColor: getActiveBg(themeColors.bg.active, 0.8),
         backgroundColor: isActive ? themeColors.bg.active : getActiveBg(themeColors.bg.active),
-        color: isActive ? 'white' : 'var(--text-primary)'
+        color: isActive ? themeColors.content.primary : 'var(--text-primary)'
       }}
     >
       <span>Q{questionNumber}</span>
