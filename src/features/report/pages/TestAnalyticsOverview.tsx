@@ -460,7 +460,7 @@ export const TestAnalyticsOverview = () => {
       </div>
 
       {/* Cards */}
-      <div className="w-full mx-auto mt-16">
+      <div className="w-full mx-auto my-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Total Time Card */}
           <div className="rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 p-6 border border-[var(--border-primary)] border-solid bg-[var(--surface-bg-primary)]">
@@ -573,7 +573,7 @@ export const TestAnalyticsOverview = () => {
         </div>
 
         {/* Summary Section */}
-        <div className="mt-8 rounded-xl shadow-lg p-6 border border-[var(--border-primary)] border-solid bg-[var(--surface-bg-primary)]">
+        {/* <div className="mt-8 rounded-xl shadow-lg p-6 border border-[var(--border-primary)] border-solid bg-[var(--surface-bg-primary)]">
           <h5 className="font-bold mb-4 text-[var(--text-secondary)]">
             Session Summary
           </h5>
@@ -597,7 +597,7 @@ export const TestAnalyticsOverview = () => {
               <p className="text-[var(--text-tertiary)]">Progress Left</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
