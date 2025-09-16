@@ -10,6 +10,7 @@ export interface BottomNavigationSheetProps {
   handleSheetHidden?: () => void;
   MAX_HEIGHT?: number;
   MIN_HEIGHT?: number;
+  className?: string;
 }
 
 const BottomNavigationSheet = ({
@@ -21,6 +22,7 @@ const BottomNavigationSheet = ({
   handleSheetHidden,
   MAX_HEIGHT,
   MIN_HEIGHT,
+  className = "",
 }: BottomNavigationSheetProps) => {
   return (
     <div
@@ -28,7 +30,8 @@ const BottomNavigationSheet = ({
         "fixed top-0 left-0 w-full h-full flex flex-col justify-end items-center transition-all duration-100 ease-linear  z-[9999999]",
         isSheetHidden
           ? "pointer-events-none opacity-0"
-          : "pointer-events-auto opacity-100"
+          : "pointer-events-auto opacity-100",
+          className
       )}
     >
       {/* Overlay: clicking it hides the sheet */}

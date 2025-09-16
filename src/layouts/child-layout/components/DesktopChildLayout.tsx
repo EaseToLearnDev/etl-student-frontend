@@ -4,6 +4,8 @@ type DesktopChildLayoutProps = {
   primaryContent?: React.ReactNode;
   secondaryContent?: React.ReactNode;
   isSecondaryHidden?: boolean;
+  primaryClassName?: string;
+  secondaryClassName?: string;
 };
 
 /**
@@ -17,6 +19,8 @@ const DesktopChildLayout = ({
   primaryContent,
   secondaryContent,
   isSecondaryHidden = false,
+  primaryClassName = "",
+  secondaryClassName = "",
 }: DesktopChildLayoutProps) => {
   return (
     <div className="flex w-full h-full gap-5 overflow-x-hidden">
@@ -24,7 +28,8 @@ const DesktopChildLayout = ({
       <div
         className={cn(
           "w-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-hide",
-          !isSecondaryHidden ? "md:w-[60%] lg:w-[70%]" : ""
+          !isSecondaryHidden ? "md:w-[60%] lg:w-[70%]" : "",
+          primaryClassName
         )}
       >
         {primaryContent}
@@ -35,7 +40,8 @@ const DesktopChildLayout = ({
           "overflow-y-auto rounded-[20px] bg-[var(--surface-bg-primary)] transition-all duration-300 ease-in-out md:w-[40%] lg:w-[30%] overflow-x-hidden scrollbar-hide",
           isSecondaryHidden
             ? "translate-x-full opacity-0 pointer-events-none absolute right-0 top-0 h-full w-0"
-            : "translate-x-0 opacity-100 relative p-5"
+            : "translate-x-0 opacity-100 relative p-5",
+            secondaryClassName
         )}
         style={{
           minWidth: isSecondaryHidden ? 0 : undefined,

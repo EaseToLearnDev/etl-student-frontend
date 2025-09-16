@@ -18,6 +18,8 @@ type ChildLayoutProps = {
   hideSecondary?: boolean;
   onSecondaryHide?: () => void;
   secondaryInitialHeight?: number;
+  primaryClassName?: string;
+  secondaryClassName?: string;
 };
 
 /**
@@ -32,6 +34,8 @@ const ChildLayout = ({
   hideSecondary = false,
   onSecondaryHide,
   secondaryInitialHeight = 0.6,
+  primaryClassName = "",
+  secondaryClassName = "",
 }: ChildLayoutProps) => {
   const isMobile = useIsMobile();
 
@@ -48,6 +52,8 @@ const ChildLayout = ({
   return isMobile ? (
     // Mobile layout: bottom sheet for secondary content
     <MobileChildLayout
+      primaryClassName={primaryClassName}
+      secondaryClassName={secondaryClassName}
       primaryContent={primaryContent}
       secondaryContent={secondaryContent}
       isSecondaryHidden={isSecondaryHidden}
@@ -60,6 +66,8 @@ const ChildLayout = ({
     />
   ) : (
     <DesktopChildLayout
+      primaryClassName={primaryClassName}
+      secondaryClassName={secondaryClassName}
       primaryContent={primaryContent}
       secondaryContent={secondaryContent}
       isSecondaryHidden={isSecondaryHidden}

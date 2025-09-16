@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 // Components
 import BottomNavigationSheet from "./BottomNavigationSheet";
+import cn from "../../../utils/classNames";
 
 type MobileChildLayoutProps = {
   primaryContent?: React.ReactNode;
@@ -14,6 +15,8 @@ type MobileChildLayoutProps = {
   handleSecondaryHide?: () => void;
   MAX_HEIGHT?: number;
   MIN_HEIGHT?: number;
+  primaryClassName?: string;
+  secondaryClassName?: string;
 };
 
 const MobileChildLayout = ({
@@ -26,13 +29,15 @@ const MobileChildLayout = ({
   handleSecondaryHide,
   MAX_HEIGHT,
   MIN_HEIGHT,
+  primaryClassName = "",
+  secondaryClassName = "",
 }: MobileChildLayoutProps) => {
   // Overlay and bottom sheet
 
   return (
     <div className="w-full h-full">
       {/* Primary content fills the background */}
-      <div className="w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-hide">
+      <div className={cn("w-full h-full overflow-y-auto p-5 rounded-[20px] bg-[var(--surface-bg-primary)] scrollbar-hide", primaryClassName)}>
         {primaryContent}
       </div>
       {createPortal(
@@ -45,6 +50,7 @@ const MobileChildLayout = ({
           handleSheetHidden={handleSecondaryHide}
           MAX_HEIGHT={MAX_HEIGHT}
           MIN_HEIGHT={MIN_HEIGHT}
+          className={secondaryClassName}
         />,
         document.body
       )}
