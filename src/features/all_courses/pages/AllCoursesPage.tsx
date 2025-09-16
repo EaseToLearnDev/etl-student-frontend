@@ -127,6 +127,7 @@ const AllCoursesPage = () => {
             setHideSecondary={setHideSecondary}
           />
         }
+        secondaryClassName="pt-0"
         hideSecondary={hideSecondary}
         onSecondaryHide={() => {
           setHideSecondary(true);

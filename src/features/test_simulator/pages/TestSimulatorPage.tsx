@@ -91,17 +91,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const loading = useLoadingStore((s) => s.loading);
   const setLoading = useLoadingStore((s) => s.setLoading);
 
-  const courses = useStudentStore((s) => s.studentData?.courses);
-  const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
-
-  const course = courses?.[openedCourse ?? 0];
-  const status = course
-    ? getActiveCourseAccessStatus(
-        course.validTillDate,
-        course.packTypeTitle,
-        course.organisationName
-      )
-    : "";
+  const status = getActiveCourseAccessStatus();
 
   const { hasExited, reEnter } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false

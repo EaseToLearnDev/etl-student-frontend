@@ -25,7 +25,7 @@ export const FilterCourses = ({
 
   return (
     <div className="relative w-full h-full px-2">
-      <div className="flex gap-4 justify-between items-center">
+      <div className="sticky top-0 z-10 bg-[var(--surface-bg-primary)] flex gap-4 justify-between items-center pt-5 pb-2">
         <h5>Filters</h5>
         <p
           onClick={() => setSelectedCategory(null)}
