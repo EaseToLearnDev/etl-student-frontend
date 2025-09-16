@@ -6,12 +6,12 @@ import useTestStore from "../store/useTestStore";
 
 // Utils
 import cn from "../../../utils/classNames";
-import { colors, Theme } from "../../../utils/colors";
+import { colors, getActiveBg, Theme } from "../../../utils/colors";
 
 /* ---------------------------- Theme Mappings ---------------------------- */
 const statusThemeMap: Record<string, Theme> = {
   [QuestionStatus.NOT_VISITED]: Theme.Neutral,
-  [QuestionStatus.VISITED]: Theme.Ocean,
+  [QuestionStatus.VISITED]: Theme.Neutral,
   [QuestionStatus.NOT_ATTEMPTED]: Theme.Valencia,
   [QuestionStatus.ATTEMPTED]: Theme.GreenHaze,
   [QuestionStatus.MARKED_FOR_REVIEW]: Theme.Amethyst,
@@ -24,16 +24,7 @@ const reviewThemeMap: Record<string, Theme> = {
   NotAnswer: Theme.Neutral,
 };
 
-/* --------------------------- Helper Functions --------------------------- */
-const getActiveBg = (hexColor: string, opacity = 0.1): string => {
-  const temp = document.createElement("div");
-  temp.style.color = hexColor;
-  document.body.appendChild(temp);
-  const rgb = getComputedStyle(temp).color; // "rgb(r, g, b)"
-  document.body.removeChild(temp);
 
-  return rgb.replace("rgb", "rgba").replace(")", `, ${opacity})`);
-};
 
 /* ------------------------------- Component ------------------------------ */
 interface QuestionProps {
@@ -71,15 +62,14 @@ const QuestionCard = ({
     <button
       onClick={() => jumpToQuestion(question)}
       className={cn(
-        "relative cursor-pointer min-w-[50px] min-h-[50px] max-w-[60px] max-h-[60px] rounded-[16px] flex justify-center items-center border",
-        "hover:bg-[var(--surface-bg-secondary)] focus:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)]",
+        "relative cursor-pointer min-w-[50px] min-h-[50px] max-w-[60px] max-h-[60px] rounded-[16px] flex justify-center items-center",
+        "hover:bg-[var(--surface-bg-secondary)] focus:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] border",
         className
       )}
       style={{
-        borderColor: themeColors.bg.active,
-        backgroundColor: isActive
-          ? getActiveBg(themeColors.bg.active)
-          : undefined,
+        borderColor: getActiveBg(themeColors.bg.active, 0.8),
+        backgroundColor: isActive ? themeColors.bg.active : getActiveBg(themeColors.bg.active),
+        color: isActive ? 'white' : 'var(--text-primary)'
       }}
     >
       <span>Q{questionNumber}</span>

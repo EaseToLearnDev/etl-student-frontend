@@ -122,3 +122,14 @@ export const colors: ThemePallete = {
     },
   },
 };
+
+/* --------------------------- Helper Functions --------------------------- */
+export const getActiveBg = (hexColor: string, opacity = 0.1): string => {
+  const temp = document.createElement("div");
+  temp.style.color = hexColor;
+  document.body.appendChild(temp);
+  const rgb = getComputedStyle(temp).color; // "rgb(r, g, b)"
+  document.body.removeChild(temp);
+
+  return rgb.replace("rgb", "rgba").replace(")", `, ${opacity})`);
+};

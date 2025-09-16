@@ -81,6 +81,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const setShowGuestTestSubmitModal = useGuestStore(
     (s) => s.setShowGuestTestSubmitModal
   );
+  const testData = useTestStore(s => s.testData);
 
   const testMode = useTestStore((s) => s.testMode);
   const setMode = useTestStore((s) => s.setMode);
@@ -121,31 +122,18 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  //     event.preventDefault();
-  //     event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
-  //   };
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
+    };
 
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
-
-  // Empty State
-  // if (!testData) {
-  //   return (
-  //     <EmptyState
-  //       title="Internal Server Error"
-  //       icon={<ExclamationTriangleIcon width={100} height={100} />}
-  //       className="min-h-screen"
-  //       buttonText="Go Back!"
-  //       onClick={() => navigate(-1)}
-  //     />
-  //   );
-  // }
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const ManageTestSubmit = () => {
     if (testMode === "guest") {
@@ -155,7 +143,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     }
   };
 
-  if (loading) {
+  if (loading && !testData) {
     return <Spinner description="Please Wait!" />;
   }
 

@@ -262,7 +262,12 @@ const ActiveQuestionPanel = () => {
       {/* Tony AI Floating Button */}
       {isAiFeatureEnabled && (
         <div
-          className={cn("flex flex-col items-center gap-1", isMobile ? "fixed bottom-[120px] right-[32px]" : "absolute bottom-4 right-8")}
+          className={cn(
+            "flex flex-col items-center gap-1",
+            isMobile
+              ? "fixed bottom-[120px] right-[32px]"
+              : "absolute bottom-4 right-8"
+          )}
           onClick={() => {
             setIsHelpModalOpen(true);
           }}

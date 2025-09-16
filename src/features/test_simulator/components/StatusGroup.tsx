@@ -8,7 +8,7 @@ import { QuestionStatus } from "../test_simulator.types";
 import useTestStore from "../store/useTestStore";
 
 // Utils
-import { colors, Theme } from "../../../utils/colors";
+import { colors, getActiveBg, Theme } from "../../../utils/colors";
 
 interface Status {
   id: string;
@@ -71,6 +71,7 @@ const StatusGroup = () => {
       id: "answered-and-review",
       text: "Answered & Review",
       theme: Theme.Amethyst,
+      count: counts.answeredAndReview,
     },
   ];
   const reviewStatusList: Status[] = [
@@ -103,9 +104,10 @@ const StatusGroup = () => {
             return (
               <div key={status.id} className="flex gap-2 items-center">
                 <div
-                  className="relative size-[24px] aspect-square flex justify-center items-center rounded-full"
+                  className="relative size-[24px] aspect-square flex justify-center items-center rounded-lg"
                   style={{
                     border: `solid 1px ${statusTheme.bg.active}`,
+                    backgroundColor: getActiveBg(statusTheme.bg.active),
                   }}
                 >
                   <span>{status.count}</span>
