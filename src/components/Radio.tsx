@@ -38,14 +38,12 @@ const Radio = ({
         {...props}
       />
       <MathJax>
-        <h6 className="select-none">
           <div
-            className="math-container"
+            className="math-container text-base"
             dangerouslySetInnerHTML={{
               __html: label.trim().replace(/[\r\n]+/g, ""),
             }}
           />
-        </h6>
       </MathJax>
     </label>
   );

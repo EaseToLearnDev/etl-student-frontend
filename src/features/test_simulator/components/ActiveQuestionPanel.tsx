@@ -68,15 +68,30 @@ const ActiveQuestionPanel = () => {
       )}
     >
       {/* Active Question Panel */}
-      <div className={cn("flex flex-col", isMobile ? "gap-5" : "gap-10")}>
+      <div className={cn("flex flex-col gap-5")}>
         {/* Question Title & Body  */}
         <div className="h-full flex flex-col gap-4">
           <h5 className="text-[24px]">
             {currentQuestion?.sectionName ?? "Questions"}
           </h5>
+          {currentQuestion?.commonDataDescription &&
+          currentQuestion?.commonDataDescription?.length > 0 ? (
+            <WidgetCard className="shadow-none">
+              <MathJax dynamic>
+                <div
+                  className="math-container text-sm"
+                  dangerouslySetInnerHTML={{
+                    __html: currentQuestion?.commonDataDescription
+                      .trim()
+                      .replace(/[\r\n]+/g, ""),
+                  }}
+                />
+              </MathJax>
+            </WidgetCard>
+          ) : null}
           <MathJax dynamic>
-            <div className="flex gap-1 max-w-[65ch] text-xl">
-              <h5>{`Q${getCurrentQuestionIndex + 1})`}</h5>
+            <div className="flex gap-1 max-w-[65ch] text-base">
+              <h6>{`Q${getCurrentQuestionIndex + 1})`}</h6>
               <div
                 className="math-container"
                 dangerouslySetInnerHTML={{
@@ -97,7 +112,7 @@ const ActiveQuestionPanel = () => {
             currentQuestion?.responseChoice.map((response) => (
               <div
                 key={response.responseId}
-                className="flex flex-wrap items-center gap-3"
+                className="flex items-center gap-3"
               >
                 <h6>{`${response?.responseId}.`}</h6>
                 <Radio
@@ -200,7 +215,7 @@ const ActiveQuestionPanel = () => {
         )}
       </div>
       {/* Navigation Buttons */}
-      <div className="flex flex-wrap gap-y-4 justify-center gap-2 items-center mt-4">
+      <div className="flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",

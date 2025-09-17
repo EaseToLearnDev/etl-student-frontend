@@ -29,6 +29,7 @@ export interface Question {
   noQuestionAttempt?: number;
   noQuestion?: number;
   bloomId: number;
+  commonDataDescription?: string;
 }
 
 export interface Section {
