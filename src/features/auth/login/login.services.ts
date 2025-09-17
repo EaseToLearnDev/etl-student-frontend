@@ -114,7 +114,7 @@ export const HandleLogin = async (
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "invalid_credentials") {
-          setError("Invalid email or password", Severity.Alert);
+          setError("Invalid User-Id or password", Severity.Alert);
           setLoading(false);
         }
         if (error.message === "invalid_email") {

@@ -116,6 +116,7 @@ const LoginPage = () => {
                       }
                     }}
                     activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
+                    tabClassName="border border-[var(--border-primary)]"
                   />
                 </div>
 
@@ -130,14 +131,14 @@ const LoginPage = () => {
                       >
                         {loginWith === "otp"
                           ? "Mobile Number"
-                          : "Email or User ID"}
+                          : "User ID / Email / Mobile"}
                       </label>
                       <input
                         type="text"
                         placeholder={
                           loginWith === "otp"
                             ? "Enter your mobile number"
-                            : "you@company.com"
+                            : "User ID or Email or Mobile"
                         }
                         className={cn(
                           "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
