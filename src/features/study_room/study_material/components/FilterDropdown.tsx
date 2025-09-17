@@ -1,9 +1,15 @@
 // React
 import { useState } from "react";
 
+// Icons
+import { MdCheck } from "react-icons/md";
+
 // Types
 import type { ReactElement, RefObject } from "react";
 import type { FilterType } from "../sm.types";
+
+// Utils
+import cn from "../../../../utils/classNames";
 
 // Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
@@ -13,8 +19,6 @@ import { useSMStore } from "../hooks/useSMStore";
 import { Popover } from "../../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../../components/Popover/PopoverContent";
-import { MdCheck } from "react-icons/md";
-import cn from "../../../../utils/classNames";
 
 /**
  * Dropdown component for filtering study materials by type.

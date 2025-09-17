@@ -44,7 +44,7 @@ const TopicModeSelector = ({
       </div>
 
       {/* Progress section */}
-      <div className="flex flex-col items-center gap-5">
+      <div className="flex flex-col items-center gap-5 mt-4">
         <p className="text-center font-semibold">Topic Progress</p>
         <TopicProgressChart progress={lastSelfTestPercentage ?? 0} />
       </div>

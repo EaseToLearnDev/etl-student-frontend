@@ -66,23 +66,24 @@ const FeedbackModal = () => {
             dropdownClassName="!bg-[var(--surface-bg-tertiary)] !w-[440px]"
             dropdownItemClassName="hover:bg-[var(--surface-bg-secondary)]"
           />
-          <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1">
             <label
               htmlFor="Subject"
               className="!font-medium text-[var(--text-secondary)]"
             >
-              Subject
+              Subject<sup>*</sup>
             </label>
             <input
               name="subject"
               className={cn(
-                "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+              "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+              "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
               )}
+              placeholder="Enter subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             />
-          </div>
+            </div>
           <div className="flex flex-col gap-1">
             <label
               htmlFor="description"
@@ -92,6 +93,7 @@ const FeedbackModal = () => {
             </label>
             <textarea
               name="description"
+              placeholder="Enter description"
               rows={4}
               className={cn(
                 "resize-none flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",

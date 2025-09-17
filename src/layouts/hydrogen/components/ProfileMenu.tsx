@@ -1,26 +1,25 @@
 // React
 import { useEffect, useState, type ReactElement, type RefObject } from "react";
+import { Link } from "react-router";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
 import { MdFeedback, MdPayments, MdStar } from "react-icons/md";
-import { BiSolidVideos } from "react-icons/bi";
-
-// Store
-import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 
 // Hooks
+import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
 import useIsMobile from "../../../hooks/useIsMobile";
-
-// Utils
-import logout from "../../../utils/logout";
-import { Popover } from "../../../components/Popover/Popover";
-import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
-import { PopoverContent } from "../../../components/Popover/PopoverContent";
-import { Link } from "react-router";
 import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
 import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
 import { useRatingCourseStore } from "../../../global/hooks/useRatingCourseStore";
+
+// Utils
+import logout from "../../../utils/logout";
+
+// Components
+import { Popover } from "../../../components/Popover/Popover";
+import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
+import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import ThemeToggle from "../../../components/ThemeToggle";
 import Button from "../../../components/Button";
 
@@ -49,7 +48,7 @@ export default function ProfileMenuDropDown({
       <PopoverTrigger>{children}</PopoverTrigger>
 
       <PopoverContent className="z-[9999] p-0 bg-[var(--surface-bg-secondary)] [&>svg]:dark:fill-gray-100">
-        <DropdownMenu />
+        <DropdownMenu onClose={() => setIsOpen(false)} />
       </PopoverContent>
     </Popover>
   );
@@ -72,11 +71,6 @@ const menuItems = [
     icon: <FaUserPlus />,
   },
   {
-    name: "Tutorials",
-    href: "#",
-    icon: <BiSolidVideos />,
-  },
-  {
     name: "Feedback",
     href: "#",
     icon: <MdFeedback />,
@@ -97,7 +91,7 @@ const menuItems = [
   //   icon: <RiUserSettingsFill />,
   // },
 ];
-const DropdownMenu = () => {
+const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
   const studentName = useStudentStore((s) => s.studentData?.studentName);
   const emailId = useStudentStore((s) => s.studentData?.emailId);
 
@@ -127,7 +121,10 @@ const DropdownMenu = () => {
           <div key={index}>
             {item.name === "Invite Teacher" ? (
               <button
-                onClick={() => setShowInviteTeacherModal(true)}
+                onClick={() => {
+                  setShowInviteTeacherModal(true);
+                  onClose();
+                }}
                 className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">
@@ -137,7 +134,10 @@ const DropdownMenu = () => {
               </button>
             ) : item.name === "Feedback" ? (
               <button
-                onClick={() => setShowFeedbackModal(true)}
+                onClick={() => {
+                  setShowFeedbackModal(true);
+                  onClose();
+                }}
                 className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">
@@ -147,7 +147,10 @@ const DropdownMenu = () => {
               </button>
             ) : item.name === "Rate a Course" ? (
               <button
-                onClick={() => setShowStudentRatingModal(true)}
+                onClick={() => {
+                  setShowStudentRatingModal(true);
+                  onClose();
+                }}
                 className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">

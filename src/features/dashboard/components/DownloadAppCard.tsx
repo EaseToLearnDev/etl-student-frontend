@@ -4,6 +4,8 @@ import { PiAndroidLogoFill, PiAppleLogoFill } from "react-icons/pi";
 
 // Components
 import QrPopover from "./QrPopover";
+import useIsMobile from "../../../hooks/useIsMobile";
+import { Link } from "react-router";
 
 interface DownloadAppCardProps {
   title?: string;
@@ -19,6 +21,7 @@ export default function DownloadAppCard({
   subtitle = "Download the mobile app for the best experience",
   className = "",
 }: DownloadAppCardProps) {
+  const isMobile = useIsMobile();
   return (
     <aside
       className={`w-full flex flex-col gap-4 ${className}`}
@@ -70,17 +73,27 @@ export default function DownloadAppCard({
                 <div className="text-sm font-medium">Google Play</div>
               </div>
             </div>
-            <QrPopover>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
+            {isMobile ? (
+              <Link
+                to={
+                  "https://play.google.com/store/apps/details?id=com.easetolearn.indiaexampreparation"
+                }
               >
-                <CloudArrowDownIcon className="w-5 h-5 text-[var(--text-secondary)]" />
-              </button>
-            </QrPopover>
+                <CloudArrowDownIcon className="size-5 aspect-square text-[var(--text-secondary)]" />
+              </Link>
+            ) : (
+              <QrPopover>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  <CloudArrowDownIcon className="w-5 h-5 text-[var(--text-secondary)]" />
+                </button>
+              </QrPopover>
+            )}
           </div>
         </div>
       </div>
