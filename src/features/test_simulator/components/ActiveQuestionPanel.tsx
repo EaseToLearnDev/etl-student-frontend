@@ -78,7 +78,7 @@ const ActiveQuestionPanel = () => {
             <div className="flex gap-1 max-w-[65ch] text-xl">
               <h5>{`Q${getCurrentQuestionIndex + 1})`}</h5>
               <div
-                className="math-container max-h-[400px] overflow-y-auto"
+                className="math-container"
                 dangerouslySetInnerHTML={{
                   __html: (currentQuestion?.questionBody ?? "")
                     .trim()
@@ -203,7 +203,7 @@ const ActiveQuestionPanel = () => {
       <div className="flex flex-wrap gap-y-4 justify-center gap-2 items-center mt-4">
         <div
           className={cn(
-            "size-[40px] aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
+            "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={goToPrev}
@@ -214,14 +214,14 @@ const ActiveQuestionPanel = () => {
           <>
             <Button
               style="secondary"
-              className="!min-w-[50px]"
+              className="!min-w-10 px-2 sm:px-4"
               onClick={clearCurrentResponse}
             >
               Clear
             </Button>
             <Button
               style="secondary"
-              className="!min-w-[50px]"
+              className="!min-w-10 px-2 sm:px-4"
               onClick={markCurrentFoReview}
             >
               {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
@@ -234,14 +234,14 @@ const ActiveQuestionPanel = () => {
           <>
             <Button
               style="secondary"
-              className="!min-w-[50px]"
+              className="!min-w-10 px-2 sm:px-4"
               onClick={() => setIsTeacherSupportModalOpen(true)}
             >
               Teacher Support
             </Button>
             <Button
               style="secondary"
-              className="!min-w-[50px]"
+              className="!min-w-10 px-2 sm:px-4"
               onClick={() => navigate(-1)}
             >
               Exit
@@ -250,7 +250,7 @@ const ActiveQuestionPanel = () => {
         )}
         <div
           className={cn(
-            "size-[40px] aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
+            "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={goToNext}

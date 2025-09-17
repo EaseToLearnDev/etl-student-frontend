@@ -2,6 +2,9 @@
 import { Link, useNavigate } from "react-router";
 import { useState } from "react";
 
+// Icons
+import { PiArrowRight } from "react-icons/pi";
+
 // Store
 import useDarkModeStore from "../../../../store/useDarkModeStore";
 import { useLoginStore } from "../hooks/useLoginStore";
@@ -66,7 +69,22 @@ const LoginPage = () => {
         </div>
 
         {/* Right section: Login/OTP form */}
-        <div className="flex-1 lg:w-1/2 p-5 bg-[var(--surface-bg-primary)] rounded-t-[25px] lg:rounded-none flex pt-20 justify-center lg:items-center">
+        <div className="relative flex-1 lg:w-1/2 p-5 bg-[var(--surface-bg-primary)] rounded-t-[25px] lg:rounded-none flex pt-20 justify-center lg:items-center">
+          {/* Signup Link */}
+          <div className="absolute top-0 right-8 flex justify-center mt-10 gap-1">
+            <p>New to ETL?</p>
+            <a
+              href={`${import.meta.env.VITE_FRONTEND_URL}/create-account`}
+              className="!font-bold text-[var(--sb-ocean-bg-active)]"
+            >
+              Sign Up
+            </a>
+            <PiArrowRight
+              size={16}
+              className="text-[var(--sb-ocean-bg-active)]"
+            />
+          </div>
+
           <div className="w-full max-w-[500px] h-[500px] flex flex-col gap-5">
             {/* Title */}
             <h2 className="!font-black text-center">{token ? "" : "Login"}</h2>
