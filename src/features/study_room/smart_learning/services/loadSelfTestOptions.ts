@@ -18,7 +18,7 @@ const loadSelfTestOptions = async () => {
     if (!data || data?.length === 0) return;
 
     setTestOptions({
-      totalQuestion: data[0]?.totalQuestion,
+      totalQuestion: data[0]?.totalQuestions,
       totalTime: data[0]?.duration,
       marksCorrectAns: data[0]?.marksCorrectAns,
       marksIncorrectAns: data[0]?.marksIncorrectAns,
