@@ -37,13 +37,13 @@ const TopicModeSelector = ({
       </h6>
       <div className="flex justify-center my-4">
         <Tabs
-          tabs={["Learning Mode", "Competitive Mode"]}
+          tabs={["Learning", "Competitive"]}
           selectedIndex={selectedIndex}
           onSelect={(index) =>
             setMode(index === 0 ? "learning" : "competitive")
           }
-          containerClassName="flex-wrap justify-center"
-          tabClassName="px-3 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
+          containerClassName="justify-center"
+          tabClassName="px-3 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200 nowrap"
           activeTabClassName="px-3 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
         />
       </div>

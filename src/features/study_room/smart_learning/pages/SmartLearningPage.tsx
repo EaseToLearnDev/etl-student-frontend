@@ -31,6 +31,7 @@ import EmptyState from "../../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
+import loadSelfTestOptions from "../services/loadSelfTestOptions";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -88,7 +89,11 @@ const SmartLearningPage = () => {
         setTopicFlatList(flatList);
       }
     };
+    // load topic tree on page load
     fetchTopicTree();
+    // Load self test form options on page load
+    loadSelfTestOptions();
+
     return () => reset();
   }, []);
 
@@ -162,7 +167,7 @@ const SmartLearningPage = () => {
               </>
             ) : selectedTopic ? (
               <TopicModeSelector
-              topicName={selectedTopic?.topicName ?? ""}
+                topicName={selectedTopic?.topicName ?? ""}
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
@@ -177,7 +182,10 @@ const SmartLearningPage = () => {
             )
           }
           hideSecondary={
-            !selectedTopic || showPreviousTestModal || showStartTestModal || isUpgradeModalOpen
+            !selectedTopic ||
+            showPreviousTestModal ||
+            showStartTestModal ||
+            isUpgradeModalOpen
           }
           onSecondaryHide={() => setSelectedTopicId(null)}
         />
