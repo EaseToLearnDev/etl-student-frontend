@@ -9,6 +9,7 @@ import type { ModeType } from "../sl.types";
 import Tabs from "../../../../components/Tabs";
 
 interface TopicModeSelectorProps {
+  topicName: string;
   lastSelfTestPercentage: number;
   mode: ModeType;
   setMode: (mode: ModeType) => void;
@@ -19,6 +20,7 @@ interface TopicModeSelectorProps {
  * TopicModeSelector component allows users to start in either "Learning Mode" or "Competitive Mode" for a given topic.
  */
 const TopicModeSelector = ({
+  topicName,
   lastSelfTestPercentage,
   mode,
   setMode,
@@ -30,7 +32,10 @@ const TopicModeSelector = ({
   return (
     <div className="relative flex flex-col w-full h-full">
       {/* Mode selection section */}
-      <div className="flex justify-center mb-3">
+      <h6 className="!font-semibold text-ellipsis line-clamp-2 text-center">
+        {topicName}
+      </h6>
+      <div className="flex justify-center my-4">
         <Tabs
           tabs={["Learning Mode", "Competitive Mode"]}
           selectedIndex={selectedIndex}

@@ -162,6 +162,7 @@ const SmartLearningPage = () => {
               </>
             ) : selectedTopic ? (
               <TopicModeSelector
+              topicName={selectedTopic?.topicName ?? ""}
                 mode={mode}
                 setMode={setMode}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
@@ -176,10 +177,9 @@ const SmartLearningPage = () => {
             )
           }
           hideSecondary={
-            !selectedTopic || showPreviousTestModal || showStartTestModal
+            !selectedTopic || showPreviousTestModal || showStartTestModal || isUpgradeModalOpen
           }
           onSecondaryHide={() => setSelectedTopicId(null)}
-          secondaryInitialHeight={1}
         />
       </div>
 

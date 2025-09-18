@@ -33,7 +33,7 @@ const ChildLayout = ({
   secondaryContent,
   hideSecondary = false,
   onSecondaryHide,
-  secondaryInitialHeight = 0.6,
+  secondaryInitialHeight = 0.7,
   primaryClassName = "",
   secondaryClassName = "",
 }: ChildLayoutProps) => {
