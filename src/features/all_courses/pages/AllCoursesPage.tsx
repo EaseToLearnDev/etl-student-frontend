@@ -133,7 +133,6 @@ const AllCoursesPage = () => {
           setHideSecondary(true);
           setSelectedCourse(null);
         }}
-        secondaryInitialHeight={0.6}
       />
 
       <Modal

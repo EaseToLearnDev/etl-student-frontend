@@ -1,5 +1,10 @@
 // React
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useLocation } from "react-router";
+import { useEffect } from "react";
+
+
+// Constants
+import tabTitles from "./tabTitles";
 
 // Route
 import PrivateRoute from "./PrivateRoute";
@@ -37,6 +42,19 @@ import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCourse
  * Main application router component that defines all routes and their layouts.
  */
 const Router = () => {
+  const location = useLocation();
+  useEffect(() => {
+    const matchedKey = Object.keys(tabTitles).find((key) =>
+      location.pathname.includes(key)
+    );
+    if (!matchedKey) {
+      // TODO: HANDLE WHITELABELING
+      document.title = "Ease To Learn";
+    } else {
+      document.title = tabTitles[matchedKey];
+    }
+  }, [location.pathname]);
+
   return (
     <Routes>
       <Route

@@ -174,9 +174,8 @@ const StudyMaterialsPage = () => {
               </>
             )
           }
-          hideSecondary={!selectedTopic || selectedContent !== null}
+          hideSecondary={!selectedTopic || selectedContent !== null || isUpgradeModalOpen}
           onSecondaryHide={() => setSelectedTopicId(null)}
-          secondaryInitialHeight={1}
         />
       </div>
 

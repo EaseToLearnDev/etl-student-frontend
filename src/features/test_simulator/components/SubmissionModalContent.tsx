@@ -27,10 +27,10 @@ const SubmissionModalContent = ({
           you wish to pause and resume it later.
         </h6>
       </div>
-      <div className="flex justify-end mt-7">
-        <div className="flex gap-4 items-center">
-          <Button onClick={onSubmit}>Submit Now</Button>
-          <Button onClick={onContinueLater} style="secondary">
+      <div className="w-full flex justify-end mt-7">
+        <div className="w-full flex flex-col test_submit_modal_action_buttons gap-4 items-center">
+          <Button onClick={onSubmit} className="w-full">Submit Now</Button>
+          <Button onClick={onContinueLater} style="secondary" className="w-full">
             Save & Continue Later
           </Button>
         </div>
