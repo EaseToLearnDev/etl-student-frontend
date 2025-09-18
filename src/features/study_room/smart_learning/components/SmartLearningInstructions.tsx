@@ -1,5 +1,6 @@
 // Constants
-import { learningRules, competitiveRules } from "../../../shared/constants";
+import { competitiveRules } from "../../../shared/constants";
+import { LearningSessionInstructions } from "./LearningSessionInstructions";
 
 type SmartLearningInstructionsProps = {
   learningMode: string;
@@ -24,30 +25,7 @@ const SmartLearningInstructions = ({
           </p>
         </>
       ) : (
-        <div className="flex flex-col text-[14px] font-medium tracking-[var(--ls-01)]">
-          <p>
-            Welcome to Learning Mode, your dedicated practice space designed to
-            help you learn at your own pace and build confidence before taking
-            real-time tests.
-          </p>
-          <p>Here's what makes Learning Mode special:</p>
-          <ol
-            type="a"
-            className="list-[lower-alpha] list-inside flex flex-col gap-4 mt-4 mb-4"
-          >
-            {learningRules.map((rule, index) => (
-              <li
-                key={index}
-                className="flex items-start gap-2 rounded-lg bg-[var(--surface-bg-hover)] text-[var(--text-primary)]"
-              >
-                <p className="text-[var(--sb-ocean-bg-active)]">
-                  {String.fromCharCode(97 + index)}.
-                </p>
-                <p className="flex-1">{rule}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        <LearningSessionInstructions />
       )}
     </div>
   ) : (

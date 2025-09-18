@@ -79,11 +79,11 @@ export default function StartTopicTestModalContent({
   );
 
   return (
-    <div className="relative p-2 px-4">
+    <div className="relative p-2 px-4 max-h-[700px]">
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
-          <h4>Test Configuration</h4>
+          <h4>Topic Test</h4>
           <h6>{testName}</h6>
         </div>
         <div
@@ -133,7 +133,7 @@ export default function StartTopicTestModalContent({
 
       {/* Action Buttons */}
       <div className="flex justify-end mt-7">
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center mb-8 sm:mb-0">
           <Button onClick={onStart}>Start Now</Button>
           <Button style="secondary" onClick={onClose}>
             Cancel

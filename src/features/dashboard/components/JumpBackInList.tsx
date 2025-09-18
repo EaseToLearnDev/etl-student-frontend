@@ -43,7 +43,7 @@ const JumpBackInList = () => {
         ref={scrollRef}
         className="max-w-full flex overflow-x-auto scrollbar-hide pt-4 scroll-smooth snap-x snap-mandatory"
       >
-        {prevRunningTest?.testMode ? (
+        {prevRunningTest?.testName ? (
           <div className="snap-start min-w-[250px] mr-5 last:mr-0">
             <JumpBackInCard
               onClick={() => setIsPreviousTestModalOpen(true)}

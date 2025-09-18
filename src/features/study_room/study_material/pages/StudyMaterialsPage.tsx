@@ -33,6 +33,7 @@ import NoCopyWrapper from "../../../../global/noCopyWrapper";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+import EmptyState from "../../../../components/EmptyState";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -142,7 +143,11 @@ const StudyMaterialsPage = () => {
             )
           }
           secondaryContent={
-            !loading && topicContentList && selectedTopic ? (
+            !topicContentList ||
+            topicContentList.length === 0 ||
+            !selectedTopic ? (
+              <EmptyState title="No Study Material Available" />
+            ) : !loading ? (
               <TopicContentPanel
                 setSelectedContent={(content) => {
                   if (getActiveCourseAccessStatus() === "renew") {

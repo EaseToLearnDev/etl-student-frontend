@@ -36,7 +36,9 @@ export const FilterCourses = ({
       </div>
       <div className="mt-7 flex flex-col gap-4">
         <h6>Categories</h6>
-        <div className="flex flex-wrap gap-3">
+        <div
+          className="flex flex-wrap gap-3 pb-28 sm:pb-0"
+        >
           {categories.map((category) => {
             const isCategorySelected =
               selectedCategory?.categoryId === category?.categoryId;

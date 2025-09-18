@@ -1,4 +1,5 @@
 import { Modal } from "../../../components/Modal";
+import logout from "../../../utils/logout";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
 import { handleDeleteRequest } from "../services/handleDeleteRequest";
@@ -22,6 +23,7 @@ const DeleteAccountOtpVerifyModal = () => {
     });
     if (res) {
       setStudentData({ ...studentData, deleteFlag: 1 });
+      logout();
     } else {
       setDeleteError("Invalid OTP. Please Try Again");
     }

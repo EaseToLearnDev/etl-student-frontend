@@ -20,9 +20,18 @@ export const competitiveRules = [
   "Do Not CLICK on the SUBMIT Button unless you have completed the exam.In case you click SUBMIT button, you will not be permitted to continue.",
 ];
 
+// export const learningRules = [
+//   "No Time Limit - Take your time to understand each question without the pressure of a ticking clock.",
+//   "Up to 3 Hints - Stuck on a question? You can request up to three helpful hints to guide you in the right direction.",
+//   "Ask for Study Material - Need to revise before answering? Instantly access relevant study resources for better clarity.",
+//   "Get Help from TONY - Our smart AI assistant, TONY, is always here to help you understand tough concepts or provide learning support.",
+// ];
+
 export const learningRules = [
-  "No Time Limit - Take your time to understand each question without the pressure of a ticking clock.",
-  "Up to 3 Hints - Stuck on a question? You can request up to three helpful hints to guide you in the right direction.",
-  "Ask for Study Material - Need to revise before answering? Instantly access relevant study resources for better clarity.",
-  "Get Help from TONY - Our smart AI assistant, TONY, is always here to help you understand tough concepts or provide learning support.",
+  "Try to answer all the questions.",
+  "Do not guess. In case you don't know the answer click HELP",
+  "First search the answer from your books. Then ask Tony AI",
+  "If your doubts are still not cleared SKIP a question. ETL Teachers will clear the doubts.",
+  "Each learning session will have different set questions.",
+  "We recommend to move to competitive mode only if the learning session progress bar is green.",
 ];

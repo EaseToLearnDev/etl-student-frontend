@@ -95,7 +95,7 @@ const Router = () => {
           path="study-room"
           element={
             <PermissionRedirect
-              to="/study-material"
+              to="/smart-learning"
               parentId="studyRoom"
               parentPath="study-room"
             />

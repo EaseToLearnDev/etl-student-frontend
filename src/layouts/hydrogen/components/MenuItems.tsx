@@ -35,16 +35,16 @@ export const menuItems: MenuItem[] = [
     icon: <PiNotebookFill />,
     menuItems: [
       {
-        id: "studyMaterial",
-        name: "Study Material",
-        href: "/study-material",
-        icon: <PiBooksFill />,
-      },
-      {
         id: "selfTest",
         name: "Smart Learning",
         href: "/smart-learning",
         icon: <PiBrainFill />,
+      },
+      {
+        id: "studyMaterial",
+        name: "Study Material",
+        href: "/study-material",
+        icon: <PiBooksFill />,
       },
     ],
   },

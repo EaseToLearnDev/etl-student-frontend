@@ -8,7 +8,6 @@ import { FiFilter } from "react-icons/fi";
 // Components
 import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
-import { Skeleton } from "../../../../components/SkeletonLoader";
 import EmptyState from "../../../../components/EmptyState";
 
 interface TopicContentPanelProps {
@@ -66,15 +65,10 @@ const TopicContentPanel = ({
             />
           ))
         ) : (
-          <>
-            <div className="space-y-3 p-4">
-              <Skeleton height={80} variant="rounded" />
-              <Skeleton height={80} variant="rounded" />
-              <Skeleton height={80} variant="rounded" />
-              <Skeleton height={80} variant="rounded" />
-              <Skeleton height={80} variant="rounded" />
-            </div>
-          </>
+          <EmptyState
+            title="No Content Available"
+            className="min-h-[60vh] overflow-hidden"
+          />
         )}
       </div>
     </div>

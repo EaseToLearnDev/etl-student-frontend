@@ -80,7 +80,7 @@ const StartMockTestModalContent = ({
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
-          <h4>Test Configuration</h4>
+          <h4>Mock Test</h4>
           <h6>{test.testName}</h6>
         </div>
         <div

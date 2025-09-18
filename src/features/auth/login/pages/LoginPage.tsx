@@ -87,7 +87,7 @@ const LoginPage = () => {
 
           <div className="w-full max-w-[500px] h-[500px] flex flex-col gap-5">
             {/* Title */}
-            <h2 className="!font-black text-center">{token ? "" : "Login"}</h2>
+            <h2 className="!font-black text-center">{token ? "" : "Login With"}</h2>
 
             {/* OTP Verification Section */}
             {token ? (
@@ -101,7 +101,7 @@ const LoginPage = () => {
             ) : (
               <>
                 {/* Login Form Tabs */}
-                <div className="flex justify-center gap-6 mt-6">
+                <div className="flex justify-center gap-6 mt-2">
                   <Tabs
                     tabs={["Password", "OTP"]}
                     selectedIndex={loginWith === "password" ? 0 : 1}
@@ -116,7 +116,6 @@ const LoginPage = () => {
                       }
                     }}
                     activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
-                    tabClassName="border border-[var(--border-primary)]"
                   />
                 </div>
 
@@ -131,14 +130,14 @@ const LoginPage = () => {
                       >
                         {loginWith === "otp"
                           ? "Mobile Number"
-                          : "User ID / Email / Mobile"}
+                          : "Email or User ID"}
                       </label>
                       <input
                         type="text"
                         placeholder={
                           loginWith === "otp"
                             ? "Enter your mobile number"
-                            : "User ID or Email or Mobile"
+                            : "you@company.com"
                         }
                         className={cn(
                           "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
