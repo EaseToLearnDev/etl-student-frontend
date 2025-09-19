@@ -27,7 +27,7 @@ export const Spinner = ({
       >
         <div
           className={cn(
-            "animate-spin rounded-full border-8 border-solid border-[var(--text-primary)] border-t-transparent h-32 w-32",
+            "animate-spin rounded-full border-8 border-solid border-[var(--text-primary)] border-t-transparent h-32 w-32 aspect-square",
             spinnerClassName
           )}
         ></div>

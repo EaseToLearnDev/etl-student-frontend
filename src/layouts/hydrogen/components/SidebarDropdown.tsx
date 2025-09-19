@@ -1,6 +1,6 @@
 // React
 import { useState, type ReactElement, type RefObject } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 // Icons
 import { PiMoonFill, PiSignOutFill, PiSunFill } from "react-icons/pi";
@@ -11,12 +11,14 @@ import useDarkModeStore from "../../../store/useDarkModeStore";
 
 // Utils
 import cn from "../../../utils/classNames";
-import logout from "../../../utils/logout";
+
+// Components
 import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 
 const DropdownOptions = () => {
+  const navigate = useNavigate();
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const toggleDarkMode = useDarkModeStore((state) => state.toggleDarkMode);
   return (
@@ -49,7 +51,7 @@ const DropdownOptions = () => {
           </button>
         </div>
         <button
-          onClick={logout}
+          onClick={() => navigate('/logout')}
           className="flex items-center gap-2 px-4 py-2 hover:bg-[var(--surface-bg-tertiary)] active:bg-[var(--surface-bg-tertiary)] rounded-md"
         >
           <PiSignOutFill size={16} />

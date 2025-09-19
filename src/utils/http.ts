@@ -1,7 +1,5 @@
 
 import axios, { type AxiosInstance } from "axios";
-import logout from "./logout";
-
 /**
  * Provides a configured Axios instance.
  */
@@ -50,7 +48,7 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
     const response = await fn();
     const data = (response as any)?.data ?? response;
     if (data.responseTxt === "invalidToken"){
-      logout();
+      window.location.href = 'logout';
     }
     return {
       success: true,
@@ -60,7 +58,7 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
   } catch (error: any) {
     const errorMsg = error?.response?.data?.message || error?.message || "Something went wrong";
     if (errorMsg === "invalidToken") {
-      logout();
+      window.location.href = 'logout';
     }
     console.log("API Error", error);
     return {

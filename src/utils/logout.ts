@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 // Hooks
 import { useStudentStore } from "../features/shared/hooks/useStudentStore";
 
@@ -6,6 +7,8 @@ import { useStudentStore } from "../features/shared/hooks/useStudentStore";
  */
 const logout = () => {
   const { reset } = useStudentStore.getState();
+  Cookies.remove("accountDetails");
+  Cookies.remove("token");
   reset();
   window.location.href = "/";
 };
