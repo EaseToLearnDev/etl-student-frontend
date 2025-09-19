@@ -1,6 +1,6 @@
 // React
 import { useEffect, useState, type ReactElement, type RefObject } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
@@ -12,9 +12,6 @@ import useIsMobile from "../../../hooks/useIsMobile";
 import { useInviteTeacherStore } from "../../../global/hooks/useInviteTeacherStore";
 import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
 import { useRatingCourseStore } from "../../../global/hooks/useRatingCourseStore";
-
-// Utils
-import logout from "../../../utils/logout";
 
 // Components
 import { Popover } from "../../../components/Popover/Popover";
@@ -92,6 +89,7 @@ const menuItems = [
   // },
 ];
 const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
+  const navigate = useNavigate();
   const studentName = useStudentStore((s) => s.studentData?.studentName);
   const emailId = useStudentStore((s) => s.studentData?.emailId);
 
@@ -178,7 +176,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
       <div className="border-t border-[var(--border-primary)] text-center px-2 pb-4 pt-3">
         <Button
           style="secondary"
-          onClick={logout}
+          onClick={() => navigate('/logout')}
           className="w-full bg-[var(--sb-valencia-bg-active)] hover:bg-[var(--sb-valencia-bg-hover)] text-white text-center justify-center p-2 rounded-lg outline-none"
         >
           Log Out

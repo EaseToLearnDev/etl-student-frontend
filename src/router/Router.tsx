@@ -2,7 +2,6 @@
 import { Navigate, Route, Routes, useLocation } from "react-router";
 import { useEffect } from "react";
 
-
 // Constants
 import tabTitles from "./tabTitles";
 
@@ -37,6 +36,7 @@ import TestWizard from "../components/TestWizard";
 import ForgetPasswordPage from "../features/auth/forgetPassword/pages/ForgetPasswordPage";
 import LoginDirectPage from "../features/auth/login/pages/LoginDirectPage";
 import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCoursePage";
+import LogoutPage from "../features/auth/logout/pages/LogoutPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -166,6 +166,7 @@ const Router = () => {
       <Route path="testview" element={<TestSimulatorPage mode="review" />} />
       <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="selectyourcourse" element={<SelectYourCoursePage />} />
+      <Route path="/logout" element={<LogoutPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

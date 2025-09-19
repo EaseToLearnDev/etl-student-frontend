@@ -1,5 +1,5 @@
+import { useNavigate } from "react-router";
 import { Modal } from "../../../components/Modal";
-import logout from "../../../utils/logout";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
 import { handleDeleteRequest } from "../services/handleDeleteRequest";
@@ -7,6 +7,7 @@ import { handleVerifyOtpAccountDeleteRequest } from "../services/handleVerifyOtp
 import VerifyOtpContent from "./VerifyOtpContent";
 
 const DeleteAccountOtpVerifyModal = () => {
+  const navigate = useNavigate();
   const studentData = useStudentStore((s) => s.studentData);
   const setStudentData = useStudentStore((s) => s.setStudentData);
   const deleteAccountToken = useProfileStore((s) => s.deleteAccountToken);
@@ -23,7 +24,7 @@ const DeleteAccountOtpVerifyModal = () => {
     });
     if (res) {
       setStudentData({ ...studentData, deleteFlag: 1 });
-      logout();
+      navigate('/logout');
     } else {
       setDeleteError("Invalid OTP. Please Try Again");
     }
