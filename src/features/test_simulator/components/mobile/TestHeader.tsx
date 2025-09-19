@@ -15,15 +15,9 @@ const TestHeader = () => {
   const {correctResponseEnabled} = useTestStore(s => s.features);
 
   return (
-    <div className="flex items-center justify-between gap-4 p-2">
-      <h3 className="text-ellipsis line-clamp-1 flex-1">{testTitle}</h3>
+    <div className="flex items-center justify-between gap-4 py-2 px-4">
+      <h5 className="!font-semibold text-ellipsis line-clamp-3 flex-1">{testTitle}</h5>
       {!correctResponseEnabled && <div className="flex items-center gap-2">
-        {/* <Button
-          onClick={() => setIsContinueLaterModalOpen(true)}
-          style="secondary"
-        >
-          End Session
-        </Button> */}
         <Button onClick={() => setIsSubmissionModalOpen(true)}>Submit</Button>
       </div>}
     </div>

@@ -110,7 +110,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       setIsAiFeatureEnabled,
       startQuestionTimer,
       setMode,
-      setLoading
+      setLoading,
+      isMobile
     );
     return () => {
       if (features?.timerEnabled) {

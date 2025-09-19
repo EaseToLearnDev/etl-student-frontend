@@ -20,7 +20,8 @@ export const setupTest = async (
   setIsAiFeatureEnabled: (v: boolean) => void,
   startQuestionTimer: () => void,
   setMode: (mode: string) => void,
-  setLoading: (loading: boolean) => void
+  setLoading: (loading: boolean) => void,
+  isMobile: boolean
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -91,7 +92,7 @@ export const setupTest = async (
     ) {
       setIsAiFeatureEnabled(true);
     } else {
-      features.fullScreenEnabled = true;
+      features.fullScreenEnabled = !isMobile ? true : false;
     }
 
     setFeatures(features);
