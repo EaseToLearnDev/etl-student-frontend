@@ -101,7 +101,14 @@ const TopMenu = () => {
                   <div className="w-[12px] h-[12px] aspect-square">
                     {item.icon}
                   </div>
-                  {item.name}
+                  <div className="flex flex-col justify-center">
+                    <p className="text-center">{item.name}</p>
+                    {item.desc && (
+                      <span className="text-center text-[var(--text-tertiary)]">
+                        ({item.desc})
+                      </span>
+                    )}
+                  </div>
                 </Link>
               );
             })}

@@ -12,6 +12,7 @@ import {
 interface MenuItem {
   id: string;
   name: string;
+  desc?: string;
   href: string;
   static?: boolean;
   icon?: React.ReactNode;
@@ -36,7 +37,8 @@ export const menuItems: MenuItem[] = [
     menuItems: [
       {
         id: "selfTest",
-        name: "Smart Learning",
+        name: "Gap Fixer",
+        desc: "Smart Learning",
         href: "/smart-learning",
         icon: <PiBrainFill />,
       },
