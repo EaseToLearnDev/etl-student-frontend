@@ -22,7 +22,7 @@ const SectionWiseQuestionList = ({
   return (
     <div
       className={cn(
-        "flex flex-col gap-5 overflow-y-auto scrollbar-hide max-h-full",
+        "flex flex-col gap-5 overflow-y-auto max-h-full",
         className
       )}
     >

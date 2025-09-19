@@ -12,7 +12,7 @@ const QuestionNavigator = ({ className }: any) => {
   return (
     <div
       className={cn(
-        "relative min-w-[200px] max-w-[300px] mx-auto flex flex-col gap-5 h-full",
+        "relative min-w-[200px] max-w-[320px] mx-auto flex flex-col gap-5 h-full",
         className
       )}
     >

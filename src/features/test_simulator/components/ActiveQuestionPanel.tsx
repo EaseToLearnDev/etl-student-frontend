@@ -93,7 +93,7 @@ const ActiveQuestionPanel = () => {
             </WidgetCard>
           ) : null}
           <MathJax dynamic>
-            <div className="flex gap-1 max-w-[65ch] text-base">
+            <div className="flex gap-1 text-base">
               <h6>{`Q${getCurrentQuestionIndex + 1})`}</h6>
               <div
                 className="math-container"
