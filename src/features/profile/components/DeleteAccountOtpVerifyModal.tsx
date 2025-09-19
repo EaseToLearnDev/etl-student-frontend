@@ -39,6 +39,7 @@ const DeleteAccountOtpVerifyModal = () => {
         onVerify={handleVerifyDeleteOtp}
         onCancel={() => setDeleteAccountToken("")}
         onResend={() => handleDeleteRequest()}
+        type="Both"
       />
       {deleteError && (
         <p className="text-[var(--sb-valencia-bg-active)] mt-2">

@@ -5,7 +5,7 @@ interface ProfileState {
   editProfile: boolean;
   isVerified: boolean;
   showOtpModal: boolean;
-  otpType: "email" | "mobile" | null;
+  otpType: "Email" | "Mobile" | null;
   otpError: string | null;
   resToken: string | null;
   tokenIdentify: number | null;
@@ -31,7 +31,7 @@ interface ProfileState {
   setEditProfile: (value: boolean) => void;
   setIsVerified: (value: boolean) => void;
   setShowOtpModal: (value: boolean) => void;
-  setOtpType: (type: "email" | "mobile" | null) => void;
+  setOtpType: (type: "Email" | "Mobile" | null) => void;
   setOtpError: (msg: string | null) => void;
   setResToken: (token: string | null) => void;
   setTokenIdentify: (id: number | null) => void;

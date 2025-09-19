@@ -378,7 +378,7 @@ export const TestAnalyticsOverview = () => {
                 <p className="text-[var(--text-secondary)] text-center whitespace-pre-line px-4">
                   Time Taken
                 </p>
-                <h5 className="text-[var(--text-primary)]">{data.timeSpent}</h5>
+                <h5 className="text-[var(--text-primary)]">{data.timeTakenPercent}</h5>
               </div>
             </div>
 

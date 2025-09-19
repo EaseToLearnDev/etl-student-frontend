@@ -151,6 +151,8 @@ export const GuestTestSubmitModal = () => {
           onVerify={handleVerifyOtp}
           onCancel={() => setOpenVerifyOtp(false)}
           onResend={() => handleSendOtp()}
+          type="Mobile"
+          value={mobile}
           error={error}
         />
       )}

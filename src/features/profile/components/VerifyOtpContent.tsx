@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import Button from "../../../components/Button";
 import InputOTP from "../../../components/InputOTP";
+import cn from "../../../utils/classNames";
+import { BiEdit } from "react-icons/bi";
 
 interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
   onCancel?: () => void;
   onResend?: () => void;
+  value?: string | number;
+  type: "Email" | "Mobile" | "Both";
   error?: string | null;
   secondaryTitle?: string;
 }
@@ -14,6 +18,8 @@ const VerifyOtpContent = ({
   onVerify,
   onCancel,
   onResend,
+  type,
+  value,
   error,
   secondaryTitle = "Cancel",
 }: VerifyOtpContentProps) => {
@@ -43,8 +49,34 @@ const VerifyOtpContent = ({
       <h2 className="!font-black text-center">Verify OTP</h2>
       <div className="flex flex-col justify-center gap-4 mt-6">
         <p className="text-center">
-          We have sent OTP, Check your Email / Mobile
+          We have sent OTP, Check your {type === "Both" ? "Email/Mobile" : type}
         </p>
+
+        {type !== "Both" && (
+          <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
+            {type === "Mobile" && (
+              <span className="flex items-center gap-1 ml-1 px-3 py-3 bg-[var(--surface-bg-secondary)] rounded-lg text-[var(--text-secondary)] select-none">
+                <img src="/india.png" alt="IN" width={18} height={18} /> +91
+              </span>
+            )}
+
+            <input
+              type="text"
+              className={cn(
+                "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base"
+              )}
+              required
+              value={value}
+              // onChange={}
+            />
+            <BiEdit
+              onClick={onCancel}
+              width={18}
+              height={18}
+              className="mr-2 cursor-pointer"
+            />
+          </div>
+        )}
         <InputOTP
           inputClassName="bg-[var(--surface-bg-tertiary)]"
           length={6}

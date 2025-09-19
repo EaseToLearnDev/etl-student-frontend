@@ -87,7 +87,9 @@ const LoginPage = () => {
 
           <div className="w-full max-w-[500px] h-[500px] flex flex-col gap-5">
             {/* Title */}
-            <h2 className="!font-black text-center">{token ? "" : "Login With"}</h2>
+            <h2 className="!font-black text-center">
+              {token ? "" : "Login With"}
+            </h2>
 
             {/* OTP Verification Section */}
             {token ? (
@@ -96,7 +98,8 @@ const LoginPage = () => {
                 onVerify={handleVerifyOtp}
                 onResend={() => HandleLogin(navigate, loginWith, deviceType)}
                 error={errorMessage}
-                secondaryTitle="Change Number"
+                type={loginWith === "password" ? "Email" : "Mobile"}
+                value={userId}
               />
             ) : (
               <>
@@ -132,27 +135,36 @@ const LoginPage = () => {
                           ? "Mobile Number"
                           : "Email or User ID"}
                       </label>
-                      <input
-                        type="text"
-                        placeholder={
-                          loginWith === "otp"
-                            ? "Enter your mobile number"
-                            : "you@company.com"
-                        }
-                        className={cn(
-                          "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                          "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+
+                      <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
+                        {loginWith === "otp" && (
+                          <span className="flex items-center gap-1 ml-1 px-3 py-3 bg-[var(--surface-bg-secondary)] rounded-lg text-[var(--text-secondary)] select-none">
+                            <img src="/india.png" alt="IN" width={18} height={18} /> +91
+                          </span>
                         )}
-                        required
-                        value={userId}
-                        onChange={(e) => {
-                          const inputValue = e.target.value.trim();
-                          if (loginWith === "otp") {
-                            if (isNaN(Number(inputValue))) return;
+
+                        <input
+                          type="text"
+                          placeholder={
+                            loginWith === "otp"
+                              ? "Enter your 10-digit mobile number"
+                              : "you@company.com"
                           }
-                          setCredentials(e.target.value, password);
-                        }}
-                      />
+                          className={cn(
+                            "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base"
+                          )}
+                          required
+                          value={userId}
+                          maxLength={loginWith === "otp" ? 10 : 100}
+                          onChange={(e) => {
+                            let inputValue = e.target.value.trim();
+                            if (loginWith === "otp") {
+                              if (!/^\d*$/.test(inputValue)) return;
+                            }
+                            setCredentials(inputValue, password);
+                          }}
+                        />
+                      </div>
                     </div>
 
                     {/* Password Input (only for password login) */}

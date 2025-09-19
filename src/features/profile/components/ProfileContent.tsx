@@ -41,7 +41,7 @@ const ProfileContent = () => {
   const phoneNo = useProfileStore((state) => state.phoneNo);
   const setPhoneNo = useProfileStore((state) => state.setPhoneNo);
 
-  const [verifyType, setVerifyType] = useState<"mobile" | "email" | null>(null);
+  const [verifyType, setVerifyType] = useState<"Mobile" | "Email" | null>(null);
 
   if (!studentData) return null;
 
@@ -135,7 +135,7 @@ const ProfileContent = () => {
               style="primary"
               onClick={() => {
                 openOtpModal();
-                setVerifyType("mobile");
+                setVerifyType("Mobile");
               }}
               disabled={!!phoneNo.error}
               className="w-min"
@@ -164,7 +164,7 @@ const ProfileContent = () => {
               style="primary"
               onClick={() => {
                 openOtpModal();
-                setVerifyType("email");
+                setVerifyType("Email");
               }}
               disabled={!!emailId.error}
               className="w-min"
@@ -192,7 +192,7 @@ const ProfileContent = () => {
         </div>
       )}
 
-      {showOtpModal && (
+      {showOtpModal && verifyType && (
         <Modal
           isOpen={showOtpModal}
           onClose={() => setShowOtpModal(false)}
@@ -202,6 +202,8 @@ const ProfileContent = () => {
             onCancel={() => setShowOtpModal(false)}
             onVerify={handleVerifyOtp}
             onResend={() => openOtpModal()}
+            type={verifyType}
+            value={verifyType === "Email" ? emailId.data: phoneNo.data}
             error={otpError}
           />
         </Modal>
