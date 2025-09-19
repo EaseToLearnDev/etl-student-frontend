@@ -44,7 +44,7 @@ const QuestionCard = ({
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   const jumpToQuestion = useTestStore((s) => s.jumpToQuestion);
   const activeQuestion = useTestStore((s) => s.getCurrentQuestion());
-  const getStatusByQuestionId = useTestStore((s) => s.getStatusByQuestionId);
+  const questionStatus = useTestStore((s) => s.getStatusByQuestionId(question?.questionId));
   const closeDrawer = useDrawerStore(s => s.closeDrawer);
 
   const isActive = question.questionId === activeQuestion?.questionId;
@@ -53,7 +53,7 @@ const QuestionCard = ({
   const theme: Theme = correctResponseEnabled
     ? reviewThemeMap[question.answerStatus ?? "NotAnswer"]
     : statusThemeMap[
-        getStatusByQuestionId(question.questionId) ?? QuestionStatus.NOT_VISITED
+       questionStatus ?? QuestionStatus.NOT_VISITED
       ];
 
   const themeColors = colors[theme];
@@ -79,7 +79,7 @@ const QuestionCard = ({
     >
       <span>Q{questionNumber}</span>
       {!correctResponseEnabled &&
-        getStatusByQuestionId(question?.questionId) ===
+        questionStatus ===
           QuestionStatus.ANSWERED_AND_REVIEW && (
           <div className="absolute top-0 right-0 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
         )}

@@ -19,6 +19,7 @@ import { useTeacherSupportStore } from "../store/useTeacherSupportStore";
 import { QuestionStatus } from "../test_simulator.types";
 import { useAiStore } from "../store/useAiStore";
 import AiIcon from "../../../components/icons/ai-icon";
+import { checkForTable } from "../../../utils";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -81,9 +82,11 @@ const ActiveQuestionPanel = () => {
                 <div
                   className="math-container text-sm"
                   dangerouslySetInnerHTML={{
-                    __html: currentQuestion?.commonDataDescription
-                      .trim()
-                      .replace(/[\r\n]+/g, ""),
+                    __html: checkForTable(
+                      currentQuestion?.commonDataDescription
+                        .trim()
+                        .replace(/[\r\n]+/g, "")
+                    ),
                   }}
                 />
               </MathJax>
@@ -95,9 +98,10 @@ const ActiveQuestionPanel = () => {
               <div
                 className="math-container"
                 dangerouslySetInnerHTML={{
-                  __html: (currentQuestion?.questionBody ?? "")
-                    .trim()
-                    .replace(/[\r\n]+/g, ""),
+                  __html: checkForTable(
+                    currentQuestion?.questionBody ?? "",
+                    "test_simulator_table".trim().replace(/[\r\n]+/g, "")
+                  ),
                 }}
               />
             </div>
@@ -203,9 +207,9 @@ const ActiveQuestionPanel = () => {
               <div
                 className="math-container select-none text-sm"
                 dangerouslySetInnerHTML={{
-                  __html: currentQuestion?.explanations
-                    .trim()
-                    .replace(/[\r\n]+/g, ""),
+                  __html: checkForTable(
+                    currentQuestion?.explanations.trim().replace(/[\r\n]+/g, "")
+                  ),
                 }}
               />
             </WidgetCard>

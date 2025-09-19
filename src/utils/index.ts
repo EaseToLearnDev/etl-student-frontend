@@ -25,7 +25,7 @@ export const checkVisible = (elm: HTMLElement) => {
 /** Function to check if the provided data has a table inside and wraps it in a div with class table-responsive.
  */
 
-export const checkForTable = (data: string) => {
+export const checkForTable = (data: string, className: string = "table_responsive") => {
   // Remove non-breaking spaces
   let body = data?.replace(/&nbsp;/g, "");
 
@@ -34,7 +34,7 @@ export const checkForTable = (data: string) => {
 
   // Loop through each part and wrap it in a table-responsive div
   for (let i = 0; i < upperParts?.length - 1; i++) {
-    upperParts[i] += "<div class='table_responsive'><table";
+    upperParts[i] += `<div class=${className}><table`;
   }
 
   // Join the parts back together
