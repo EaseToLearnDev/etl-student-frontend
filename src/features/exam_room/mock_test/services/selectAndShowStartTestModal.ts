@@ -3,10 +3,7 @@ import type { MockTestCategory } from "../../../shared/types";
 interface SelectAndShowStartTestModalParams {
   testId: number;
   selectedTabIndex: number;
-  completeMockTests: MockTestCategory;
-  subjectSpecificMockTests: MockTestCategory[];
-  selectedDropdownIndex: number;
-
+  testList?: MockTestCategory[] | null;
   // store setters
   setSelectedTest: (test: any) => void;
   setShowStartTestModal: (value: boolean) => void;
@@ -18,20 +15,12 @@ interface SelectAndShowStartTestModalParams {
 export const selectAndShowStartTestModal = ({
   testId,
   selectedTabIndex,
-  completeMockTests,
-  subjectSpecificMockTests,
-  selectedDropdownIndex,
+  testList,
   setSelectedTest,
   setShowStartTestModal,
 }: SelectAndShowStartTestModalParams) => {
   // pick correct test
-  const selectedTest =
-    selectedTabIndex === 0
-      ? completeMockTests?.testList?.find((t) => t.mocktestId === testId) ??
-        null
-      : subjectSpecificMockTests[selectedDropdownIndex]?.testList?.find(
-          (t) => t.mocktestId === testId
-        ) ?? null;
+  const selectedTest = testList?.[selectedTabIndex]?.testList?.find(test => test.mocktestId === testId) ?? null;
 
   // save selection
   setSelectedTest(selectedTest);

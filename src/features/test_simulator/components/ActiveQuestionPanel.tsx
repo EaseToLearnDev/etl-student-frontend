@@ -294,7 +294,7 @@ const ActiveQuestionPanel = () => {
           <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
             <AiIcon width={28} height={28} />
           </div>
-          <span className="font-semibold !text-xs">TONY AI</span>
+          <span className="font-semibold !text-xs">ASK TONY</span>
         </div>
       )}
     </div>

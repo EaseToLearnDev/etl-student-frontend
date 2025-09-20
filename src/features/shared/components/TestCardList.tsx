@@ -12,7 +12,7 @@ import {
 import TestCard from "./TestCard";
 
 type TestCardListProps = {
-  tests: MockTest[] | TopicTest[];
+  tests?: MockTest[] | TopicTest[];
   infoClickHandler?: () => void;
   onClickHandler?: (test: NormalizedTest) => void;
 };

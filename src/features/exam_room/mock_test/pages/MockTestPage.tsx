@@ -1,14 +1,16 @@
 // React
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 
-// Types
-import type { MockTestCategory } from "../../../shared/types";
-
 // Hooks
-import cn from "../../../../utils/classNames";
 import useIsMobile from "../../../../hooks/useIsMobile";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+
+// Utils
+import cn from "../../../../utils/classNames";
 
 // Store
 import { useMTStore } from "../hooks/useMTStore";
@@ -24,7 +26,6 @@ import { handleShowPreviousOrStartTest } from "../../../shared/services/handleSh
 // Layouts & Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
 import TopicTestInstructions from "../../topic_test/components/TopicTestInstructions";
-import Select from "../../../../components/Select";
 import { Modal } from "../../../../components/Modal";
 import Tabs from "../../../../components/Tabs";
 import StartMockTestModalContent from "../components/StartMockTestModalContent";
@@ -32,12 +33,8 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import TestCardList from "../../../shared/components/TestCardList";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
-import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
-import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
-
-// Constants
-const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
@@ -45,6 +42,7 @@ const TABS = ["Complete Mock Tests", "Subject Wise Mock Tests"] as const;
 const MockTestPage = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
 
   // Store state
   const testList = useMTStore((s) => s.testList);
@@ -67,17 +65,14 @@ const MockTestPage = () => {
 
   // Local state
   const [hideSecondary, setHideSecondary] = useState(isMobile);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [selectedDropdownIndex, setSelectedDropdownIndex] = useState(0);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
+  const courseTitle = useStudentStore((s) => s.activeCourse?.organisationName);
 
-  // Derived data
-  const completeMockTests = testList?.[0] || ({} as MockTestCategory);
-  const subjectSpecificMockTests = testList?.slice(1) || [];
-
-  const selectedSubjectTests = useMemo(
-    () => subjectSpecificMockTests[selectedDropdownIndex]?.testList ?? [],
-    [subjectSpecificMockTests, selectedDropdownIndex]
+  const tabs = testList?.map((set) =>
+    set?.categoryName
+      ?.replace(courseTitle || "", "")
+      .replace("MOCK TESTS", "")
+      .trim()
   );
 
   const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
@@ -89,32 +84,61 @@ const MockTestPage = () => {
     loadMockTestList();
   }, []);
 
+  const scrollTabs = (direction: "left" | "right") => {
+    if (tabsContainerRef.current) {
+      const scrollAmount = 200;
+      const currentScroll = tabsContainerRef.current.scrollLeft;
+      const newScroll =
+        direction === "left"
+          ? currentScroll - scrollAmount
+          : currentScroll + scrollAmount;
+
+      tabsContainerRef.current.scrollTo({
+        left: newScroll,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <div className="w-full h-full overflow-hidden">
-      {/* Tabs + Subject Filter */}
+      {/* Tabs + Navigation Arrow */}
       <div
         className={cn(
-          "flex flex-col lg:flex-row lg:items-center gap-4 justify-between md:w-[60%] lg:w-[70%]",
+          "flex lg:items-center gap-2 md:max-w-[60%] lg:max-w-[70%]",
           !isMobile ? " pr-5" : ""
         )}
       >
-        <Tabs
-          tabs={TABS}
-          selectedIndex={selectedTabIndex}
-          onSelect={setSelectedTabIndex}
-          tabClassName="px-5 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
-          activeTabClassName="px-5 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
-        />
-        {selectedTabIndex === 1 && (
-          <Select
-            type="Subjects"
-            items={subjectSpecificMockTests.map((item) => item.categoryName)}
-            isOpen={isDropdownOpen}
-            onToggle={() => setIsDropdownOpen((prev) => !prev)}
-            selectedIndex={selectedDropdownIndex}
-            onSelect={setSelectedDropdownIndex}
+        <button
+          onClick={() => scrollTabs("left")}
+          className="size-10 aspect-square border-1 border-[var(--border-secondary)] rounded-lg flex justify-center items-center cursor-pointer hover:bg-[var(--sb-ocean-bg-disabled)] transition-colors"
+        >
+          <MdChevronLeft
+            size={20}
+            className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] active:text-[var(--text-primary)]"
           />
-        )}
+        </button>
+        <div
+          ref={tabsContainerRef}
+          className="max-w-[85%] overflow-x-auto scrollbar-hide"
+        >
+          <Tabs
+            tabs={tabs || []}
+            selectedIndex={selectedTabIndex}
+            onSelect={setSelectedTabIndex}
+            tabClassName="px-5 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200"
+            activeTabClassName="px-5 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
+          />
+        </div>
+        <button
+          onClick={() => scrollTabs("right")}
+          className="ml-auto size-10 aspect-square border-1 border-[var(--border-secondary)] rounded-lg flex justify-center items-center cursor-pointer hover:bg-[var(--sb-ocean-bg-disabled)] transition-colors"
+        >
+          <MdChevronRight
+            size={20}
+            className="text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] active:text-[var(--text-primary)]"
+          />
+        </button>
       </div>
 
       {/* Layout */}
@@ -123,21 +147,15 @@ const MockTestPage = () => {
           primaryContent={
             !loading ? (
               <TestCardList
-                tests={
-                  selectedTabIndex === 0
-                    ? completeMockTests?.testList
-                    : selectedSubjectTests
-                }
+                tests={testList?.[selectedTabIndex]?.testList}
                 infoClickHandler={() => setHideSecondary(false)}
                 onClickHandler={(test) => {
                   getActiveCourseAccessStatus() === "renew"
                     ? setIsUpgradeModalOpen(true)
                     : selectAndShowStartTestModal({
-                        testId: test.id,
+                        testId: test?.id,
                         selectedTabIndex,
-                        completeMockTests,
-                        subjectSpecificMockTests,
-                        selectedDropdownIndex,
+                        testList,
                         setSelectedTest,
                         setShowStartTestModal,
                       });

@@ -28,8 +28,8 @@ const Tabs = ({
           key={tab}
           onClick={() => onSelect(index)}
           className={cn(
-            "border-1 border-[var(--border-tertiary)] rounded-full",
-            "flex justify-center items-center min-w-[100px] max-w-fit px-4 py-2",
+            "border-1 border-[var(--border-secondary)] rounded-full",
+            "flex justify-center items-center w-fit px-4 py-2 whitespace-nowrap",
             "select-none cursor-pointer transition-colors duration-150 ease",
             index === selectedIndex
               ? cn(

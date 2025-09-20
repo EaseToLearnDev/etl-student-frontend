@@ -1,10 +1,10 @@
 // React
 import { useEffect, useState, type ReactElement, type RefObject } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link } from "react-router";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
-import { MdFeedback, MdPayments, MdStar } from "react-icons/md";
+import { MdFeedback, MdLogout, MdPayments, MdStar } from "react-icons/md";
 
 // Hooks
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
@@ -18,7 +18,6 @@ import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import ThemeToggle from "../../../components/ThemeToggle";
-import Button from "../../../components/Button";
 
 export default function ProfileMenuDropDown({
   children,
@@ -77,19 +76,8 @@ const menuItems = [
     href: "#",
     icon: <MdStar />,
   },
-  {
-    name: "Settings",
-    href: "#",
-    // icon: <RiUserSettingsFill />,
-  },
-  // {
-  //   name: "Settings",
-  //   href: "/settings",
-  //   icon: <RiUserSettingsFill />,
-  // },
 ];
 const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
-  const navigate = useNavigate();
   const studentName = useStudentStore((s) => s.studentData?.studentName);
   const emailId = useStudentStore((s) => s.studentData?.emailId);
 
@@ -173,14 +161,13 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
         ))}
       </div>
 
-      <div className="border-t border-[var(--border-primary)] text-center px-2 pb-4 pt-3">
-        <Button
-          style="secondary"
-          onClick={() => navigate('/logout')}
-          className="w-full bg-[var(--sb-valencia-bg-active)] hover:bg-[var(--sb-valencia-bg-hover)] text-white text-center justify-center p-2 rounded-lg outline-none"
+      <div className="px-2 py-4 border-t-1 border-t-[var(--border-primary)]">
+        <Link
+          to={"/login"}
+          className="font-medium w-full flex items-center gap-2 px-4 rounded-lg outline-none border-none"
         >
-          Log Out
-        </Button>
+          <MdLogout size={14}/><p>Log Out</p>
+        </Link>
       </div>
     </div>
   );
