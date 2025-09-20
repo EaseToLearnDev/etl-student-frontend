@@ -1,5 +1,5 @@
 // Icons
-import { MdChevronLeft } from "react-icons/md";
+import { MdArrowBack, MdChevronLeft } from "react-icons/md";
 
 // Constants
 // import {
@@ -29,6 +29,7 @@ import { getTimeFromSeconds } from "../../../../utils";
 const MobileTestSimulator = () => {
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
+  const closeDrawer = useDrawerStore((state) => state.closeDrawer);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const isExpired = useTestTimerStore((state) => state.isExpired);
   const isRunning = useTestTimerStore((state) => state.isRunning);
@@ -60,11 +61,13 @@ const MobileTestSimulator = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-full h-full justify-between gap-2 p-2">
+      <div className="flex flex-col w-full h-full gap-2 p-2">
         {/* Horizontal Section-wise Question List */}
         <SectionQuestionScroll />
         {/* Active Question Section */}
-        <ActiveQuestionPanel />
+        <div className="w-full h-[calc(100dvh-300px)]">
+          <ActiveQuestionPanel />
+        </div>
       </div>
 
       {/* Bottom Navigation for tony AI Chat Window
@@ -86,7 +89,12 @@ const MobileTestSimulator = () => {
           openDrawer({
             view: (
               <div className="w-full h-full flex flex-col p-4 gap-5 items-center bg-[var(--surface-bg-secondary)]">
-                <h3 className="text-center">Questions</h3>
+                <div className="w-full flex gap-3 items-center" onClick={() => closeDrawer()}>
+                  <div className="size-10 aspect-square border-1 border-[var(--border-primary)] flex justify-center items-center rounded-lg hover:bg-[var(--surface-bg-tertiary)]">
+                    <MdArrowBack size={18} />
+                  </div>
+                  <h3>Questions</h3>
+                </div>
                 <SectionWiseQuestionList />
                 <StatusGroup />
               </div>

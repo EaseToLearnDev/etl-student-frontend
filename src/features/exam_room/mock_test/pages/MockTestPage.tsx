@@ -120,7 +120,7 @@ const MockTestPage = () => {
         </button>
         <div
           ref={tabsContainerRef}
-          className="max-w-[85%] overflow-x-auto scrollbar-hide"
+          className="max-w-[90%] overflow-x-auto scrollbar-hide"
         >
           <Tabs
             tabs={tabs || []}

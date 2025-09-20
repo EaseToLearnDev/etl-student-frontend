@@ -18,7 +18,7 @@ const TestHeader = () => {
   return (
     <div className="flex justify-between">
       <div className="md:w-[60%] lg:w-[70%]">
-        <h3 className="text-ellipsis line-clamp-1">{testTitle}</h3>
+      <h5 className="!font-semibold text-ellipsis line-clamp-2 flex-1">{testTitle}</h5>
       </div>
       <div className="hidden md:flex md:justify-center md:w-[40%] lg:w-[30%]">
         <h3>
