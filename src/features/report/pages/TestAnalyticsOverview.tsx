@@ -649,49 +649,57 @@ export const TestAnalyticsOverview = () => {
             </h6>
 
             <div className="h-[400px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={groupedData}
-                  barSize={28}
-                  margin={{ top: 20, bottom: 20, left: 20, right: 20 }}
-                >
-                  <CartesianGrid strokeDasharray="8 10" strokeOpacity={0.435} />
-                  <XAxis dataKey="title" axisLine={false} tickLine={false} />
-                  <YAxis axisLine={false} tickLine={false} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "var(--surface-bg-secondary)",
-                      border: "none",
-                      borderRadius: "0.5rem",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                    }}
-                    cursor={{ fill: "rgba(0, 0, 0, 0.2)" }}
-                    wrapperStyle={{ outline: "none" }}
-                  />
-
-                  {Object.keys(colors).map((key) => (
-                    <Bar
-                      key={key}
-                      dataKey={key}
-                      fill={colors[key as keyof typeof colors]}
-                      stackId={key === "TimeSpent" ? undefined : "a"}
-                      radius={[4, 4, 0, 0]}
+              {groupedData.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={groupedData}
+                    barSize={28}
+                    margin={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                  >
+                    <CartesianGrid
+                      strokeDasharray="8 10"
+                      strokeOpacity={0.435}
                     />
-                  ))}
-                </BarChart>
-              </ResponsiveContainer>
+                    <XAxis dataKey="title" axisLine={false} tickLine={false} />
+                    <YAxis axisLine={false} tickLine={false} />
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: "var(--surface-bg-secondary)",
+                        border: "none",
+                        borderRadius: "0.5rem",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                      }}
+                      cursor={{ fill: "rgba(0, 0, 0, 0.2)" }}
+                      wrapperStyle={{ outline: "none" }}
+                    />
+
+                    {Object.keys(colors).map((key) => (
+                      <Bar
+                        key={key}
+                        dataKey={key}
+                        fill={colors[key as keyof typeof colors]}
+                        stackId={key === "TimeSpent" ? undefined : "a"}
+                        radius={[4, 4, 0, 0]}
+                      />
+                    ))}
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <EmptyState title="No Data Available" />
+              )}
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-4">
-              {Object.entries(colors).map(([key, color]) => (
-                <div key={key} className="flex items-center gap-2">
-                  <p
-                    className="w-3 h-3 rounded-md"
-                    style={{ backgroundColor: color }}
-                  />
-                  {key === "TimeSpent" ? "Time Spent (min)" : key}
-                </div>
-              ))}
+              {groupedData.length > 0 &&
+                Object.entries(colors).map(([key, color]) => (
+                  <div key={key} className="flex items-center gap-2">
+                    <p
+                      className="w-3 h-3 rounded-md"
+                      style={{ backgroundColor: color }}
+                    />
+                    {key === "TimeSpent" ? "Time Spent (min)" : key}
+                  </div>
+                ))}
             </div>
           </div>
 
@@ -700,31 +708,35 @@ export const TestAnalyticsOverview = () => {
               Scores Comparison
             </h6>
             <div className="h-[400px]">
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
-                className="[&_.recharts-default-legend]:flex [&_.recharts-default-legend]:justify-center"
-              >
-                <RadialBarChart
-                  innerRadius="40%"
-                  outerRadius="80%"
-                  barSize={20}
-                  data={scoreLevels}
+              {scoreLevels.length > 0 ? (
+                <ResponsiveContainer
+                  width="100%"
+                  height="100%"
+                  className="[&_.recharts-default-legend]:flex [&_.recharts-default-legend]:justify-center"
                 >
-                  <RadialBar
-                    dataKey="value"
-                    background
-                    cornerRadius={20}
-                    label={{
-                      fill: "#fff",
-                      position: "insideStart",
-                      formatter: (entry) =>
-                        `${entry?.toString()} out of ${data.fullMarks}`,
-                    }}
-                    className="[&_.recharts-radial-bar-background-sector]:fill-[var(--surface-bg-tertiary)]"
-                  />
-                </RadialBarChart>
-              </ResponsiveContainer>
+                  <RadialBarChart
+                    innerRadius="40%"
+                    outerRadius="80%"
+                    barSize={20}
+                    data={scoreLevels}
+                  >
+                    <RadialBar
+                      dataKey="value"
+                      background
+                      cornerRadius={20}
+                      label={{
+                        fill: "#fff",
+                        position: "insideStart",
+                        formatter: (entry) =>
+                          `${entry?.toString()} out of ${data.fullMarks}`,
+                      }}
+                      className="[&_.recharts-radial-bar-background-sector]:fill-[var(--surface-bg-tertiary)]"
+                    />
+                  </RadialBarChart>
+                </ResponsiveContainer>
+              ) : (
+                <EmptyState title="No Data Available" />
+              )}
             </div>
             <div className="flex flex-wrap justify-center gap-4">
               {scoreLevels.map((entry, idx) => (

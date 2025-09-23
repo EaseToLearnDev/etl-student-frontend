@@ -4,6 +4,7 @@ export interface Response {
 }
 
 export interface Question {
+  itemId?: number;
   questionId: number;
   questionDisplayId: string;
   questionType: string;
@@ -56,7 +57,7 @@ export interface TestData {
   remainingTime: number;
   lastQuestionIndex?: number;
   sectionLock: string;
-  
+  modelTestId?: string;
   bloom?: number;
   subject?: string;
   scheduleId?: string;
@@ -137,6 +138,7 @@ export interface TestSubmitRequest {
   packTypeId: number;
   packTypeTitle: PackTypeTitle;
   testId: string;
+  modelTestId?: string;
   testType: number;
   testOption: number;
   testMode: string;
@@ -147,7 +149,10 @@ export interface TestSubmitRequest {
   bloom: number;
   questionSet: {
     questionId: number;
-    topicId: string;
+    itemId?: number; 
+    sectionId?: number; 
+    sectionName?: string; 
+    topicId: number;
     timeSpent: number;
     studentResponse?: string;
     correctAnswerMarks: number;
@@ -157,9 +162,12 @@ export interface TestSubmitRequest {
     noQuestionAttempt: number;
   }[];
   noQuestionAttempt: number;
-  schoolId: number;
-  schoolName: string;
-  className: string;
+  admissionNumber?: string;
+  schoolId?: number;
+  schoolName?: string;
+  className?: string;
+  subject?: string;
+  scheduleId?: string;
   helpCounter: number;
 }
 

@@ -8,13 +8,21 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import type { NavigateFunction } from "react-router";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
+import useTestTimerStore from "../store/useTestTimerStore";
 
 /**
  * Handles the submission of a test by collecting relevant test, student, and course data,
  */
 export const handleTestSubmit = async (navigate: NavigateFunction) => {
-  const { testData, testConfig, questionResponseMap, questionTimeMap, helpCount } = useTestStore.getState();
+  const {
+    testData,
+    testConfig,
+    questionResponseMap,
+    questionTimeMap,
+    helpCount,
+  } = useTestStore.getState();
   const { setToast } = useToastStore.getState();
+  const { remainingSec, finalRemainingSec } = useTestTimerStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse) return;
@@ -44,13 +52,15 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testOption: testData?.testOption,
     testMode: testMode,
     totalTime: testData?.totalTime,
-    remainingTime: testData?.remainingTime,
+    remainingTime: finalRemainingSec ?? remainingSec,
     totalQuestion: testData?.questionSet?.length ?? 0,
     testTitle: testData?.testName,
     bloom: testData?.bloom,
+    modelTestId: testData?.modelTestId,
     questionSet:
       testData?.questionSet.map((item) => {
         const baseObj: any = {
+          itemId: item.itemId,
           questionId: item.questionId,
           topicId: item.topicId,
           timeSpent: questionTimeMap[item.questionId] || 0,
@@ -59,7 +69,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           notAnswerMarks: item.notAnswerMarks,
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
-          studentResponse: questionResponseMap[item.questionId] || ""
+          studentResponse: questionResponseMap[item.questionId] || "",
         };
 
         if (testData?.testType === 3) {
@@ -69,6 +79,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
 
         return baseObj;
       }) ?? [],
+    noQuestionAttempt: testData?.noQuestionAttempt,
     helpCounter: helpCount,
   };
   const { schools } = studentData;

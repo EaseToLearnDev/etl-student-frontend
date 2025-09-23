@@ -3,12 +3,12 @@ import { create } from "zustand";
 interface TestTimerStore {
   testDurationSec: number;
   remainingSec: number;
+  finalRemainingSec: number | null;
   isRunning: boolean;
   isExpired: boolean;
   _testEndMs: number | null;
   _testTimerId: ReturnType<typeof setInterval> | null;
-  isTestEndedModalOpen: boolean
-  
+  isTestEndedModalOpen: boolean;
 
   startTestTimer: (durationSec: number) => void;
   pauseTestTimer: () => void;
@@ -29,13 +29,14 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
   isExpired: false,
   _testEndMs: null,
   _testTimerId: null,
-   isTestEndedModalOpen: false,
+  finalRemainingSec: null,
+  isTestEndedModalOpen: false,
 
   // Starts a new countdown timer with the specified duration in seconds.
   // Clears any existing timer and sets up a new interval to tick every second.
   startTestTimer: (durationSec) => {
     const { _testTimerId, _tick } = get();
-    
+
     const now = Date.now();
     const endMs = now + durationSec * 1000;
 
@@ -43,6 +44,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
     if (_testTimerId) clearInterval(_testTimerId);
 
     set({
+      finalRemainingSec: null,
       testDurationSec: durationSec,
       remainingSec: durationSec,
       isRunning: true,
@@ -68,11 +70,12 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
       if (_testTimerId) clearInterval(_testTimerId);
       set({
         remainingSec: 0,
+        finalRemainingSec: 0,
         isRunning: false,
         isExpired: true,
         _testTimerId: null,
       });
-      set({ isTestEndedModalOpen: true})
+      set({ isTestEndedModalOpen: true });
       return;
     }
 
@@ -101,20 +104,21 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
     startTestTimer(remainingSec);
   },
 
-  setIsTestEndedModalOpen: (v) => set({ isTestEndedModalOpen: v}),
+  setIsTestEndedModalOpen: (v) => set({ isTestEndedModalOpen: v }),
 
   // Completely stops the timer and marks it as expired.
   // Resets remaining time to zero and clears the interval.
   stopTestTimer: () => {
-    const { _testTimerId } = get();
+    const { _testTimerId, remainingSec } = get();
     if (_testTimerId) clearInterval(_testTimerId);
     set({
+      finalRemainingSec: remainingSec,
       isRunning: false,
       isExpired: true,
       _testTimerId: null,
       _testEndMs: null,
       remainingSec: 0,
-      isTestEndedModalOpen: false
+      isTestEndedModalOpen: false,
     });
   },
 }));
