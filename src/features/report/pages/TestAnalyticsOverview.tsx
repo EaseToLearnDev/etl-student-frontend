@@ -10,6 +10,8 @@ import {
   BarChart,
   CartesianGrid,
   XAxis,
+  RadialBarChart,
+  RadialBar,
 } from "recharts";
 import { useEffect, useState } from "react";
 import { Widget } from "../components/newreports/Widget";
@@ -23,7 +25,7 @@ import {
   NoSymbolIcon,
   PresentationChartLineIcon,
   StarIcon,
-  TrophyIcon,
+  // TrophyIcon,
   UserGroupIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
@@ -158,6 +160,32 @@ export const TestAnalyticsOverview = () => {
         ),
         color: item.color || "#8884d8",
       })) || [];
+
+  const TopperColors = ["#3b82f6", "#2CDDC7", "#10b981", "#ef4444", "#8b5cf6"];
+  const scoreLevels = data.topperCompare.map((item, index) => ({
+    name: item.title,
+    value: item.score,
+    fill: TopperColors[index % TopperColors.length],
+  }));
+
+  const groupedData = data.topperCompare.map((item) => {
+    const [minutes, seconds] = item.timeSpent.split(":").map(Number);
+    const totalMinutes = minutes + seconds / 60;
+    return {
+      title: item.title,
+      Correct: item.correctQuestions,
+      Incorrect: item.incorrectQuestions,
+      Unattempted: item.unattemptedQuestions,
+      TimeSpent: parseFloat(totalMinutes.toFixed(2)),
+    };
+  });
+
+  const colors = {
+    Correct: "#282ECA",
+    Incorrect: "#4052F6",
+    Unattempted: "#96C0FF",
+    TimeSpent: "#2CDDC7",
+  };
 
   // Tab content components
   const OverallPerformanceTab = () => (
@@ -378,7 +406,9 @@ export const TestAnalyticsOverview = () => {
                 <p className="text-[var(--text-secondary)] text-center whitespace-pre-line px-4">
                   Time Taken
                 </p>
-                <h5 className="text-[var(--text-primary)]">{data.timeTakenPercent}</h5>
+                <h5 className="text-[var(--text-primary)]">
+                  {data.timeTakenPercent}
+                </h5>
               </div>
             </div>
 
@@ -612,77 +642,107 @@ export const TestAnalyticsOverview = () => {
       </div>
 
       <div className="space-y-6">
-        {/* Topper Compare Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {data.topperCompare?.map((item, index) => (
-            <div
-              key={index}
-              className="relative overflow-hidden bg-[var(--surface-bg-primary)] border border-[var(--border-primary)] rounded-xl p-5 hover:shadow-md transition-shadow duration-200"
-            >
-              {/* Decorative circle */}
-              <div className="absolute top-0 right-0 w-20 h-20 bg-[var(--sb-ocean-bg-active)]/5 rounded-full translate-x-1/3 -translate-y-1/3 opacity-50"></div>
+          <div className="bg-[var(--surface-bg-primary)] border border-[var(--border-primary)] rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
+            <h6 className="text-[var(--text-primary)] mb-4">
+              Correct / Incorrect / Unattempted / Time Spent Comparison
+            </h6>
 
-              <div className="relative">
-                <div className="flex items-center justify-between mb-4">
-                  <h6 className="text-[var(--text-primary)]">{item.title}</h6>
-                  <TrophyIcon className="w-5 h-5 text-[var(--sb-ocean-bg-active)]" />
-                </div>
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={groupedData}
+                  barSize={28}
+                  margin={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                >
+                  <CartesianGrid strokeDasharray="8 10" strokeOpacity={0.435} />
+                  <XAxis dataKey="title" axisLine={false} tickLine={false} />
+                  <YAxis axisLine={false} tickLine={false} />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "var(--surface-bg-secondary)",
+                      border: "none",
+                      borderRadius: "0.5rem",
+                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                    }}
+                    cursor={{ fill: "rgba(0, 0, 0, 0.2)" }}
+                    wrapperStyle={{ outline: "none" }}
+                  />
 
-                <div className="space-y-3">
-                  {/* Score */}
-                  <div className="flex items-center justify-between p-3 bg-[var(--surface-bg-primary)] rounded-lg">
-                    <p className="text-[var(--text-tertiary)] flex items-center gap-2">
-                      <StarIcon className="w-4 h-4 text-[var(--sb-sunglow-bg-active)]" />
-                      Score
-                    </p>
-                    <p className="text-[var(--sb-ocean-bg-active)]">
-                      {item.score} ({item.scorePercentage}%)
-                    </p>
-                  </div>
-
-                  {/* Correct / Incorrect */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="flex items-center gap-2 p-3 bg-[var(--sb-green-haze-bg-active)]/10 rounded-lg">
-                      <CheckCircleIcon className="w-4 h-4 text-[var(--sb-green-haze-bg-active)]" />
-                      <div>
-                        <p className="text-[var(--sb-green-haze-bg-active)]">
-                          Correct
-                        </p>
-                        <p className="text-[var(--sb-green-haze-bg-on-press)]">
-                          {item.correctQuestions}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 p-3 bg-[var(--sb-valencia-bg-active)]/10 rounded-lg">
-                      <XCircleIcon className="w-4 h-4 text-[var(--sb-valencia-bg-active)]" />
-                      <div>
-                        <p className="text-[var(--sb-valencia-bg-active)]">
-                          Incorrect
-                        </p>
-                        <p className="text-[var(--sb-valencia-bg-on-press)]">
-                          {item.incorrectQuestions}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Time Spent */}
-                  <div className="flex items-center gap-2 p-3 bg-[var(--sb-sunglow-bg-active)]/10 rounded-lg">
-                    <ClockIcon className="w-4 h-4 text-[var(--sb-sunglow-bg-active)]" />
-                    <div>
-                      <p className="text-[var(--sb-sunglow-bg-active)]">
-                        Time Spent
-                      </p>
-                      <p className="text-[var(--sb-sunglow-bg-on-press)]">
-                        {item.timeSpent}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  {Object.keys(colors).map((key) => (
+                    <Bar
+                      key={key}
+                      dataKey={key}
+                      fill={colors[key as keyof typeof colors]}
+                      stackId={key === "TimeSpent" ? undefined : "a"}
+                      radius={[4, 4, 0, 0]}
+                    />
+                  ))}
+                </BarChart>
+              </ResponsiveContainer>
             </div>
-          ))}
+
+            <div className="flex flex-wrap justify-center gap-4 mt-4">
+              {Object.entries(colors).map(([key, color]) => (
+                <div key={key} className="flex items-center gap-2">
+                  <p
+                    className="w-3 h-3 rounded-md"
+                    style={{ backgroundColor: color }}
+                  />
+                  {key === "TimeSpent" ? "Time Spent (min)" : key}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[var(--surface-bg-primary)] border border-[var(--border-primary)] rounded-xl p-5 hover:shadow-md transition-shadow duration-200">
+            <h6 className="text-[var(--text-primary)] mb-4">
+              Scores Comparison
+            </h6>
+            <div className="h-[400px]">
+              <ResponsiveContainer
+                width="100%"
+                height="100%"
+                className="[&_.recharts-default-legend]:flex [&_.recharts-default-legend]:justify-center"
+              >
+                <RadialBarChart
+                  innerRadius="40%"
+                  outerRadius="80%"
+                  barSize={20}
+                  data={scoreLevels}
+                >
+                  <RadialBar
+                    dataKey="value"
+                    background
+                    cornerRadius={20}
+                    label={{
+                      fill: "#fff",
+                      position: "insideStart",
+                      formatter: (entry) =>
+                        `${entry?.toString()} out of ${data.fullMarks}`,
+                    }}
+                    className="[&_.recharts-radial-bar-background-sector]:fill-[var(--surface-bg-tertiary)]"
+                  />
+                </RadialBarChart>
+              </ResponsiveContainer>
+            </div>
+            <div className="flex flex-wrap justify-center gap-4">
+              {scoreLevels.map((entry, idx) => (
+                <div
+                  key={`answer-legend-${idx}`}
+                  className="flex items-center gap-2"
+                >
+                  <p
+                    style={{ backgroundColor: entry.fill }}
+                    className="w-4 h-4 rounded-full inline-block"
+                  />
+                  <p className="text-[var(--text-primary)] font-medium">
+                    {entry.name}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Your Performance Overview */}

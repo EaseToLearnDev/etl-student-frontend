@@ -76,6 +76,10 @@ const menuItems = [
     href: "#",
     icon: <MdStar />,
   },
+  {
+    name: "Settings",
+    href: "#",
+  },
 ];
 const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
   const studentName = useStudentStore((s) => s.studentData?.studentName);
@@ -163,10 +167,11 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
 
       <div className="px-2 py-4 border-t-1 border-t-[var(--border-primary)]">
         <Link
-          to={"/login"}
+          to={"/logout"}
           className="font-medium w-full flex items-center gap-2 px-4 rounded-lg outline-none border-none"
         >
-          <MdLogout size={14}/><p>Log Out</p>
+          <MdLogout size={14} />
+          <p>Log Out</p>
         </Link>
       </div>
     </div>
