@@ -122,8 +122,11 @@ const ActiveQuestionPanel = () => {
           {/* Response Section */}
           <div className="flex flex-col gap-5">
             {/* Case: MCQ */}
-            {(currentQuestion?.questionType === "Multiple-Choice" ||
-              currentQuestion?.questionType === "Multiple-Choice-(5)") &&
+            {[
+              "Multiple-Choice",
+              "Multiple-Choice-(5)",
+              "MC-Assertion-Reason",
+            ].includes(currentQuestion?.questionType || "") &&
               currentQuestion?.responseChoice.map((response) => (
                 <div
                   key={response.responseId}
