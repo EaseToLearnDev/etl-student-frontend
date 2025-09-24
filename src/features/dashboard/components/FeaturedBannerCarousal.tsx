@@ -1,72 +1,78 @@
 import {
   ArrowRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
+  // ChevronLeftIcon,
+  // ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import cn from "../../../utils/classNames";
-import { useState } from "react";
-import { PiBook, PiChartLine, PiTimer } from "react-icons/pi";
+// import { useState } from "react";
+// import { PiBook, PiChartLine, PiTimer } from "react-icons/pi";
 import { Link } from "react-router";
 import { Modal } from "../../../components/Modal";
 import { MdClose } from "react-icons/md";
 import { useSMStore } from "../../study_room/study_material/hooks/useSMStore";
 import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
-import useIsMobile from "../../../hooks/useIsMobile";
+// import useIsMobile from "../../../hooks/useIsMobile";
 import { isProfileComplete } from "../services/isProfileComplete";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { useTutorialStore } from "../../tutorials/hooks/useTutorialStore";
 
 interface FeaturedBannerCarousalProps {
   className?: string;
 }
 
 const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
-  const [selectedSlideIndex, setSelectedSlideIndex] = useState<number>(0);
-  const studentName = useStudentStore(state => state.studentData?.studentName);
+  // const [selectedSlideIndex, setSelectedSlideIndex] = useState<number>(0);
+  const studentName = useStudentStore(
+    (state) => state.studentData?.studentName
+  );
 
   const selectedContent = useSMStore((s) => s.selectedContent);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
-  const mobile = useIsMobile();
 
-  const tutorialCards = [
-    {
-      title: "Study Room",
-      description: "Watch Study Room tutorials to boost your learning.",
-      icon: <PiBook />,
-      content: {
-        contentTitle: "The Nitrogen Cycle",
-        contentType: "Video",
-        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
-        id: 375,
-        language: "English",
-      },
-    },
-    {
-      title: "Exam Room",
-      description:
-        "Learn how to attempt practice exams, view results, and improve your score.",
-      icon: <PiTimer />,
-      content: {
-        contentTitle: "The Nitrogen Cycle",
-        contentType: "Video",
-        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
-        id: 375,
-        language: "English",
-      },
-    },
-    {
-      title: "Analytics",
-      description:
-        "Track your performance with detailed analytics and progress insights.",
-      icon: <PiChartLine />,
-      content: {
-        contentTitle: "The Nitrogen Cycle",
-        contentType: "Video",
-        contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
-        id: 375,
-        language: "English",
-      },
-    },
-  ];
+  const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
+
+  // const mobile = useIsMobile();
+
+  // const tutorialCards = [
+  //   {
+  //     title: "Study Room",
+  //     description: "Watch Study Room tutorials to boost your learning.",
+  //     icon: <PiBook />,
+  //     content: {
+  //       contentTitle: "The Nitrogen Cycle",
+  //       contentType: "Video",
+  //       contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+  //       id: 375,
+  //       language: "English",
+  //     },
+  //   },
+  //   {
+  //     title: "Exam Room",
+  //     description:
+  //       "Learn how to attempt practice exams, view results, and improve your score.",
+  //     icon: <PiTimer />,
+  //     content: {
+  //       contentTitle: "The Nitrogen Cycle",
+  //       contentType: "Video",
+  //       contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+  //       id: 375,
+  //       language: "English",
+  //     },
+  //   },
+  //   {
+  //     title: "Analytics",
+  //     description:
+  //       "Track your performance with detailed analytics and progress insights.",
+  //     icon: <PiChartLine />,
+  //     content: {
+  //       contentTitle: "The Nitrogen Cycle",
+  //       contentType: "Video",
+  //       contentUrl: "https://www.youtube.com/embed/Fy3HSTkvvc8",
+  //       id: 375,
+  //       language: "English",
+  //     },
+  //   },
+  // ];
 
   const slides = [
     // Slide 1
@@ -87,7 +93,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
         <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
           <button
             className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
-            onClick={() => setSelectedSlideIndex(1)}
+            onClick={() => setShowTutorialModal(true)}
           >
             Explore Features
           </button>
@@ -109,32 +115,32 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     </div>,
 
     // Slide 2 (mapped cards)
-    <div
-      key="slide-2"
-      className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center p-10"
-    >
-      <div className="grid grid-cols-3 gap-5 w-full select-none">
-        {tutorialCards.map((card, i) => (
-          <div
-            key={i}
-            onClick={() => setSelectedContent(card.content)}
-            className="border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
-          >
-            <div className="w-8 h-8 flex bg-white/10 rounded-md justify-center items-center text-2xl">
-              {card.icon}
-            </div>
-            <div>
-              <h6 className="text-lg font-semibold">{card.title}</h6>
-              {mobile ? (
-                ""
-              ) : (
-                <p className="text-sm text-gray-200">{card.description}</p>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>,
+    // <div
+    //   key="slide-2"
+    //   className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center p-10"
+    // >
+    //   <div className="grid grid-cols-3 gap-5 w-full select-none">
+    //     {tutorialCards.map((card, i) => (
+    //       <div
+    //         key={i}
+    //         onClick={() => setSelectedContent(card.content)}
+    //         className="border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
+    //       >
+    //         <div className="w-8 h-8 flex bg-white/10 rounded-md justify-center items-center text-2xl">
+    //           {card.icon}
+    //         </div>
+    //         <div>
+    //           <h6 className="text-lg font-semibold">{card.title}</h6>
+    //           {mobile ? (
+    //             ""
+    //           ) : (
+    //             <p className="text-sm text-gray-200">{card.description}</p>
+    //           )}
+    //         </div>
+    //       </div>
+    //     ))}
+    //   </div>
+    // </div>,
   ];
 
   return (
@@ -145,7 +151,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       )}
     >
       {/* Navigation */}
-      <div className="absolute top-2 right-3 z-30 flex items-center gap-3">
+      {/* <div className="absolute top-2 right-3 z-30 flex items-center gap-3">
         <button
           onClick={() =>
             setSelectedSlideIndex((prev) =>
@@ -167,10 +173,10 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
         >
           <ChevronRightIcon className="size-4" />
         </button>
-      </div>
+      </div> */}
 
       {/* Dots */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+      {/* <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-2">
         {slides.map((_, i) => (
           <button
             key={i}
@@ -181,12 +187,12 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             )}
           />
         ))}
-      </div>
+      </div> */}
 
       {/* Slides wrapper */}
       <div
         className="flex w-full h-full transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${selectedSlideIndex * 100}%)` }}
+        // style={{ transform: `translateX(-${selectedSlideIndex * 100}%)` }}
       >
         {slides}
       </div>

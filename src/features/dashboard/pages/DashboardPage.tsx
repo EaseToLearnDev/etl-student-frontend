@@ -13,6 +13,7 @@ import { ActivityList } from "../components/ActivityList";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import TutorialsModal from "../../tutorials/pages/TutorialsModal";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -88,6 +89,8 @@ const DashboardPage = () => {
           duration={toastData.duration}
         />
       )}
+
+      <TutorialsModal />
     </div>
   );
 };
