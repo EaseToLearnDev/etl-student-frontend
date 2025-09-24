@@ -72,7 +72,7 @@ const menuItems = [
     icon: <MdFeedback />,
   },
   {
-    name: "Rate a Course",
+    name: "Rate This Course",
     href: "#",
     icon: <MdStar />,
   },

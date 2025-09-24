@@ -45,7 +45,7 @@ const VerifyOtpContent = ({
   };
 
   return (
-    <div className="h-[500px] flex flex-col justify-start lg:justify-center items-center">
+    <div className="flex flex-col justify-start lg:justify-center items-center">
       <h2 className="!font-black text-center">Verify OTP</h2>
       <div className="flex flex-col justify-center gap-4 mt-6">
         <p className="text-center">

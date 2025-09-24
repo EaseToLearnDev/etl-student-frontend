@@ -2,6 +2,7 @@ import cn from "../../../utils/classNames";
 import LogoFull from "../../../components/logo-full";
 import { SidebarMenu } from "./SidebarMenu";
 import { Link } from "react-router";
+import ReleaseNotesModal from "./ReleaseNotesModal";
 
 export default function Sidebar({ className }: { className?: string }) {
   return (
@@ -25,6 +26,7 @@ export default function Sidebar({ className }: { className?: string }) {
       <div className="custom-scrollbar h-[calc(100%-80px)] overflow-hidden --text-[var(--text-primary)]">
         <SidebarMenu />
       </div>
+      <ReleaseNotesModal />
     </aside>
   );
 }
