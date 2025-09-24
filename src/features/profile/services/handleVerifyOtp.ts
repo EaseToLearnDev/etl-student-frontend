@@ -7,8 +7,8 @@ export const handleVerifyOtp = async (otp: string) => {
   if (!resToken || !tokenIdentify) return;
   try {
     const verification = await handleStudentProfileVerifyOtp({
-      otpForMobile: otpType === "mobile" ? Number(otp) : undefined,
-      otpForEmail: otpType === "email" ? Number(otp) : undefined,
+      otpForMobile: otpType === "Mobile" ? Number(otp) : undefined,
+      otpForEmail: otpType === "Email" ? Number(otp) : undefined,
       resToken,
       tokenIdentify,
     });
