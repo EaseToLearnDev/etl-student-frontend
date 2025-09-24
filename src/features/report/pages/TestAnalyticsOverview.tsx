@@ -407,7 +407,7 @@ export const TestAnalyticsOverview = () => {
                   Time Taken
                 </p>
                 <h5 className="text-[var(--text-primary)]">
-                  {data.timeTakenPercent}
+                  {data.timeTakenPercent}%
                 </h5>
               </div>
             </div>
