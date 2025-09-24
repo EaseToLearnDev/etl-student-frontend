@@ -77,22 +77,11 @@ export function SidebarMenu() {
       {/* Bottom section  */}
 
       <div className="mt-auto mb-2">
-        {/* <div
-          className="ml-4 size-7 aspect-square rounded-full border border-[var(--border-primary)] flex justify-center items-center cursor-pointer"
-          onClick={() => setIsReleaseNotesModalOpen(true)}
-        >
-          <p className="w-fit text-[var(--text-secondary)] font-semibold">?</p>
-        </div> */}
-        {/* <div
-          className="flex items-center gap-1 ml-4 px-4 py-2 w-fit border border-[var(--border-primary)] rounded-md cursor-pointer"
-          onClick={() => setIsReleaseNotesModalOpen(true)}
-        >
-          <p>Release Notes</p>
-          <HiMiniArrowUpRight />
-        </div> */}
-
         <div className="px-4 w-full">
-          <div className="w-full h-full p-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer" onClick={() => setIsReleaseNotesModalOpen(true)}>
+          <div
+            className="w-full h-full p-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer"
+            onClick={() => setIsReleaseNotesModalOpen(true)}
+          >
             {/* card header */}
             <div className="text-white flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
@@ -101,8 +90,12 @@ export function SidebarMenu() {
               </div>
               <MdChevronRight size={16} />
             </div>
-            <p className="text-neutral-100 mt-2 mb-1">Discover the latest features and improvements</p>
-            <span className="text-white font-semibold">Version v1.0.0 Available</span>
+            <p className="text-neutral-100 mt-2 mb-1">
+              Discover the latest features and improvements
+            </p>
+            <span className="text-white font-semibold">
+              Version v1.0.0 Available
+            </span>
           </div>
         </div>
       </div>
