@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { PlanCard } from "./PlanCard";
 import Tabs from "../../../components/Tabs";
 import { applyPromoCode } from "../services/VerifyPromoCode";
@@ -20,15 +20,6 @@ import { resetPromocode } from "../services/resetPromocode";
 // Constants
 const deviceType = "web";
 
-// utility to normalize order of plans
-const orderPlans = (plans?: PriceList[]) => {
-  const planOrder = ["FREE", "PRO", "ACE"];
-  return planOrder.map((type) => {
-    const match = plans?.find((p) => p?.packType?.toUpperCase() === type);
-    return match || { packType: type, list: [] };
-  });
-};
-
 interface PlanBodyProps {
   features?: FeaturesList[];
   coursePlan?: PriceList[];
@@ -47,6 +38,11 @@ export const PlanBody = ({
   const selectedTabIndex = useCoursesStore((s) => s.selectedTabIndex);
   const setSelectedTabIndex = useCoursesStore((s) => s.setSelectedTabIndex);
 
+  const [selectedPlan, setSelectedPlan] = useState<PriceList | null>(null);
+  const [coursePriceList, setCoursePriceList] = useState<PriceList[] | null>(
+    null
+  );
+
   const code = useCoursesStore((s) => s.code);
   const setCode = useCoursesStore((s) => s.setCode);
 
@@ -55,7 +51,7 @@ export const PlanBody = ({
   const selectedPlanId = useCoursesStore((s) => s.selectedPlanId);
   const setSelectedPlanId = useCoursesStore((s) => s.setSelectedPlanId);
 
-  const selPriceList = useCoursesStore((s) => s.selPriceList);
+  const discountedPriceList = useCoursesStore((s) => s.discountedPriceList);
 
   const payableAmount = useCoursesStore((s) => s.payableAmount);
   const setPayableAmount = useCoursesStore((s) => s.setPayableAmount);
@@ -66,27 +62,76 @@ export const PlanBody = ({
 
   if (!studentData) return null;
 
-  const effectivePlan = orderPlans(
-    selPriceList && selPriceList.length > 0 ? selPriceList : coursePlan
-  );
+  useEffect(() => {
+    const newTabIndex = 0;
+    setSelectedTabIndex(newTabIndex);
+    // Plan with or without applied discount
+    const priceList =
+      discountedPriceList && discountedPriceList.length > 0
+        ? discountedPriceList
+        : coursePlan;
+    if (!priceList) return;
+    setCoursePriceList(priceList);
+
+    // Added free option at beginning manually
+    if (priceList.findIndex((p) => p.packType === "FREE") === -1) {
+      priceList?.unshift({ packType: "FREE", list: [] });
+    }
+
+    // get current plan (free, pro or ace) based on tab index
+    const newPlan = getSelectedPlan(tabs, priceList, newTabIndex) || null;
+
+    // set current plan
+    setSelectedPlan(newPlan);
+  }, []);
 
   useEffect(() => {
-    const selectedPlan = getSelectedPlan(effectivePlan, selectedTabIndex);
-    if (selectedPlan && selectedPlan?.list?.length > 0) {
-      const plan = selectedPlan.list[0];
-      setSelectedPlanId(plan.packId);
-      const price = getPriceValue(plan?.salePrice);
-      setPayableAmount(price);
+    if (!coursePriceList) return;
+
+    const newPlan = getSelectedPlan(tabs, coursePriceList, selectedTabIndex);
+    if (newPlan) {
+      setSelectedPlan(newPlan);
+      if (newPlan?.list?.length > 0) {
+        const plan = newPlan.list[0];
+        setSelectedPlanId(plan.packId);
+        const price = getPriceValue(plan?.salePrice);
+        setPayableAmount(price);
+      }
     }
   }, [selectedTabIndex]);
+
+  useEffect(() => {
+    const priceList =
+      discountedPriceList && discountedPriceList.length > 0
+        ? discountedPriceList
+        : coursePlan;
+    if (!priceList) return;
+    setCoursePriceList(priceList);
+
+     // Added free option at beginning manually
+    if (priceList.findIndex((p) => p.packType === "FREE") === -1) {
+      priceList?.unshift({ packType: "FREE", list: [] });
+    }
+
+    // get current plan (free, pro or ace) based on tab index
+    const newPlan = getSelectedPlan(tabs, priceList, selectedTabIndex) || null;
+
+    // set current plan
+    setSelectedPlan(newPlan);
+  }, [discountedPriceList]);
 
   const handlePromoSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const promocode = code.trim();
     if (!applied && promocode) {
-      applyPromoCode(promocode, courseId);
+      applyPromoCode(tabs, promocode, courseId);
     }
   };
+
+  const isCourseOwned = Boolean(
+    studentData?.courses?.find((c) => c.courseId === courseId)
+  );
+  const tabs = isCourseOwned ? ["ACE", "PRO"] : ["FREE", "ACE", "PRO"];
 
   return (
     <div className="relative w-full h-[100dvh] lg:h-[calc(100dvh-2rem)] overflow-y-auto">
@@ -94,7 +139,7 @@ export const PlanBody = ({
         <h3 className="px-4 text-center">{courseTitle}</h3>
         <div className="px-4 mt-4">
           <Tabs
-            tabs={["FREE", "PRO", "ACE"]}
+            tabs={tabs}
             selectedIndex={selectedTabIndex}
             onSelect={setSelectedTabIndex}
             activeTabClassName="bg-blue-500 border-none text-white !font-semibold"
@@ -117,44 +162,49 @@ export const PlanBody = ({
             title="Features"
           >
             <div className="flex flex-col gap-4">
-              {features?.map((feat, idx) => (
-                <PlanFeature
-                  key={idx}
-                  feature={feat}
-                  packIdx={selectedTabIndex}
-                />
-              ))}
+              {features?.map((feat, idx) => {
+                const packIdx = isCourseOwned
+                  ? selectedTabIndex === 0
+                    ? 2
+                    : 1
+                  : selectedTabIndex === 1
+                  ? 2
+                  : selectedTabIndex === 2
+                  ? 1
+                  : 0;
+                return (
+                  <PlanFeature key={idx} feature={feat} packIdx={packIdx} />
+                );
+              })}
             </div>
           </WidgetCard>
 
           {/* Right Column (only if plans exist) */}
-          {effectivePlan[selectedTabIndex]?.list?.length > 0 && (
+          {selectedPlan && selectedPlan?.list?.length > 0 ? (
             <div className="flex flex-col gap-4 w-full h-auto lg:flex-1 lg:h-full lg:overflow-y-auto scrollbar-hide">
-              {selectedTabIndex !== 0 && (
+              {tabs[selectedTabIndex] !== "FREE" && (
                 <WidgetCard
                   className="shadow-none h-auto lg:flex-1 lg:overflow-y-auto scrollbar-hide"
                   title="Plans"
                 >
                   <div className="flex flex-col gap-3 mt-4">
-                    {effectivePlan?.[selectedTabIndex]?.list.map(
-                      (plan, idx) => (
-                        <PlanCard
-                          key={idx}
-                          plan={plan}
-                          selected={selectedPlanId === plan.packId}
-                          onSelect={() => {
-                            setSelectedPlanId(plan.packId);
-                            const price = getPriceValue(plan?.salePrice);
-                            setPayableAmount(price);
-                          }}
-                        />
-                      )
-                    )}
+                    {selectedPlan?.list?.map((plan, idx) => (
+                      <PlanCard
+                        key={idx}
+                        plan={plan}
+                        selected={selectedPlanId === plan.packId}
+                        onSelect={() => {
+                          setSelectedPlanId(plan.packId);
+                          const price = getPriceValue(plan?.salePrice);
+                          setPayableAmount(price);
+                        }}
+                      />
+                    ))}
                   </div>
                 </WidgetCard>
               )}
 
-              {selectedTabIndex !== 0 && (
+              {tabs[selectedTabIndex] !== "FREE" ? (
                 <WidgetCard
                   className="shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide"
                   title="Apply Promo Code"
@@ -213,14 +263,18 @@ export const PlanBody = ({
                     </div>
                   </form>
                 </WidgetCard>
+              ) : (
+                <></>
               )}
             </div>
+          ) : (
+            <></>
           )}
         </div>
         {/* Actions Section*/}
         <div className="w-full py-4 flex items-center">
           <div className="w-full max-w-[1400px] mx-auto px-4 flex lg:justify-end">
-            {selectedTabIndex === 0 ? (
+            {tabs[selectedTabIndex] === "FREE" ? (
               <Button
                 style="primary"
                 className="w-full lg:w-fit"
