@@ -3,28 +3,26 @@ import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // Icons
-// import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
+import { MdChevronRight } from "react-icons/md";
+import AiIcon from "../../../components/icons/ai-icon";
 
 // Store
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
+import useReleaseNotesStore from "../../../global/hooks/useReleaseNotesStore";
 
 // Utils
 import cn from "../../../utils/classNames";
 import { getFilteredMenuItems } from "../../../utils/menuFilter";
-
-// Components
-// import SidebarDropdown from "./SidebarDropdown";
 
 /**
  * Renders the sidebar menu with navigation links and user info for the student dashboard.
  */
 export function SidebarMenu() {
   const location = useLocation();
-  // const studentName = useStudentStore(
-  //   (state) => state.studentData?.studentName
-  // );
-  // const emailId = useStudentStore((state) => state.studentData?.emailId);
   const activeCourse = useStudentStore((state) => state.activeCourse);
+  const setIsReleaseNotesModalOpen = useReleaseNotesStore(
+    (s) => s.setIsReleaseNotesModalOpen
+  );
 
   const filteredMenuItems = getFilteredMenuItems(activeCourse);
 
@@ -76,31 +74,38 @@ export function SidebarMenu() {
           );
         })}
       </div>
-      {/* Bottom section for Settings and Logout */}
-      {/* <div className="mt-auto">
-        <div className="flex w-full items-center justify-between px-4 py-2">
-          <div className="flex gap-4">
-            <div className="w-8 h-8 p-5 aspect-square bg-[var(--surface-bg-tertiary)] rounded-full flex justify-center items-center">
-              <p className="!font-bold">
-                {studentName?.split(" ")?.map((w) => w[0] || "")}
-              </p>
+      {/* Bottom section  */}
+
+      <div className="mt-auto mb-2">
+        {/* <div
+          className="ml-4 size-7 aspect-square rounded-full border border-[var(--border-primary)] flex justify-center items-center cursor-pointer"
+          onClick={() => setIsReleaseNotesModalOpen(true)}
+        >
+          <p className="w-fit text-[var(--text-secondary)] font-semibold">?</p>
+        </div> */}
+        {/* <div
+          className="flex items-center gap-1 ml-4 px-4 py-2 w-fit border border-[var(--border-primary)] rounded-md cursor-pointer"
+          onClick={() => setIsReleaseNotesModalOpen(true)}
+        >
+          <p>Release Notes</p>
+          <HiMiniArrowUpRight />
+        </div> */}
+
+        <div className="px-4 w-full">
+          <div className="w-full h-full p-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer" onClick={() => setIsReleaseNotesModalOpen(true)}>
+            {/* card header */}
+            <div className="text-white flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <AiIcon fontSize={16} />
+                <h6 className="font-semibold">What's New</h6>
+              </div>
+              <MdChevronRight size={16} />
             </div>
-            <div className="flex flex-col gap-1">
-              <p className="!font-semibold block w-[140px] overflow-hidden text-ellipsis  whitespace-nowrap line-clamp-1">
-                {studentName}
-              </p>
-              <span className="block w-[140px] overflow-hidden text-[var(--text-tertiary)] text-ellipsis whitespace-nowrap line-clamp-1">
-                {emailId}
-              </span>
-            </div>
+            <p className="text-neutral-100 mt-2 mb-1">Discover the latest features and improvements</p>
+            <span className="text-white font-semibold">Version v1.0.0 Available</span>
           </div>
-          <SidebarDropdown>
-            <div className="w-8 h-8 aspect-square rounded-full hover:bg-[var(--surface-bg-tertiary)] flex justify-center items-center cursor-pointer">
-              <PiDotsThreeOutlineVerticalFill size={18} />
-            </div>
-          </SidebarDropdown>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }
