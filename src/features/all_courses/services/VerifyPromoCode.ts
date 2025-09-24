@@ -3,10 +3,10 @@ import { verifyPromoCodesMultiplePricing } from "../apis/veriftPromoCodesMultipl
 import { useCoursesStore } from "../hooks/useCoursesStore";
 import { getSelectedPlan } from "../utils/getSelectedPlan";
 
-export const applyPromoCode = async (promoCode?: string, courseId?: number) => {
+export const applyPromoCode = async (tabs: string[], promoCode?: string, courseId?: number) => {
   const { studentData } = useStudentStore.getState();
   const {
-    setSelPriceList,
+    setDiscountedPriceList,
     setApplied,
     setError,
     setPayableAmount,
@@ -32,8 +32,8 @@ export const applyPromoCode = async (promoCode?: string, courseId?: number) => {
     });
 
     if (res?.responseTxt === "success" && res?.obj) {
-      setSelPriceList(res.obj);
-      const selectedPlan = getSelectedPlan(res?.obj, selectedTabIndex);
+      setDiscountedPriceList(res.obj);
+      const selectedPlan = getSelectedPlan(tabs, res?.obj, selectedTabIndex);
       const pack = selectedPlan?.list?.find(
         (sp) => sp.packId === selectedPlanId
       );

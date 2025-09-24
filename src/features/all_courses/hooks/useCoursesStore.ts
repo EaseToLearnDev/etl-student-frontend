@@ -44,8 +44,8 @@ interface CoursesState {
   selectedPlanId: number | null;
   setSelectedPlanId: (id: number | null) => void;
 
-  selPriceList: PriceList[];
-  setSelPriceList: (list: PriceList[]) => void;
+  discountedPriceList: PriceList[];
+  setDiscountedPriceList: (list: PriceList[]) => void;
 
   error: boolean;
   setError: (v: boolean) => void;
@@ -78,7 +78,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   setLoading: (loading) => set({ loading }),
 
   setSelectedCourse: (course) => set({ selectedCourse: course }),
-  selectedTabIndex: 1,
+  selectedTabIndex: 0,
   setSelectedTabIndex: (i) => set({ selectedTabIndex: i }),
 
   payableAmount: null,
@@ -93,8 +93,8 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   selectedPlanId: null,
   setSelectedPlanId: (id) => set({ selectedPlanId: id }),
 
-  selPriceList: [],
-  setSelPriceList: (list) => set({ selPriceList: list }),
+  discountedPriceList: [],
+  setDiscountedPriceList: (list) => set({ discountedPriceList: list }),
 
   error: false,
   setError: (v) => set({ error: v }),
@@ -109,5 +109,6 @@ export const useCoursesStore = create<CoursesState>((set) => ({
       selectedCourse: null,
       isPlanModalOpen: false,
       payableAmount: null,
+      selectedTabIndex: 0,
     }),
 }));
