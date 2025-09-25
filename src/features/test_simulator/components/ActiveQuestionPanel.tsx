@@ -126,6 +126,8 @@ const ActiveQuestionPanel = () => {
               "Multiple-Choice",
               "Multiple-Choice-(5)",
               "MC-Assertion-Reason",
+              "MC-Matching-Type",
+              "Selection-Type",
             ].includes(currentQuestion?.questionType || "") &&
               currentQuestion?.responseChoice.map((response) => (
                 <div
