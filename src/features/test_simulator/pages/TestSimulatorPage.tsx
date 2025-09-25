@@ -2,10 +2,25 @@
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router";
 
+// Types
+import type { SimulatorMode } from "../test_simulator.types";
+import { ToastType } from "../../shared/types";
+
+// Services
+import { handleTestSubmit } from "../services/handleTestSubmit";
+import { handleContinueLater } from "../services/handleContinueLater";
+import { setupTest } from "../services/setupTest";
+
 // Hooks & Stores
 import useIsMobile from "../../../hooks/useIsMobile";
 import useTestTimerStore from "../store/useTestTimerStore";
 import useTestStore from "../store/useTestStore";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { useAiStore } from "../store/useAiStore";
+import { useFullscreenProtection } from "../store/useFullScreenProtection";
+import { useGuestStore } from "../../../global/hooks/useGuestStore";
+import { useToastStore } from "../../../global/hooks/useToastStore";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 // Layouts and Components
 import MobileTestSimulator from "../components/mobile/MobileTestSimulator";
@@ -13,27 +28,19 @@ import DesktopTestSimulator from "../components/desktop/DesktopTestSimulator";
 import { Modal } from "../../../components/Modal";
 import SubmissionModalContent from "../components/SubmissionModalContent";
 import AiHelpModal from "../components/AiHelpModal";
-import { useAiStore } from "../store/useAiStore";
-import { handleTestSubmit } from "../services/handleTestSubmit";
-import { handleContinueLater } from "../services/handleContinueLater";
-import type { SimulatorMode } from "../test_simulator.types";
 import TestEndedModalContent from "../components/TestEndedModalContent";
 import FullScreenExitModalContent from "../components/FullSrcreenModal";
 import TeacherSupportModal from "../components/TeacherSupportModal";
-import { setupTest } from "../services/setupTest";
-import { useFullscreenProtection } from "../store/useFullScreenProtection";
 import { Toast } from "../../../components/Toast";
 import SwitchSectionModal from "../components/SwitchSectionModal";
-import { ToastType } from "../../shared/types";
-import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
-import { useToastStore } from "../../../global/hooks/useToastStore";
-import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
-import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 
+/**
+ * TestSimulatorPage component for rendering the test simulator UI.
+ * Handles test setup, modals, and submission logic.
+ */
 const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
@@ -81,7 +88,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const setShowGuestTestSubmitModal = useGuestStore(
     (s) => s.setShowGuestTestSubmitModal
   );
-  const testData = useTestStore(s => s.testData);
+  const testData = useTestStore((s) => s.testData);
 
   const testMode = useTestStore((s) => s.testMode);
   const setMode = useTestStore((s) => s.setMode);
@@ -91,8 +98,6 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const loading = useLoadingStore((s) => s.loading);
   const setLoading = useLoadingStore((s) => s.setLoading);
-
-  const status = getActiveCourseAccessStatus();
 
   const { hasExited, reEnter, exit } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
@@ -155,7 +160,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       <EmptyState
         title="Limit Reached!"
         description={testError.message}
-        buttonText={status}
+        buttonText={"Upgrade"}
         onClick={() => navigate(`/selectcourse?cid=${activeCourse?.courseId}`)}
         className="min-h-screen"
       />
