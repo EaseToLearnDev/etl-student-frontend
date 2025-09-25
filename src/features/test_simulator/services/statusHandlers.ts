@@ -26,16 +26,20 @@ export const markForReviewHandler = ({
   );
   if (!currQId || !currentQuestion) return null;
 
-  
   const questionStatus = questionStatusMap[currQId];
-  console.log(questionStatus)
+  console.log(questionStatus);
   let newStatus = QuestionStatus.VISITED;
-  if(questionStatus === QuestionStatus.VISITED || questionStatus === QuestionStatus.NOT_ATTEMPTED) {
-    newStatus = QuestionStatus.MARKED_FOR_REVIEW
+  if (
+    questionStatus === QuestionStatus.VISITED ||
+    questionStatus === QuestionStatus.NOT_ATTEMPTED
+  ) {
+    newStatus = QuestionStatus.MARKED_FOR_REVIEW;
   } else if (questionStatus === QuestionStatus.ATTEMPTED) {
-    newStatus = QuestionStatus.ANSWERED_AND_REVIEW
+    newStatus = QuestionStatus.ANSWERED_AND_REVIEW;
   } else if (questionStatus === QuestionStatus.ANSWERED_AND_REVIEW) {
-    newStatus = QuestionStatus.ATTEMPTED
+    newStatus = QuestionStatus.ATTEMPTED;
+  } else if (questionStatus === QuestionStatus.MARKED_FOR_REVIEW) {
+    newStatus = QuestionStatus.NOT_ATTEMPTED;
   }
 
   return {
