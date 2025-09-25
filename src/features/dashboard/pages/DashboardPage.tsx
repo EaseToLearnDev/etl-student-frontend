@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ClassTestList from "../components/ClassTestList";
 import FeaturedBannerCarousal from "../components/FeaturedBannerCarousal";
 import { loadClassTestList } from "../../../global/services/loadClassTestList";
@@ -14,6 +14,9 @@ import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import TutorialsModal from "../../tutorials/pages/TutorialsModal";
+import { getGhActivity } from "../../../global/services/getGhActivity";
+import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
+import { getGhActivityYears } from "../../../global/services/getGhActivityYears";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -21,6 +24,11 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
+
+  const [year, setYear] = useState(null);
+  const [apiData, setAPIData] = useState<ITransformedGhData[][] | null>(year);
+  const [yearsOptions, setYearsOptions] = useState<number[] | null>(null);
+
 
   const isClassTest = activeCourse?.tabs?.classTest;
 
@@ -33,7 +41,24 @@ const DashboardPage = () => {
       if (prevRunningTest) setPrevRunningTest(prevRunningTest);
     };
     fetchData();
+
+
+    const fetchGhActivityYears = async () => {
+      const _data = await getGhActivityYears();
+      if(_data) setYearsOptions(_data.sort((a, b) => (b - a)));
+    }
+    fetchGhActivityYears();
   }, []);
+
+
+  useEffect(() => {
+    const fetchGhActivity = async () => {
+      const _data = await getGhActivity(year);
+      if(_data) setAPIData(_data);
+    }
+
+    fetchGhActivity();
+  }, [year]);
 
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
@@ -42,7 +67,7 @@ const DashboardPage = () => {
         <div className="flex flex-col gap-5 xl:col-span-2">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
           <WidgetCard className="w-full min-h-[300px] max-h-full">
-            <ActivityList />
+            <ActivityList yearsOptions={yearsOptions} apiData={apiData} year={year} setYear={setYear} />
           </WidgetCard>
         </div>
 
