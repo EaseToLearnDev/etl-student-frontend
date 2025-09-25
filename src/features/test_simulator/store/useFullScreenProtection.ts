@@ -54,5 +54,16 @@ export function useFullscreenProtection(enable: boolean) {
     }
   };
 
-  return { hasExited, reEnter };
+   const exit = async () => {
+    try {
+      if (document.exitFullscreen) {
+        await document.exitFullscreen();
+        setHasExited(true);
+      }
+    } catch (error) {
+      console.warn("Exit full-screen failed:", error);
+    }
+  };
+
+  return { hasExited, reEnter, exit };
 }

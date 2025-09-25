@@ -94,7 +94,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const status = getActiveCourseAccessStatus();
 
-  const { hasExited, reEnter } = useFullscreenProtection(
+  const { hasExited, reEnter, exit } = useFullscreenProtection(
     features?.fullScreenEnabled ?? false
   );
 
@@ -121,6 +121,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       stopQuestionTimer();
       reset();
       resetAi();
+      exit();
     };
   }, []);
 
