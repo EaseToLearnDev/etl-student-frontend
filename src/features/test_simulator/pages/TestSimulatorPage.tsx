@@ -111,6 +111,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       startQuestionTimer,
       setMode,
       setLoading,
+      setCurrentQuestion,
       isMobile
     );
     return () => {

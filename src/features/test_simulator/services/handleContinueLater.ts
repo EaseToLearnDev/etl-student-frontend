@@ -5,6 +5,7 @@ import useTestStore from "../store/useTestStore";
 // Apis
 import { testStop } from "../api/testStop.api";
 import type { NavigateFunction } from "react-router";
+import useTestTimerStore from "../store/useTestTimerStore";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -18,6 +19,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
     helpCount,
   } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { timeSpent } = useTestTimerStore.getState();
+  const currentQuestionIndex = useTestStore.getState().getCurrentQuestionIndex();
 
   if (!studentData) return;
 
@@ -42,8 +45,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       ...(testData?.testType === 3 && {
         noQuestionAttempt: testData?.noQuestionAttempt ?? 0,
       }),
-      remainingTime: testData?.remainingTime,
-      lastQuestionIndex: testData?.lastQuestionIndex,
+      remainingTime: (testData?.remainingTime ?? 0) - timeSpent,
+      lastQuestionIndex: currentQuestionIndex,
       sectionLock: testData?.sectionLock,
       bloom: testData?.bloom,
       sectionSet: testData?.sectionSet.map((item) => ({
@@ -68,11 +71,6 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,
-            questionBody: item.questionBody,
-            responseChoice: item.responseChoice.map((i) => ({
-              responseId: i.responseId,
-              responseText: i.responseText,
-            })),
             backgroundImg: item.backgroundImg,
             cssName: item.cssName,
           };
@@ -81,6 +79,11 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             baseObj.sectionId = item.sectionId;
             baseObj.sectionName = item.sectionName;
             baseObj.sectionOrder = item.sectionOrder;
+            baseObj.sectionTime = item.sectionTime;
+            baseObj.commonDataDescription = "";
+            baseObj.questionBody = "";
+            baseObj.columns = [];
+            baseObj.responseChoice = [];
           } else {
             baseObj.bloomId = 0;
           }

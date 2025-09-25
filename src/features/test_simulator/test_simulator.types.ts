@@ -35,6 +35,7 @@ export interface Question {
 
 export interface Section {
   sectionName?: string;
+  sectionTime?:number;
   questionNumbers: {
     questionIndex: number;
     questionId: number;
@@ -44,6 +45,7 @@ export interface Section {
 
 export interface SectionUI {
   sectionName?: string;
+  sectionTime?:number;
   questionList: Question[];
 }
 

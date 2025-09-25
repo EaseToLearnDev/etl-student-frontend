@@ -22,7 +22,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     helpCount,
   } = useTestStore.getState();
   const { setToast } = useToastStore.getState();
-  const { remainingSec, finalRemainingSec } = useTestTimerStore.getState();
+  const { timeSpent } = useTestTimerStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
 
   if (!studentData || !activeCourse) return;
@@ -52,7 +52,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testOption: testData?.testOption,
     testMode: testMode,
     totalTime: testData?.totalTime,
-    remainingTime: finalRemainingSec ?? remainingSec,
+    remainingTime: (testData?.remainingTime ?? 0) - timeSpent,
     totalQuestion: testData?.questionSet?.length ?? 0,
     testTitle: testData?.testName,
     bloom: testData?.bloom,

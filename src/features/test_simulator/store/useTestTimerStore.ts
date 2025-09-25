@@ -1,9 +1,10 @@
 import { create } from "zustand";
+import useTestStore from "./useTestStore";
 
 interface TestTimerStore {
   testDurationSec: number;
   remainingSec: number;
-  finalRemainingSec: number | null;
+  timeSpent: number;
   isRunning: boolean;
   isExpired: boolean;
   _testEndMs: number | null;
@@ -29,7 +30,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
   isExpired: false,
   _testEndMs: null,
   _testTimerId: null,
-  finalRemainingSec: null,
+  timeSpent: 0,
   isTestEndedModalOpen: false,
 
   // Starts a new countdown timer with the specified duration in seconds.
@@ -44,7 +45,7 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
     if (_testTimerId) clearInterval(_testTimerId);
 
     set({
-      finalRemainingSec: null,
+      timeSpent: 0,
       testDurationSec: durationSec,
       remainingSec: durationSec,
       isRunning: true,
@@ -60,23 +61,67 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
   // Internal tick function that calculates remaining time and handles timer expiration.
   // Automatically stops the timer when countdown reaches zero.
   _tick: () => {
-    const { _testEndMs, isExpired } = get();
+    const { _testEndMs, isExpired, timeSpent } = get();
+    
+    // Early return if test is expired or not started
     if (_testEndMs == null || isExpired) return;
 
+    // Calculate remaining time in seconds
     const remaining = Math.max(0, Math.floor((_testEndMs - Date.now()) / 1000));
 
-    if (remaining === 0) {
-      const { _testTimerId } = get();
-      if (_testTimerId) clearInterval(_testTimerId);
-      set({
-        remainingSec: 0,
-        finalRemainingSec: 0,
-        isRunning: false,
-        isExpired: true,
-        _testTimerId: null,
-      });
-      set({ isTestEndedModalOpen: true });
-      return;
+    // Increase overall time spent in test
+    set({timeSpent: timeSpent + 1});
+
+    // If test timer has run out
+    if (remaining <= 0) {
+      const { _testTimerId, startTestTimer } = get();
+      const { testData, currentPointer } = useTestStore.getState();
+
+      // Early return
+      if (!testData) return;
+
+      const isNotLastSection =
+        currentPointer.sectionPos < testData.sectionSet.length - 1;
+      const isPartiallyLock = testData?.sectionLock === "Partially_Lock";
+
+      // If test is section locked then switch to next section and reset timer
+      if (isPartiallyLock && isNotLastSection) {
+        if (_testTimerId) clearInterval(_testTimerId);
+
+        useTestStore.setState((state) => ({
+        currentPointer: {
+          ...state.currentPointer,
+          sectionPos: state.currentPointer.sectionPos + 1,
+        },
+      }));
+        
+        const nextSectionIndex = currentPointer.sectionPos + 1;
+        const nextSection = testData.sectionSet[nextSectionIndex];
+
+        if (nextSection && nextSection.sectionTime) {
+          set({
+            remainingSec: 0,
+            isRunning: false,
+            isExpired: false,
+            _testTimerId: null,
+          });
+          startTestTimer(nextSection.sectionTime);
+        }
+      }
+      // If test is not section locked then reset timer since test has ended
+      else {
+        if (_testTimerId) clearInterval(_testTimerId);
+
+        set({
+          remainingSec: 0,
+          timeSpent: 0,
+          isRunning: false,
+          isExpired: true,
+          _testTimerId: null,
+        });
+        set({ isTestEndedModalOpen: true });
+        return;
+      }
     }
 
     set({ remainingSec: remaining });
@@ -109,10 +154,9 @@ const useTestTimerStore = create<TestTimerStore>((set, get) => ({
   // Completely stops the timer and marks it as expired.
   // Resets remaining time to zero and clears the interval.
   stopTestTimer: () => {
-    const { _testTimerId, remainingSec } = get();
+    const { _testTimerId } = get();
     if (_testTimerId) clearInterval(_testTimerId);
     set({
-      finalRemainingSec: remainingSec,
       isRunning: false,
       isExpired: true,
       _testTimerId: null,

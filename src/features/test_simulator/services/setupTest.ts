@@ -2,6 +2,7 @@ import type { Error } from "../../shared/types";
 import { Severity } from "../../shared/types";
 import type {
   Features,
+  Question,
   SimulatorMode,
   TestConfig,
   TestData,
@@ -21,6 +22,7 @@ export const setupTest = async (
   startQuestionTimer: () => void,
   setMode: (mode: string) => void,
   setLoading: (loading: boolean) => void,
+  setCurrentQuestion: (question: Question | null) => void,
   isMobile: boolean
 ) => {
   // Test Configuration Setup
@@ -40,15 +42,29 @@ export const setupTest = async (
     });
 
     if (!result) {
-      setError({ id: "unknown_error", message: "Failed to load test details.", severity: Severity.Alert });
+      setError({
+        id: "unknown_error",
+        message: "Failed to load test details.",
+        severity: Severity.Alert,
+      });
       setLoading(false);
       return null;
     }
-    
-    const { data, error }: { data: TestData | null, error: { id: string; message: string } | null } = result;
-    
+
+    const {
+      data,
+      error,
+    }: {
+      data: TestData | null;
+      error: { id: string; message: string } | null;
+    } = result;
+
     if (error?.id === "limit_reached") {
-      setError({ id: error?.id, message: error.message, severity: Severity.Alert });
+      setError({
+        id: error?.id,
+        message: error.message,
+        severity: Severity.Alert,
+      });
       setLoading(false);
       return null;
     }
@@ -94,6 +110,8 @@ export const setupTest = async (
     } else {
       features.fullScreenEnabled = !isMobile ? true : false;
     }
+
+    setCurrentQuestion(data?.questionSet[data.lastQuestionIndex ?? 0] ?? null);
 
     setFeatures(features);
     setLoading(false);
