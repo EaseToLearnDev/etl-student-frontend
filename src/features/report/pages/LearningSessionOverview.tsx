@@ -170,7 +170,7 @@ export const LearningSessionOverview = () => {
   ];
 
   return (
-    <div className="px-4">
+    <div>
       <Button
         onClick={() => {
           setData(null);

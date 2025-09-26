@@ -37,6 +37,8 @@ import ForgetPasswordPage from "../features/auth/forgetPassword/pages/ForgetPass
 import LoginDirectPage from "../features/auth/login/pages/LoginDirectPage";
 import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCoursePage";
 import LogoutPage from "../features/auth/logout/pages/LogoutPage";
+import { Spinner } from "../components/Spinner";
+import { InAppPayment } from "../features/in_app_payment/InAppPayment";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -167,6 +169,8 @@ const Router = () => {
       <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="selectyourcourse" element={<SelectYourCoursePage />} />
       <Route path="/logout" element={<LogoutPage />} />
+      <Route path="/pgcancelled" element={<Spinner />} />
+      <Route path="/inapppayment" element={<InAppPayment />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

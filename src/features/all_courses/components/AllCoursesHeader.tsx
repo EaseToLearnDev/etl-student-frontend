@@ -1,5 +1,5 @@
 // Icons
-import { FiFilter, FiSearch } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 
 // Types
 import type { CategoryType } from "../../shared/types";
@@ -7,9 +7,11 @@ import type { CategoryType } from "../../shared/types";
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
 import cn from "../../../utils/classNames";
+import GlobalSearch from "../../../components/GlobalSearch";
+import { useCoursesStore } from "../hooks/useCoursesStore";
+import { resetPromocode } from "../services/resetPromocode";
 
 interface AllCoursesHeaderProps {
-  search: string;
   setSearch: (value: string) => void;
   selectedCategory: CategoryType | null;
   setSelectedCategory: (category: CategoryType) => void;
@@ -23,28 +25,40 @@ interface AllCoursesHeaderProps {
  * Header component for the All Courses page, providing search and category selection UI.
  */
 const AllCoursesHeader = ({
-  search,
   setSearch,
   selectedCategory,
   setHideSecondary,
   className = "",
 }: AllCoursesHeaderProps) => {
   const isMobile = useIsMobile();
+  const searchData = useCoursesStore((s) => s.searchData);
+  const setSelectedCourse = useCoursesStore(s => s.setSelectedCourse)
+  const setIsPlanModalOpen = useCoursesStore(s => s.setIsPlanModalOpen)
   return (
-    <div className={cn("relative p-4 flex flex-col gap-2 md:w-[60%] lg:w-[70%]", className)}>
+    <div
+      className={cn(
+        "relative p-4 flex flex-col gap-2 md:w-[60%] lg:w-[70%]",
+        className
+      )}
+    >
       <div className="flex flex-col lg:flex-row gap-3 justify-between lg:items-center">
         <h3>Select Course</h3>
         <div className="flex items-center gap-4">
-          <div className="flex items-center w-full bg-[var(--surface-bg-secondary)] rounded-lg px-4 py-3">
-            <FiSearch className="text-[var(--text-tertiary)] mr-2" />
-            <input
-              type="text"
-              placeholder="Search courses..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 bg-transparent outline-none text-[var(--text-primary)] placeholder:text-[var(--text-tertiary)]"
-            />
-          </div>
+          <GlobalSearch
+            placeholder="Search courses..."
+            // onSearch={(data) => setSearch(data)}
+            data={searchData ?? []}
+            onSelect={(course: any) => {
+              setSelectedCourse(course);
+              setIsPlanModalOpen(true);
+              resetPromocode();
+            }}
+            renderItem={(course) => (
+              <div>
+                {course.courseSubTitle && <p>{course.courseSubTitle}</p>}
+              </div>
+            )}
+          />
           {isMobile && (
             <div
               className="relative size-[50px] aspect-square rounded-lg flex justify-center items-center bg-[var(--surface-bg-secondary)] cursor-pointer"

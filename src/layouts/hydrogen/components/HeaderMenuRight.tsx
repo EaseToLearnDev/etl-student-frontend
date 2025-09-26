@@ -27,9 +27,9 @@ const HeaderMenuRight = () => {
       <ProfileMenuDropDown>
         <button
           className={cn(
-            "overflow-hidden rounded-full p-0.5 border-2 hover:scale-105 transition-all duration-200 ease border-[var(--sb-ocean-bg-active)] outline-none focus-visible:ring-[1.5px]",
+            "overflow-hidden rounded-full p-0.5 hover:scale-105 transition-all duration-200 ease outline-none focus-visible:ring-[1.5px]",
             "focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px shadow-sm",
-            profilePic ? "w-9 h-9" : "w-10 h-10"
+            profilePic ? "w-10 h-10" : "w-11 h-11"
           )}
         >
           <div

@@ -1,3 +1,4 @@
+import { XMarkIcon } from "@heroicons/react/24/outline";
 import Badge from "../../../components/Badge";
 import Button from "../../../components/Button";
 import useIsMobile from "../../../hooks/useIsMobile";
@@ -31,7 +32,7 @@ export const FilterCourses = ({
           onClick={() => setSelectedCategory(null)}
           className="cursor-pointer text-[var(--text-tertiary)] text-nowrap"
         >
-          Clear All
+          Clear
         </p>
       </div>
       <div className="mt-7 flex flex-col gap-4">
@@ -48,10 +49,11 @@ export const FilterCourses = ({
                 key={category.categoryId}
                 theme={isCategorySelected ? Theme.Ocean : Theme.Neutral}
                 style={isCategorySelected ? "filled" : "outline"}
-                onClickHandler={() => setSelectedCategory(category)}
+                onClickHandler={() =>  setSelectedCategory(isCategorySelected ? null : category)}
                 className={cn("border !border-[var(--border-secondary)]")}
               >
                 <p>{category.categoryName}</p>
+                {isCategorySelected && <XMarkIcon width={15} height={15} />}
               </Badge>
             );
           })}

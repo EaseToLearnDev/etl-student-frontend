@@ -7,6 +7,9 @@ interface CoursesState {
   search: string;
   setSearch: (search: string) => void;
 
+  searchData: CourseType[] | null;
+  setSearchData: (data: CourseType[]) => void;
+
   isPlanModalOpen: boolean;
   setIsPlanModalOpen: (v: boolean) => void;
 
@@ -62,8 +65,11 @@ export const useCoursesStore = create<CoursesState>((set) => ({
   selectedCourse: null,
   isPlanModalOpen: false,
   isUpdateEmailModalOpen: false,
+  searchData: null,
 
   setSearch: (search) => set({ search }),
+
+  setSearchData: (data) => set({searchData: data}),
 
   setIsPlanModalOpen: (v) => set({ isPlanModalOpen: v }),
 
