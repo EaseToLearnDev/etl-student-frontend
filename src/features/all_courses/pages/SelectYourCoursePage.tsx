@@ -28,7 +28,6 @@ const SelectYourCoursePage = () => {
   const isMobile = useIsMobile();
   const reset = useCoursesStore((s) => s.reset);
   const search = useCoursesStore((s) => s.search);
-  const setSearch = useCoursesStore((s) => s.setSearch);
   const loading = useCoursesStore((s) => s.loading);
   const setLoading = useCoursesStore((s) => s.setLoading);
   const courseList = useCoursesStore((s) => s.courseList);
@@ -88,8 +87,6 @@ const SelectYourCoursePage = () => {
     >
       {/* Header */}
       <AllCoursesHeader
-        search={search}
-        setSearch={setSearch}
         onClickFilter={() => setHideSecondary(!hideSecondary)}
         isFilterSectionOpen={!hideSecondary}
         selectedCategory={selectedCategory}
