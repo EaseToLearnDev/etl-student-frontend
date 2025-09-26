@@ -6,6 +6,7 @@ import useTestStore from "../store/useTestStore";
 import { testStop } from "../api/testStop.api";
 import type { NavigateFunction } from "react-router";
 import useTestTimerStore from "../store/useTestTimerStore";
+import { QuestionStatusReverseMap } from "../test_simulator.types";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -14,13 +15,16 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   const {
     testData,
     questionResponseMap,
+    questionStatusMap,
     testConfig,
     questionTimeMap,
     helpCount,
   } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
-  const currentQuestionIndex = useTestStore.getState().getCurrentQuestionIndex();
+  const currentQuestionIndex = useTestStore
+    .getState()
+    .getCurrentQuestionIndex();
 
   if (!studentData) return;
 
@@ -71,7 +75,9 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,
-            backgroundImg: item.backgroundImg,
+            backgroundImg:
+              QuestionStatusReverseMap[questionStatusMap[item.questionId]] ??
+              item.backgroundImg,
             cssName: item.cssName,
           };
 
