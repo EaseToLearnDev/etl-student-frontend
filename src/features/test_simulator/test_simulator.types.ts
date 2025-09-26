@@ -35,7 +35,7 @@ export interface Question {
 
 export interface Section {
   sectionName?: string;
-  sectionTime?:number;
+  sectionTime?: number;
   questionNumbers: {
     questionIndex: number;
     questionId: number;
@@ -45,7 +45,7 @@ export interface Section {
 
 export interface SectionUI {
   sectionName?: string;
-  sectionTime?:number;
+  sectionTime?: number;
   questionList: Question[];
 }
 
@@ -86,6 +86,22 @@ export enum QuestionStatus {
   ANSWERED_AND_REVIEW = "answered_and_review",
   HELP = "help",
 }
+
+export const QuestionStatusMap: Record<string, QuestionStatus> = {
+  "url('./not-visited.png')": QuestionStatus.NOT_VISITED,
+  "url('./not-answered.png')": QuestionStatus.NOT_ATTEMPTED,
+  "url('./review.png')": QuestionStatus.MARKED_FOR_REVIEW,
+  "url('./answered.png')": QuestionStatus.ATTEMPTED,
+  "url('./answered-review.png')": QuestionStatus.ANSWERED_AND_REVIEW,
+};
+
+export const QuestionStatusReverseMap: Record<string, string> = {
+  [QuestionStatus.NOT_VISITED]: "url('./not-visited.png')",
+  [QuestionStatus.NOT_ATTEMPTED]: "url('./not-answered.png')",
+  [QuestionStatus.MARKED_FOR_REVIEW]: "url('./review.png')",
+  [QuestionStatus.ATTEMPTED]: "url('./answered.png')",
+  [QuestionStatus.ANSWERED_AND_REVIEW]: "url('./answered-review.png')",
+};
 
 export type QuestionType =
   | "Multiple Choice"
@@ -151,9 +167,9 @@ export interface TestSubmitRequest {
   bloom: number;
   questionSet: {
     questionId: number;
-    itemId?: number; 
-    sectionId?: number; 
-    sectionName?: string; 
+    itemId?: number;
+    sectionId?: number;
+    sectionName?: string;
     topicId: number;
     timeSpent: number;
     studentResponse?: string;

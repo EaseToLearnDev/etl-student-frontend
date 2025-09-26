@@ -1,5 +1,5 @@
 // Types
-import { QuestionStatus } from "../test_simulator.types";
+import { QuestionStatus, QuestionStatusMap } from "../test_simulator.types";
 import type {
   TestData,
   Pointer,
@@ -28,7 +28,8 @@ export const initializeTestData = ({
   const timeMap: Record<number, number> = {};
 
   testData?.questionSet?.forEach((q) => {
-    statusMap[q.questionId] = QuestionStatus.NOT_VISITED;
+    statusMap[q.questionId] =
+      QuestionStatusMap[q.backgroundImg ?? ""] ?? QuestionStatus.NOT_VISITED;
     responseMap[q?.questionId] = q.studentResponse ?? "";
     timeMap[q.questionId] = q.timeSpent ?? 0;
   });
