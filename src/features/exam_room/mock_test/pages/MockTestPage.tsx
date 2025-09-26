@@ -57,6 +57,8 @@ const MockTestPage = () => {
     (s) => s.setShowPreviousTestModal
   );
 
+  const reset = useMTStore((s) => s.reset);
+
   const loading = useLoadingStore((s) => s.loading);
 
   // Prev test store
@@ -82,6 +84,10 @@ const MockTestPage = () => {
 
   useEffect(() => {
     loadMockTestList();
+
+    return () => {
+      reset();
+    };
   }, []);
 
   const scrollTabs = (direction: "left" | "right") => {

@@ -827,7 +827,7 @@ export const TestAnalyticsOverview = () => {
       content: <ComparativeStudyTab />,
     },
     {
-      label: "View Answers",
+      label: "VIEW ANSWERS",
       content: <></>,
     },
   ];

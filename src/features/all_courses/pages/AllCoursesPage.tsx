@@ -90,7 +90,6 @@ const AllCoursesPage = () => {
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
       <AllCoursesHeader
-        search={search}
         setSearch={setSearch}
         onClickFilter={() => setHideSecondary(!hideSecondary)}
         isFilterSectionOpen={!hideSecondary}

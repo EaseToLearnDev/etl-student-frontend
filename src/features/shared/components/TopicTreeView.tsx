@@ -1,6 +1,7 @@
 // Components
 import EmptyState from "../../../components/EmptyState";
 import Topic from "./Topic";
+import GlobalSearch from "../../../components/GlobalSearch";
 
 interface TopicListProps<T> {
   topics: T[];
@@ -24,23 +25,51 @@ const TopicTreeView = <T,>({
   getChildren,
   renderRightSection,
 }: TopicListProps<T>) => {
+  // Flatten topics for search
+  const flattenTopics = (list: T[]): T[] => {
+    let result: T[] = [];
+    list.forEach((topic) => {
+      result.push(topic);
+      if (getChildren) {
+        const children = getChildren(topic);
+        if (children && children.length) {
+          result = result.concat(flattenTopics(children));
+        }
+      }
+    });
+    return result;
+  };
+
+  const allTopics = flattenTopics(topics);
+
   if (!topics || topics.length === 0) {
     return <EmptyState title="No Topics Available" />;
   }
   return (
     <div>
-      {topics?.map((topic) => (
-        <Topic
-          key={getId(topic)}
-          topic={topic}
-          activeTopic={selectedTopic}
-          onClickHandler={onClickHandler}
-          getId={getId}
-          getLabel={getLabel}
-          getChildren={getChildren}
-          renderRightSection={renderRightSection}
-        />
-      ))}
+      <GlobalSearch
+        placeholder="Search topics..."
+        data={allTopics}
+        onSelect={(topic: any) => {
+          onClickHandler?.(topic);
+        }}
+        renderItem={(topic) => <div>{getLabel(topic)}</div>}
+      />
+
+      <div className="mt-4">
+        {topics?.map((topic) => (
+          <Topic
+            key={getId(topic)}
+            topic={topic}
+            activeTopic={selectedTopic}
+            onClickHandler={onClickHandler}
+            getId={getId}
+            getLabel={getLabel}
+            getChildren={getChildren}
+            renderRightSection={renderRightSection}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -11,6 +11,8 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import CourseCard from "./CourseCard";
 import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
 import EmptyState from "../../../components/EmptyState";
+import { useCoursesStore } from "../hooks/useCoursesStore";
+import { useEffect } from "react";
 
 interface CoursesCardsProps {
   search: string;
@@ -31,18 +33,27 @@ const CoursesCards = ({
   selectedCategory,
   onCourseClick,
 }: CoursesCardsProps) => {
-  const { studentData } = useStudentStore.getState();
-  const filteredCourses = courseList.filter((course) => {
-    const matchesSearch =
-      course?.courseTitle?.toLowerCase().includes(search?.toLowerCase()) ||
-      course?.courseSubTitle?.toLowerCase().includes(search?.toLowerCase());
+  const studentData = useStudentStore((s) => s.studentData);
+  const setSearchData = useCoursesStore((s) => s.setSearchData);
 
+  const filteredCourses = courseList.filter((course) => {
     const matchesCategory =
       !selectedCategory ||
       selectedCategory.categoryName === course.categoryName;
 
-    return matchesSearch && matchesCategory;
+    return matchesCategory;
   });
+
+  const filteredSearchCourses = courseList.filter((course) => {
+    const matchesSearch =
+      course?.courseTitle?.toLowerCase().includes(search?.toLowerCase()) ||
+      course?.courseSubTitle?.toLowerCase().includes(search?.toLowerCase());
+    return matchesSearch;
+  });
+
+  useEffect(() => {
+    setSearchData?.(filteredSearchCourses);
+  }, [filteredCourses]);
 
   if (filteredCourses.length === 0) {
     return (
