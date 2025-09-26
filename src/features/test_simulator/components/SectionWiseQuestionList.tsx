@@ -7,6 +7,9 @@ import cn from "../../../utils/classNames";
 // Components
 import Question from "./Question";
 
+// React
+import { useEffect, useRef } from "react";
+
 interface SectionWiseQuestionListProps {
   className?: string;
 }
@@ -19,6 +22,18 @@ const SectionWiseQuestionList = ({
   className,
 }: SectionWiseQuestionListProps) => {
   const sections = useTestStore((state) => state.sectionsUI);
+  const currentQuestion = useTestStore(state => state.getCurrentQuestion());
+  const activeQuestionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeQuestionRef.current) {
+      activeQuestionRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
+  }, [currentQuestion?.questionId]);
+
   return (
     <div
       className={cn(
@@ -35,12 +50,15 @@ const SectionWiseQuestionList = ({
             <h6 className="text-center">{section.sectionName}</h6>
             <div className="flex flex-wrap gap-3">
               {section.questionList.map((q, i: number) => (
-                <Question
+                <div
                   key={q.questionId}
-                  question={q}
-                  questionNumber={i + 1}
-  
-                />
+                  ref={currentQuestion?.questionId === q.questionId ? activeQuestionRef : null}
+                >
+                  <Question
+                    question={q}
+                    questionNumber={i + 1}
+                  />
+                </div>
               ))}
             </div>
           </div>

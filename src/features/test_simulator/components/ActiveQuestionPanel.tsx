@@ -75,16 +75,16 @@ const ActiveQuestionPanel = () => {
       <div className={cn("flex flex-col gap-4 h-full")}>
         {/* Question Type Badge */}
         <div className="flex justify-between items-center gap-4">
-          <h5 className="pl-3 text-ellipsis line-clamp-2">
+          <h5 className="text-ellipsis line-clamp-2">
             {currentQuestion?.sectionName ?? "Questions"}
           </h5>
           <Badge theme={Theme.Ocean} style="filled" className="w-fit">
-            {currentQuestion?.questionTypeLabel}
+            <span>{currentQuestion?.questionTypeLabel}</span>
           </Badge>
         </div>
 
         <div className="max-h-[calc(100%-130px)] pr-2 overflow-y-auto">
-          {/* Question Title & Body  */}
+          {/* Common Data Description  */}
           <div className="flex flex-col gap-4">
             {currentQuestion?.commonDataDescription &&
             currentQuestion?.commonDataDescription?.length > 0 ? (
@@ -103,6 +103,8 @@ const ActiveQuestionPanel = () => {
                 </MathJax>
               </WidgetCard>
             ) : null}
+
+            {/* Question Index & Body */}
             <MathJax dynamic>
               <div className="flex gap-1 text-base">
                 <h6>{`Q${getCurrentQuestionIndex + 1})`}</h6>
@@ -111,16 +113,78 @@ const ActiveQuestionPanel = () => {
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.questionBody ?? "",
-                      "test_simulator_table".trim().replace(/[\r\n]+/g, "")
-                    ),
+                      "test_simulator_table"
+                    )
+                      .trim()
+                      .replace(/[\r\n]+/g, ""),
                   }}
                 />
               </div>
             </MathJax>
+
+            {/* Columns */}
+            {currentQuestion?.columns &&
+            currentQuestion?.columns?.length > 0 ? (
+              <table className="w-full">
+                <tr className="w-full grid grid-cols-2 gap-4">
+                  {currentQuestion?.columns?.map((row, index) => (
+                    <td key={index} className="p-2 border-b border-b-[var(--border-primary)]">
+                      {row?.columnHeader && row?.columnHeader?.length > 0 ? (
+                        <MathJax dynamic>
+                          <div
+                            className="math-container text-[18px] font-semibold scrollbar-hide"
+                            dangerouslySetInnerHTML={{
+                              __html: row?.columnHeader
+                                .trim()
+                                .replace(/[\r\n]+/g, ""),
+                            }}
+                          />
+                        </MathJax>
+                      ) : (
+                        <></>
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="w-full grid grid-cols-2 gap-4">
+                  {currentQuestion?.columns?.map((col, indexCol) => (
+                    <td key={indexCol} className="w-full">
+                      <table className="w-full">
+                        {col.columnRows?.map((row, indexRow) => (
+                          <tr key={indexRow}>
+                            <td className="flex items-center gap-2 p-2 border-b border-b-[var(--border-primary)]">
+                              <p className="min-w-[20px]">
+                                {row?.rowId}.&nbsp;
+                              </p>
+                              {row?.rowName && row?.rowName?.length > 0 ? (
+                                <MathJax dynamic>
+                                  <div
+                                    className="math-container text-[14px] scrollbar-hide"
+                                    dangerouslySetInnerHTML={{
+                                      __html: row?.rowName
+                                        .trim()
+                                        .replace(/[\r\n]+/g, ""),
+                                    }}
+                                  />
+                                </MathJax>
+                              ) : (
+                                <></>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </table>
+                    </td>
+                  ))}
+                </tr>
+              </table>
+            ) : (
+              <></>
+            )}
           </div>
 
           {/* Response Section */}
-          <div className="flex flex-col gap-5">
+          <div className="flex flex-col gap-5 mt-7">
             {/* Case: MCQ */}
             {[
               "Multiple-Choice",
@@ -128,6 +192,9 @@ const ActiveQuestionPanel = () => {
               "MC-Assertion-Reason",
               "MC-Matching-Type",
               "Selection-Type",
+              "True False",
+              "Common data",
+              "Common Data (5)",
             ].includes(currentQuestion?.questionType || "") &&
               currentQuestion?.responseChoice.map((response) => (
                 <div
@@ -173,7 +240,7 @@ const ActiveQuestionPanel = () => {
             {/* Case: Fill in the Blank / Integer */}
             {(currentQuestion?.questionType === "Fill-in-Blank" ||
               currentQuestion?.questionType === "Integer-Type") && (
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mt-7">
                 <input
                   type="text"
                   value={currentResponse ?? ""}
@@ -182,6 +249,8 @@ const ActiveQuestionPanel = () => {
                   placeholder={"Enter Your Answer"}
                   className="w-full max-w-[300px] px-3 py-2 border rounded-md text-base bg-[var(--surface-bg-primary)]"
                 />
+
+                {/* Correct Incorrect Labels */}
                 {correctResponseEnabled && (
                   <>
                     {currentQuestion?.studentResponse ===
@@ -221,7 +290,7 @@ const ActiveQuestionPanel = () => {
             <MathJax>
               <WidgetCard title="Explanation" className="shadow-none">
                 <div
-                  className="math-container select-none text-sm"
+                  className="math-container select-none text-sm mt-7"
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.explanations

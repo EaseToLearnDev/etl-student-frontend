@@ -31,6 +31,16 @@ export interface Question {
   noQuestion?: number;
   bloomId: number;
   commonDataDescription?: string;
+  columns?: QuestionColumn[];
+}
+
+export interface QuestionColumn {
+  columnHeader?: string;
+  columnRows?: ColumnRow[];
+}
+export interface ColumnRow {
+  rowId?: string;
+  rowName?: string;
 }
 
 export interface Section {
