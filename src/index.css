@@ -516,6 +516,12 @@ img {
 }
 
 /* RESPONSIVE */
+
+@media only screen and (max-width: 450px) {
+  .all_courses_searchbar {
+    max-width: 250px !important;
+  }
+}
 @media only screen and (min-width: 480px) {
   .test_submit_modal_action_buttons {
     flex-direction: row;

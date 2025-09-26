@@ -12,7 +12,6 @@ import { useCoursesStore } from "../hooks/useCoursesStore";
 import { resetPromocode } from "../services/resetPromocode";
 
 interface AllCoursesHeaderProps {
-  setSearch: (value: string) => void;
   selectedCategory: CategoryType | null;
   setSelectedCategory: (category: CategoryType) => void;
   isFilterSectionOpen: boolean;
@@ -25,7 +24,6 @@ interface AllCoursesHeaderProps {
  * Header component for the All Courses page, providing search and category selection UI.
  */
 const AllCoursesHeader = ({
-  setSearch,
   selectedCategory,
   setHideSecondary,
   className = "",
@@ -58,6 +56,7 @@ const AllCoursesHeader = ({
                 {course.courseSubTitle && <p>{course.courseSubTitle}</p>}
               </div>
             )}
+            searchBarClassName="all_courses_searchbar"
           />
           {isMobile && (
             <div

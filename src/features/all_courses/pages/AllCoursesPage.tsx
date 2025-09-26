@@ -26,7 +26,6 @@ const AllCoursesPage = () => {
   const isMobile = useIsMobile();
   const reset = useCoursesStore((s) => s.reset);
   const search = useCoursesStore((s) => s.search);
-  const setSearch = useCoursesStore((s) => s.setSearch);
   const loading = useCoursesStore((s) => s.loading);
   const setLoading = useCoursesStore((s) => s.setLoading);
   const isPlanModalOpen = useCoursesStore((s) => s.isPlanModalOpen);
@@ -90,7 +89,6 @@ const AllCoursesPage = () => {
     <div className="h-full flex flex-col flex-grow">
       {/* Header */}
       <AllCoursesHeader
-        setSearch={setSearch}
         onClickFilter={() => setHideSecondary(!hideSecondary)}
         isFilterSectionOpen={!hideSecondary}
         selectedCategory={selectedCategory}
