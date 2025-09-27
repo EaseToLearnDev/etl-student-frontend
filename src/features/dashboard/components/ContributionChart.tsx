@@ -1,126 +1,47 @@
 import React, { memo } from "react";
-import { useActivityStore } from "../hooks/useActivityStore";
 import { getColor } from "../utils/getColor";
+import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 
 export interface ActivityData {
   count: number;
   date: Date;
 }
 
-const DayCell = memo(
-  ({
-    day,
-    color,
-    onHover,
-    onLeave,
-    onDayClick,
-  }: {
-    day: ActivityData;
-    color: string;
-    onHover: (e: React.MouseEvent, day: ActivityData) => void;
-    onLeave: () => void;
-    onDayClick: (day: ActivityData) => void;
-  }) => {
-    return (
-      <div
-        title={`${day.count ? day.count : "No"} contributions on ${day.date}`}
-        onMouseEnter={(e) => onHover(e, day)}
-        onMouseLeave={onLeave}
-        onClick={() => onDayClick(day)}
-        className={`w-[clamp(0.8rem,1.2vw,1rem)] h-[clamp(0.8rem,1.2vw,1rem)] rounded-sm ${getColor(
-          day.count,
-          color
-        )}`}
-      ></div>
-    );
-  }
-);
+const DayCell = memo(({ day, dayIdx, monthIdx, weekIdx, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, dayIdx: number; monthIdx: number; weekIdx: number; color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
+  return (
+    <div
+      title={`${day.contribution ? day.contribution : "No"} contributions on ${day.date}`}
+      onMouseEnter={(e) => onHover(e, day)}
+      onMouseLeave={onLeave}
+      onClick={() => onDayClick(day)}
+      className={`w-[clamp(1rem,1.2vw,1rem)] h-[clamp(1rem,1.2vw,1rem)] transition-transform transform hover:scale-110 child cursor-pointer rounded-sm ${getColor(
+        day.contribution, color, darkMode
+      )} ${day.isInvalidDate && "invisible pointer-events-none"}`}
+    >
+    </div>
+  )
+})
 
 function ContributionChart({
   color = "green",
-  year,
   onDayClick,
+  renderableData,
+  darkMode,
   scrollRef,
 }: {
   color?: string;
-  year: string;
-  onDayClick: (day: ActivityData) => void;
+  onDayClick: (day: ITransformedGhData) => void;
+  renderableData: any;
+  darkMode: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
 }) {
-  const { data, monthLabels } = useActivityStore(color, year);
-
-  const getLegendColors = () => {
-    const colorMap = {
-      green: [
-        "bg-green-100/30",
-        "bg-green-200",
-        "bg-green-400",
-        "bg-green-500",
-        "bg-green-600",
-        "bg-green-800",
-      ],
-      emerald: [
-        "bg-emerald-100/30",
-        "bg-emerald-200",
-        "bg-emerald-400",
-        "bg-emerald-500",
-        "bg-emerald-600",
-        "bg-emerald-800",
-      ],
-      amber: [
-        "bg-amber-100/30",
-        "bg-amber-200",
-        "bg-amber-400",
-        "bg-amber-500",
-        "bg-amber-600",
-        "bg-amber-800",
-      ],
-      cyan: [
-        "bg-cyan-100/30",
-        "bg-cyan-200",
-        "bg-cyan-400",
-        "bg-cyan-500",
-        "bg-cyan-600",
-        "bg-cyan-800",
-      ],
-      fuchsia: [
-        "bg-fuchsia-100/30",
-        "bg-fuchsia-200",
-        "bg-fuchsia-400",
-        "bg-fuchsia-500",
-        "bg-fuchsia-600",
-        "bg-fuchsia-800",
-      ],
-      rose: [
-        "bg-rose-100/30",
-        "bg-rose-200",
-        "bg-rose-400",
-        "bg-rose-500",
-        "bg-rose-600",
-        "bg-rose-800",
-      ],
-    };
-
-    const colors = colorMap[color as keyof typeof colorMap] || colorMap.green;
-
-    return colors;
-  };
-
-  const legendColors = [
-    getLegendColors()[0],
-    getLegendColors()[1],
-    getLegendColors()[2],
-    getLegendColors()[3],
-    getLegendColors()[4],
-    getLegendColors()[5],
-  ];
 
   return (
     <div
       ref={scrollRef}
-      className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4"
+      className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4 h-[180px] mb-3 "
     >
-      <div
+      {/* <div
         className="flex text-xs text-[var(--text-tertiary)] text-bold mb-1"
         style={{
           width: `calc(52 * (clamp(0.8rem, 1.2vw, 1rem) + 0.25rem))`,
@@ -135,17 +56,50 @@ function ContributionChart({
             </div>
           );
         })}
-      </div>
+      </div> */}
       <div className="flex flex-col justify-start gap-4">
-        <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(0.8rem,1.2vw,1rem)+6*0.25rem)]">
-          <div className="flex flex-col justify-between items-start  text-xs h-full text-[var(--text-tertiary)] text-bold">
-            {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
-              <div key={i} className="">
+        <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)] ">
+          <div className="flex flex-col justify-between items-start mt-7  h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)]  text-xs text-[var(--text-tertiary)] text-bold">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => (
+              <div key={i} className={`${!(i & 1) ? 'invisible pointer-events-none': 'visible pointer-events-auto'}`}>
                 {d}
               </div>
             ))}
           </div>
-          <div className="flex gap-1">
+          <div className='flex gap-8 '>
+            {
+
+              renderableData?.map((month: any, monthIdx: any) => {
+                return (
+                  <div key={monthIdx} className='flex flex-col  gap-2  '>
+
+                    <p className='text-(--primary-text)  text-center'>{month.monthLabel}</p>
+                    <div className='flex gap-2'>
+
+                      {
+                        month.weeks.map((week: any, weekIdx: any) => {
+                          return (
+                            <div key={weekIdx} className='flex flex-col gap-1 parent '>
+                              {
+                                week.map((day: any, dayIdx: any) => {
+
+                                  return (
+                                    <DayCell key={dayIdx} dayIdx={dayIdx} monthIdx={monthIdx} weekIdx={weekIdx} day={day} color={color} onHover={() => { }} onLeave={() => { }} onDayClick={onDayClick} darkMode={darkMode} />
+                                  )
+                                })
+                              }
+                            </div>
+
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                )
+              })
+            }
+          </div>
+          {/* <div className="flex gap-1">
             {data.map((week, weekIdx) => {
               return (
                 <div key={weekIdx} className="flex flex-col gap-1">
@@ -164,18 +118,10 @@ function ContributionChart({
                 </div>
               );
             })}
-          </div>
+          </div> */}
         </div>
       </div>
-      <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">
-        <span>Less</span>
-        <div className="flex items-center justify-center gap-1">
-          {legendColors.map((c, i) => (
-            <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
-          ))}
-        </div>
-        <span>More</span>
-      </div>
+
     </div>
   );
 }
