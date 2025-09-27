@@ -70,8 +70,8 @@ const ProfileHeader = () => {
       >
         <div className="absolute -bottom-12 left-6">
           <div className="relative">
-            <div className="size-24 aspect-square rounded-full p-1 border-4 border-[var(--sb-ocean-bg-active)] bg-[var(--surface-bg-secondary)] flex justify-center items-center overflow-hidden">
-              <div className="w-full h-full aspect-square rounded-full">
+            <div className="size-24 aspect-square rounded-full p-1 border-4 border-[var(--sb-ocean-bg-active)] bg-[var(--surface-bg-secondary)] flex justify-center items-center overflow-hidden relative">
+              <div className="w-full h-full aspect-square rounded-full overflow-hidden">
                 {profilePic || studentData?.profilePic ? (
                   <img
                     src={profilePic || studentData?.profilePic}
@@ -79,10 +79,12 @@ const ProfileHeader = () => {
                     className="w-full h-full rounded-full bg-white object-cover border-2 border-white shadow-lg"
                   />
                 ) : (
-                  <FaUser
-                    size={70}
-                    className="-mb-8 text-[var(--text-tertiary)]"
-                  />
+                  <div className="w-full h-full flex items-end justify-center absolute inset-0">
+                    <FaUser
+                      size={70}
+                      className="w-15 h-15 aspect-square text-[var(--text-tertiary)]"
+                    />
+                  </div>
                 )}
               </div>
             </div>
