@@ -1,12 +1,12 @@
 import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
-import { useLoadingStore } from "../../hooks/useLoadingStore";
-import { getGhActivityYearsAPI } from "../api/getGhActivityYears.api";
+import { getGhActivityByDayAPI } from "../api/getGhActivityByDay.api";
 
-export const getGhActivityYears = async (setLoadingGhActivityYears: any) => {
+export const getGhActivityByDay = async (date: string | null, setLoadingGhActivityByDay: any) => {
     const { studentData, activeCourse } = useStudentStore.getState();
-    const { setLoading } = useLoadingStore.getState();
 
     if (!studentData || !activeCourse) return null;
+
+    if(!date) return null;
 
     const { loginId, token } = studentData;
     const courseId = activeCourse?.courseId;
@@ -14,23 +14,24 @@ export const getGhActivityYears = async (setLoadingGhActivityYears: any) => {
 
     if (!loginId || !token || !courseId || !studentId) return null;
 
-    setLoadingGhActivityYears(true);
+    setLoadingGhActivityByDay(true);
 
     try {
-        const list = (await getGhActivityYearsAPI({
+        const data = (await getGhActivityByDayAPI({
             loginId,
             token,
             courseId,
             studentId,
-        })) as number[];
+            date
+        })) as any;
 
-        return list ?? null;
+        return data ?? null;
     }
     catch (error) {
         console.log("Failed to load gh activity list: ", error);
         return null;
     }
     finally {
-        setLoadingGhActivityYears(false);
+        setLoadingGhActivityByDay(false);
     }
 }

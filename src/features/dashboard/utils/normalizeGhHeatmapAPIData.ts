@@ -1,5 +1,3 @@
-import {  type IAPIResponse } from "../../../data"
-
 const numberOfDaysInMonth = (year: number, month: number): number => {
     const date: Date = new Date(year, month+1, 0);
     return date.getDate();

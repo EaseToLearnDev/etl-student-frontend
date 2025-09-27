@@ -3,7 +3,7 @@ import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
 import { useLoadingStore } from "../../hooks/useLoadingStore";
 import { getGhActivityAPI } from "../api/getGhActivity.api";
 
-export const getGhActivity = async (year: number | null) => {
+export const getGhActivity = async (year: number | null, setLoadingGhActivity: any) => {
     const { studentData, activeCourse } = useStudentStore.getState();
     const { setLoading } = useLoadingStore.getState();
 
@@ -15,7 +15,7 @@ export const getGhActivity = async (year: number | null) => {
 
     if (!loginId || !token || !courseId || !studentId) return null;
 
-    setLoading(true);
+    setLoadingGhActivity(true);
 
     try {
         const list = (await getGhActivityAPI({
@@ -33,6 +33,6 @@ export const getGhActivity = async (year: number | null) => {
         return null;
     }
     finally {
-        setLoading(false);
+        setLoadingGhActivity(false);
     }
 }

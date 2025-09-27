@@ -1,33 +1,46 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import ContributionChart from "./ContributionChart";
 import Select from "../../../components/Select";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
+import { transformNormalizeGhData, type ITransformedGhData } from "../utils/transformNormalizeGhData";
 import useDarkModeStore from "../../../store/useDarkModeStore";
+import { Skeleton } from "../../../components/SkeletonLoader";
+import { normalizeGhHeatmapAPIData } from "../utils/normalizeGhHeatmapAPIData";
+import { seggregateGhHeatmapData } from "../utils/seggregateGhHeatmapData";
+import { generateColorsForGhHeatmap, Seed } from "../utils/generateColorsForGhHeatmap";
 
 interface IActivityListProps {
   yearsOptions: number[] | null,
   apiData: ITransformedGhData[][] | null,
   year: number | null;
-  setYear: any
+  setYear: any,
+  color: string;
+  setColor: (val: string) => void;
+  loadingGhActivity: boolean;
+  loadingGhActivityYears: boolean;
+  handleClickOnDay: (day: any) => void;
 }
 
-export const ActivityList = ({ yearsOptions, apiData, year, setYear }: IActivityListProps) => {
+export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhActivity, loadingGhActivityYears, color, setColor, handleClickOnDay }: IActivityListProps) => {
 
-  const [color, setColor] = useState('green');
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const {darkMode} = useDarkModeStore();
-
+  const { darkMode } = useDarkModeStore();
   const currentYear = new Date().getFullYear();
 
 
-  console.log("ActivityList: ", yearsOptions, apiData, year, setYear)
+  const normalizedGhAPIData = normalizeGhHeatmapAPIData(apiData, year);
+  const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
+  const renderableData = seggregateGhHeatmapData(transformedData);
+
+  // if (!renderableData) {
+  //   return (
+  //     <EmptyState />
+  //   )
+  // }
 
 
-  const handleClickOnDay = (day: any) => {
-    console.log(day);
-  };
+
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -41,127 +54,17 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear }: IActivity
 
 
 
-  const getLegendColors = (color: string) => {
-    const colorMap = {
-      green: {
-        light: [
-          "bg-gray-200",
-          "bg-green-200",
-          "bg-green-400",
-          "bg-green-500",
-          "bg-green-600",
-          "bg-green-800",
-        ],
-        dark: [
-          "bg-green-100/30",
-          "bg-green-800",
-          "bg-green-700",
-          "bg-green-600",
-          "bg-green-500",
-          "bg-green-400",
-        ],
-      },
-      emerald: {
-        light: [
-          "bg-emerald-100/30",
-          "bg-emerald-200",
-          "bg-emerald-400",
-          "bg-emerald-500",
-          "bg-emerald-600",
-          "bg-emerald-800",
-        ],
-        dark: [
-          "bg-emerald-900/50",
-          "bg-emerald-800",
-          "bg-emerald-700",
-          "bg-emerald-600",
-          "bg-emerald-500",
-          "bg-emerald-400",
-        ],
-      },
-      amber: {
-        light: [
-          "bg-amber-100/30",
-          "bg-amber-200",
-          "bg-amber-400",
-          "bg-amber-500",
-          "bg-amber-600",
-          "bg-amber-800",
-        ],
-        dark: [
-          "bg-amber-900/50",
-          "bg-amber-800",
-          "bg-amber-700",
-          "bg-amber-600",
-          "bg-amber-500",
-          "bg-amber-400",
-        ],
-      },
-      cyan: {
-        light: [
-          "bg-cyan-100/30",
-          "bg-cyan-200",
-          "bg-cyan-400",
-          "bg-cyan-500",
-          "bg-cyan-600",
-          "bg-cyan-800",
-        ],
-        dark: [
-          "bg-cyan-900/50",
-          "bg-cyan-800",
-          "bg-cyan-700",
-          "bg-cyan-600",
-          "bg-cyan-500",
-          "bg-cyan-400",
-        ],
-      },
-      fuchsia: {
-        light: [
-          "bg-fuchsia-100/30",
-          "bg-fuchsia-200",
-          "bg-fuchsia-400",
-          "bg-fuchsia-500",
-          "bg-fuchsia-600",
-          "bg-fuchsia-800",
-        ],
-        dark: [
-          "bg-fuchsia-900/50",
-          "bg-fuchsia-800",
-          "bg-fuchsia-700",
-          "bg-fuchsia-600",
-          "bg-fuchsia-500",
-          "bg-fuchsia-400",
-        ],
-      },
-      rose: {
-        light: [
-          "bg-rose-100/30",
-          "bg-rose-200",
-          "bg-rose-400",
-          "bg-rose-500",
-          "bg-rose-600",
-          "bg-rose-800",
-        ],
-        dark: [
-          "bg-rose-900/50",
-          "bg-rose-800",
-          "bg-rose-700",
-          "bg-rose-600",
-          "bg-rose-500",
-          "bg-rose-400",
-        ],
-      },
-    };
-
-    const colorEntry = colorMap[color as keyof typeof colorMap] || colorMap.green;
+  const getLegendColors = () => {
+    const colorEntry = generateColorsForGhHeatmap(color as Seed)[color] || generateColorsForGhHeatmap('green' as Seed).green;
     return darkMode ? colorEntry.dark : colorEntry.light;
   };
 
 
-  const [c0, c1, c2, c3, c4, c5] = getLegendColors(color);
+  const [c0, c1, c2, c3, c4, c5] = getLegendColors();
   const legendColors = [c0, c1, c2, c3, c4, c5];
 
 
+  console.log(getLegendColors())
 
 
   return (
@@ -175,16 +78,24 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear }: IActivity
             Choose Year
           </label>
           <div className="relative flex items-center w-40">
-            <Select
-              type="Year"
-              items={yearsOptions ? yearsOptions : []}
-              selectedIndex={yearsOptions ? yearsOptions?.indexOf(year ? year : currentYear): null}
-              isOpen={isOpen}
-              onToggle={() => setIsOpen(!isOpen)}
-              onSelect={(index) => setYear(yearsOptions ? yearsOptions[index]: null)}
-              className="w-full"
-              dropdownClassName="w-40"
-            />
+
+            {
+              loadingGhActivityYears ? (
+                <Skeleton width="120px" height="40px" className="rounded-lg" />
+              ) : (
+
+                <Select
+                  type="Year"
+                  items={yearsOptions ? yearsOptions : []}
+                  selectedIndex={yearsOptions ? yearsOptions?.indexOf(year ? year : currentYear) : null}
+                  isOpen={isOpen}
+                  onToggle={() => setIsOpen(!isOpen)}
+                  onSelect={(index) => setYear(yearsOptions ? yearsOptions[index] : null)}
+                  className="w-full"
+                  dropdownClassName="w-40"
+                />
+              )
+            }
           </div>
         </div>
         <div className="flex items-center gap-4 text-[var(--text-primary)]">
@@ -204,19 +115,26 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear }: IActivity
       </div>
 
 
-      <ContributionChart
-        // color={color}
-        apiData={apiData}
-        year={year}
-        onDayClick={handleClickOnDay}
-        scrollRef={scrollRef}
-      />
+      {
+        loadingGhActivity ? (
+          <Skeleton width="100%" height="55%" className="rounded-lg mb-3" />
+        ) : (
+
+          <ContributionChart
+            color={color}
+            renderableData={renderableData}
+            darkMode={darkMode}
+            onDayClick={handleClickOnDay}
+            scrollRef={scrollRef}
+          />
+        )
+      }
       <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">
         <span>Less</span>
         <div className="flex items-center justify-center gap-1">
-          {legendColors.map((c, i) => (
-            <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
-          ))}
+          {legendColors.map((c, i) => {
+            return <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
+          })}
         </div>
         <span>More</span>
       </div>

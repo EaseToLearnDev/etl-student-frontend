@@ -1,4 +1,3 @@
-import type { constants } from "buffer";
 
 export interface ITransformedGhData {
     contribution: number;
@@ -35,7 +34,6 @@ export const transformNormalizeGhData = (data: number[][] | null, year: number |
                 const currentDay = dayIdx;
                 const constructedDate = new Date(_year, _m, currentDay+1);
 
-                console.log("currentDay: ", currentDay+1, constructedDate)
                 return {
                     contribution: day,
                     date: constructedDate,

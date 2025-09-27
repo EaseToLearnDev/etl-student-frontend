@@ -1,68 +1,40 @@
 import React, { memo } from "react";
-// import { useActivityStore } from "../hooks/useActivityStore";
 import { getColor } from "../utils/getColor";
-import { normalizeGhHeatmapAPIData } from "../utils/normalizeGhHeatmapAPIData";
-import { transformNormalizeGhData, type ITransformedGhData } from "../utils/transformNormalizeGhData";
-// import { apiData } from "../../../data";
-import { seggregateGhHeatmapData } from "../utils/seggregateGhHeatmapData";
-import useDarkModeStore from "../../../store/useDarkModeStore";
+import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 
 export interface ActivityData {
   count: number;
   date: Date;
 }
 
-const DayCell = ({ day, dayIdx, monthIdx, weekIdx, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, dayIdx: number; monthIdx: number; weekIdx: number; color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
-
-
-  if (day.contribution > 0) {
-    console.log(day)
-  }
-
-
+const DayCell = memo(({ day, dayIdx, monthIdx, weekIdx, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, dayIdx: number; monthIdx: number; weekIdx: number; color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
   return (
     <div
       title={`${day.contribution ? day.contribution : "No"} contributions on ${day.date}`}
       onMouseEnter={(e) => onHover(e, day)}
       onMouseLeave={onLeave}
       onClick={() => onDayClick(day)}
-      className={`w-[clamp(0.8rem,1.2vw,1rem)] h-[clamp(1rem,1.2vw,1rem)]   rounded-sm ${getColor(
+      className={`w-[clamp(1rem,1.2vw,1rem)] h-[clamp(1rem,1.2vw,1rem)] transition-transform transform hover:scale-110 child cursor-pointer rounded-sm ${getColor(
         day.contribution, color, darkMode
-      )} ${day.isInvalidDate && "bg-transparent"}`}
+      )} ${day.isInvalidDate && "invisible pointer-events-none"}`}
     >
     </div>
   )
-}
+})
 
 function ContributionChart({
   color = "green",
-  year,
-  apiData,
   onDayClick,
+  renderableData,
+  darkMode,
   scrollRef,
 }: {
   color?: string;
-  year: number | null;
-  apiData: ITransformedGhData[][] | null,
   onDayClick: (day: ITransformedGhData) => void;
+  renderableData: any;
+  darkMode: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
 }) {
-  // const { data, monthLabels } = useActivityStore(color, year);
-
-
-  // console.log(apiData, year)
-
-
-  const normalizedGhAPIData = normalizeGhHeatmapAPIData(apiData, year);
-  const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
-  const renderableData = seggregateGhHeatmapData(transformedData);
-
-  const {darkMode} = useDarkModeStore();
-
-  if(!renderableData) return <div className="text-red-400">[ERROR]: Something went wrong!!!</div>
-
-
-
 
   return (
     <div
@@ -86,10 +58,10 @@ function ContributionChart({
         })}
       </div> */}
       <div className="flex flex-col justify-start gap-4">
-        <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(0.8rem,1.2vw,1rem)+6*0.25rem)] ">
-          <div className="flex flex-col justify-between items-start pt-4  text-xs h-full text-[var(--text-tertiary)] text-bold">
-            {["", "Mon", "", "Wed", "", "Fri", ""].map((d, i) => (
-              <div key={i} className="">
+        <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)] ">
+          <div className="flex flex-col justify-between items-start mt-7  h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)]  text-xs text-[var(--text-tertiary)] text-bold">
+            {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => (
+              <div key={i} className={`${!(i & 1) ? 'invisible pointer-events-none': 'visible pointer-events-auto'}`}>
                 {d}
               </div>
             ))}
@@ -97,17 +69,17 @@ function ContributionChart({
           <div className='flex gap-8 '>
             {
 
-              renderableData.map((month: any, monthIdx: any) => {
+              renderableData?.map((month: any, monthIdx: any) => {
                 return (
-                  <div key={monthIdx} className='flex flex-col  gap-2 '>
+                  <div key={monthIdx} className='flex flex-col  gap-2  '>
 
                     <p className='text-(--primary-text)  text-center'>{month.monthLabel}</p>
-                    <div className='flex gap-2 '>
+                    <div className='flex gap-2'>
 
                       {
                         month.weeks.map((week: any, weekIdx: any) => {
                           return (
-                            <div key={weekIdx} className='flex flex-col gap-1'>
+                            <div key={weekIdx} className='flex flex-col gap-1 parent '>
                               {
                                 week.map((day: any, dayIdx: any) => {
 
@@ -149,7 +121,7 @@ function ContributionChart({
           </div> */}
         </div>
       </div>
-   
+
     </div>
   );
 }
