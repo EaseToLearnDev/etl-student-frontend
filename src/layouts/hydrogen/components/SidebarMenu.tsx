@@ -27,7 +27,7 @@ export function SidebarMenu() {
   const filteredMenuItems = getFilteredMenuItems(activeCourse);
 
   return (
-    <div className="flex flex-col h-full mt-4 pb-4 3xl:mt-6">
+    <div className="flex flex-col mt-4 pb-4 h-full 3xl:mt-6">
       <div className="flex-1">
         {filteredMenuItems.map((item, index) => {
           const isActive = location.pathname.includes(item?.href as string);
@@ -76,10 +76,11 @@ export function SidebarMenu() {
       </div>
       {/* Bottom section  */}
 
+      {/* What's New Card */}
       <div className="mt-auto mb-2">
         <div className="px-4 w-full">
           <div
-            className="w-full h-full p-6 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer"
+            className="w-full h-full p-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer"
             onClick={() => setIsReleaseNotesModalOpen(true)}
           >
             {/* card header */}

@@ -10,6 +10,7 @@ import QuestionCard from "../Question";
  */
 const SectionQuestionScroll = () => {
   const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
+  const testData = useTestStore((s) => s.testData);
   const currentSection = useTestStore((state) =>
     state.sectionsUI.find((s) => s.sectionName === currentQuestion?.sectionName)
   );
@@ -30,14 +31,18 @@ const SectionQuestionScroll = () => {
         <h3 className="text-center">{currentQuestion?.sectionName}</h3>
         <div className="w-full overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 max-w-max px-2">
-           {currentSection.questionList.map((q, i: number) => {
+            {currentSection.questionList.map((q, i: number) => {
               const isCurrent = q.questionId === currentQuestion?.questionId;
               return (
-                <div
-                  key={q.questionId}
-                  ref={isCurrent ? currentRef : null}
-                >
-                  <QuestionCard question={q} questionNumber={i + 1} />
+                <div key={q.questionId} ref={isCurrent ? currentRef : null}>
+                  <QuestionCard
+                    question={q}
+                    questionNumber={
+                      (testData?.sectionSet.find(
+                        (s) => s.sectionName === currentSection.sectionName
+                      )?.questionNumbers[i].questionIndex ?? 0) + 1
+                    }
+                  />
                 </div>
               );
             })}

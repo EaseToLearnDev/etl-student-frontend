@@ -69,7 +69,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           notAnswerMarks: item.notAnswerMarks,
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
-          studentResponse: questionResponseMap[item.questionId] || "",
+          studentResponse: questionResponseMap[item.questionId].join('~') || "",
         };
 
         if (testData?.testType === 3) {

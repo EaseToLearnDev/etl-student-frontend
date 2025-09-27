@@ -34,7 +34,7 @@ export function getResponseForQuestionHandler({
   questionResponseMap,
 }: {
   questionId: number;
-  questionResponseMap: Record<number, string>;
+  questionResponseMap: Record<number, Array<string>>;
 }) {
-  return questionResponseMap[questionId] ?? "";
+  return questionResponseMap[questionId];
 }
