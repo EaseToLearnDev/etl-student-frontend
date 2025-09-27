@@ -1,27 +1,36 @@
-// Hooks
-import useTestStore from "../store/useTestStore";
-
-// Components
-import Button from "../../../components/Button";
-import Radio from "../../../components/Radio";
+// React
 import { MathJax } from "better-react-mathjax";
+import { useNavigate } from "react-router";
+
+// Types
+import { QuestionStatus } from "../test_simulator.types";
+
+// Icons
 import {
   MdCheck,
   MdChevronLeft,
   MdChevronRight,
   MdClose,
 } from "react-icons/md";
+
+// Utils
 import cn from "../../../utils/classNames";
-import WidgetCard from "../../report/components/newreports/WidgetCard";
-import useIsMobile from "../../../hooks/useIsMobile";
-import { useNavigate } from "react-router";
-import { useTeacherSupportStore } from "../store/useTeacherSupportStore";
-import { QuestionStatus } from "../test_simulator.types";
-import { useAiStore } from "../store/useAiStore";
-import AiIcon from "../../../components/icons/ai-icon";
 import { checkForTable } from "../../../utils";
-import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
+
+// Hooks
+import useTestStore from "../store/useTestStore";
+import useIsMobile from "../../../hooks/useIsMobile";
+import { useTeacherSupportStore } from "../store/useTeacherSupportStore";
+import { useAiStore } from "../store/useAiStore";
+
+// Components
+import Button from "../../../components/Button";
+import Radio from "../../../components/Radio";
+import WidgetCard from "../../report/components/newreports/WidgetCard";
+import AiIcon from "../../../components/icons/ai-icon";
+import Badge from "../../../components/Badge";
+import Checkbox from "../../../components/Checkbox";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -55,7 +64,6 @@ const ActiveQuestionPanel = () => {
   const currentQuestionStatus = currentQuestion
     ? questionStatusMap[currentQuestion.questionId]
     : null;
-
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
 
   // Ai Store
@@ -105,11 +113,11 @@ const ActiveQuestionPanel = () => {
             ) : null}
 
             {/* Question Index & Body */}
-            <MathJax dynamic>
-              <div className="flex gap-1 text-base">
-                <h6>{`Q${getCurrentQuestionIndex + 1})`}</h6>
+            <div className="flex gap-1 text-base">
+              <h6>{`Q${getCurrentQuestionIndex + 1})`}</h6>
+              <MathJax dynamic>
                 <div
-                  className="math-container"
+                  className="math-container text-sm"
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.questionBody ?? "",
@@ -119,8 +127,8 @@ const ActiveQuestionPanel = () => {
                       .replace(/[\r\n]+/g, ""),
                   }}
                 />
-              </div>
-            </MathJax>
+              </MathJax>
+            </div>
 
             {/* Columns */}
             {currentQuestion?.columns &&
@@ -128,7 +136,10 @@ const ActiveQuestionPanel = () => {
               <table className="w-full">
                 <tr className="w-full grid grid-cols-2 gap-4">
                   {currentQuestion?.columns?.map((row, index) => (
-                    <td key={index} className="p-2 border-b border-b-[var(--border-primary)]">
+                    <td
+                      key={index}
+                      className="p-2 border-b border-b-[var(--border-primary)]"
+                    >
                       {row?.columnHeader && row?.columnHeader?.length > 0 ? (
                         <MathJax dynamic>
                           <div
@@ -185,7 +196,7 @@ const ActiveQuestionPanel = () => {
 
           {/* Response Section */}
           <div className="flex flex-col gap-5 mt-7">
-            {/* Case: MCQ */}
+            {/* Case: MCQ and Multiple Response Type Questions */}
             {[
               "Multiple-Choice",
               "Multiple-Choice-(5)",
@@ -195,6 +206,8 @@ const ActiveQuestionPanel = () => {
               "True False",
               "Common data",
               "Common Data (5)",
+              "MR-Matching-Type",
+              "Multiple-Response",
             ].includes(currentQuestion?.questionType || "") &&
               currentQuestion?.responseChoice.map((response) => (
                 <div
@@ -202,29 +215,56 @@ const ActiveQuestionPanel = () => {
                   className="flex items-center gap-3"
                 >
                   <h6>{`${response?.responseId}.`}</h6>
-                  <Radio
-                    label={response.responseText}
-                    value={response?.responseId}
-                    checked={currentResponse === response.responseId}
-                    onChange={(e) => {
-                      setCurrentResponse(e.target.value ?? "");
-                    }}
-                    disabled={correctResponseEnabled}
-                  />
+                  {/* Case Multiple Response */}
+                  {["MR-Matching-Type", "Multiple-Response"].includes(
+                    currentQuestion?.questionType || ""
+                  ) ? (
+                    <Checkbox
+                      label={response?.responseText}
+                      value={response?.responseId}
+                      checked={
+                        !!currentResponse &&
+                        currentResponse.includes(response.responseId)
+                      }
+                      onChange={(e) => {
+                        if (e.target.checked) {
+                          setCurrentResponse(response?.responseId, "push");
+                        } else {
+                          setCurrentResponse(response?.responseId, "pop");
+                        }
+                      }}
+                      disabled={correctResponseEnabled}
+                    />
+                  ) : (
+                    <Radio
+                      label={response.responseText}
+                      value={response?.responseId}
+                      checked={
+                        !!currentResponse &&
+                        currentResponse.includes(response.responseId)
+                      }
+                      onChange={(e) => {
+                        setCurrentResponse(e.target.value, "replace");
+                      }}
+                      disabled={correctResponseEnabled}
+                    />
+                  )}
 
                   {/* Correct/Incorrect Labels */}
                   {correctResponseEnabled && (
                     <>
-                      {response?.responseId ===
-                      currentQuestion?.correctResponse ? (
+                      {currentQuestion?.correctResponse
+                        ?.split("~")
+                        ?.includes(response?.responseId) ? (
                         <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
                           <MdCheck size={16} />
                           <p className="!font-semibold text-[var(--text-primary)]">
                             Correct Answer
                           </p>
                         </div>
-                      ) : response?.responseId ===
-                        currentQuestion?.studentResponse ? (
+                      ) : currentQuestion?.studentResponse
+                          ?.split("~")
+                          ?.includes(response?.responseId) ? (
                         <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
                           <MdClose size={16} />
                           <p className="!font-semibold text-[var(--text-primary)]">
@@ -244,7 +284,9 @@ const ActiveQuestionPanel = () => {
                 <input
                   type="text"
                   value={currentResponse ?? ""}
-                  onChange={(e) => setCurrentResponse(e.target.value)}
+                  onChange={(e) =>
+                    setCurrentResponse(e.target.value, "replace")
+                  }
                   disabled={correctResponseEnabled}
                   placeholder={"Enter Your Answer"}
                   className="w-full max-w-[300px] px-3 py-2 border rounded-md text-base bg-[var(--surface-bg-primary)]"
@@ -287,10 +329,10 @@ const ActiveQuestionPanel = () => {
 
           {/* Explanation (Review Mode Only) */}
           {correctResponseEnabled && currentQuestion?.explanations ? (
-            <MathJax>
-              <WidgetCard title="Explanation" className="shadow-none">
+            <WidgetCard title="Explanation" className="shadow-none mt-7">
+              <MathJax dynamic>
                 <div
-                  className="math-container select-none text-sm mt-7"
+                  className="math-container select-none text-sm"
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.explanations
@@ -299,8 +341,8 @@ const ActiveQuestionPanel = () => {
                     ),
                   }}
                 />
-              </WidgetCard>
-            </MathJax>
+              </MathJax>
+            </WidgetCard>
           ) : (
             <></>
           )}

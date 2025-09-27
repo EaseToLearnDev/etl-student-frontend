@@ -9,7 +9,7 @@ import type {
 
 export interface InitializeTestDataResult {
   statusMap: Record<number, QuestionStatus>;
-  responseMap: Record<number, string>;
+  responseMap: Record<number, Array<string>>;
   timeMap: Record<number, number>;
   sectionsUI: SectionUI[];
   initialPointer: Pointer;
@@ -24,13 +24,16 @@ export const initializeTestData = ({
   testData: TestData;
 }): InitializeTestDataResult => {
   const statusMap: Record<number, QuestionStatus> = {};
-  const responseMap: Record<number, string> = {};
+  const responseMap: Record<number, Array<string>> = {};
   const timeMap: Record<number, number> = {};
 
   testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] =
       QuestionStatusMap[q.backgroundImg ?? ""] ?? QuestionStatus.NOT_VISITED;
-    responseMap[q?.questionId] = q.studentResponse ?? "";
+    responseMap[q?.questionId] =
+      q.studentResponse && q.studentResponse.length > 0
+        ? q.studentResponse.split("~")
+        : [];
     timeMap[q.questionId] = q.timeSpent ?? 0;
   });
 

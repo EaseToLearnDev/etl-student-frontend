@@ -21,6 +21,7 @@ interface SectionWiseQuestionListProps {
 const SectionWiseQuestionList = ({
   className,
 }: SectionWiseQuestionListProps) => {
+  const testData = useTestStore((state) => state.testData);
   const sections = useTestStore((state) => state.sectionsUI);
   const currentQuestion = useTestStore(state => state.getCurrentQuestion());
   const activeQuestionRef = useRef<HTMLDivElement>(null);
@@ -56,7 +57,7 @@ const SectionWiseQuestionList = ({
                 >
                   <Question
                     question={q}
-                    questionNumber={i + 1}
+                    questionNumber={(testData?.sectionSet[index].questionNumbers[i].questionIndex ?? 0) + 1}
                   />
                 </div>
               ))}

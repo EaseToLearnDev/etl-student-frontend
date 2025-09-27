@@ -30,20 +30,20 @@ const Radio = ({
         onChange={onChange}
         className={cn(
           "appearance-none w-[14px] h-[14px] aspect-square border-1 border-[var(--border-primary)] rounded-full outline-none transition-all duration-200 ease-in-out",
-          "checked:bg-[var(--sb-ocean-bg-active)] checked:border-none checked:w-[16px] checked:h-[16px]",
+          "checked:bg-[var(--sb-ocean-bg-active)] checked:border-none checked:w-[14px] checked:h-[14px]",
           disabled &&
             "bg-[var(--surface-bg-tertiary)] cursor-not-allowed opacity-70"
         )}
         disabled={disabled}
         {...props}
       />
-      <MathJax>
-          <div
-            className="math-container text-base"
-            dangerouslySetInnerHTML={{
-              __html: label.trim().replace(/[\r\n]+/g, ""),
-            }}
-          />
+      <MathJax dynamic>
+        <div
+          className="math-container text-base"
+          dangerouslySetInnerHTML={{
+            __html: label.trim().replace(/[\r\n]+/g, ""),
+          }}
+        />
       </MathJax>
     </label>
   );

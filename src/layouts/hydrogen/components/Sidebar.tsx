@@ -3,6 +3,7 @@ import LogoFull from "../../../components/logo-full";
 import { SidebarMenu } from "./SidebarMenu";
 import { Link } from "react-router";
 import ReleaseNotesModal from "./ReleaseNotesModal";
+import etlDomains from "../../../utils/etlDomains";
 
 export default function Sidebar({ className }: { className?: string }) {
   return (
@@ -12,14 +13,24 @@ export default function Sidebar({ className }: { className?: string }) {
         className
       )}
     >
-      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 2xl:px-8 2xl:pt-6 select-none focus:outline-none">
+      <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-2 pt-5 2xl:px-8 2xl:pt-6 select-none focus:outline-none">
         <Link
           to="/"
           aria-label="Site Logo"
           className="focus:outline-none focus:ring-0"
           tabIndex={-1}
         >
-          <LogoFull className="max-w-[180px] h-fit select-none pointer-events-none" />
+          {etlDomains.includes(window.location.hostname) ? (
+            <LogoFull className="max-w-[180px] h-fit select-none pointer-events-none" />
+          ) : (
+            <img
+              src={`${
+                import.meta.env.VITE_WHITE_LABEL_LOGO_URL
+              }/${window.location.hostname.replace(/\./g, "-")}.png`}
+              alt="Site Logo"
+              className="max-w-[180px] h-fit select-none pointer-events-none rounded-md"
+            />
+          )}
         </Link>
       </div>
 

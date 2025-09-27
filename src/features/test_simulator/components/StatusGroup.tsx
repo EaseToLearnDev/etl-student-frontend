@@ -113,7 +113,7 @@ const StatusGroup = () => {
                   <span>{status.count}</span>
                   {!correctResponseEnabled &&
                     status.id === "answered-and-review" && (
-                      <div className="absolute top-0 right-0 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
+                      <div className="absolute -top-1 -right-1 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
                     )}
                 </div>
                 <p>{status.text}</p>

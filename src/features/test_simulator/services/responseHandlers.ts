@@ -5,12 +5,13 @@ import { QuestionStatus, type Question } from "../test_simulator.types";
 export interface SetCurrentResponseParams {
   question: Question | null;
   response: string;
-  questionResponseMap: Record<number, string>;
+  questionResponseMap: Record<number, Array<string>>;
   questionStatusMap: Record<number, QuestionStatus>;
+  action: "push" | "pop" | "replace";
 }
 
 export interface SetCurrentResponseResult {
-  newResponseMap: Record<number, string>;
+  newResponseMap: Record<number, Array<string>>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -22,6 +23,7 @@ export const setCurrentResponseHandler = ({
   response,
   questionResponseMap,
   questionStatusMap,
+  action,
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
 
@@ -42,11 +44,30 @@ export const setCurrentResponseHandler = ({
     newStatus = QuestionStatus.NOT_ATTEMPTED;
   }
 
+  let newResponseMap = questionResponseMap;
+  switch (action) {
+    case "push":
+      const isDuplicateResponse = questionResponseMap[question.questionId].find(
+        (r) => r.toLowerCase() === response.toLowerCase()
+      );
+      if (!isDuplicateResponse) {
+        newResponseMap[question.questionId].push(response);
+      }
+      break;
+    case "pop":
+      newResponseMap[question.questionId] = newResponseMap[question.questionId].filter(
+        r => r.toLowerCase() !== response.toLowerCase()
+      );
+      break;
+    case "replace":
+      newResponseMap[question.questionId] = [response];
+      break;
+    default:
+      break;
+  }
+
   return {
-    newResponseMap: {
-      ...questionResponseMap,
-      [question.questionId]: response,
-    },
+    newResponseMap: newResponseMap,
     newStatusMap: {
       ...questionStatusMap,
       [question.questionId]: newStatus,
@@ -58,12 +79,12 @@ export const setCurrentResponseHandler = ({
 
 export interface ClearCurrentResponseParams {
   question: Question | null;
-  questionResponseMap: Record<number, string>;
+  questionResponseMap: Record<number, Array<string>>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 export interface ClearCurrentResponseResult {
-  newResponseMap: Record<number, string>;
+  newResponseMap: Record<number, Array<string>>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -79,14 +100,17 @@ export const clearCurrentResponseHandler = ({
 
   let newStatus = QuestionStatus.NOT_ATTEMPTED;
 
-  if(questionStatusMap[question.questionId] === QuestionStatus.ANSWERED_AND_REVIEW) {
+  if (
+    questionStatusMap[question.questionId] ===
+    QuestionStatus.ANSWERED_AND_REVIEW
+  ) {
     newStatus = QuestionStatus.MARKED_FOR_REVIEW;
   }
 
   return {
     newResponseMap: {
       ...questionResponseMap,
-      [question.questionId]: "",
+      [question.questionId]: [],
     },
     newStatusMap: {
       ...questionStatusMap,

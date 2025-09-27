@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import { toQueryString } from "../utils";
+import etlDomains from "../utils/etlDomains";
 
 interface Chunk {
   title: string;
@@ -251,7 +252,17 @@ const TestWizard = () => {
       <div className="relative max-w-[850px] w-full bg-[var(--surface-bg-primary)] rounded-xl shadow-lg p-5 md:p-10 flex flex-col min-h-[600px]">
         {/* Top (Logo - fixed, non scrollable) */}
         <div className="flex justify-center mb-6 flex-shrink-0">
-          <img src="/ease_to_learn_logo.png" className="h-10" />
+          <img
+            src={
+              !etlDomains.includes(window.location.hostname)
+                ? `${
+                    import.meta.env.VITE_WHITE_LABEL_LOGO_URL
+                  }/${window.location.hostname.replace(/\./g, "-")}.png`
+                : "/ease_to_learn_logo.png"
+            }
+            alt="Site Logo"
+            className="h-10"
+          />
         </div>
 
         {/* Back Button */}

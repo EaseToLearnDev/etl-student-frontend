@@ -71,7 +71,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             questionTypeLabel: item.questionTypeLabel,
             topicId: item.topicId,
             timeSpent: questionTimeMap[item.questionId] || 0,
-            studentResponse: questionResponseMap[item.questionId] || "",
+            studentResponse: questionResponseMap[item.questionId].join("~"),
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,

@@ -75,9 +75,12 @@ export interface TestStore {
 
   jumpToQuestion: (question: Question | null) => void;
 
-  questionResponseMap: Record<number, string>;
-  getCurrentResponse: () => string;
-  setCurrentResponse: (response: string) => void;
+  questionResponseMap: Record<number, Array<string>>;
+  getCurrentResponse: () => Array<string>;
+  setCurrentResponse: (
+    response: string,
+    action: "push" | "pop" | "replace"
+  ) => void;
   clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
@@ -410,18 +413,16 @@ const useTestStore = create<TestStore>((set, get) => ({
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
-    if (!question) return "";
+    if (!question) return [];
 
-    return (
-      getResponseForQuestionHandler({
-        questionId: question.questionId,
-        questionResponseMap,
-      }) ?? ""
-    );
+    return getResponseForQuestionHandler({
+      questionId: question.questionId,
+      questionResponseMap,
+    });
   },
 
   // Set Current Response Handler
-  setCurrentResponse: (response) => {
+  setCurrentResponse: (response, action) => {
     const { getCurrentQuestion } = get();
     const question = getCurrentQuestion();
     if (!question) return null;
@@ -433,6 +434,7 @@ const useTestStore = create<TestStore>((set, get) => ({
       response,
       questionResponseMap,
       questionStatusMap,
+      action: action,
     });
 
     if (!result) return;
@@ -442,7 +444,6 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap: result.newStatusMap,
     });
   },
-
   // Clear Current Response Handler
   clearCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap, questionStatusMap } =

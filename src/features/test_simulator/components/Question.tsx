@@ -81,7 +81,7 @@ const QuestionCard = ({
       {!correctResponseEnabled &&
         questionStatus ===
           QuestionStatus.ANSWERED_AND_REVIEW && (
-          <div className="absolute top-0 right-0 size-2 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
+          <div className="absolute -top-0.5 -right-0.5 size-3 aspect-square rounded-full bg-[var(--sb-green-haze-bg-active)]" />
         )}
     </button>
   );
