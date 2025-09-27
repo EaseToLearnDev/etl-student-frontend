@@ -64,9 +64,6 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhAc
   const legendColors = [c0, c1, c2, c3, c4, c5];
 
 
-  console.log(getLegendColors())
-
-
   return (
     <>
       <div className="w-full mb-4 flex items-start justify-between">
