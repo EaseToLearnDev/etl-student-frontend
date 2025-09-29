@@ -10,7 +10,7 @@ import type {
   TestConfig,
   Features,
 } from "../test_simulator.types";
-import { Severity, type Error } from "../../shared/types";
+import { Severity, ToastType, type Error } from "../../shared/types";
 
 // Services
 import {
@@ -20,6 +20,7 @@ import {
 } from "../services/navigation";
 import {
   clearCurrentResponseHandler,
+  isMaxQuestionLimitReached,
   setCurrentResponseHandler,
 } from "../services/responseHandlers";
 import {
@@ -39,6 +40,7 @@ import {
   markForReviewHandler,
   updateStatusHandler,
 } from "../services/statusHandlers";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 export interface TestStore {
   testData: TestData | null;
@@ -423,11 +425,37 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   // Set Current Response Handler
   setCurrentResponse: (response, action) => {
-    const { getCurrentQuestion } = get();
+    const {
+      getCurrentQuestion,
+      questionResponseMap,
+      questionStatusMap,
+      testData,
+      currentPointer,
+    } = get();
+    const { setToast } = useToastStore.getState();
     const question = getCurrentQuestion();
     if (!question) return null;
 
-    const { questionResponseMap, questionStatusMap } = get();
+    // Check if maximum question attempt limit has been reached
+    // This prevents students from attempting more questions than allowed
+    // either globally across all sections or within a specific section
+    const isLimitReached = isMaxQuestionLimitReached({
+      testData,
+      currentPointer,
+      question,
+      questionStatusMap,
+    });
+    if (isLimitReached !== "NONE") {
+      setToast({
+        title: "Max question limit reached.",
+        description:
+          isLimitReached === "GLOBAL"
+            ? `You are not allowed to attempt more than ${testData?.noQuestionAttempt} questions.`
+            : `You are not allowed to attempt more than ${testData?.noQuestionAttempt} questions in this section.`,
+        type: ToastType.WARNING,
+      });
+      return;
+    }
 
     const result = setCurrentResponseHandler({
       question,
