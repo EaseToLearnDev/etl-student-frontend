@@ -2,18 +2,25 @@ import { useRef, useState } from "react";
 import ContributionChart from "./ContributionChart";
 import Select from "../../../components/Select";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { transformNormalizeGhData, type ITransformedGhData } from "../utils/transformNormalizeGhData";
+import {
+  transformNormalizeGhData,
+  type ITransformedGhData,
+} from "../utils/transformNormalizeGhData";
 import useDarkModeStore from "../../../store/useDarkModeStore";
 import { Skeleton } from "../../../components/SkeletonLoader";
 import { normalizeGhHeatmapAPIData } from "../utils/normalizeGhHeatmapAPIData";
 import { seggregateGhHeatmapData } from "../utils/seggregateGhHeatmapData";
-import { generateColorsForGhHeatmap, Seed } from "../utils/generateColorsForGhHeatmap";
+import {
+  generateColorsForGhHeatmap,
+  Seed,
+} from "../utils/generateColorsForGhHeatmap";
+import EmptyState from "../../../components/EmptyState";
 
 interface IActivityListProps {
-  yearsOptions: number[] | null,
-  apiData: ITransformedGhData[][] | null,
+  yearsOptions: number[] | null;
+  apiData: ITransformedGhData[][] | null;
   year: number | null;
-  setYear: any,
+  setYear: any;
   color: string;
   setColor: (val: string) => void;
   loadingGhActivity: boolean;
@@ -21,26 +28,29 @@ interface IActivityListProps {
   handleClickOnDay: (day: any) => void;
 }
 
-export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhActivity, loadingGhActivityYears, color, setColor, handleClickOnDay }: IActivityListProps) => {
-
+export const ActivityList = ({
+  yearsOptions,
+  apiData,
+  year,
+  setYear,
+  loadingGhActivity,
+  loadingGhActivityYears,
+  color,
+  setColor,
+  handleClickOnDay,
+}: IActivityListProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const { darkMode } = useDarkModeStore();
   const currentYear = new Date().getFullYear();
 
-
   const normalizedGhAPIData = normalizeGhHeatmapAPIData(apiData, year);
   const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
   const renderableData = seggregateGhHeatmapData(transformedData);
 
-  // if (!renderableData) {
-  //   return (
-  //     <EmptyState />
-  //   )
-  // }
-
-
-
+  if (!renderableData) {
+    return <EmptyState />;
+  }
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -52,17 +62,15 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhAc
     }
   };
 
-
-
   const getLegendColors = () => {
-    const colorEntry = generateColorsForGhHeatmap(color as Seed)[color] || generateColorsForGhHeatmap('green' as Seed).green;
+    const colorEntry =
+      generateColorsForGhHeatmap(color as Seed)[color] ||
+      generateColorsForGhHeatmap("green" as Seed).green;
     return darkMode ? colorEntry.dark : colorEntry.light;
   };
 
-
   const [c0, c1, c2, c3, c4, c5] = getLegendColors();
   const legendColors = [c0, c1, c2, c3, c4, c5];
-
 
   return (
     <>
@@ -75,24 +83,26 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhAc
             Choose Year
           </label>
           <div className="relative flex items-center w-40">
-
-            {
-              loadingGhActivityYears ? (
-                <Skeleton width="120px" height="40px" className="rounded-lg" />
-              ) : (
-
-                <Select
-                  type="Year"
-                  items={yearsOptions ? yearsOptions : []}
-                  selectedIndex={yearsOptions ? yearsOptions?.indexOf(year ? year : currentYear) : null}
-                  isOpen={isOpen}
-                  onToggle={() => setIsOpen(!isOpen)}
-                  onSelect={(index) => setYear(yearsOptions ? yearsOptions[index] : null)}
-                  className="w-full"
-                  dropdownClassName="w-40"
-                />
-              )
-            }
+            {loadingGhActivityYears ? (
+              <Skeleton width="120px" height="40px" className="rounded-lg" />
+            ) : (
+              <Select
+                type="Year"
+                items={yearsOptions ? yearsOptions : []}
+                selectedIndex={
+                  yearsOptions
+                    ? yearsOptions?.indexOf(year ? year : currentYear)
+                    : null
+                }
+                isOpen={isOpen}
+                onToggle={() => setIsOpen(!isOpen)}
+                onSelect={(index) =>
+                  setYear(yearsOptions ? yearsOptions[index] : null)
+                }
+                className="w-full"
+                dropdownClassName="w-40"
+              />
+            )}
           </div>
         </div>
         <div className="flex items-center gap-4 text-[var(--text-primary)]">
@@ -111,26 +121,22 @@ export const ActivityList = ({ yearsOptions, apiData, year, setYear, loadingGhAc
         </div>
       </div>
 
-
-      {
-        loadingGhActivity ? (
-          <Skeleton width="100%" height="55%" className="rounded-lg mb-3" />
-        ) : (
-
-          <ContributionChart
-            color={color}
-            renderableData={renderableData}
-            darkMode={darkMode}
-            onDayClick={handleClickOnDay}
-            scrollRef={scrollRef}
-          />
-        )
-      }
+      {loadingGhActivity ? (
+        <Skeleton width="100%" height="55%" className="rounded-lg mb-3" />
+      ) : (
+        <ContributionChart
+          color={color}
+          renderableData={renderableData}
+          darkMode={darkMode}
+          onDayClick={handleClickOnDay}
+          scrollRef={scrollRef}
+        />
+      )}
       <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">
         <span>Less</span>
         <div className="flex items-center justify-center gap-1">
           {legendColors.map((c, i) => {
-            return <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>
+            return <div key={i} className={`w-4 h-4 rounded-sm ${c}`}></div>;
           })}
         </div>
         <span>More</span>

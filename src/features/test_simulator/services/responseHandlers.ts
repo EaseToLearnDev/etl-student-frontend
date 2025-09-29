@@ -1,4 +1,9 @@
-import { QuestionStatus, type Question } from "../test_simulator.types";
+import {
+  QuestionStatus,
+  type Pointer,
+  type Question,
+  type TestData,
+} from "../test_simulator.types";
 
 // ------------------SET CURRENT RESPONSE------------------
 
@@ -55,9 +60,9 @@ export const setCurrentResponseHandler = ({
       }
       break;
     case "pop":
-      newResponseMap[question.questionId] = newResponseMap[question.questionId].filter(
-        r => r.toLowerCase() !== response.toLowerCase()
-      );
+      newResponseMap[question.questionId] = newResponseMap[
+        question.questionId
+      ].filter((r) => r.toLowerCase() !== response.toLowerCase());
       break;
     case "replace":
       newResponseMap[question.questionId] = [response];
@@ -117,4 +122,63 @@ export const clearCurrentResponseHandler = ({
       [question.questionId]: newStatus,
     },
   };
+};
+
+export interface IsMaxQuestionLimitReachedParams {
+  testData: TestData | null;
+  currentPointer: Pointer;
+  question: Question | null;
+  questionStatusMap: Record<number, QuestionStatus>;
+}
+
+export type IsMaxQuestionLimitReachedResult = 'NONE' | 'GLOBAL' | 'SECTION';
+
+/**
+ * Function to check max attempted questions
+ */
+export const isMaxQuestionLimitReached = ({
+  testData,
+  currentPointer,
+  question,
+  questionStatusMap,
+}: IsMaxQuestionLimitReachedParams): IsMaxQuestionLimitReachedResult => {
+  if (!question || !testData) return 'NONE';
+
+  const attemptedQuestionsCount = Object.values(questionStatusMap).filter(
+    (status) =>
+      status === QuestionStatus.ATTEMPTED ||
+      status === QuestionStatus.ANSWERED_AND_REVIEW
+  ).length;
+
+  // Check for global attempted limit
+  if (
+    question?.questionId &&
+    !question?.sectionId &&
+    testData?.noQuestionAttempt &&
+    testData?.noQuestionAttempt > 0 &&
+    attemptedQuestionsCount >= testData?.noQuestionAttempt
+  ) {
+    return 'GLOBAL';
+  }
+
+  // Check for section attempted limit
+  const currentSectionQuestionList =
+    testData.sectionSet[currentPointer.sectionPos].questionNumbers;
+  const currentSectionAttemptedCount = currentSectionQuestionList.filter(
+    (q) =>
+      questionStatusMap[q?.questionId] === QuestionStatus.ATTEMPTED ||
+      questionStatusMap[q?.questionId] === QuestionStatus.ANSWERED_AND_REVIEW
+  ).length;
+  if (
+    question?.questionId &&
+    question?.sectionId &&
+    question?.sectionId > 0 &&
+    question?.noQuestionAttempt &&
+    question?.noQuestionAttempt > 0 &&
+    currentSectionAttemptedCount >= question?.noQuestionAttempt
+  ) {
+    return 'SECTION';
+  }
+
+  return 'NONE';
 };
