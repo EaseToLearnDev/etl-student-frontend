@@ -1,19 +1,28 @@
 import { useRef, useState } from "react";
-import ContributionChart from "./ContributionChart";
-import Select from "../../../components/Select";
+
+// Icons
+import { LuCalendarMinus2 } from "react-icons/lu";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import {
-  transformNormalizeGhData,
-  type ITransformedGhData,
-} from "../utils/transformNormalizeGhData";
-import useDarkModeStore from "../../../store/useDarkModeStore";
-import { Skeleton } from "../../../components/SkeletonLoader";
+
+// Utils
 import { normalizeGhHeatmapAPIData } from "../utils/normalizeGhHeatmapAPIData";
 import { seggregateGhHeatmapData } from "../utils/seggregateGhHeatmapData";
 import {
   generateColorsForGhHeatmap,
   Seed,
 } from "../utils/generateColorsForGhHeatmap";
+import {
+  transformNormalizeGhData,
+  type ITransformedGhData,
+} from "../utils/transformNormalizeGhData";
+
+// Hooks
+import useDarkModeStore from "../../../store/useDarkModeStore";
+
+// Components
+import ContributionChart from "./ContributionChart";
+import Select from "../../../components/Select";
+import { Skeleton } from "../../../components/SkeletonLoader";
 import EmptyState from "../../../components/EmptyState";
 
 interface IActivityListProps {
@@ -49,7 +58,12 @@ export const ActivityList = ({
   const renderableData = seggregateGhHeatmapData(transformedData);
 
   if (!renderableData) {
-    return <EmptyState />;
+    return (
+      <EmptyState
+        title="No Activity Available"
+        icon={<LuCalendarMinus2 size={100} />}
+      />
+    );
   }
 
   const scroll = (direction: "left" | "right") => {
