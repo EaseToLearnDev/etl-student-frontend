@@ -50,8 +50,6 @@ export const initializeTestData = ({
     (sec) => sec.questionNumbers.length > 0
   );
   if (firstSection) {
-    const firstQId = firstSection?.questionNumbers[0]?.questionId;
-    statusMap[firstQId] = QuestionStatus.VISITED;
     initialPointer = {
       sectionPos: 0,
       questionPos: 0,

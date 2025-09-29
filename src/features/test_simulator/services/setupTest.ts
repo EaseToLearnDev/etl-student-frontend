@@ -59,7 +59,7 @@ export const setupTest = async (
       error: { id: string; message: string } | null;
     } = result;
 
-    if (error?.id === "limit_reached") {
+    if (error?.id === "limit_reached" || error?.id === "question_limit_reached") {
       setError({
         id: error?.id,
         message: error.message,

@@ -166,6 +166,17 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       />
     );
   }
+  
+  if (testError?.id === "question_limit_reached") {
+    return (
+      <EmptyState
+        title={testError.message}
+        buttonText={"Go Back!"}
+        onClick={() => navigate(-1)}
+        className="min-h-screen"
+      />
+    );
+  }
 
   return (
     <>

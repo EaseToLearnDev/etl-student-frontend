@@ -61,6 +61,9 @@ export const loadTestDetails = async ({
         if(res.responseTxt.includes('Maximum number')) {
           return {data: null, error: {id: 'limit_reached', message: res?.responseTxt}};
         }
+        if(res.responseTxt.includes('No question')) {
+          return {data: null, error: {id: 'question_limit_reached', message: res?.responseTxt}};
+        }
         if(res?.obj?.[0]) {
           return {data: res?.obj?.[0], error: null};
         }
