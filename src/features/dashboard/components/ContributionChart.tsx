@@ -10,7 +10,7 @@ export interface ActivityData {
 const DayCell = memo(({ day, dayIdx, monthIdx, weekIdx, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, dayIdx: number; monthIdx: number; weekIdx: number; color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
   return (
     <div
-      title={`${day.contribution ? day.contribution : "No"} contributions on ${day.date}`}
+      title={`${day.contribution ? day.contribution+" problems" : "No problem"} solved on ${day.date}`}
       onMouseEnter={(e) => onHover(e, day)}
       onMouseLeave={onLeave}
       onClick={() => onDayClick(day)}

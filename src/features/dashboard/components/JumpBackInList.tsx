@@ -36,7 +36,6 @@ const JumpBackInList = () => {
   return (
     <div>
       {/* Header with nav buttons */}
-      <h5>Jump Back In</h5>
 
       {/* Scrollable list */}
       <div
@@ -52,10 +51,13 @@ const JumpBackInList = () => {
             />
           </div>
         ) : (
-          <EmptyState
-            icon={<EmptyGhostIcon width={100} height={100} />}
-            title="No Previous Tests Found"
-          />
+          <div className="flex flex-col w-full items-center mt-12">
+            <EmptyState
+              icon={<EmptyGhostIcon width={100} height={100} />}
+              title="No Previous Tests Found"
+            />
+            <h5 className="mt-8">Jump Back In</h5>
+          </div>
         )}
       </div>
       <PreviousTestModal

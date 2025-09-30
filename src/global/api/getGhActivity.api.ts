@@ -17,14 +17,16 @@ export const getGhActivityAPI = async ({
     year
 }: GhActivityTypes) => {
 
-    const payload = {
-        studentId,
-        courseId,
-        ...(year && { year })
+    const params = new URLSearchParams({
+        studentId: studentId.toString(),
+        courseId: courseId.toString(),
+    })
+
+    if(year) {
+        params.append('year', year.toString());
     }
 
-
-    const res = await makeRequest('post', '/get-activity', payload, {
+    const res = await makeRequest('get', `/get-activity?${params.toString()}`, null, {
         headers: {
             loginId,
             token,
