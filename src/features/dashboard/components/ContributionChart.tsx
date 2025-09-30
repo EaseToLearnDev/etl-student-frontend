@@ -7,7 +7,7 @@ export interface ActivityData {
   date: Date;
 }
 
-const DayCell = memo(({ day, dayIdx, monthIdx, weekIdx, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, dayIdx: number; monthIdx: number; weekIdx: number; color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
+const DayCell = memo(({ day, color, onHover, onLeave, onDayClick, darkMode }: { day: ITransformedGhData, color: string, onHover: (e: React.MouseEvent, day: ITransformedGhData) => void, onLeave: () => void; onDayClick: (day: ITransformedGhData) => void, darkMode: boolean }) => {
   return (
     <div
       title={`${day.contribution ? day.contribution+" problems" : "No problem"} solved on ${day.date}`}
@@ -84,7 +84,7 @@ function ContributionChart({
                                 week.map((day: any, dayIdx: any) => {
 
                                   return (
-                                    <DayCell key={dayIdx} dayIdx={dayIdx} monthIdx={monthIdx} weekIdx={weekIdx} day={day} color={color} onHover={() => { }} onLeave={() => { }} onDayClick={onDayClick} darkMode={darkMode} />
+                                    <DayCell key={dayIdx} day={day} color={color} onHover={() => { }} onLeave={() => { }} onDayClick={onDayClick} darkMode={darkMode} />
                                   )
                                 })
                               }

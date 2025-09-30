@@ -1,4 +1,3 @@
-import React from 'react'
 import EmptyState from '../../../components/EmptyState'
 import type { IGhActivityByDayResults } from '../../../global/services/getGhActivityByDay'
 import Badge from '../../../components/Badge'

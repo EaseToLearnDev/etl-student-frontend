@@ -57,8 +57,6 @@ export const ActivityList = ({
   const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
   const renderableData = seggregateGhHeatmapData(transformedData);
 
-  console.log(renderableData)
-
   if (!renderableData) {
     return (
       <EmptyState

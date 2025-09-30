@@ -41,8 +41,6 @@ const DashboardPage = () => {
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(null);
 
-  console.log(dataByDay)
-
   const createDate = (_date: Date) => {
     const yyyy = _date.getFullYear().toString();
     const mm = String(_date.getMonth() + 1).padStart(2, '0');
