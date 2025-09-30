@@ -15,12 +15,12 @@ export const getGhActivityYearsAPI = async ({
     courseId,
 }: GhActivityYearsTypes) => {
 
-    const payload = {
-        studentId,
-        courseId,
-    }
+    const params = new URLSearchParams({
+        studentId: studentId.toString(),
+        courseId: courseId.toString()
+    })
 
-    const res = await makeRequest('post', '/get-activity-years', payload, {
+    const res = await makeRequest('get', `/get-activity-years?${params.toString()}`, null, {
         headers: {
             loginId,
             token,

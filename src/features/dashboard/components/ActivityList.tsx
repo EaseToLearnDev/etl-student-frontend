@@ -88,7 +88,7 @@ export const ActivityList = ({
 
   return (
     <>
-      <div className="w-full mb-4 flex items-start justify-between">
+      <div className="w-full mb-4 flex items-start justify-between mt-8">
         <div>
           <label
             htmlFor="choose-year"

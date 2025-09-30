@@ -17,14 +17,13 @@ export const getGhActivityByDayAPI = async ({
     date
 }: GhActivityByDayTypes) => {
 
-    const payload = {
-        studentId,
-        courseId,
+    const params = new URLSearchParams({
+        studentId: studentId.toString(),
+        courseId: courseId.toString(),
         date
-    }
+    })
 
-
-    const res = await makeRequest('post', '/get-activity-by-day', payload, {
+    const res = await makeRequest('get', `/get-activity-by-day?${params.toString()}`, null, {
         headers: {
             loginId,
             token,

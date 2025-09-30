@@ -1,12 +1,32 @@
 import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
 import { getGhActivityByDayAPI } from "../api/getGhActivityByDay.api";
 
+export interface IGhActivityByDayResults {
+    courseId: number
+    testId: number
+    marksObtain: {
+        source: string
+        parsedValue: number
+    }
+    testSession: string
+    testTitle: string
+    fullMarks: {
+        source: string
+        parsedValue: number
+    }
+    correctCount: number
+    totalQuestions: number
+    incorrectCount: number
+    notAnsweredCount: number
+}
+
+
 export const getGhActivityByDay = async (date: string | null, setLoadingGhActivityByDay: any) => {
     const { studentData, activeCourse } = useStudentStore.getState();
 
     if (!studentData || !activeCourse) return null;
 
-    if(!date) return null;
+    if (!date) return null;
 
     const { loginId, token } = studentData;
     const courseId = activeCourse?.courseId;
@@ -25,6 +45,7 @@ export const getGhActivityByDay = async (date: string | null, setLoadingGhActivi
             date
         })) as any;
 
+        if(data?.length === 0) return null;
         return data ?? null;
     }
     catch (error) {
