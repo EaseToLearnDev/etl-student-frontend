@@ -204,7 +204,6 @@ const SmartLearningPage = () => {
           setTestOptions={setTestOptions}
           onStart={() =>
             handleShowPreviousOrStartTest({
-              previousRunningTest,
               setPreviousRunningTest,
               setShowPreviousTestModal,
               startTestCallback: () =>

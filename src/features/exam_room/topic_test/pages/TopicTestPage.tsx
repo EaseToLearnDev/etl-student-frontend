@@ -203,7 +203,6 @@ const TopicTestPage = () => {
           testName={selectedTest?.mockTestTitle || ""}
           onStart={() =>
             handleShowPreviousOrStartTest({
-              previousRunningTest,
               setPreviousRunningTest,
               setShowPreviousTestModal,
               startTestCallback: () =>

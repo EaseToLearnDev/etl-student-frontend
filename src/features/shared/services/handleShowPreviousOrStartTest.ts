@@ -5,7 +5,6 @@ import type { PrevRunningTest } from "../types";
 import { loadPreviousRunningTest } from "./loadPreviousRunningTest";
 
 interface HandleShowPreviousOrStartTestParams {
-  previousRunningTest: PrevRunningTest | null;
   setPreviousRunningTest: (previousTest: PrevRunningTest) => void;
   setShowPreviousTestModal: (v: boolean) => void;
   startTestCallback: () => void;
@@ -14,14 +13,11 @@ interface HandleShowPreviousOrStartTestParams {
  * Manages the display logic for test modals based on the previous running test status.
  */
 export const handleShowPreviousOrStartTest = async ({
-  previousRunningTest,
   setPreviousRunningTest,
   setShowPreviousTestModal,
   startTestCallback,
 }: HandleShowPreviousOrStartTestParams) => {
-  const data = previousRunningTest
-    ? previousRunningTest
-    : await loadPreviousRunningTest();
+  const data = await loadPreviousRunningTest();
 
   if (!data) return;
 

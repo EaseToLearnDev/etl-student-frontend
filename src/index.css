@@ -291,6 +291,7 @@ math {
 
 /* Text Content Start */
 .text_content {
+  --fs-heading-1: 40px;
   --fs-heading-2: 32px;
   --fs-heading-3: 28px;
   --fs-heading-4: 22px;
@@ -300,7 +301,7 @@ math {
   --fs-paragraph-sm: 14px;
 }
 .text_content_heading {
-  --fs-heading-1: 45px;
+  --fs-heading-1: 40px;
 }
 
 @media only screen and (max-width: 480px) {

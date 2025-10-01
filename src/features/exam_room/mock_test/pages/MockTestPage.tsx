@@ -199,7 +199,6 @@ const MockTestPage = () => {
             test={selectedTest}
             onStart={() =>
               handleShowPreviousOrStartTest({
-                previousRunningTest,
                 setPreviousRunningTest,
                 setShowPreviousTestModal,
                 startTestCallback: () =>
@@ -225,7 +224,6 @@ const MockTestPage = () => {
             }}
             onStart={() =>
               handleShowPreviousOrStartTest({
-                previousRunningTest,
                 setPreviousRunningTest,
                 setShowPreviousTestModal,
                 startTestCallback: () =>

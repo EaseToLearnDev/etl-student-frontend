@@ -27,7 +27,7 @@ function ActivityListData({ dataByDay }: { dataByDay: IGhActivityByDayResults[] 
     const navigate = useNavigate();
 
     if (!dataByDay) {
-        return <EmptyState title='Nothing to show here, Please give a test.' />
+        return <EmptyState title='Nothing to show here, Please give a test' />
     }
 
     const handleTestNavigation = (testSession: string, testType: string) => {
