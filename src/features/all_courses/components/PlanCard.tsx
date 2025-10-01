@@ -44,10 +44,10 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
             </div>
             <h5 className="text-[var(--text-primary)] m-0">{plan?.title}</h5>
           </div>
-          <h6 className="text-[var(--text-primary)]">
-            Total: ₹ {salePrice}
-          </h6>
+          <h6 className="text-[var(--text-primary)]">Total: ₹ {salePrice}</h6>
         </div>
+
+        <p className="mt-2">{plan.validityDate}</p>
 
         <div className="w-full flex items-center justify-between mt-1">
           <p className="text-[var(--sb-green-haze-bg-active)]">

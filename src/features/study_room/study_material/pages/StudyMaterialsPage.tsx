@@ -143,11 +143,20 @@ const StudyMaterialsPage = () => {
             )
           }
           secondaryContent={
-            !topicContentList ||
-            topicContentList.length === 0 ||
-            !selectedTopic ? (
+            loading ? (
+              <div className="mt-4 space-y-3 p-4">
+                <Skeleton height={80} variant="rounded" />
+                <Skeleton height={80} variant="rounded" />
+                <Skeleton height={80} variant="rounded" />
+                <Skeleton height={80} variant="rounded" />
+                <Skeleton height={80} variant="rounded" />
+                <Skeleton height={80} variant="rounded" />
+              </div>
+            ) : !topicContentList ||
+              topicContentList.length === 0 ||
+              !selectedTopic ? (
               <EmptyState title="No Study Material Available" />
-            ) : !loading ? (
+            ) : (
               <TopicContentPanel
                 setSelectedContent={(content) => {
                   if (getActiveCourseAccessStatus() === "renew") {
@@ -161,20 +170,11 @@ const StudyMaterialsPage = () => {
                 selectedTopic={selectedTopic}
                 contentFilterType={contentFilterType}
               />
-            ) : (
-              <>
-                <div className="mt-4 space-y-3 p-4">
-                  <Skeleton height={80} variant="rounded" />
-                  <Skeleton height={80} variant="rounded" />
-                  <Skeleton height={80} variant="rounded" />
-                  <Skeleton height={80} variant="rounded" />
-                  <Skeleton height={80} variant="rounded" />
-                  <Skeleton height={80} variant="rounded" />
-                </div>
-              </>
             )
           }
-          hideSecondary={!selectedTopic || selectedContent !== null || isUpgradeModalOpen}
+          hideSecondary={
+            !selectedTopic || selectedContent !== null || isUpgradeModalOpen
+          }
           onSecondaryHide={() => setSelectedTopicId(null)}
         />
       </div>

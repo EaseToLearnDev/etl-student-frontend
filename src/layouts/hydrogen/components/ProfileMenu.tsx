@@ -135,7 +135,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                 </span>
                 {item.name}
               </button>
-            ) : item.name === "Rate a Course" ? (
+            ) : item.name === "Rate This Course" ? (
               <button
                 onClick={() => {
                   setShowStudentRatingModal(true);

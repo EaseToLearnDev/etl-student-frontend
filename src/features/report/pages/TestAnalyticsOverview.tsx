@@ -815,6 +815,10 @@ export const TestAnalyticsOverview = () => {
       content: <OverallPerformanceTab />,
     },
     {
+      label: "VIEW ANSWERS",
+      content: <></>,
+    },
+    {
       label: "PERFORMANCE IN DETAIL",
       content: <PerformanceInDetailTab />,
     },
@@ -825,10 +829,6 @@ export const TestAnalyticsOverview = () => {
     {
       label: "COMPARATIVE STUDY",
       content: <ComparativeStudyTab />,
-    },
-    {
-      label: "VIEW ANSWERS",
-      content: <></>,
     },
   ];
 
@@ -989,7 +989,7 @@ export const TestAnalyticsOverview = () => {
           tabs={tabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
           onSelect={(index) => {
-            if (index === 4) {
+            if (index === 1) {
               navigate(
                 `/testview?testSession=${
                   testType === 3 ? "mt" : "st"

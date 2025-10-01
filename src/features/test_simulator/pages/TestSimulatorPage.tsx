@@ -36,6 +36,7 @@ import SwitchSectionModal from "../components/SwitchSectionModal";
 import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
 import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
+import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -103,6 +104,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     features?.fullScreenEnabled ?? false
   );
 
+  const status = getActiveCourseAccessStatus();
+
   useEffect(() => {
     setupTest(
       params,
@@ -160,8 +163,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       <EmptyState
         title="Limit Reached!"
         description={testError.message}
-        buttonText={"Upgrade"}
-        onClick={() => navigate(`/selectcourse?cid=${activeCourse?.courseId}`)}
+        buttonText={status === "upgrade" ? "Upgrade": "Home"}
+        onClick={() => navigate(status === "upgrade" ? `/selectcourse?cid=${activeCourse?.courseId}`: "/")}
         className="min-h-screen"
       />
     );

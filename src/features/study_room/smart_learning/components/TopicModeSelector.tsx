@@ -32,7 +32,7 @@ const TopicModeSelector = ({
   return (
     <div className="relative flex flex-col w-full h-full">
       {/* Mode selection section */}
-      <h6 className="!font-semibold text-ellipsis line-clamp-2 text-center">
+      <h6 className="!font-semibold text-ellipsis line-clamp-2 text-center pb-2">
         {topicName}
       </h6>
       <div className="flex justify-center my-4">
