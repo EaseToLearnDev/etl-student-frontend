@@ -56,7 +56,6 @@ const JumpBackInList = () => {
               icon={<EmptyGhostIcon width={100} height={100} />}
               title="No Previous Tests Found"
             />
-            <h5 className="mt-8">Jump Back In</h5>
           </div>
         )}
       </div>

@@ -104,7 +104,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="flex flex-col gap-5 xl:col-span-2">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
-          <WidgetCard title="Activity Chart" className="w-full min-h-[300px] mt-6 max-h-full">
+          <WidgetCard title="Activity Chart" className="w-full min-h-[300px] max-h-full">
             <ActivityList yearsOptions={yearsOptions} apiData={apiData} year={year} setYear={setYear} loadingGhActivity={loadingGhActivity} loadingGhActivityYears={loadingGhActivityYears} color={color} setColor={setColor} handleClickOnDay={handleClickOnDay} />
           </WidgetCard>
         </div>
@@ -140,7 +140,7 @@ const DashboardPage = () => {
             )
           }
         </WidgetCard>
-        <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
+        <WidgetCard title="Jump Back In" className="h-full min-h-[300px]">
           <JumpBackInList />
         </WidgetCard>
         {isClassTest && (
