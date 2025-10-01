@@ -35,6 +35,7 @@ const CoursesCards = ({
 }: CoursesCardsProps) => {
   const studentData = useStudentStore((s) => s.studentData);
   const setSearchData = useCoursesStore((s) => s.setSearchData);
+  const activeCourse = useStudentStore((s) => s.activeCourse);
 
   const filteredCourses = courseList.filter((course) => {
     const matchesCategory =
@@ -51,11 +52,32 @@ const CoursesCards = ({
     return matchesSearch;
   });
 
+  const reorderedCourses = (() => {
+    if (!activeCourse) return filteredCourses;
+
+    const activeCourseFull = courseList.find(
+      (c) => c.courseId === activeCourse.courseId
+    );
+
+    if (!activeCourseFull) return filteredCourses;
+
+    const activeCategory = activeCourseFull.categoryName;
+
+    const activeCategoryCourses = filteredCourses.filter(
+      (c) => c.categoryName === activeCategory
+    );
+    const otherCourses = filteredCourses.filter(
+      (c) => c.categoryName !== activeCategory
+    );
+
+    return [...activeCategoryCourses, ...otherCourses];
+  })();
+
   useEffect(() => {
     setSearchData?.(filteredSearchCourses);
   }, [filteredCourses]);
 
-  if (filteredCourses.length === 0) {
+  if (reorderedCourses.length === 0) {
     return (
       <EmptyState
         title="No courses found"
@@ -67,7 +89,7 @@ const CoursesCards = ({
     <div
       className={cn("grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4")}
     >
-      {filteredCourses.map((course) => {
+      {reorderedCourses.map((course) => {
         const existingCourse = studentData?.courses?.find(
           (c) => c.courseId === course.courseId
         );

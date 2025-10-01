@@ -9,6 +9,7 @@ import type { NavigateFunction } from "react-router";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
 import useTestTimerStore from "../store/useTestTimerStore";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 /**
  * Handles the submission of a test by collecting relevant test, student, and course data,
@@ -24,6 +25,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   const { setToast } = useToastStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { setLoading } = useLoadingStore.getState();
 
   if (!studentData || !activeCourse) return;
 
@@ -33,6 +35,8 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   if (!loginId || !templateId || !token) return;
 
   let testMode = "";
+
+  setLoading(true);
 
   if (testConfig?.assessmentMode && testConfig?.assessmentMode === "beginner") {
     testMode = "Learning Session";
@@ -69,7 +73,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           notAnswerMarks: item.notAnswerMarks,
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
-          studentResponse: questionResponseMap[item.questionId].join('~') || "",
+          studentResponse: questionResponseMap[item.questionId].join("~") || "",
         };
 
         if (testData?.testType === 3) {
@@ -126,8 +130,10 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
       description: "Failed to submit test.",
       type: ToastType.DANGER,
     });
+    setLoading(false);
     return;
   }
+  setLoading(false);
 
   if (testData?.testType === 1) {
     navigate(

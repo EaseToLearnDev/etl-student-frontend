@@ -9,12 +9,12 @@ function Test({ testData, onNavigate }: { testData: IGhActivityByDayResults, onN
     return (
         <div className='w-full py-2  border-b  border-(--border-primary) flex justify-between items-center'>
             <div>
-                <span>{testData.testTitle.length > 30 ? testData.testTitle.slice(0, 30) + "..." : testData.testTitle}</span>
+                <p>{testData.testTitle}</p>
                 <div className='flex gap-3 py-4 flex-wrap'>
-                    <Badge theme={Theme.Amethyst} className='text-xs h-8' style='filled'>Total: 40</Badge>
-                    <Badge theme={Theme.GreenHaze} className='text-xs h-8' style='filled'>Correct: 12</Badge>
-                    <Badge theme={Theme.Pumpkin} className='text-xs h-8' style='filled'>Incorrect: 38</Badge>
-                    <Badge theme={Theme.Ocean} className='text-xs h-8' style='filled'>Not Attempted: 0</Badge>
+                    <Badge theme={Theme.Amethyst} className='text-xs h-8' style='filled'>Total Questions: {testData.totalQuestions}</Badge>
+                    <Badge theme={Theme.GreenHaze} className='text-xs h-8' style='filled'>Correct: {testData.correctCount}</Badge>
+                    <Badge theme={Theme.Pumpkin} className='text-xs h-8' style='filled'>Incorrect: {testData.incorrectCount}</Badge>
+                    <Badge theme={Theme.Ocean} className='text-xs h-8' style='filled'>Not Answered: {testData.notAnsweredCount}</Badge>
                 </div>
             </div>
             <Button style='secondary' type='button' onClick={() => onNavigate(testData.testSession, testData.testId.toString())} className='text-xs rounded-full py-2'>View Test</Button>

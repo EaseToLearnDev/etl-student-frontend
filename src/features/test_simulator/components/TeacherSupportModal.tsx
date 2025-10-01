@@ -52,7 +52,7 @@ const TeacherSupportModal = () => {
         {/* Main Body */}
         <div className="mt-4 flex flex-col gap-4">
           <p>
-            Question Id: <b>{questionId}</b>
+            Display Id: <b>{questionId}</b>
           </p>
           <div className="flex flex-col gap-2">
             <textarea

@@ -136,48 +136,50 @@ const StartMockTestModalContent = ({
       </div>
 
       {/* Test Sections */}
-      <div className="mt-7 flex flex-col gap-4">
-        <div className="flex gap-2 items-center">
-          <FiUsers size={20} />
-          <h5>Test Sections</h5>
-        </div>
-        <div className="flex flex-col gap-4 max-h-[250px] pr-2 overflow-y-auto">
-          {test.sectionSet?.map((section) => (
-            <div
-              key={section.sectionName}
-              className="w-full bg-[var(--surface-bg-tertiary)] rounded-lg"
-            >
-              <div className="flex justify-between items-center p-4 border-b border-[var(--border-primary)]">
-                <h6>{section.sectionName}</h6>
-                <p>{`Questions ${section.questionRange}`}</p>
-              </div>
-              <div className="grid grid-cols-3 gap-2 p-2">
-                {getSectionFields(section).map((f) => (
-                  <div
-                    key={f.field}
-                    className="flex flex-col md:flex-row items-center gap-2 p-2 text-center md:text-left md:gap-4 md:p-4 w-full"
-                  >
+      {test.sectionSet && test.sectionSet.length > 0 && (
+        <div className="mt-7 flex flex-col gap-4">
+          <div className="flex gap-2 items-center">
+            <FiUsers size={20} />
+            <h5>Test Sections</h5>
+          </div>
+          <div className="flex flex-col gap-4 max-h-[250px] pr-2 overflow-y-auto">
+            {test.sectionSet?.map((section) => (
+              <div
+                key={section.sectionName}
+                className="w-full bg-[var(--surface-bg-tertiary)] rounded-lg"
+              >
+                <div className="flex justify-between items-center p-4 border-b border-[var(--border-primary)]">
+                  <h6>{section.sectionName}</h6>
+                  <p>{`Questions ${section.questionRange}`}</p>
+                </div>
+                <div className="grid grid-cols-3 gap-2 p-2">
+                  {getSectionFields(section).map((f) => (
                     <div
-                      className={cn(
-                        "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
-                        darkMode
-                          ? "bg-[var(--sb-neutral-bg-disabled)]/50"
-                          : "bg-[var(--sb-neutral-bg-disabled)]"
-                      )}
+                      key={f.field}
+                      className="flex flex-col md:flex-row items-center gap-2 p-2 text-center md:text-left md:gap-4 md:p-4 w-full"
                     >
-                      {f.icon}
+                      <div
+                        className={cn(
+                          "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
+                          darkMode
+                            ? "bg-[var(--sb-neutral-bg-disabled)]/50"
+                            : "bg-[var(--sb-neutral-bg-disabled)]"
+                        )}
+                      >
+                        {f.icon}
+                      </div>
+                      <div>
+                        <span>{f.field}</span>
+                        <h6>{f.value}</h6>
+                      </div>
                     </div>
-                    <div>
-                      <span>{f.field}</span>
-                      <h6>{f.value}</h6>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex justify-end mt-7">
