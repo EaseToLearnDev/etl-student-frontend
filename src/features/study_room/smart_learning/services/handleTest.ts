@@ -1,7 +1,7 @@
 // Types
 import type { NavigateFunction } from "react-router-dom";
 import type { Topic } from "../../../shared/types";
-import type { ModeType } from "../sl.types";
+import type { ModeType, TestOptions } from "../sl.types";
 import { type PrevRunningTest } from "../../../shared/types";
 
 // Utils
@@ -15,7 +15,7 @@ export const handleStartTest = async (
   navigate: NavigateFunction,
   mode: ModeType,
   selectedTopic: Topic | null,
-  testOptions: Record<string, number>
+  testOptions: TestOptions
 ) => {
   const {studentData, activeCourse} = useStudentStore.getState();
   if(!studentData || !activeCourse) return;
@@ -24,7 +24,7 @@ export const handleStartTest = async (
     let params = {
       testId: "0",
       testType: "1",
-      questionType: "Multiple Choice",
+      questionType: testOptions.questionTypeList.join(",") ?? "Multiple Choice",
       totalQuestion: String(testOptions.totalQuestion),
       totalTime: String(testOptions.totalTime),
       marksCorrectAnswer: String(testOptions.marksCorrectAns),

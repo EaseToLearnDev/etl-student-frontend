@@ -3,7 +3,9 @@ import { create } from "zustand";
 
 // Types
 import { type PrevRunningTest, type Topic } from "../../../shared/types";
-import type { ModeType } from "../sl.types";
+import type { ModeType, TestOptions } from "../sl.types";
+
+
 
 interface SLStore {
   // Topic data structures
@@ -21,7 +23,7 @@ interface SLStore {
   showPreviousTestModal: boolean;
 
   // Test configuration
-  testOptions: Record<string, number>;
+  testOptions: TestOptions;
 
   // Actions
   setTopicTree: (tree: Topic[] | null) => void;
@@ -32,7 +34,7 @@ interface SLStore {
   setPreviousRunningTest: (test: PrevRunningTest | null) => void;
   setShowStartTestModal: (show: boolean) => void;
   setShowPreviousTestModal: (show: boolean) => void;
-  setTestOptions: (options: Record<string, number>) => void;
+  setTestOptions: (options: TestOptions) => void;
 
   getSelectedTopic: () => Topic | null;
   reset: () => void;
@@ -60,6 +62,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
     marksCorrectAns: 1,
     marksIncorrectAns: -0.25,
     marksNotAttempted: 0,
+    questionTypeList: []
   },
 
   // Actions
@@ -93,6 +96,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
         marksCorrectAns: 1,
         marksIncorrectAns: -0.25,
         marksNotAttempted: 0,
+        questionTypeList: []
       },
     }),
 }));

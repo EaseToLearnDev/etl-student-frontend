@@ -4,15 +4,15 @@ import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import cn from "../../../../utils/classNames";
 import { Theme } from "../../../../utils/colors";
-import type { ModeType } from "../sl.types";
+import type { ModeType, TestOptions } from "../sl.types";
 import SmartLearningInstructions from "./SmartLearningInstructions";
 import { useState } from "react";
 
 interface SLTestModalContentProps {
   mode: ModeType;
   topicName: string;
-  testOptions: Record<string, number>;
-  setTestOptions: (options: Record<string, number>) => void;
+  testOptions: TestOptions;
+  setTestOptions: (options: TestOptions) => void;
   onStart: () => void;
   onClose: () => void;
 }
@@ -26,7 +26,7 @@ const SLTestModalContent = ({
 }: SLTestModalContentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const fields = [
+  const fields : {id: keyof TestOptions; label: string}[] = [
     {
       id: "totalQuestion",
       label: "Total Question",
