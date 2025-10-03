@@ -158,7 +158,7 @@ const StartMockTestModalContent = ({
             <FiUsers size={20} />
             <h5>Test Sections</h5>
           </div>
-          <div className="flex flex-col gap-4 max-h-[250px] pr-2 overflow-y-auto">
+          <div className="flex flex-col gap-4 max-h-[200px] pr-2 overflow-y-auto">
             {test.sectionSet?.map((section) => (
               <div
                 key={section.sectionName}
