@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Types
-import type { TextContentType } from "../sm.types";
+import type { Content } from "../sm.types";
 
 // Icons
 import { MdArrowUpward } from "react-icons/md";
@@ -21,14 +21,14 @@ import { buildNestedList } from "../services/buildNestedList";
 import NestedList from "./NestedList";
 
 interface TextContentModalViewProps {
-  content: TextContentType;
+  content: Content;
 }
 
 /**
  * Modal view component for displaying text content with a table of contents and scroll-to-top functionality.
  */
 const TextContentModalView = ({ content }: TextContentModalViewProps) => {
-  const list = buildNestedList(content?.links);
+  const list = buildNestedList(content?.links || []);
   const isMobile = useIsMobile();
 
   const tocRef = useRef<HTMLDivElement | null>(null);
@@ -81,7 +81,7 @@ const TextContentModalView = ({ content }: TextContentModalViewProps) => {
           className="text_content w-full"
           dangerouslySetInnerHTML={{
             __html: checkForTable(
-              content?.description.trim().replace(/[\r\n]+/g, "")
+              content?.description?.trim()?.replace(/[\r\n]+/g, "") ?? ""
             ),
           }}
         />

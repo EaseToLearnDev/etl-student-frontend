@@ -1,8 +1,8 @@
 // React
-import type { TopicContentType } from "../sm.types";
+import type { Content } from "../sm.types";
 
 interface MediaContentModalViewProps {
-  content: TopicContentType;
+  content: Content;
 }
 
 /**

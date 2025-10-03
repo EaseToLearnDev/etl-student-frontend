@@ -1,5 +1,5 @@
 // Types
-import type { TextContentType, TopicContentType } from "../sm.types";
+import type { Content } from "../sm.types";
 
 // Hooks
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
@@ -10,7 +10,7 @@ import { getTextContent } from "../api/textContent.api";
 /**
  * Loads text content for the selected topic using student credentials.
  */
-export const loadTextContent = async (selectedContent: TopicContentType) => {
+export const loadTextContent = async (selectedContent: Content) => {
   const { studentData } = useStudentStore.getState();
 
   if (!studentData || !selectedContent) {
@@ -28,7 +28,7 @@ export const loadTextContent = async (selectedContent: TopicContentType) => {
       id,
       loginId,
       token,
-    })) as TextContentType;
+    })) as Content;
 
     return data ?? null;
   } catch (error) {
