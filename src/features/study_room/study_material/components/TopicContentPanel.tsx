@@ -1,6 +1,6 @@
 // Types
 import type { Topic } from "../../../shared/types";
-import type { FilterType, TopicContentType } from "../sm.types";
+import type { FilterType, Content } from "../sm.types";
 
 // Icons
 import { FiFilter } from "react-icons/fi";
@@ -12,8 +12,8 @@ import EmptyState from "../../../../components/EmptyState";
 
 interface TopicContentPanelProps {
   selectedTopic: Topic;
-  setSelectedContent: (contentType: TopicContentType) => void;
-  topicContentList: TopicContentType[];
+  setSelectedContent: (contentType: Content) => void;
+  topicContentList: Content[];
   contentFilterType: FilterType;
 }
 

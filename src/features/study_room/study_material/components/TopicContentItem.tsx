@@ -1,5 +1,5 @@
 // Types
-import type { TopicContentType as TopicContentType } from "../sm.types";
+import type { Content } from "../sm.types";
 import type { ReactNode } from "react";
 
 // Icons
@@ -9,8 +9,8 @@ import PPTIcon from "../../../../components/icons/ppt-solid-icon";
 import VideoIcon from "../../../../components/icons/video-solid-icon";
 
 type TopicContentItemProps = {
-  content: TopicContentType;
-  onClickHandler?: (content: TopicContentType) => void;
+  content: Content;
+  onClickHandler?: (content: Content) => void;
 };
 
 /**

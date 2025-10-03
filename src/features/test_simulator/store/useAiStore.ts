@@ -1,5 +1,6 @@
 import { create } from "zustand";
-import { AIModalView, type ContentType } from "../test_simulator.types";
+import { AIModalView, } from "../test_simulator.types";
+import type { Content } from "../../study_room/study_material/sm.types";
 
 interface AiStore {
   isAiFeatureEnabled: boolean;
@@ -8,8 +9,8 @@ interface AiStore {
   setCurrentModalView: (modalView: AIModalView) => void;
   solution: string;
   setSolution: (solution: string) => void;
-  studyMaterial: ContentType[] | null;
-  setStudyMaterial: (contentList: ContentType[] | null) => void;
+  studyMaterial: Content[] | null;
+  setStudyMaterial: (contentList: Content[] | null) => void;
 
   isHelpModalOpen: boolean;
   setIsHelpModalOpen: (v: boolean) => void;

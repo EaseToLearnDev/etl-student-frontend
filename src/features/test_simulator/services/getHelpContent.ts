@@ -1,7 +1,7 @@
+import type { Content } from "../../study_room/study_material/sm.types";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { helpContent } from "../api/helpContent.api";
-import type { ContentType } from "../test_simulator.types";
 
 interface GetHelpContentParams {
   topicId?: number;
@@ -41,7 +41,7 @@ export const getHelpContent = async ({
       topicId,
       loginId,
       token,
-    }) as ContentType[];
+    }) as Content[];
 
     return list ?? null;
   } catch (error) {

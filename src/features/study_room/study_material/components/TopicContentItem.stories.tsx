@@ -22,7 +22,7 @@ export const Default: Story = {
     content: {
       id: 0,
       contentTitle: "Introduction to React",
-      contentType: "video",
+      contentType: "Video",
       language: "English",
     },
   },
@@ -33,7 +33,7 @@ export const LongDescription: Story = {
     content: {
       id: 0,
       contentTitle: "Advanced Node.js",
-      contentType: "article",
+      contentType: "Text",
       language: "English",
     },
   },
