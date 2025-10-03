@@ -1,36 +1,36 @@
-// Store
+// React
 import { create } from "zustand";
 
 // Types
 import type { Topic } from "../../../shared/types";
-import type {
-  FilterType,
-  TextContentType,
-  TopicContentType,
-} from "../sm.types";
+import type { FilterType, Content } from "../sm.types";
 
 interface SMStore {
   // States
   topicTree: Topic[] | null;
   topicFlatList: Topic[] | null;
-  topicContentList: TopicContentType[] | null;
+  topicContentList: Content[] | null;
   selectedTopicId: number | null;
   contentFilterType: FilterType;
-  selectedContent: TopicContentType | null;
-  textContent: TextContentType | null;
+  selectedContent: Content | null;
+  textContent: Content | null;
 
   // Actions
   setTopicTree: (topics: Topic[] | null) => void;
   setTopicFlatList: (topics: Topic[] | null) => void;
-  setTopicContentList: (contents: TopicContentType[] | null) => void;
+  setTopicContentList: (contents: Content[] | null) => void;
   setSelectedTopicId: (id: number | null) => void;
   setContentFilterType: (filter: FilterType) => void;
-  setSelectedContent: (content: TopicContentType | null) => void;
-  setTextContent: (text: TextContentType | null) => void;
+  setSelectedContent: (content: Content | null) => void;
+  setTextContent: (text: Content | null) => void;
   getSelectedTopic: () => Topic | null;
   reset: () => void;
 }
 
+/**
+ * Zustand store hook for managing study material state and actions.
+ * Provides topic, content, selection, and filter management for study rooms.
+ */
 export const useSMStore = create<SMStore>((set, get) => ({
   // Initial state
   topicTree: null,

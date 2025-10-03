@@ -26,8 +26,8 @@ const ProfileContent = () => {
 
   const editProfile = useProfileStore((state) => state.editProfile);
   const setEditProfile = useProfileStore((state) => state.setEditProfile);
-  const isVerified = useProfileStore((state) => state.isVerified);
-  const setIsVerified = useProfileStore((state) => state.setIsVerified);
+  const setVerifiedFields = useProfileStore((state) => state.setVerifiedFields);
+  const verifiedFields = useProfileStore((state) => state.verifiedFields);
   const showOtpModal = useProfileStore((state) => state.showOtpModal);
   const setShowOtpModal = useProfileStore((state) => state.setShowOtpModal);
   const setOtpType = useProfileStore((state) => state.setOtpType);
@@ -49,18 +49,25 @@ const ProfileContent = () => {
   const isEmailChanged = emailId?.data?.trim() !== studentData?.emailId?.trim();
   const isNameChanged =
     studentName?.data?.trim() !== studentData?.studentName?.trim();
-  const hasChanges = isPhoneChanged || isEmailChanged || isNameChanged;
 
-  const openOtpModal = async () => {
+  const openOtpModal = async (type: "Mobile" | "Email") => {
     try {
+      setVerifyType(type);
+
+      if (type === "Email") {
+        setVerifiedFields({ ...verifiedFields, emailId: "pending" });
+      } else {
+        setVerifiedFields({ ...verifiedFields, phoneNo: "pending" });
+      }
+
       const res = await handleStudentProfileUpdateDetails({
-        newEmailId: emailId.data,
-        newPhoneNo: phoneNo.data,
+        newEmailId: type === "Email" ? emailId.data : undefined,
+        newPhoneNo: type === "Mobile" ? phoneNo.data : undefined,
       });
       if (res) {
         setResToken(res.resToken);
         setTokenIdentify(res.tokenIdentify);
-        setOtpType(verifyType);
+        setOtpType(type);
         setShowOtpModal(true);
       }
     } catch (err) {
@@ -76,7 +83,7 @@ const ProfileContent = () => {
       emailId: emailId.data,
     });
     setEditProfile(false);
-    setIsVerified(false);
+    setVerifiedFields({ phoneNo: "unchanged", emailId: "unchanged" });
   };
 
   const handleReset = () => {
@@ -88,7 +95,41 @@ const ProfileContent = () => {
     setPhoneNo({ ...phoneNo, data: studentData?.phoneNo ?? "", error: "" });
     setEmailId({ ...emailId, data: studentData?.emailId ?? "", error: "" });
     setEditProfile(false);
-    setIsVerified(false);
+    setVerifiedFields({ phoneNo: "unchanged", emailId: "unchanged" });
+  };
+
+  const isSaveDisabled = () => {
+    // nothing changed
+    if (
+      !isNameChanged &&
+      verifiedFields.emailId === "unchanged" &&
+      verifiedFields.phoneNo === "unchanged"
+    )
+      return true;
+
+    // if any field is pending verification
+    if (
+      verifiedFields.emailId === "pending" ||
+      verifiedFields.phoneNo === "pending"
+    ) {
+      return true;
+    }
+
+    // if only name is changed → allowed
+    if (isNameChanged) return false;
+
+    // if email is changed → must be verified
+    if (isEmailChanged && verifiedFields.emailId !== "verified") {
+      return true;
+    }
+
+    // if phone is changed → must be verified
+    if (isPhoneChanged && verifiedFields.phoneNo !== "verified") {
+      return true;
+    }
+
+    // otherwise, enable save
+    return false;
   };
 
   useEffect(() => {
@@ -130,19 +171,20 @@ const ProfileContent = () => {
             type="text"
             placeholder="Enter Your Mobile"
           />
-          {editProfile && isPhoneChanged && (
-            <Button
-              style="primary"
-              onClick={() => {
-                openOtpModal();
-                setVerifyType("Mobile");
-              }}
-              disabled={!!phoneNo.error}
-              className="w-min"
-            >
-              Verify
-            </Button>
-          )}
+          {editProfile &&
+            isPhoneChanged &&
+            verifiedFields.phoneNo !== "verified" && (
+              <Button
+                style="primary"
+                onClick={() => {
+                  openOtpModal("Mobile");
+                }}
+                disabled={!!phoneNo.error}
+                className="w-min"
+              >
+                Verify
+              </Button>
+            )}
         </div>
         <div className="flex flex-col gap-2">
           <InputField
@@ -159,19 +201,20 @@ const ProfileContent = () => {
             info={{ msg: emailId.error, type: "error" }}
             placeholder="Enter Your Email Id"
           />
-          {editProfile && isEmailChanged && (
-            <Button
-              style="primary"
-              onClick={() => {
-                openOtpModal();
-                setVerifyType("Email");
-              }}
-              disabled={!!emailId.error}
-              className="w-min"
-            >
-              Verify
-            </Button>
-          )}
+          {editProfile &&
+            isEmailChanged &&
+            verifiedFields.emailId !== "verified" && (
+              <Button
+                style="primary"
+                onClick={() => {
+                  openOtpModal("Email");
+                }}
+                disabled={!!emailId.error}
+                className="w-min"
+              >
+                Verify
+              </Button>
+            )}
         </div>
       </form>
 
@@ -180,9 +223,7 @@ const ProfileContent = () => {
           <Button
             style="primary"
             onClick={handleSave}
-            disabled={
-              !hasChanges || ((isPhoneChanged || isEmailChanged) && !isVerified)
-            }
+            disabled={isSaveDisabled()}
           >
             Save
           </Button>
@@ -201,9 +242,9 @@ const ProfileContent = () => {
           <VerifyOtpContent
             onCancel={() => setShowOtpModal(false)}
             onVerify={handleVerifyOtp}
-            onResend={() => openOtpModal()}
+            onResend={() => openOtpModal(verifyType)}
             type={verifyType}
-            value={verifyType === "Email" ? emailId.data: phoneNo.data}
+            value={verifyType === "Email" ? emailId.data : phoneNo.data}
             error={otpError}
           />
         </Modal>

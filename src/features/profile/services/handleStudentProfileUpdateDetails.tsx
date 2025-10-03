@@ -17,8 +17,8 @@ export const handleStudentProfileUpdateDetails = async ({
 
   try {
     const res = await studentProfileUpdateDetails({
-      emailId: newEmailId ?? studentData.emailId,
-      phoneNo: newPhoneNo ?? studentData.phoneNo,
+      emailId: newEmailId,
+      phoneNo: newPhoneNo,
       loginId,
       token,
       studentId,

@@ -1,9 +1,10 @@
 import { create } from "zustand";
 import type { InputFieldType } from "../../shared/types";
 
+export type ProfileFieldState = "unchanged" | "pending" | "verified";
 interface ProfileState {
   editProfile: boolean;
-  isVerified: boolean;
+  verifiedFields: {emailId: ProfileFieldState; phoneNo: ProfileFieldState},
   showOtpModal: boolean;
   otpType: "Email" | "Mobile" | null;
   otpError: string | null;
@@ -29,7 +30,7 @@ interface ProfileState {
 
   // Actions
   setEditProfile: (value: boolean) => void;
-  setIsVerified: (value: boolean) => void;
+  setVerifiedFields: (fields: {emailId: ProfileFieldState, phoneNo: ProfileFieldState}) => void;
   setShowOtpModal: (value: boolean) => void;
   setOtpType: (type: "Email" | "Mobile" | null) => void;
   setOtpError: (msg: string | null) => void;
@@ -47,13 +48,13 @@ interface ProfileState {
 
 export const useProfileStore = create<ProfileState>((set) => ({
   editProfile: false,
-  isVerified: false,
   showOtpModal: false,
   otpType: null,
   otpError: null,
   resToken: null,
   tokenIdentify: null,
   errors: { email: "", phone: "" },
+  verifiedFields: {emailId: "unchanged", phoneNo: "unchanged"},
   
   studentName: {
     id: "studentName",
@@ -83,7 +84,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   setProfilePic: (profilePic) => set({profilePic}),
 
   setEditProfile: (value) => set({ editProfile: value }),
-  setIsVerified: (value) => set({ isVerified: value }),
+  setVerifiedFields: (fields) => set({verifiedFields: fields}),
   setShowOtpModal: (value) => set({ showOtpModal: value }),
   setOtpType: (type) => set({ otpType: type }),
   setOtpError: (msg) => set({ otpError: msg }),
@@ -99,7 +100,6 @@ export const useProfileStore = create<ProfileState>((set) => ({
   reset: () =>
     set({
       editProfile: false,
-      isVerified: false,
       showOtpModal: false,
       otpType: null,
       otpError: null,
@@ -110,6 +110,10 @@ export const useProfileStore = create<ProfileState>((set) => ({
       deleteAccountToken: "",
       confirmDeleteOpen: false,
       deleteError: null,
+      verifiedFields: {
+        emailId: "unchanged",
+        phoneNo: "unchanged",
+      },
 
       studentName: {
         id: "studentName",

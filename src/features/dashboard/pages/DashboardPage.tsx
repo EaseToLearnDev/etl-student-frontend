@@ -20,6 +20,7 @@ import { getGhActivityYears } from "../../../global/services/getGhActivityYears"
 import { getGhActivityByDay, type IGhActivityByDayResults } from "../../../global/services/getGhActivityByDay";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
+import { useLocation } from "react-router-dom";
 
 
 const DashboardPage = () => {

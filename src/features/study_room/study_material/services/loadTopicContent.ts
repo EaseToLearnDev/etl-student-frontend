@@ -1,6 +1,5 @@
 // Types
 import type { Topic } from "../../../shared/types";
-import type { TopicContentType } from "../sm.types";
 
 // Hooks
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
@@ -29,18 +28,18 @@ export const loadTopicContent = async (topic: Topic) => {
 
   setLoading(true);
   try {
-    const list = (await getTopicContent({
+    const contentData = await getTopicContent({
       loginId,
       token,
       templateId,
       topicId: topic?.topicId,
       topicName: topic?.topicName,
-    })) as TopicContentType[];
+    })
 
-    if (!list) {
+    if (!contentData && !contentData?.list && contentData?.list?.length === 0) {
       return null;
     }
-    return list;
+    return contentData;
   } catch (error) {
     console.error("Failed to load topic content:", error);
     return null;

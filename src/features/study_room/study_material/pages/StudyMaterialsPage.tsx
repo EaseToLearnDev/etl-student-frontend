@@ -34,6 +34,12 @@ import UpgradeModal from "../../../shared/components/UpgradeModal";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import EmptyState from "../../../../components/EmptyState";
+import type { ContentType } from "recharts/types/component/Label";
+import canOpenContent from "../services/canOpenContent";
+import type { Content } from "../sm.types";
+import { useContentLimitStore } from "../hooks/useContentLimitStore";
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import LimitReachedModal from "../components/LimitReachedModal";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -51,6 +57,8 @@ const StudyMaterialsPage = () => {
   const selectedContent = useSMStore((s) => s.selectedContent);
   const textContent = useSMStore((s) => s.textContent);
   const loading = useLoadingStore((s) => s.loading);
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const activeCourse = useStudentStore((s) => s.activeCourse);
 
   // Actions
   const setTopicTree = useSMStore((s) => s.setTopicTree);
@@ -59,13 +67,17 @@ const StudyMaterialsPage = () => {
   const setSelectedTopicId = useSMStore((s) => s.setSelectedTopicId);
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
   const setTextContent = useSMStore((s) => s.setTextContent);
-
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-
-  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
   const setIsUpgradeModalOpen = useUpgradeModalStore(
     (s) => s.setIsUpgradeModalOpen
   );
+  const setLimits = useContentLimitStore((s) => s.setLimits);
+  const addOrUpdateCounter = useContentLimitStore((s) => s.addOrUpdateCounter);
+  const setIsLimitReachedmodalOpen = useContentLimitStore(
+    (s) => s.setIsLimitReachedmodalOpen
+  );
+  const resetLimitReachedModal = useContentLimitStore((s) => s.reset);
+
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {
@@ -78,9 +90,13 @@ const StudyMaterialsPage = () => {
       }
     };
     getTopicTree();
-    return reset;
+    return () => {
+      reset();
+      resetLimitReachedModal();
+    };
   }, []);
 
+  // ========== Update selected topic on change ==========
   useEffect(() => {
     setSelectedTopic(getSelectedTopic());
   }, [selectedTopicId]);
@@ -90,7 +106,8 @@ const StudyMaterialsPage = () => {
     const getContentList = async () => {
       if (selectedTopic?.topicId) {
         const contentList = await loadTopicContent(selectedTopic);
-        setTopicContentList(contentList);
+        setTopicContentList(contentList?.list);
+        setLimits(contentList?.contentLimit);
       }
     };
     getContentList();
@@ -113,6 +130,31 @@ const StudyMaterialsPage = () => {
 
     getTextContent();
   }, [selectedContent?.id]);
+
+  const handleContentSelection = (content: Content) => {
+    if (!activeCourse) return;
+
+    if (getActiveCourseAccessStatus() === "renew") {
+      setIsUpgradeModalOpen(true);
+      return;
+    }
+
+    // Check if content limit has reached or not
+    if (canOpenContent(activeCourse.courseId, content)) {
+      addOrUpdateCounter(
+        activeCourse.courseId,
+        content.contentType,
+        content.id
+      );
+      // update selected content and reset text content
+      // if content is type 'Text' then text content will be retrieved from api call
+      setSelectedContent(content);
+      setTextContent(null);
+    } else {
+      // Show "Limit Reached" Modal
+      setIsLimitReachedmodalOpen(true);
+    }
+  };
 
   // ========== Render ==========
   return (
@@ -158,14 +200,7 @@ const StudyMaterialsPage = () => {
               <EmptyState title="No Study Material Available" />
             ) : (
               <TopicContentPanel
-                setSelectedContent={(content) => {
-                  if (getActiveCourseAccessStatus() === "renew") {
-                    setIsUpgradeModalOpen(true);
-                    return;
-                  }
-                  setSelectedContent(content);
-                  setTextContent(null);
-                }}
+                setSelectedContent={handleContentSelection}
                 topicContentList={topicContentList}
                 selectedTopic={selectedTopic}
                 contentFilterType={contentFilterType}
@@ -218,6 +253,8 @@ const StudyMaterialsPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
+
+      <LimitReachedModal />
     </div>
   );
 };

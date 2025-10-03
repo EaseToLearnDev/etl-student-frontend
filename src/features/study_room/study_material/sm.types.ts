@@ -1,25 +1,28 @@
 export interface TopicSyllabusType {
   responseTxt: string;
   obj: {
-    list: TopicContentType[];
+    list: ContentType[];
+    contentLimit?: ContentLimit;
   };
 }
 
-export interface TopicContentType {
+export type ContentType = "PPT" | "PDF" | "Video" | "Text";
+
+export interface Content {
   id: number;
   contentTitle: string;
-  contentType: string;
+  contentType: ContentType;
   contentUrl?: string;
+  description?: string;
+  links?: LinkItem[];
   language?: string;
 }
 
-export interface TextContentType {
-  id: number;
-  contentTitle: string;
-  contentType: string;
-  contentUrl?: string;
-  description: string;
-  links: LinkItem[];
+export interface ContentLimit {
+  videoMax: number;
+  pdfMax: number;
+  pptMax: number;
+  textMax: number;
 }
 
 export interface LinkItem {

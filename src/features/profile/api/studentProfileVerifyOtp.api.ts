@@ -19,15 +19,15 @@ export const studentProfileVerifyOtp = async ({
   loginId,
   token,
 }: StudentProfileVerifyOtpRequest) => {
-  const res = await makeRequest("post", "/student-profile/verify-otp", null, {
-    params: {
-      token: resToken,
-      tokenIdentify: tokenIdentify,
-      otpForEmail: otpForEmail,
-      otpForMobile: otpForMobile,
-      studentId: studentId,
-    },
-    header: {
+  const data = new FormData();
+  data.append("studentId", String(studentId));
+  data.append("token", resToken);
+  data.append("tokenIdentify", String(tokenIdentify));
+  if (otpForEmail) data.append("otpForEmail", String(otpForEmail));
+  if (otpForMobile) data.append("otpForMobile", String(otpForMobile));
+
+  const res = await makeRequest("post", "/student-profile/verify-otp", data, {
+    headers: {
       "Content-Type": "multipart/mixed",
       loginId: loginId,
       token: token,

@@ -18,11 +18,13 @@ import { PlanDetails } from "../components/PlanDetails";
 import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
 import { resetPromocode } from "../services/resetPromocode";
 import UpdateEmailModal from "../components/UpdateEmailModal";
+import { useLocation } from "react-router";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
  */
 const AllCoursesPage = () => {
+  const location = useLocation();
   const isMobile = useIsMobile();
   const reset = useCoursesStore((s) => s.reset);
   const search = useCoursesStore((s) => s.search);
@@ -51,39 +53,43 @@ const AllCoursesPage = () => {
 
   const courseId = new URLSearchParams(location.search).get("cid");
 
+  // fetch categories & courses on mount
   useEffect(() => {
     setLoading(true);
     const fetchCourses = async () => {
       try {
         const data = await fetchCategoryAndCourses();
-
-        const courses = extractCourses(data);
-        if (courses && courses.length > 0) {
-          setCourseList(courses);
-          const numCourseId = Number(courseId);
-          if (!isNaN(numCourseId)) {
-            const preSelectedCourse = courses?.find(
-              (c) => c.courseId === numCourseId
-            );
-            if (preSelectedCourse) {
-              setSelectedCourse(preSelectedCourse);
-              setIsPlanModalOpen(true);
-              resetPromocode();
-            }
-          }
-        }
         if (data) {
+          const courses = extractCourses(data);
+          setCourseList(courses);
           setCategoryList(data);
         }
       } finally {
         setLoading(false);
       }
     };
-
     fetchCourses();
-
     return () => reset();
   }, []);
+
+  // watch "courseId" param changes
+  useEffect(() => {
+    if (!courseList?.length) return;
+    const cid = new URLSearchParams(location.search).get("cid");
+    if (cid) {
+      const numCourseId = Number(cid);
+      if (!isNaN(numCourseId)) {
+        const preSelectedCourse = courseList.find(
+          (c) => c.courseId === numCourseId
+        );
+        if (preSelectedCourse) {
+          setSelectedCourse(preSelectedCourse);
+          setIsPlanModalOpen(true);
+          resetPromocode();
+        }
+      }
+    }
+  }, [location.key, courseList]);
 
   return (
     <div className="h-full flex flex-col flex-grow">

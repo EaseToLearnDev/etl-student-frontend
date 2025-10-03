@@ -2,6 +2,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router";
 
+// Icons
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
+
 // Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
@@ -32,9 +35,7 @@ import StartMockTestModalContent from "../components/StartMockTestModalContent";
 import { Skeleton } from "../../../../components/SkeletonLoader";
 import TestCardList from "../../../shared/components/TestCardList";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
-import StartTopicTestModalContent from "../../shared/components/StartTopicTestModalContent";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
-import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
@@ -116,7 +117,11 @@ const MockTestPage = () => {
         )}
       >
         <button
-          onClick={() => scrollTabs("left")}
+          onClick={() => {
+            setSelectedTabIndex(selectedTabIndex !== 0 ? selectedTabIndex - 1 : 0)
+            scrollTabs("left");
+
+          }}
           className="size-10 aspect-square border-1 border-[var(--border-secondary)] rounded-lg flex justify-center items-center cursor-pointer hover:bg-[var(--sb-ocean-bg-disabled)] transition-colors"
         >
           <MdChevronLeft
@@ -137,7 +142,14 @@ const MockTestPage = () => {
           />
         </div>
         <button
-          onClick={() => scrollTabs("right")}
+          onClick={() => {
+            setSelectedTabIndex(
+              selectedTabIndex !== (tabs || [])?.length - 1
+                ? selectedTabIndex + 1
+                : selectedTabIndex
+            );
+            scrollTabs("right");
+          }}
           className="ml-auto size-10 aspect-square border-1 border-[var(--border-secondary)] rounded-lg flex justify-center items-center cursor-pointer hover:bg-[var(--sb-ocean-bg-disabled)] transition-colors"
         >
           <MdChevronRight
@@ -194,49 +206,22 @@ const MockTestPage = () => {
         size="lg"
         className="p-4"
       >
-        {selectedTabIndex === 0 ? (
-          <StartMockTestModalContent
-            test={selectedTest}
-            onStart={() =>
-              handleShowPreviousOrStartTest({
-                setPreviousRunningTest,
-                setShowPreviousTestModal,
-                startTestCallback: () =>
-                  handleStartTest({
-                    navigate,
-                    testId: selectedTest?.mocktestId ?? null,
-                    testType: 3,
-                  }),
-              })
-            }
-            onClose={() => setShowStartTestModal(false)}
-          />
-        ) : (
-          <StartTopicTestModalContent
-            testName={selectedTest?.testName || ""}
-            details={{
-              marksCorrect: selectedTest?.correctAnsMark,
-              marksIncorrect: selectedTest?.wrongAnsMark,
-              marksUnattempted: selectedTest?.noAnsMark,
-              totalMarks: selectedTest?.totalMarks,
-              totalQuestions: selectedTest?.totalQuestions,
-              totalTime: selectedTest?.testTotalTime,
-            }}
-            onStart={() =>
-              handleShowPreviousOrStartTest({
-                setPreviousRunningTest,
-                setShowPreviousTestModal,
-                startTestCallback: () =>
-                  handleStartTest({
-                    navigate,
-                    testId: selectedTest?.mocktestId ?? null,
-                    testType: 3,
-                  }),
-              })
-            }
-            onClose={() => setShowStartTestModal(false)}
-          />
-        )}
+        <StartMockTestModalContent
+          test={selectedTest}
+          onStart={() =>
+            handleShowPreviousOrStartTest({
+              setPreviousRunningTest,
+              setShowPreviousTestModal,
+              startTestCallback: () =>
+                handleStartTest({
+                  navigate,
+                  testId: selectedTest?.mocktestId ?? null,
+                  testType: 3,
+                }),
+            })
+          }
+          onClose={() => setShowStartTestModal(false)}
+        />
       </Modal>
 
       {/* Previous Test Modal */}

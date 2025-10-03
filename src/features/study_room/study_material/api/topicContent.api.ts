@@ -25,5 +25,5 @@ export const getTopicContent = async ({
     headers: { loginId, token, device: "web" },
   });
 
-  return res?.data?.obj?.list ?? null;
+  return res?.data?.obj ?? null;
 };

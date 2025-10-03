@@ -20,7 +20,7 @@ export const handleStudentProfileVerifyOtp = async ({
   const { loginId, token, studentId } = studentData;
 
   try {
-    const verification = await studentProfileVerifyOtp({
+    const result = await studentProfileVerifyOtp({
       resToken,
       tokenIdentify,
       otpForEmail,
@@ -30,7 +30,7 @@ export const handleStudentProfileVerifyOtp = async ({
       token,
     });
 
-    return verification.responseTxt === "success";
+    return result.responseTxt === "success";
   } catch (error) {
     console.error("Failed to verify OTP: ", error);
     return null;

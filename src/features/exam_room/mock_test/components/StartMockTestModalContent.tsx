@@ -73,7 +73,25 @@ const StartMockTestModalContent = ({
       value: test.totalMarks,
       icon: <PiMedal size={20} />,
     },
+    {
+      field: "Correct Answer",
+      value: test?.correctAnsMark,
+      icon: <PiCheckCircle size={20} />,
+    },
+    {
+      field: "Incorrect Answer",
+      value: test?.wrongAnsMark,
+      icon: <PiWarning size={20} />,
+    },
+    {
+      field: "Question Not Attempted",
+      value: test?.noAnsMark,
+      icon: <FiTarget size={20} />,
+    },
   ];
+
+  const validFields = test?.sectionSet && test?.sectionSet?.length > 0 ? fields.slice(0, 3) : fields;
+  const isOdd = validFields.length % 2 !== 0;
 
   return (
     <div className="relative p-2">
@@ -102,10 +120,8 @@ const StartMockTestModalContent = ({
           <h5>Test Overview</h5>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          {fields.map((f, i) => {
-            const isLast = i === fields.length - 1;
-            const isOdd = fields.length % 2 !== 0;
-
+          {validFields.map((f, i) => {
+            const isLast = i === validFields.length - 1;
             return (
               <div
                 key={f.field}

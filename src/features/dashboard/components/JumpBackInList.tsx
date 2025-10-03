@@ -35,8 +35,6 @@ const JumpBackInList = () => {
 
   return (
     <div>
-      {/* Header with nav buttons */}
-
       {/* Scrollable list */}
       <div
         ref={scrollRef}
