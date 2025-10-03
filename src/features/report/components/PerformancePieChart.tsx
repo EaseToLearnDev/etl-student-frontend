@@ -72,14 +72,14 @@ const PerformancePieChart = ({
   );
 
   return (
-    <div className="w-full max-w-[500px] h-[310px] mx-auto flex flex-col 2xl:flex-row items-center justify-around gap-4">
+    <div className="w-full max-w-[500px] h-[310px] mx-auto flex flex-col items-center justify-around gap-4">
       {/* Chart container */}
-      <div className="flex-1 h-full max-w-[250px] max-h-[250px]">
+      <div className="flex-1 h-full max-w-[250px] max-h-[250px] mt-2">
         <Doughnut data={data} options={options} />
       </div>
 
       {/* Custom Legend + Tooltip Values */}
-      <div className="flex flex-row 2xl:flex-col justify-center gap-5 min-w-[120px]">
+      <div className="flex flex-row justify-center gap-5 min-w-[120px]">
         {labels.map((label, v) => (
           <div key={v} className="flex items-center gap-2">
             <div

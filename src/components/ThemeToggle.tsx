@@ -1,6 +1,6 @@
 import useDarkModeStore from "../store/useDarkModeStore";
 
-const ThemeToggle = () => {
+const ThemeToggle = ({ onClose }: { onClose: () => void }) => {
   const { darkMode, setDarkMode } = useDarkModeStore();
 
   return (
@@ -8,7 +8,10 @@ const ThemeToggle = () => {
       <input
         type="checkbox"
         checked={darkMode}
-        onChange={(e) => setDarkMode(e.target.checked)}
+        onChange={(e) => {
+          setDarkMode(e.target.checked);
+          onClose();
+        }}
         className="sr-only"
       />
       <div

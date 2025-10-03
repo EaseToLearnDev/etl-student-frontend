@@ -149,7 +149,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                 {item.name}
               </button>
             ) : item.name === "Settings" ? (
-              <ThemeToggle />
+              <ThemeToggle onClose={onClose} />
             ) : (
               <Link
                 to={item.href}

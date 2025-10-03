@@ -17,11 +17,14 @@ import TutorialsModal from "../../tutorials/pages/TutorialsModal";
 import { getGhActivity } from "../../../global/services/getGhActivity";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import { getGhActivityYears } from "../../../global/services/getGhActivityYears";
-import { getGhActivityByDay, type IGhActivityByDayResults } from "../../../global/services/getGhActivityByDay";
+import {
+  getGhActivityByDay,
+  type IGhActivityByDayResults,
+} from "../../../global/services/getGhActivityByDay";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
-
+import useIsMobile from "../../../hooks/useIsMobile";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -29,32 +32,36 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
-  const [color, setColor] = useState('green');
+  const isMobile = useIsMobile();
+  const [color, setColor] = useState("green");
 
   const [year, setYear] = useState(null);
   const [apiData, setAPIData] = useState<ITransformedGhData[][] | null>(year);
   const [yearsOptions, setYearsOptions] = useState<number[] | null>(null);
   const [loadingGhActivity, setLoadingGhActivity] = useState<boolean>(false);
-  const [loadingGhActivityYears, setLoadingGhActivityYears] = useState<boolean>(false);
-  const [loadingGhActivityByDay, setLoadingGhActivityByDay] = useState<boolean>(false);
+  const [loadingGhActivityYears, setLoadingGhActivityYears] =
+    useState<boolean>(false);
+  const [loadingGhActivityByDay, setLoadingGhActivityByDay] =
+    useState<boolean>(false);
 
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
-  const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(null);
+  const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
+    null
+  );
 
   const createDate = (_date: Date) => {
     const yyyy = _date.getFullYear().toString();
-    const mm = String(_date.getMonth() + 1).padStart(2, '0');
-    const dd = String(_date.getDate()).padStart(2, '0');
+    const mm = String(_date.getMonth() + 1).padStart(2, "0");
+    const dd = String(_date.getDate()).padStart(2, "0");
     return `${yyyy}-${mm}-${dd}`;
-  }
+  };
 
   const handleClickOnDay = (day: ITransformedGhData) => {
     const _date = day.date;
     if (!_date) return;
     setDate(createDate(_date));
   };
-
 
   const isClassTest = activeCourse?.tabs?.classTest;
 
@@ -68,36 +75,33 @@ const DashboardPage = () => {
     };
     fetchData();
 
-
     const fetchGhActivityYears = async () => {
       const _data = await getGhActivityYears(setLoadingGhActivityYears);
-      if (_data) setYearsOptions(_data.sort((a, b) => (b - a)));
-    }
+      if (_data) setYearsOptions(_data.sort((a, b) => b - a));
+    };
     fetchGhActivityYears();
   }, []);
-
 
   useEffect(() => {
     const fetchGhActivity = async () => {
       const _data = await getGhActivity(year, setLoadingGhActivity);
-      setColor('green');
+      setColor("green");
       if (_data) setAPIData(_data);
-    }
+    };
     fetchGhActivity();
   }, [year]);
 
   useEffect(() => {
     const fetchGhActiviyByDay = async () => {
       const _data = await getGhActivityByDay(date, setLoadingGhActivityByDay);
-      if(_data) setDataByDay(_data);
+      if (_data) setDataByDay(_data);
       else setDataByDay(null);
-    }
-    if(!date) {
+    };
+    if (!date) {
       setDate(createDate(new Date()));
     }
     fetchGhActiviyByDay();
   }, [date]);
-
 
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">
@@ -105,45 +109,70 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
         <div className="flex flex-col gap-5 xl:col-span-2">
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
-          <WidgetCard title="Activity Chart" className="w-full min-h-[300px] max-h-full">
-            <ActivityList yearsOptions={yearsOptions} apiData={apiData} year={year} setYear={setYear} loadingGhActivity={loadingGhActivity} loadingGhActivityYears={loadingGhActivityYears} color={color} setColor={setColor} handleClickOnDay={handleClickOnDay} />
+          <WidgetCard
+            title="Activity Chart"
+            className="w-full min-h-[300px] max-h-full"
+          >
+            <ActivityList
+              yearsOptions={yearsOptions}
+              apiData={apiData}
+              year={year}
+              setYear={setYear}
+              loadingGhActivity={loadingGhActivity}
+              loadingGhActivityYears={loadingGhActivityYears}
+              color={color}
+              setColor={setColor}
+              handleClickOnDay={handleClickOnDay}
+            />
           </WidgetCard>
         </div>
 
-        <div className="flex flex-col gap-5 xl:col-span-1">
-          {isClassTest ? (
-            <>
-              <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
-                <ClassTestList />
-              </WidgetCard>
-            </>
-          ) : (
-            <>
-              <WidgetCard className="min-h-[250px] max-h-[250px]">
-                <DownloadAppCard />
-              </WidgetCard>
-              <WidgetCard className="h-full">
-                <SupportSection />
-              </WidgetCard>
-            </>
-          )}
-        </div>
+        {!isMobile && (
+          <div className="flex flex-col gap-5 xl:col-span-1">
+            {isClassTest ? (
+              <>
+                <WidgetCard
+                  title="Class Tests"
+                  className="h-full min-h-[300px]"
+                >
+                  <ClassTestList />
+                </WidgetCard>
+              </>
+            ) : (
+              <>
+                <WidgetCard className="min-h-[250px] max-h-[250px]">
+                  <DownloadAppCard />
+                </WidgetCard>
+                <WidgetCard className="h-full">
+                  <SupportSection />
+                </WidgetCard>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
-        <WidgetCard title="Tests activity " className="min-h-[400px] relative overflow-y-auto scrollbar-hide">
-          {
-            loadingGhActivityByDay ? (
-              <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
-            ) : (
-              <ActivityListData dataByDay={dataByDay} />
-            )
-          }
+        <WidgetCard
+          title="Tests activity "
+          className="min-h-[400px] relative overflow-y-auto scrollbar-hide"
+        >
+          {loadingGhActivityByDay ? (
+            <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
+          ) : (
+            <ActivityListData dataByDay={dataByDay} />
+          )}
         </WidgetCard>
         <WidgetCard title="Jump Back In" className="h-full min-h-[300px]">
           <JumpBackInList />
         </WidgetCard>
+
+        {isMobile && isClassTest && (
+          <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
+            <ClassTestList />
+          </WidgetCard>
+        )}
         {isClassTest && (
           <>
             <WidgetCard>

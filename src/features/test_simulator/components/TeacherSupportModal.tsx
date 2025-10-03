@@ -10,6 +10,7 @@ import { handleSupportQuerySubmit } from "../services/handleSupportQuerySubmit";
 
 const TeacherSupportModal = () => {
   const questionId = useTestStore((s) => s.getCurrentQuestion()?.questionId);
+  const questionTypeLabel = useTestStore((s) => s.getCurrentQuestion()?.questionTypeLabel);
   const isModalOpen = useTeacherSupportStore(
     (s) => s.isTeacherSupportModalOpen
   );
@@ -52,7 +53,7 @@ const TeacherSupportModal = () => {
         {/* Main Body */}
         <div className="mt-4 flex flex-col gap-4">
           <p>
-            Display Id: <b>{questionId}</b>
+            Question Id: <b>{questionTypeLabel}</b>
           </p>
           <div className="flex flex-col gap-2">
             <textarea
@@ -79,6 +80,7 @@ const TeacherSupportModal = () => {
                     questionId
                   );
                 }}
+                disabled={feedback.trim().length === 0}
               >
                 <PiPaperPlaneTiltFill size={16} /> Send
               </Button>
