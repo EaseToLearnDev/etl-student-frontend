@@ -1,10 +1,13 @@
 import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
+import { ToastType } from "../../features/shared/types";
 import { RatingCreate } from "../api/ratingCreate.api";
 import { useRatingCourseStore } from "../hooks/useRatingCourseStore";
+import { useToastStore } from "../hooks/useToastStore";
 
 export const submitCourseRating = async () => {
-  const { rating, remarks, setError } = useRatingCourseStore.getState();
+  const { rating, remarks } = useRatingCourseStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
+  const { setToast } = useToastStore.getState();
 
   if (!studentData || !activeCourse) return null;
 
@@ -20,13 +23,30 @@ export const submitCourseRating = async () => {
     const response = await RatingCreate({ loginId, token, data });
 
     if (response.responseTxt === "given") {
-      setError("You have already given a rating for this course.");
-      return null;
+      setToast({
+        title: "You have already rated this course",
+        type: ToastType.WARNING,
+        duration: 5000,
+      });
+    } else if (response.responseTxt === "failed") {
+      setToast({
+        title: response.message,
+        type: ToastType.DANGER,
+        duration: 5000,
+      });
+    } else {
+      setToast({
+        title: "Thanks for rating this course",
+        type: ToastType.SUCCESS,
+        duration: 5000,
+      });
     }
-    setError(null);
-    return response ?? null;
   } catch (error) {
     console.error("Error submitting rating:", error);
-    setError("Something went wrong. Please try again later.");
+    setToast({
+      title: "Something went wrong. Please try again later.",
+      type: ToastType.DANGER,
+      duration: 5000,
+    });
   }
 };

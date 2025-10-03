@@ -44,6 +44,8 @@ import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
 import Button from "../../../components/Button";
 import { formatMinutesToHHMMSS, parseTimeString } from "../libs/utils";
+import { Toast } from "../../../components/Toast";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 interface TabItem {
   label: string;
@@ -58,6 +60,8 @@ export const TestAnalyticsOverview = () => {
     ? Number(params[0]?.get("testType"))
     : null;
   const loading = useLoadingStore((s) => s.loading);
+  const toastData = useToastStore((s) => s.toastData);
+  const showToast = useToastStore((s) => s.showToast);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -1003,6 +1007,15 @@ export const TestAnalyticsOverview = () => {
         />
       </div>
       <div className="mt-10">{tabs[selectedIndex]?.content}</div>
+
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };

@@ -11,7 +11,6 @@ import { submitCourseRating } from "../../../global/services/submitCourseRating"
 export const StudentRatingCourseModal = () => {
   const rating = useRatingCourseStore((s) => s.rating);
   const remarks = useRatingCourseStore((s) => s.remarks);
-  const error = useRatingCourseStore((s) => s.error);
   const showStudentRatingModal = useRatingCourseStore(
     (s) => s.showStudentRatingModal
   );
@@ -76,12 +75,12 @@ export const StudentRatingCourseModal = () => {
             required
           />
         </div>
-        {error && <div className="mt-4 text-sm text-red-500">{error}</div>}
+
         {/* Buttons */}
         <div className="flex justify-end mt-7">
           <div className="flex gap-4 items-center">
             <Button
-              disabled={!rating || !remarks.trim() || !!error}
+              disabled={!rating || !remarks.trim()}
               onClick={() => {
                 submitCourseRating();
                 reset();

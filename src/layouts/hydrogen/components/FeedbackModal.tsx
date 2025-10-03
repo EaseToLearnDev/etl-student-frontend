@@ -8,6 +8,7 @@ import { getFeedbackTypes } from "../../../global/services/getFeedbackTypes";
 import Button from "../../../components/Button";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { submitStudentFeedback } from "../../../global/services/submitStudentFeedback";
+import { useToastStore } from "../../../global/hooks/useToastStore";
 
 const FeedbackModal = () => {
   const showFeedbackModal = useFeedbackStore((s) => s.showFeedbackModal);
@@ -21,6 +22,7 @@ const FeedbackModal = () => {
   const setDetails = useFeedbackStore((s) => s.setDetails);
   const setFeedbackTypes = useFeedbackStore((s) => s.setFeedbackTypes);
   const setShowFeedbackModal = useFeedbackStore((s) => s.setShowFeedbackModal);
+  const resetToast = useToastStore((s) => s.resetToast);
 
   const [isTypeSelectionOpen, setIsTypeSelectionOpen] =
     useState<boolean>(false);
@@ -66,7 +68,7 @@ const FeedbackModal = () => {
             dropdownClassName="!bg-[var(--surface-bg-tertiary)] !w-[440px]"
             dropdownItemClassName="hover:bg-[var(--surface-bg-secondary)]"
           />
-            <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <label
               htmlFor="Subject"
               className="!font-medium text-[var(--text-secondary)]"
@@ -76,14 +78,14 @@ const FeedbackModal = () => {
             <input
               name="subject"
               className={cn(
-              "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-              "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
               )}
               placeholder="Enter subject"
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
             />
-            </div>
+          </div>
           <div className="flex flex-col gap-1">
             <label
               htmlFor="description"
@@ -108,13 +110,14 @@ const FeedbackModal = () => {
         <div className="flex justify-end mt-7">
           <div className="flex gap-4 items-center">
             <Button
-            disabled={!subject.trim()}
+              disabled={!subject.trim()}
               onClick={() => {
                 submitStudentFeedback({
                   type: feedbackTypes ? feedbackTypes[typeIdx].title : "",
                   subject: subject,
                   details: details,
                 });
+                resetToast();
                 setShowFeedbackModal(false);
               }}
             >

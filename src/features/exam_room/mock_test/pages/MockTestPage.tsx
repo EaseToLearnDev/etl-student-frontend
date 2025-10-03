@@ -36,6 +36,8 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import TestCardList from "../../../shared/components/TestCardList";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
+import { Toast } from "../../../../components/Toast";
+import { useToastStore } from "../../../../global/hooks/useToastStore";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
@@ -59,6 +61,9 @@ const MockTestPage = () => {
   );
 
   const reset = useMTStore((s) => s.reset);
+
+  const toastData = useToastStore(s => s.toastData)
+  const showToast = useToastStore(s => s.showToast)
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -118,9 +123,10 @@ const MockTestPage = () => {
       >
         <button
           onClick={() => {
-            setSelectedTabIndex(selectedTabIndex !== 0 ? selectedTabIndex - 1 : 0)
+            setSelectedTabIndex(
+              selectedTabIndex !== 0 ? selectedTabIndex - 1 : 0
+            );
             scrollTabs("left");
-
           }}
           className="size-10 aspect-square border-1 border-[var(--border-secondary)] rounded-lg flex justify-center items-center cursor-pointer hover:bg-[var(--sb-ocean-bg-disabled)] transition-colors"
         >
@@ -250,6 +256,15 @@ const MockTestPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
+
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };

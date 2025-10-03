@@ -3,7 +3,7 @@ import { makeRequest } from "../../utils/http";
 interface StudentFeedbackParams {
   type: string;
   subject: string;
-  details: string;
+  details?: string;
   loginId: string;
   token: string;
 }
@@ -14,12 +14,14 @@ export const studentFeedback = async ({
   details,
   loginId,
   token,
-}: StudentFeedbackParams): Promise<unknown | null> => {
+}: StudentFeedbackParams) => {
   try {
     const data = new FormData();
     data.append("type", type);
     data.append("subject", subject);
-    data.append("details", details);
+    if (details) {
+      data.append("details", details);
+    }
 
     const res = await makeRequest("post", "/student-feedback", data, {
       headers: {

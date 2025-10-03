@@ -37,8 +37,8 @@ function ActivityListData({ dataByDay }: { dataByDay: IGhActivityByDayResults[] 
     return (
         <div className="flex flex-col gap-4 pt-6">
             {
-                dataByDay.map((testData: IGhActivityByDayResults, _: number) => {
-                    return <Test testData={testData} onNavigate={handleTestNavigation} />
+                dataByDay.map((testData: IGhActivityByDayResults, index: number) => {
+                    return <Test key={index} testData={testData} onNavigate={handleTestNavigation} />
                 })
             }
         </div>

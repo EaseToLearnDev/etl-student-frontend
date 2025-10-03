@@ -115,7 +115,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                   setShowInviteTeacherModal(true);
                   onClose();
                 }}
-                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+                className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">
                   {item.icon}
@@ -128,7 +128,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                   setShowFeedbackModal(true);
                   onClose();
                 }}
-                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+                className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">
                   {item.icon}
@@ -141,7 +141,7 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                   setShowStudentRatingModal(true);
                   onClose();
                 }}
-                className="group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+                className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
               >
                 <span className="text-[var(--text-secondary)]">
                   {item.icon}

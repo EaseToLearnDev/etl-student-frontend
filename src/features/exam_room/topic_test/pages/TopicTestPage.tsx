@@ -39,6 +39,8 @@ import EmptyState from "../../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
+import { useToastStore } from "../../../../global/hooks/useToastStore";
+import { Toast } from "../../../../components/Toast";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -72,8 +74,13 @@ const TopicTestPage = () => {
     (s) => s.setShowPreviousTestModal
   );
 
-  const isUpgradeModalOpen = useUpgradeModalStore(s => s.isUpgradeModalOpen);
-  const setIsUpgradeModalOpen = useUpgradeModalStore(s => s.setIsUpgradeModalOpen);
+  const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
+  const setIsUpgradeModalOpen = useUpgradeModalStore(
+    (s) => s.setIsUpgradeModalOpen
+  );
+
+  const toastData = useToastStore(s => s.toastData)
+  const showToast = useToastStore(s => s.showToast)
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -148,7 +155,9 @@ const TopicTestPage = () => {
                   const selectedTest =
                     testList?.find((t) => t.mockTestId === test.id) ?? null;
                   setSelectedTest(selectedTest);
-                  getActiveCourseAccessStatus() === "renew" ? setIsUpgradeModalOpen(true) : setShowStartTestModal(true);
+                  getActiveCourseAccessStatus() === "renew"
+                    ? setIsUpgradeModalOpen(true)
+                    : setShowStartTestModal(true);
                 }}
               />
             ) : topicTree && topicTree.length > 0 ? (
@@ -245,9 +254,19 @@ const TopicTestPage = () => {
           testName={previousRunningTest?.testName || ""}
         />
       </Modal>
-
       {/* Upgrade Modal */}
-      <UpgradeModal isOpen={isUpgradeModalOpen} onClose={() => setIsUpgradeModalOpen(false)} />
+      <UpgradeModal
+        isOpen={isUpgradeModalOpen}
+        onClose={() => setIsUpgradeModalOpen(false)}
+      />
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };

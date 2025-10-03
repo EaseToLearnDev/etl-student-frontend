@@ -25,7 +25,7 @@ export const processCourseSelection = async ({
   navigate: (path: string) => void;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
-  const {setIsUpdateEmailModalOpen} = useCoursesStore.getState();
+  const { setIsUpdateEmailModalOpen } = useCoursesStore.getState();
   const { setToast } = useToastStore.getState();
 
   if (!courseId || !option) return;
@@ -67,11 +67,16 @@ export const processCourseSelection = async ({
           otherCourses: !!c.otherCourses,
         },
       }));
-       const purchasedCourse = courses?.find((c) => c.courseId === courseId);
+      const purchasedCourse = courses?.find((c) => c.courseId === courseId);
       const openedCourse = purchasedCourse
         ? courses.indexOf(purchasedCourse)
         : 0;
       setStudentData({ ...studentData, courses, openedCourse });
+      setToast({
+        title: `${purchasedCourse?.organisationName} Course Successfully Added`,
+        description: "Start your free trial and practice before you commit",
+        type: ToastType.SUCCESS,
+      });
       return navigate("/dashboard");
     } catch (err) {
       return console.error("Error enrolling in free course:", err);
@@ -80,16 +85,16 @@ export const processCourseSelection = async ({
 
   // ---------------- Paid course flow ----------------
   if (!selectedPlanId) return console.warn("Please select a plan first");
-  
-  const {emailId} = studentData;
 
-  if(!emailId) {
+  const { emailId } = studentData;
+
+  if (!emailId) {
     setIsUpdateEmailModalOpen(true);
     return;
   }
 
   try {
-    if(!courseTitle) return;
+    if (!courseTitle) return;
     const data = await handlePaymentButton({
       option,
       courseId,
@@ -157,6 +162,11 @@ export const processCourseSelection = async ({
         ? courses.indexOf(purchasedCourse)
         : 0;
       setStudentData({ ...studentData, courses, openedCourse });
+      setToast({
+        title: `${purchasedCourse?.organisationName} Course Successfully Purchased`,
+        description: "Thanks for buying and practice before you commit",
+        type: ToastType.SUCCESS,
+      });
       return navigate("/dashboard");
     }
   } catch (err) {

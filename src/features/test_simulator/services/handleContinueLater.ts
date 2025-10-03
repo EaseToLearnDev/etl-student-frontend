@@ -7,6 +7,8 @@ import { testStop } from "../api/testStop.api";
 import type { NavigateFunction } from "react-router";
 import useTestTimerStore from "../store/useTestTimerStore";
 import { QuestionStatusReverseMap } from "../test_simulator.types";
+import { useToastStore } from "../../../global/hooks/useToastStore";
+import { ToastType } from "../../shared/types";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -22,6 +24,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
+  const { setToast } = useToastStore.getState();
   const currentQuestionIndex = useTestStore
     .getState()
     .getCurrentQuestionIndex();
@@ -114,6 +117,10 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   const res = await testStop({ data, loginId, token });
   if (!res) {
     console.log("Failed to submit test");
+    setToast({
+      title: "Failed to Submit Continue Test",
+      type: ToastType.DANGER,
+    });
     return;
   }
 
@@ -133,5 +140,10 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       break;
   }
 
+  setToast({
+    title: "Saved your progress",
+    description: "Pick up where you left off anytime.",
+    type: ToastType.PRIMARY,
+  });
   navigate(returnPage);
 };

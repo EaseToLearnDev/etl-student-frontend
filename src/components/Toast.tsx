@@ -10,6 +10,7 @@ import cn from "../utils/classNames";
 import Button from "./Button";
 import { BiError } from "react-icons/bi";
 import { ToastType } from "../features/shared/types";
+import { useToastStore } from "../global/hooks/useToastStore";
 interface ToastProps {
   type?: ToastType;
   title: string;
@@ -63,16 +64,19 @@ export const Toast: React.FC<ToastProps> = ({
   className,
 }) => {
   const [visible, setVisible] = useState(true);
+  const resetToast = useToastStore(s => s.resetToast)
 
   const handleOnClick = () => {
     setVisible(false);
     onExpire?.();
+    resetToast();
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
       onExpire?.();
+      resetToast();
     }, duration);
 
     return () => {
