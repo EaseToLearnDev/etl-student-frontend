@@ -19,6 +19,8 @@ import { goGoogle } from "../services/goGoogle";
 import { useEffect } from "react";
 import { getHelpContent } from "../services/getHelpContent";
 import TopicContentItem from "../../study_room/study_material/components/TopicContentItem";
+import useIsMobile from "../../../hooks/useIsMobile";
+import { RiLoader4Fill } from "react-icons/ri";
 
 interface AiHelpModalInterface {
   isOpen: boolean;
@@ -73,7 +75,10 @@ const Main = () => {
             <LuBot size={20} /> {"Ask TONY (Your AI Teacher)"}
           </>
         ) : (
-          "Please Wait..."
+          <div className="flex items-center gap-2">
+            <RiLoader4Fill size={20} className="animate-spin" />
+            <p>Please Wait...</p>
+          </div>
         )}
       </Button>
 
@@ -197,6 +202,7 @@ const StudyMaterialContent = () => {
 };
 
 const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
+  const isMobile = useIsMobile();
   const currentModalView = useAiStore((s) => s.currentModalView);
   const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
   const testConfig = useTestStore((s) => s.testConfig);
@@ -230,12 +236,14 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      size="lg"
+      size={
+        currentModalView === AIModalView.AIContent && !isMobile ? "xl" : "lg"
+      }
       className="p-4"
       blur="none"
       noGutter
     >
-      <div className="relative p-2 max-h-[500px]">
+      <div className="relative p-2 max-h-[90dvh]">
         {/* Top Header */}
         <div className="flex flex-col gap-4">
           <div className="sticky top-0 left-0 w-full p-4 bg-[var(--surface-bg-secondary)] flex justify-between items-center gap-4">

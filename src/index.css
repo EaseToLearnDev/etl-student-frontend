@@ -291,10 +291,10 @@ math {
 
 /* Text Content Start */
 .text_content {
-  --fs-heading-1: 40px;
-  --fs-heading-2: 32px;
-  --fs-heading-3: 28px;
-  --fs-heading-4: 22px;
+  --fs-heading-1: 32px;
+  --fs-heading-2: 28px;
+  --fs-heading-3: 22px;
+  --fs-heading-4: 18px;
   --fs-heading-5: 16px;
   --fs-heading-6: 14px;
   --fs-paragraph: 16px;

@@ -132,7 +132,7 @@ export const LearningSessionOverview = () => {
 
   const tabs = [
     {
-      label: "Performance",
+      label: "PERFORMANCE",
       content: (
         <div className="flex flex-col gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -168,7 +168,7 @@ export const LearningSessionOverview = () => {
       ),
     },
     {
-      label: "View Answers",
+      label: "VIEW ANSWERS",
       content: <></>,
     },
   ];
