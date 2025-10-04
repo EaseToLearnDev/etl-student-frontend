@@ -1,6 +1,6 @@
 // React
 import { useEffect, useState, type ReactElement, type RefObject } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 
 // Icons
 import { FaUser, FaUserPlus } from "react-icons/fa";
@@ -28,11 +28,12 @@ export default function ProfileMenuDropDown({
   username?: boolean;
 }) {
   const isMobile = useIsMobile();
+  const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setIsOpen(false);
-  }, [location.pathname]);
+  }, [location.key]);
 
   return (
     <Popover
