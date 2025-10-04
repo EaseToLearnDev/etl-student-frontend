@@ -24,19 +24,20 @@ export const submitCourseRating = async () => {
 
     if (response.responseTxt === "given") {
       setToast({
-        title: "You have already rated this course",
+        title:
+          "You have already submitted your experience with us for this course.",
         type: ToastType.WARNING,
         duration: 5000,
       });
     } else if (response.responseTxt === "failed") {
       setToast({
-        title: response.message,
+        title: "Rating Could not be saved.",
         type: ToastType.DANGER,
         duration: 5000,
       });
     } else {
       setToast({
-        title: "Thanks for rating this course",
+        title: "Thanks for sharing your experience with us.",
         type: ToastType.SUCCESS,
         duration: 5000,
       });

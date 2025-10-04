@@ -16,6 +16,7 @@ export const RatingCreate = async ({
       loginId: loginId,
       token: token,
       device: "web",
+      "Content-Type": "multipart/mixed",
     },
   });
 
