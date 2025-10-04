@@ -23,16 +23,19 @@ import {
 } from "../../../global/services/getGhActivityByDay";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
-import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { useTutorialStore } from "../../tutorials/hooks/useTutorialStore";
 
 const DashboardPage = () => {
+  const isMobile = useIsMobile();
+
+  const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
   const setTestList = useCTStore((s) => s.setTestList);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
-  const isMobile = useIsMobile();
+  const ftue = useStudentStore(s => s.studentData?.firstTimeUser);
   const [color, setColor] = useState("green");
 
   const [year, setYear] = useState(null);
@@ -102,6 +105,13 @@ const DashboardPage = () => {
     }
     fetchGhActiviyByDay();
   }, [date]);
+
+  useEffect(() => {
+    if (ftue === 1 && !localStorage.getItem('ftue')) {
+      setShowTutorialModal(true);
+      localStorage.setItem("ftue", "completed");
+    }
+  }, []);
 
   return (
     <div className="pb-5 h-full flex flex-col gap-5 flex-grow scrollbar-hide overflow-y-auto">

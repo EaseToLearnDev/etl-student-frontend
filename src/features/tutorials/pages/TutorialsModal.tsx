@@ -203,6 +203,7 @@ const TutorialsModal = () => {
       isOpen={showTutorialModal}
       onClose={() => setShowTutorialModal(false)}
       size="lg"
+      className="p-4"
     >
       <div className="p-2">
         <div className="flex flex-col gap-2 text-[var(--text-primary)]">
