@@ -46,10 +46,12 @@ import Button from "../../../components/Button";
 import { formatMinutesToHHMMSS, parseTimeString } from "../libs/utils";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { getTimeFromSeconds } from "../../../utils";
 
 interface TabItem {
   label: string;
   count?: number;
+  hidden?: boolean;
   content: React.ReactNode;
 }
 
@@ -555,7 +557,7 @@ export const TestAnalyticsOverview = () => {
             </div>
             <h4 className="mb-2 text-[var(--sb-green-haze-bg-active)]">
               {data.timeRemaining
-                ? formatMinutesToHHMMSS(data.timeRemaining)
+                ? getTimeFromSeconds(data.timeRemaining)
                 : "00:00:00"}
             </h4>
             <p className="text-[var(--text-tertiary)]">Time left</p>
@@ -825,6 +827,7 @@ export const TestAnalyticsOverview = () => {
     {
       label: "PERFORMANCE IN DETAIL",
       content: <PerformanceInDetailTab />,
+      hidden: testType !== 3,
     },
     {
       label: "TIME MANAGEMENT",
@@ -835,6 +838,9 @@ export const TestAnalyticsOverview = () => {
       content: <ComparativeStudyTab />,
     },
   ];
+
+  const visibleTabs = tabs.filter(t => !t.hidden);
+
 
   //   const handleTabChange = (index: number) => {
   //     console.log(`Switched to tab: ${tabs[index].label}`);
@@ -990,7 +996,7 @@ export const TestAnalyticsOverview = () => {
 
       <div className="flex items-center gap-3 overflow-x-auto">
         <Tabs
-          tabs={tabs.map((t) => t.label)}
+          tabs={visibleTabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
           onSelect={(index) => {
             if (index === 1) {
@@ -1006,7 +1012,7 @@ export const TestAnalyticsOverview = () => {
           activeTabClassName="rounded-lg py-3 bg-[var(--sb-ocean-bg-active)] text-[var(--sb-ocean-content-primary)]"
         />
       </div>
-      <div className="mt-10">{tabs[selectedIndex]?.content}</div>
+      <div className="mt-10">{visibleTabs[selectedIndex]?.content}</div>
 
       {/* Toast */}
       {showToast && toastData && (

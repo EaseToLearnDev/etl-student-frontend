@@ -133,7 +133,7 @@ const LoginPage = () => {
                       >
                         {loginWith === "otp"
                           ? "Mobile Number"
-                          : "Email or User ID"}
+                          : "Email or User ID or Mobile"}
                       </label>
 
                       <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
