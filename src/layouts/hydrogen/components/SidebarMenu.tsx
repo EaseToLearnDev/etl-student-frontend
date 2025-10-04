@@ -13,6 +13,8 @@ import useReleaseNotesStore from "../../../global/hooks/useReleaseNotesStore";
 // Utils
 import cn from "../../../utils/classNames";
 import { getFilteredMenuItems } from "../../../utils/menuFilter";
+import Badge from "../../../components/Badge";
+import { Theme } from "../../../utils/colors";
 
 /**
  * Renders the sidebar menu with navigation links and user info for the student dashboard.
@@ -89,7 +91,13 @@ export function SidebarMenu() {
                 <AiIcon fontSize={16} />
                 <h6 className="font-semibold">What's New</h6>
               </div>
-              <MdChevronRight size={16} />
+              <Badge
+                className="w-fit !px-2 !py-1"
+                style="outline"
+                theme={Theme.Neutral}
+              >
+                <span>BETA</span>
+              </Badge>
             </div>
             <p className="text-neutral-100 mt-2 mb-1">
               Discover the latest features and improvements

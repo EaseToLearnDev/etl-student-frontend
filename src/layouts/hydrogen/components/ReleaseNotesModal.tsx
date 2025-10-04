@@ -24,8 +24,7 @@ const ReleaseNotesModal = () => {
       <div className="max-h-[600px]">
         {/* Modal Header */}
         <div className="fixed top-0 left-0 right-0 h-[70px] bg-[var(--surface-bg-secondary)] py-2 px-4 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <h6 className="!text-[20px]">Release Notes</h6>
+          <div className="flex items-center gap-2 px-8">
             <Badge
               theme={Theme.Ocean}
               style="filled"
