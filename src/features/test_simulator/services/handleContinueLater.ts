@@ -72,6 +72,9 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             questionDisplayId: item.questionDisplayId,
             questionType: item.questionType,
             questionTypeLabel: item.questionTypeLabel,
+            questionBody: item.questionBody,
+            responseChoice: item.responseChoice,
+            columns: item.columns,
             topicId: item.topicId,
             timeSpent: questionTimeMap[item.questionId] || 0,
             studentResponse: questionResponseMap[item.questionId].join("~"),
@@ -82,6 +85,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
               QuestionStatusReverseMap[questionStatusMap[item.questionId]] ??
               item.backgroundImg,
             cssName: item.cssName,
+            bloomId: item.bloomId,
           };
 
           if (testData?.testType === 3) {
@@ -93,14 +97,13 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             baseObj.questionBody = "";
             baseObj.columns = [];
             baseObj.responseChoice = [];
-          } else {
-            baseObj.bloomId = 0;
           }
 
           return baseObj;
         }) ?? [],
     },
   ];
+  console.log(testDetail);
 
   const { loginId, token } = studentData;
 
