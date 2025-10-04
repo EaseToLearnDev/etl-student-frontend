@@ -6,7 +6,7 @@ export interface Response {
 export interface Question {
   itemId?: number;
   questionId: number;
-  questionDisplayId: string;
+  questionDisplayId: number;
   questionType: string;
   questionTypeLabel: string;
   topicId: number;

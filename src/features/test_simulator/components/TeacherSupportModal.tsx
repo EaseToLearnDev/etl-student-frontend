@@ -10,7 +10,7 @@ import { handleSupportQuerySubmit } from "../services/handleSupportQuerySubmit";
 
 const TeacherSupportModal = () => {
   const questionId = useTestStore((s) => s.getCurrentQuestion()?.questionId);
-  const questionTypeLabel = useTestStore((s) => s.getCurrentQuestion()?.questionTypeLabel);
+  const questionDisplayId = useTestStore((s) => s.getCurrentQuestion()?.questionDisplayId);
   const isModalOpen = useTeacherSupportStore(
     (s) => s.isTeacherSupportModalOpen
   );
@@ -53,7 +53,7 @@ const TeacherSupportModal = () => {
         {/* Main Body */}
         <div className="mt-4 flex flex-col gap-4">
           <p>
-            Question Id: <b>{questionTypeLabel}</b>
+            Question Id: <b>{questionDisplayId}</b>
           </p>
           <div className="flex flex-col gap-2">
             <textarea
@@ -77,7 +77,7 @@ const TeacherSupportModal = () => {
                     setFeedback,
                     setIsModalOpen,
                     feedback,
-                    questionId
+                    questionDisplayId,
                   );
                 }}
                 disabled={feedback.trim().length === 0}
