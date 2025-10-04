@@ -141,9 +141,8 @@ const AllCoursesPage = () => {
       <Modal
         isOpen={isPlanModalOpen}
         onClose={() => setIsPlanModalOpen(false)}
-        size="xl"
-        containerClassName="!h-full !w-full !max-w-full bg-[var(--surface-bg-primary)] p-0 sm:p-0 overflow-hidden"
-        className="p-4 lg:p-10"
+        size={isMobile ? "lg" : "xl"}
+        className="p-4"
       >
         <PlanDetails
           course={selectedCourse!}

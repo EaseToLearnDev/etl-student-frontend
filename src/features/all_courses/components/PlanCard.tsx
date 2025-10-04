@@ -27,7 +27,7 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
         bg-[var(--surface-bg-primary)]
       `}
     >
-      <div className="flex-[0.6] w-full px-5 py-3.5">
+      <div className="flex-[0.6] w-full p-4">
         <div className="w-full flex items-center justify-between">
           <div className="flex items-center">
             <div
@@ -44,22 +44,25 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
             </div>
             <h5 className="text-[var(--text-primary)] m-0">{plan?.title}</h5>
           </div>
-          <h6 className="text-[var(--text-primary)]">Total: ₹ {salePrice}</h6>
+          <div className="flex flex-col items-end">
+            <div className="flex items-center gap-1">
+              <h6 className="text-[var(--text-primary)]">₹ {salePrice}</h6>
+            </div>
+            <span
+              className={cn(
+                "text-[var(--text-tertiary)]",
+                plan?.discount ? "line-through" : "no-underline"
+              )}
+            >
+              ₹ {retailPrice}
+            </span>
+          </div>
         </div>
-
-        <p className="mt-2">{plan.validityDate}</p>
-
-        <div className="w-full flex items-center justify-between mt-1">
+        <div className="flex justify-between items-center">
+          <p className="text-[var(--text-secondary)]">{plan.validityDate}</p>
           <p className="text-[var(--sb-green-haze-bg-active)]">
-            {plan?.discount ? `Save ${plan?.discount}%` : ""}
+            {plan?.discount ? `-${plan?.discount}%` : ""}
           </p>
-          <span
-            className={`flex items-center text-[var(--text-tertiary)] ${
-              plan?.discount ? "line-through" : "no-underline"
-            }`}
-          >
-            ₹ {retailPrice}
-          </span>
         </div>
       </div>
 
@@ -69,7 +72,7 @@ export const PlanCard = ({ plan, selected, onSelect }: PlanCardProps) => {
           <p className="text-[var(--sb-ocean-bg-active)] max-w-[28ch]">
             {plan?.description || ""}
           </p>
-          <p className="text-[var(--text-secondary)]">
+          <p className="text-[var(--text-secondary)] text-nowrap">
             {`₹${Math.floor(salePrice / plan?.validityDuration)}/day`}
           </p>
         </div>

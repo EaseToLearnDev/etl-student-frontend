@@ -16,6 +16,7 @@ import { useNavigate } from "react-router";
 import { getPriceValue } from "../utils/getPrice";
 import { getSelectedPlan } from "../utils/getSelectedPlan";
 import { resetPromocode } from "../services/resetPromocode";
+import useIsMobile from "../../../hooks/useIsMobile";
 
 // Constants
 const deviceType = "web";
@@ -34,6 +35,7 @@ export const PlanBody = ({
   courseId,
 }: PlanBodyProps) => {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   const selectedTabIndex = useCoursesStore((s) => s.selectedTabIndex);
   const setSelectedTabIndex = useCoursesStore((s) => s.setSelectedTabIndex);
@@ -108,7 +110,7 @@ export const PlanBody = ({
     if (!priceList) return;
     setCoursePriceList(priceList);
 
-     // Added free option at beginning manually
+    // Added free option at beginning manually
     if (priceList.findIndex((p) => p.packType === "FREE") === -1) {
       priceList?.unshift({ packType: "FREE", list: [] });
     }
@@ -120,8 +122,7 @@ export const PlanBody = ({
     setSelectedPlan(newPlan);
   }, [discountedPriceList]);
 
-  const handlePromoSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePromoSubmit = () => {
     const promocode = code.trim();
     if (!applied && promocode) {
       applyPromoCode(tabs, promocode, courseId);
@@ -134,8 +135,13 @@ export const PlanBody = ({
   const tabs = isCourseOwned ? ["ACE", "PRO"] : ["FREE", "ACE", "PRO"];
 
   return (
-    <div className="relative w-full h-[100dvh] lg:h-[calc(100dvh-2rem)] overflow-y-auto">
-      <div className="w-full h-[150px] p-4">
+    <div
+      className={cn(
+        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)] scrollbar-hide",
+        isMobile ? "overflow-y-auto" : "overflow-hidden"
+      )}
+    >
+      <div className="w-full h-[120px] p-4">
         <h3 className="px-4 text-center">{courseTitle}</h3>
         <div className="px-4 mt-4">
           <Tabs
@@ -148,12 +154,12 @@ export const PlanBody = ({
         </div>
       </div>
 
-      <div className="w-full h-[calc(100%-250px)] flex flex-col justify-center items-center">
-        <div className="flex flex-col-reverse gap-4 max-w-[1400px] lg:flex-row lg:h-full overflow-y-auto py-4 lg:py-0">
+      <div className="w-full flex flex-col justify-center items-center mb-[120px] lg:max-h-[calc(100vh-19rem)]">
+        <div className="flex flex-col-reverse gap-4 lg:flex-row lg:h-full overflow-y-auto lg:py-0">
           {/* Features Section */}
           <WidgetCard
             className={cn(
-              "shadow-none flex flex-col scrollbar-hide",
+              "shadow-none flex flex-col scrollbar-hide !p-4",
               // mobile: full width, auto height
               "w-full h-auto",
               // desktop: flex-1 and scrollable
@@ -161,7 +167,7 @@ export const PlanBody = ({
             )}
             title="Features"
           >
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mt-4">
               {features?.map((feat, idx) => {
                 const packIdx = isCourseOwned
                   ? selectedTabIndex === 0
@@ -181,10 +187,10 @@ export const PlanBody = ({
 
           {/* Right Column (only if plans exist) */}
           {selectedPlan && selectedPlan?.list?.length > 0 ? (
-            <div className="flex flex-col gap-4 w-full h-auto lg:flex-1 lg:h-full lg:overflow-y-auto scrollbar-hide">
+            <div className="flex flex-col gap-4 w-full lg:flex-1 lg:min-h-full lg:overflow-y-auto scrollbar-hide">
               {tabs[selectedTabIndex] !== "FREE" && (
                 <WidgetCard
-                  className="shadow-none h-auto lg:flex-1 lg:overflow-y-auto scrollbar-hide"
+                  className="shadow-none h-auto lg:flex-1 lg:overflow-y-auto scrollbar-hide !p-4"
                   title="Plans"
                 >
                   <div className="flex flex-col gap-3 mt-4">
@@ -204,12 +210,18 @@ export const PlanBody = ({
                 </WidgetCard>
               )}
 
-              {tabs[selectedTabIndex] !== "FREE" ? (
+              {tabs[selectedTabIndex] !== "FREE" && isMobile ? (
                 <WidgetCard
-                  className="shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide"
-                  title="Apply Promo Code"
+                  className="shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide !p-4"
+                  title="Have a Promo Code?"
                 >
-                  <form className="mt-4" onSubmit={handlePromoSubmit}>
+                  <form
+                    className="mt-4"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      applied ? resetPromocode() : handlePromoSubmit();
+                    }}
+                  >
                     {applied && (
                       <p className="text-[var(--sb-green-haze-bg-active)] pb-1">
                         Promo applied successfully 🎉
@@ -235,31 +247,16 @@ export const PlanBody = ({
                       <Button
                         style="secondary"
                         type="submit"
-                        disabled={applied}
+                        className="cursor-pointer"
                       >
                         {applied ? (
-                          <p className="flex gap-1">
-                            <BiCheck size={16} /> Applied
+                          <p className="flex gap-1 items-center">
+                            <MdClose size={16} /> Clear
                           </p>
                         ) : (
                           <p>Apply</p>
                         )}
                       </Button>
-                      {applied ? (
-                        <Button
-                          style="secondary"
-                          type="button"
-                          onClick={() => {
-                            resetPromocode();
-                          }}
-                        >
-                          <p className="flex gap-1">
-                            <MdClose size={16} /> Clear
-                          </p>
-                        </Button>
-                      ) : (
-                        <></>
-                      )}
                     </div>
                   </form>
                 </WidgetCard>
@@ -272,8 +269,53 @@ export const PlanBody = ({
           )}
         </div>
         {/* Actions Section*/}
-        <div className="w-full py-4 flex items-center">
-          <div className="w-full max-w-[1400px] mx-auto px-4 flex lg:justify-end">
+        <div className="w-full py-4 flex items-center fixed bottom-0 min-h-[120px] bg-[var(--surface-bg-secondary)]">
+          <div className="w-full max-w-[1400px] mx-auto px-4 flex lg:justify-between gap-4 items-center">
+            {!isMobile && (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  applied ? resetPromocode() : handlePromoSubmit();
+                }}
+              >
+                {applied && (
+                  <p className="text-[var(--sb-green-haze-bg-active)] pb-1 pl-1">
+                    Promo applied successfully 🎉
+                  </p>
+                )}
+                {error && (
+                  <p className="text-[var(--sb-valencia-bg-active)] pb-1 pl-1">
+                    Invalid promo code
+                  </p>
+                )}
+                <div className="flex items-center gap-4">
+                  <input
+                    type="text"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="Enter Promo Code"
+                    disabled={applied}
+                    className={cn(
+                      "w-full flex px-4 py-2 items-center gap-2 self-stretch rounded-md border-1 border-[var(--border-secondary)] text-base",
+                      "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                    )}
+                  />
+                  <Button
+                    style="secondary"
+                    type="submit"
+                    className="cursor-pointer !px-4 !py-2"
+                  >
+                    {applied ? (
+                      <p className="flex gap-1 items-center">
+                        <MdClose size={16} /> Clear
+                      </p>
+                    ) : (
+                      <p>Apply</p>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            )}
             {tabs[selectedTabIndex] === "FREE" ? (
               <Button
                 style="primary"
