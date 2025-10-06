@@ -16,6 +16,8 @@ import { Modal } from "../../../components/Modal";
 import AccountRemovalSection from "./AccountRemovalSection";
 import ProfileHeader from "./ProfileHeader";
 import VerifyOtpContent from "./VerifyOtpContent";
+import { useToastStore } from "../../../global/hooks/useToastStore";
+import { Toast } from "../../../components/Toast";
 
 /**
  * Renders the main profile content section for viewing and editing student profile details.
@@ -40,6 +42,8 @@ const ProfileContent = () => {
   const setEmailId = useProfileStore((state) => state.setEmailId);
   const phoneNo = useProfileStore((state) => state.phoneNo);
   const setPhoneNo = useProfileStore((state) => state.setPhoneNo);
+  const showToast = useToastStore((state) => state.showToast);
+  const toastData = useToastStore((state) => state.toastData);
 
   const [verifyType, setVerifyType] = useState<"Mobile" | "Email" | null>(null);
 
@@ -252,6 +256,15 @@ const ProfileContent = () => {
 
       {/* Account Removal Section */}
       <AccountRemovalSection />
+
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };
