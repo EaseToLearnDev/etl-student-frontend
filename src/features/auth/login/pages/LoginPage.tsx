@@ -61,11 +61,11 @@ const LoginPage = () => {
           )}
         >
           <img
-            src="/logo.svg"
+            src="/etl_logo.svg"
             alt="ETL"
-            className="w-[60px] lg:w-full lg:h-full lg:max-w-[480px] lg:max-h-[160px] aspect-auto object-contain select-none"
+            className="w-[150px] lg:w-[500px] aspect-auto object-contain select-none"
           />
-          <h2 className="text-white select-none">Ease To Learn</h2>
+          {/* <h2 className="text-white select-none">Ease To Learn</h2> */}
         </div>
 
         {/* Right section: Login/OTP form */}
@@ -151,7 +151,7 @@ const LoginPage = () => {
                               : "you@company.com"
                           }
                           className={cn(
-                            "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base"
+                            "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base placeholder:text-[var(--text-tertiary)]"
                           )}
                           required
                           value={userId}
@@ -180,7 +180,7 @@ const LoginPage = () => {
                           type="password"
                           placeholder="**********"
                           className={cn(
-                            "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
+                            "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
                             "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
                           )}
                           required
