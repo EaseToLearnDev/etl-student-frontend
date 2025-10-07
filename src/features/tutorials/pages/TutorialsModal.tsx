@@ -46,17 +46,16 @@ const data = [
   //   ],
   // },
   {
-    category: "MY Study Room",
+    category: "My Study Room",
     items: [
       {
-        title: "What is MY Study Room and how to use it?",
-        videoLink:
-          "https://www.youtube.com/embed/PBZ_v7gVBXI?si=JKUzsldGRRdmPviL",
+        title: "What is My Study Room and how to use it?",
+        videoLink: "https://www.youtube.com/embed/U40xDO-oXa8",
       },
-      // {
-      //   title: "Discover Emerging Trends",
-      //   videoLink: "https://www.youtube.com/embed/3fumBcKC6RE",
-      // },
+      {
+        title: "What is My Study Material and how to use it?",
+        videoLink: "https://www.youtube.com/embed/CmqiPLH7BGc",
+      },
       // {
       //   title: "See the top questions consumers ask about any topic",
       //   videoLink: "https://www.youtube.com/embed/ysz5S6PUM-U",
@@ -75,47 +74,71 @@ const data = [
       // },
     ],
   },
-  // {
-  //   category: "Smart Learning",
-  //   items: [
-  //     {
-  //       title: "See the top questions consumers ask about any topic",
-  //       videoLink: "https://www.youtube.com/embed/ysz5S6PUM-U",
-  //     },
-  //     {
-  //       title: "See where consumers are talking most about any topic",
-  //       videoLink: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-  //     },
-  //     {
-  //       title: "Differentiate fads from trends",
-  //       videoLink: "https://www.youtube.com/embed/jNQXAC9IVRw",
-  //     },
-  //     {
-  //       title: "Discover Emerging Trends",
-  //       videoLink: "https://www.youtube.com/embed/3fumBcKC6RE",
-  //     },
-  //     {
-  //       title: "Forecast Future Market Conditions",
-  //       videoLink: "https://www.youtube.com/embed/oHg5SJYRHA0",
-  //     },
-  //     {
-  //       title: "See what consumers are searching on different channels",
-  //       videoLink: "https://www.youtube.com/embed/tgbNymZ7vqY",
-  //     },
-  //   ],
-  // },
   {
-    category: "MY Exam Room",
+    category: "Smart Learning",
     items: [
       {
-        title: "What is MY Exam Room and how to use it?",
-        videoLink:
-          "https://www.youtube.com/embed/w7M0oCKfUwk?si=LK9DQswWj0DU5oaT",
+        title: "See the top questions consumers ask about any topic",
+        videoLink: "https://www.youtube.com/embed/xq4ZZdm0mDY",
       },
+      // {
+      //   title: "See where consumers are talking most about any topic",
+      //   videoLink: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+      // },
+      // {
+      //   title: "Differentiate fads from trends",
+      //   videoLink: "https://www.youtube.com/embed/jNQXAC9IVRw",
+      // },
       // {
       //   title: "Discover Emerging Trends",
       //   videoLink: "https://www.youtube.com/embed/3fumBcKC6RE",
       // },
+      // {
+      //   title: "Forecast Future Market Conditions",
+      //   videoLink: "https://www.youtube.com/embed/oHg5SJYRHA0",
+      // },
+      // {
+      //   title: "See what consumers are searching on different channels",
+      //   videoLink: "https://www.youtube.com/embed/tgbNymZ7vqY",
+      // },
+    ],
+  },
+  {
+    category: "My Exam Room",
+    items: [
+      {
+        title: "What is My Exam Room and how to use it?",
+        videoLink: "https://www.youtube.com/embed/lxe59f74gaE",
+      },
+      {
+        title: "My Mock Topic Tutorial: A Step-by-Step Guide",
+        videoLink: "https://www.youtube.com/embed/vQOcTVWm5AI",
+      },
+      {
+        title: "My Topic Test Tutorial: A Step-by-Step Guide",
+        videoLink: "https://www.youtube.com/embed/mz6lU3TfgwQ",
+      },
+      {
+        title: "My Class Test Tutorial: A Step-by-Step Guide",
+        videoLink: "https://www.youtube.com/embed/UaNK7D0MwCo",
+      },
+      // {
+      //   title: "Differentiate fads from trends",
+      //   videoLink: "https://www.youtube.com/embed/jNQXAC9IVRw",
+      // },
+      // {
+      //   title: "Forecast Future Market Conditions",
+      //   videoLink: "https://www.youtube.com/embed/oHg5SJYRHA0",
+      // },
+    ],
+  },
+  {
+    category: "Report & Analytics",
+    items: [
+      {
+        title: "Discover Emerging Trends",
+        videoLink: "https://www.youtube.com/embed/0KAYPfpnTbg",
+      },
       // {
       //   title: "See the top questions consumers ask about any topic",
       //   videoLink: "https://www.youtube.com/embed/ysz5S6PUM-U",
@@ -132,37 +155,12 @@ const data = [
       //   title: "Forecast Future Market Conditions",
       //   videoLink: "https://www.youtube.com/embed/oHg5SJYRHA0",
       // },
+      // {
+      //   title: "See what consumers are searching on different channels",
+      //   videoLink: "https://www.youtube.com/embed/tgbNymZ7vqY",
+      // },
     ],
   },
-  // {
-  //   category: "Report & Analytics",
-  //   items: [
-  //     {
-  //       title: "Discover Emerging Trends",
-  //       videoLink: "https://www.youtube.com/embed/3fumBcKC6RE",
-  //     },
-  //     {
-  //       title: "See the top questions consumers ask about any topic",
-  //       videoLink: "https://www.youtube.com/embed/ysz5S6PUM-U",
-  //     },
-  //     {
-  //       title: "See where consumers are talking most about any topic",
-  //       videoLink: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-  //     },
-  //     {
-  //       title: "Differentiate fads from trends",
-  //       videoLink: "https://www.youtube.com/embed/jNQXAC9IVRw",
-  //     },
-  //     {
-  //       title: "Forecast Future Market Conditions",
-  //       videoLink: "https://www.youtube.com/embed/oHg5SJYRHA0",
-  //     },
-  //     {
-  //       title: "See what consumers are searching on different channels",
-  //       videoLink: "https://www.youtube.com/embed/tgbNymZ7vqY",
-  //     },
-  //   ],
-  // },
   // {
   //   category: "All Courses",
   //   items: [

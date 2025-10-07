@@ -15,7 +15,7 @@ export const getTopicContent = async ({
   topicId,
   topicName,
 }: GetTopicContentParams) => {
-  const res = await makeRequest("get", "/syllabus", null, {
+  const res = await makeRequest("get", "/syllabus/v2", null, {
     params: {
       templateId,
       searchFlag: "Topic",
