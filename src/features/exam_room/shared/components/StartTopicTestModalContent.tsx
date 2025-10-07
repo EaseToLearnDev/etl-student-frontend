@@ -26,12 +26,14 @@ interface StartTopicTestModalContentProps {
   onClose: () => void;
   onStart: () => void;
   details: TestDetails;
+  customTitle?: string;
 }
 export default function StartTopicTestModalContent({
   testName,
   onClose,
   onStart,
   details,
+  customTitle,
 }: StartTopicTestModalContentProps) {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const rawFields = [
@@ -83,7 +85,11 @@ export default function StartTopicTestModalContent({
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
-          <h4>Topic Test</h4>
+          <h4>
+            {customTitle && customTitle?.length > 0
+              ? customTitle
+              : "Topic Test"}
+          </h4>
           <h6>{testName}</h6>
         </div>
         <div

@@ -103,6 +103,12 @@ const ClassTestPage = () => {
         columns={columns}
         header={<h5>Class Test</h5>}
         data={testList || []}
+        onRowClick={(row) => {
+          setSelectedTest(row);
+          getActiveCourseAccessStatus() === "renew"
+            ? setIsUpgradeModalOpen(true)
+            : setShowStartTestModal(true);
+        }}
       />
       <Modal
         isOpen={showStartTestModal}
@@ -111,13 +117,14 @@ const ClassTestPage = () => {
         className="p-4"
       >
         <StartTopicTestModalContent
+        customTitle={'Class Test'}
           testName={selectedTest?.testTitle || ""}
           onStart={() => {
             handleStartTest({
               navigate,
               testId: selectedTest?.testId ?? null,
               classTestId: selectedTest?.scheduleId,
-              testType: 4,
+              testType: selectedTest?.testType,
             });
             setShowStartTestModal(false);
           }}

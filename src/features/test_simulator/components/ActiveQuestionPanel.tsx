@@ -80,7 +80,7 @@ const ActiveQuestionPanel = () => {
       )}
     >
       {/* Active Question Panel */}
-      <div className={cn("flex flex-col gap-4 h-full")}>
+      <div className={"flex flex-col gap-4 h-full"}>
         {/* Question Type Badge */}
         <div className="flex justify-between items-center gap-4">
           <h5 className="text-ellipsis line-clamp-2">

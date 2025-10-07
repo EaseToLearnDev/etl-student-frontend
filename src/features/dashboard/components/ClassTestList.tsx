@@ -48,13 +48,14 @@ const ClassTestList = () => {
         className="p-4"
       >
         <StartTopicTestModalContent
+          customTitle={"Class Test"}
           testName={selectedTest?.testTitle || ""}
           onStart={() => {
             handleStartTest({
               navigate,
               testId: selectedTest?.testId ?? null,
               classTestId: selectedTest?.scheduleId,
-              testType: 4,
+              testType: selectedTest?.testType,
             });
             setShowStartTestModal(false);
           }}
