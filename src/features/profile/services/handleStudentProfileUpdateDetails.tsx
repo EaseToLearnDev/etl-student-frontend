@@ -34,8 +34,9 @@ export const handleStudentProfileUpdateDetails = async ({
     };
   } catch (error: any) {
     if (error.status === 409) {
+      const type = newEmailId ? 'Email' : 'Number';
       setToast({
-        title: "Number already exists. Try another Number",
+        title: `${type} already exists. Try another ${type}`,
         type: ToastType.WARNING,
       });
     } else {
