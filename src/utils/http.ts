@@ -53,17 +53,20 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
     return {
       success: true,
       data: data,
+      status: data.status,
       message: (response as any)?.data?.message || "Success",
     };
   } catch (error: any) {
     const errorMsg = error?.response?.data?.message || error?.message || "Something went wrong";
+    const status = error?.response?.status 
     if (errorMsg === "invalidToken") {
       window.location.href = '/logout';
     }
     console.log("API Error", error);
-    return {
+    throw {
       success: false,
       data: null,
+      status: status,
       message:errorMsg
     };
   }
