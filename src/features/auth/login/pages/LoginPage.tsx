@@ -63,7 +63,7 @@ const LoginPage = () => {
           <img
             src="/etl_logo.svg"
             alt="ETL"
-            className="w-[150px] lg:w-[500px] aspect-auto object-contain select-none"
+            className="w-[150px] lg:w-[500px] aspect-auto object-contain select-none pointer-events-none"
           />
           {/* <h2 className="text-white select-none">Ease To Learn</h2> */}
         </div>
