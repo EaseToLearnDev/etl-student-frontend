@@ -5,6 +5,7 @@ import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
 import type { TestReportdata } from "../pages/ReportMockTestPage";
 import { MdArrowRight } from "react-icons/md";
+import { LuFileChartPie } from "react-icons/lu";
 
 interface ReportTablePageProps {
   data: TestReportdata[];
@@ -62,9 +63,10 @@ const ReportTablePage = ({
         </div>
       ) : (
         <EmptyState
-          title={emptyTitle}
-          icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
-          className="min-h-[60vh]"
+          title={emptyTitle?.toLowerCase()[0].toUpperCase()+emptyTitle?.toLowerCase().slice(1, emptyTitle.length)}
+          description="No report data is available at this moment. Your reports will populate this section as you complete activities on the platform."
+          icon={<LuFileChartPie className="w-24 h-24" />}
+          className="max-w-md"
         />
       )}
     </>

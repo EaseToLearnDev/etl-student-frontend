@@ -1,9 +1,19 @@
+<<<<<<< Updated upstream
 import EmptyState from "../../../components/EmptyState";
 import type { IGhActivityByDayResults } from "../../../global/services/getGhActivityByDay";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 import Button from "../../../components/Button";
 import { useNavigate } from "react-router";
+=======
+import EmptyState from '../../../components/EmptyState'
+import type { IGhActivityByDayResults } from '../../../global/services/getGhActivityByDay'
+import Badge from '../../../components/Badge'
+import { Theme } from '../../../utils/colors';
+import Button from '../../../components/Button';
+import { useNavigate } from "react-router"
+import { LuFilePenLine } from 'react-icons/lu';
+>>>>>>> Stashed changes
 
 function Test({
   testData,
@@ -54,11 +64,21 @@ function ActivityListData({
     return <EmptyState title="Nothing to show here, Please give a test" />;
   }
 
+<<<<<<< Updated upstream
   const handleTestNavigation = (testSession: string, testMode: string) => {
     if (testMode === "Learning Session") {
       navigate(`/learning-testanalytics?testSession=${testSession}`);
     } else {
       navigate(`/testanalytics?testSession=${testSession}`);
+=======
+    if (!dataByDay) {
+        return <EmptyState 
+title='No test data available'
+description='It looks like there aren’t any tests available right now. Please select a valid day.'
+icon={<LuFilePenLine className='w-20 h-20' />}
+className='max-w-md'
+         />
+>>>>>>> Stashed changes
     }
   };
 

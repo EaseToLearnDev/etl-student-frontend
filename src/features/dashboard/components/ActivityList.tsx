@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 
 // Icons
-import { LuCalendarMinus2 } from "react-icons/lu";
+import { LuActivity, LuCalendarMinus2, LuFilePenLine } from "react-icons/lu";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 
 // Utils
@@ -60,10 +60,12 @@ export const ActivityList = ({
   if (!renderableData) {
     return (
       <EmptyState
-        title="No Activity Available"
-        icon={<LuCalendarMinus2 size={100} />}
+        title='No activity data available'
+        description='No activity data available yet. Start giving tests, and your activity will appear here!'
+        icon={<LuActivity className='w-20 h-20' />}
+        className='max-w-md'
       />
-    );
+    )
   }
 
   const scroll = (direction: "left" | "right" = 'right') => {
@@ -156,14 +158,5 @@ export const ActivityList = ({
         <span>More</span>
       </div>
     </>
-    // <div className='flex items-center  justify-around gap-2 h-12 max-w-[320px]  w-full'>
-    //     <button onClick={() => setColor('green')} className={`h-full w-1/6 rounded-lg bg-green-500 `}></button>
-    //     <button onClick={() => setColor('emerald')} className='h-full w-1/6 rounded-lg bg-emerald-500'></button>
-    //     <button onClick={() => setColor('amber')} className='h-full w-1/6 rounded-lg bg-amber-500'></button>
-    //     <button onClick={() => setColor('cyan')} className='h-full w-1/6 rounded-lg bg-cyan-500'></button>
-    //     <button onClick={() => setColor('fuchsia')} className='h-full w-1/6 rounded-lg bg-fuchsia-500'></button>
-    //     <button onClick={() => setColor('rose')} className='h-full w-1/6 rounded-lg bg-rose-500'></button>
-    // </div>
-    // </div>
   );
 };

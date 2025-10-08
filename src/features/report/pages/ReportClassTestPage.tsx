@@ -4,6 +4,7 @@ import type { Column } from "../../../components/types";
 import type { TestReportdata } from "./ReportMockTestPage";
 import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
+import { LuFileChartColumn, LuFileChartLine } from "react-icons/lu";
 
 interface ReportClassTestPageProps {
   data: TestReportdata[];
@@ -43,11 +44,19 @@ const ReportClassTestPage = ({
           />
         </div>
       ) : (
+
         <EmptyState
-          title="No Class Test Data Available"
-          icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
-          className="min-h-[60vh]"
+          title="No class test data available"
+          description="No learning analytics data is available yet. Start engaging with tests, activities, or courses to see your progress here!"
+          icon={<LuFileChartLine className="w-24 h-24" />}
+          className="max-w-md"
+          buttonText="Go Back"
         />
+        // <EmptyState
+        //   title="No Class Test Data Available"
+        //   icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
+        //   className="min-h-[60vh]"
+        // />
       )}
     </>
   );

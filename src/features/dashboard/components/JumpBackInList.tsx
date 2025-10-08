@@ -13,6 +13,7 @@ import EmptyGhostIcon from "../../../components/icons/empty-ghost-icon";
 import PreviousTestModal from "./PreviousTestModal";
 import { handleResumeTest } from "../../study_room/smart_learning/services/handleTest";
 import { useNavigate } from "react-router";
+import { LuClipboardX, LuFileClock, LuFilePenLine, LuFileQuestion } from "react-icons/lu";
 
 const JumpBackInList = () => {
   const navigate = useNavigate();
@@ -51,8 +52,10 @@ const JumpBackInList = () => {
         ) : (
           <div className="flex flex-col w-full items-center mt-12">
             <EmptyState
-              icon={<EmptyGhostIcon width={100} height={100} />}
-              title="No Previous Tests Found"
+              title='No previous tests available'
+              description='No previous test data is available at the moment.'
+              icon={<LuFileClock className='w-20 h-20' />}
+              className="max-w-md lg:max-w-sm"
             />
           </div>
         )}

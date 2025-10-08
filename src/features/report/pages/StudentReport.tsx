@@ -19,6 +19,7 @@ import EmptyState from "../../../components/EmptyState";
 import ReportTablePage from "../components/ReportTablePage";
 import { useNavigate } from "react-router";
 import { loadTablsForReports } from "../services/loadTabsForReports";
+import { LuFileSearch, LuFileUser } from "react-icons/lu";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
@@ -122,7 +123,13 @@ const StudentReport = () => {
   };
 
   if (!reportData || !sessionData)
-    return <EmptyState title="No Report Data Available" />;
+    return <EmptyState
+        title="No student report data available"
+        description="No student reports are available yet. Once tests, activities, or assignments are completed, reports will appear here!"
+        icon={<LuFileUser className="w-24 h-24" />}
+        className="max-w-md"
+      />
+;
 
   const tabContentsMap: Record<string, JSX.Element> = {
     Overview: <ReportOverviewPage />,

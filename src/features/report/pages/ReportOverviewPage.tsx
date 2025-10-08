@@ -14,6 +14,7 @@ import PerformancePieChart from "../components/PerformancePieChart";
 import EmptyState from "../../../components/EmptyState";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
+import { LuFileChartColumnIncreasing, LuFileQuestion, LuFileScan, LuFileSearch, LuFileSearch2, LuFileText } from "react-icons/lu";
 
 const ReportOverviewPage = () => {
   const overviewData = useReportOverviewStore((s) => s.overviewData);
@@ -53,7 +54,12 @@ const ReportOverviewPage = () => {
 
   if (!parseReportValues || !overviewData)
     return (
-      <EmptyState title="No Overview Data Available" className="min-h-[60vh]" />
+      <EmptyState
+        title="No overview data available"
+        description="No overview data is available yet. Start engaging with courses, tests, or activities to see your summary here!"
+        icon={<LuFileSearch className="w-24 h-24" />}
+        className="max-w-md"
+      />
     );
 
   return (

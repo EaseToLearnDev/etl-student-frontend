@@ -9,6 +9,7 @@ import { FiFilter } from "react-icons/fi";
 import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
 import EmptyState from "../../../../components/EmptyState";
+import { LuBookOpen } from "react-icons/lu";
 
 interface TopicContentPanelProps {
   selectedTopic: Topic;
@@ -65,10 +66,12 @@ const TopicContentPanel = ({
             />
           ))
         ) : (
-          <EmptyState
-            title="No Content Available"
-            className="min-h-[60vh] overflow-hidden"
-          />
+      <EmptyState
+      title="No content available"
+      description="No content are available right now. Please check back later or contact your instructor for updates!"
+      icon={<LuBookOpen className="w-24 h-24" />}
+      className="max-w-md"
+    />
         )}
       </div>
     </div>
