@@ -48,10 +48,11 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
               htmlFor="Subject"
               className="!font-medium text-[var(--text-secondary)]"
             >
-              Subject
+              Subject*
             </label>
             <input
               name="subject"
+              placeholder="Enter subject"
               className={cn(
                 "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                 "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
@@ -67,6 +68,7 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
             <textarea
               name="description"
               rows={4}
+              placeholder="Enter your query"
               className={cn(
                 "resize-none w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
                 "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
@@ -79,6 +81,7 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
             <div className="flex gap-4 items-center">
               <Button
                 style="primary"
+                disabled={!subject.trim()}
                 onClick={() => {
                   submitStudentFeedback({
                     type: "Other",
