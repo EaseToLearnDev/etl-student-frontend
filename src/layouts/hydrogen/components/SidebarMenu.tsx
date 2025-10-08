@@ -92,7 +92,7 @@ export function SidebarMenu() {
                 <h6 className="font-semibold">What's New</h6>
               </div>
               <Badge
-                className="w-fit !px-2 !py-1"
+                className="w-fit !px-2 !py-1 !text-white !border-white"
                 style="outline"
                 theme={Theme.Neutral}
               >

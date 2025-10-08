@@ -3,8 +3,7 @@ import { useEffect, useState, type ReactElement, type RefObject } from "react";
 import { Link, useLocation } from "react-router";
 
 // Icons
-import { FaUser, FaUserPlus } from "react-icons/fa";
-import { MdFeedback, MdLogout, MdPayments, MdStar } from "react-icons/md";
+import { MdLogout } from "react-icons/md";
 
 // Hooks
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
@@ -18,6 +17,7 @@ import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import ThemeToggle from "../../../components/ThemeToggle";
+import { PiChatTextFill, PiStarFill, PiUserFill, PiUsersFill, PiVideoFill, PiWalletFill } from "react-icons/pi";
 
 export default function ProfileMenuDropDown({
   children,
@@ -55,27 +55,32 @@ const menuItems = [
   {
     name: "My Profile",
     href: "profile",
-    icon: <FaUser />,
+    icon: <PiUserFill size={14} />,
   },
   {
     name: "Payments",
     href: "payments",
-    icon: <MdPayments />,
+    icon: <PiWalletFill size={16} />,
   },
   {
     name: "Invite Teacher",
     href: "#",
-    icon: <FaUserPlus />,
+    icon: <PiUsersFill size={16} />,
   },
   {
     name: "Feedback",
     href: "#",
-    icon: <MdFeedback />,
+    icon: <PiChatTextFill size={16} />,
   },
   {
     name: "Rate This Course",
     href: "#",
-    icon: <MdStar />,
+    icon: <PiStarFill size={16} />,
+  },
+  {
+    name: "Tutorials",
+    href: "#",
+    icon: <PiVideoFill size={16} />,
   },
   {
     name: "Settings",
@@ -149,8 +154,15 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                 </span>
                 {item.name}
               </button>
+            ) : item.name === "Tutorials" ? (
+              <button className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none">
+                <span className="text-[var(--text-secondary)]">
+                  {item.icon}
+                </span>
+                {item.name}
+              </button>
             ) : item.name === "Settings" ? (
-              <ThemeToggle onClose={onClose} />
+              <ThemeToggle />
             ) : (
               <Link
                 to={item.href}
