@@ -47,6 +47,7 @@ import { formatMinutesToHHMMSS, parseTimeString } from "../libs/utils";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { getTimeFromSeconds } from "../../../utils";
+import { LuFileChartColumn } from "react-icons/lu";
 
 interface TabItem {
   label: string;
@@ -95,7 +96,13 @@ export const TestAnalyticsOverview = () => {
 
   if (loading) return <TestAnalyticsSkeleton />;
 
-  if (!data) return <EmptyState title="No Report Data Available" />;
+  if (!data) return (
+    <EmptyState
+      icon={<NoSymbolIcon width={80} height={80} />}
+      title="Progress Not Available"
+      className="mb-2"
+    />
+  )
 
   const SectionGraphData = [
     {
@@ -219,9 +226,12 @@ export const TestAnalyticsOverview = () => {
             </div>
           ) : (
             <EmptyState
-              icon={<NoSymbolIcon width={80} height={80} />}
-              title="Progress Not Available"
-              className="mb-2"
+              title="No analytics data available"
+              description="No learning analytics data is available yet. Start engaging with tests, activities, or courses to see your progress here!"
+              icon={<LuFileChartColumn className="w-24 h-24" />}
+              className="max-w-md"
+              buttonText="Go Back"
+              onClick={() => navigate('/report')}
             />
           )}
         </Widget>
@@ -691,7 +701,12 @@ export const TestAnalyticsOverview = () => {
                   </BarChart>
                 </ResponsiveContainer>
               ) : (
-                <EmptyState title="No Data Available" />
+                <EmptyState
+                  title="No data available"
+                  description="No data available at the moment. Check back later or explore available activities to get started!"
+                  icon={<LuFileChartColumn className="w-24 h-24" />}
+                  className="max-w-md"
+                />
               )}
             </div>
 
@@ -741,7 +756,7 @@ export const TestAnalyticsOverview = () => {
                   </RadialBarChart>
                 </ResponsiveContainer>
               ) : (
-                <EmptyState title="No Data Available" />
+                <></>
               )}
             </div>
             <div className="flex flex-wrap justify-center gap-4">
@@ -1001,8 +1016,7 @@ export const TestAnalyticsOverview = () => {
           onSelect={(index) => {
             if (index === 1) {
               navigate(
-                `/testview?testSession=${
-                  testType === 3 ? "mt" : "st"
+                `/testview?testSession=${testType === 3 ? "mt" : "st"
                 }${testSession}`
               );
             }

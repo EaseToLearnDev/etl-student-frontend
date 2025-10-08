@@ -4,6 +4,7 @@ import { ChartBarIcon } from "@heroicons/react/24/outline";
 import EmptyState from "../../../components/EmptyState";
 import Button from "../../../components/Button";
 import { MdArrowRight } from "react-icons/md";
+import { LuFileChartColumnIncreasing } from "react-icons/lu";
 
 export interface LearningSessionData {
   testTitle: string;
@@ -66,7 +67,7 @@ const ReportLearningSessionPage = ({
   );
   return (
     <>
-      {learningSessionData.length > 0 ? (
+       {learningSessionData.length > 0 ? (
         <div className="flex">
           <PaginatedTable
             columns={columns}
@@ -76,10 +77,12 @@ const ReportLearningSessionPage = ({
           />
         </div>
       ) : (
+
         <EmptyState
-          title="No Learning Session Data Available"
-          icon={<ChartBarIcon height={100} width={100} />}
-          className="min-h-[60vh]"
+          title="No learning session data available"
+          description="No learning session data is available yet. Start engaging with courses or lessons to see your sessions appear here!"
+          icon={<LuFileChartColumnIncreasing className="w-24 h-24" />}
+          className="max-w-md"
         />
       )}
     </>

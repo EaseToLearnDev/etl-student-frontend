@@ -40,6 +40,7 @@ import type { Content } from "../sm.types";
 import { useContentLimitStore } from "../hooks/useContentLimitStore";
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 import LimitReachedModal from "../components/LimitReachedModal";
+import { LuBookOpen, LuListTree } from "react-icons/lu";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -197,7 +198,12 @@ const StudyMaterialsPage = () => {
             ) : !topicContentList ||
               topicContentList.length === 0 ||
               !selectedTopic ? (
-              <EmptyState title="No Study Material Available" />
+              <EmptyState
+                title="No study material available"
+                description="No study materials are available right now. Please check back later or contact your instructor for updates!"
+                icon={<LuBookOpen className="w-24 h-24" />}
+                className="max-w-md"
+              />
             ) : (
               <TopicContentPanel
                 setSelectedContent={handleContentSelection}

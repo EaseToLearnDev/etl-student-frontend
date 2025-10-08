@@ -41,6 +41,7 @@ import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { Toast } from "../../../../components/Toast";
+import { LuArchive, LuCalendarX, LuInfo } from "react-icons/lu";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -183,7 +184,12 @@ const TopicTestPage = () => {
                 }
               />
             ) : (
-              <EmptyState title="No Tests Available" />
+              <EmptyState
+                title="No topic test data available"
+                description="No topic tests are available at this time. New tests will be added to the platform as they become available."
+                icon={<LuArchive className="w-24 h-24" />}
+                className="max-w-md "
+              />
             )
           }
           secondaryContent={
@@ -192,7 +198,12 @@ const TopicTestPage = () => {
                 title={capitalizeWords(selectedTopic.topicName)}
               />
             ) : (
-              <EmptyState title="No Instructions Available" />
+              <EmptyState
+                title="No Instructions available"
+                description="No instructions are available right now. Please check back later for guidance or updates!"
+                icon={<LuInfo className="w-24 h-24" />}
+                className="max-w-xs"
+              />
             )
           }
           hideSecondary={!showTestList || hideSecondary}

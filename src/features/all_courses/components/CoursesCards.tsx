@@ -10,6 +10,7 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 // Components
 import CourseCard from "./CourseCard";
 import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
+import {LuBookX} from "react-icons/lu";
 import EmptyState from "../../../components/EmptyState";
 import { useCoursesStore } from "../hooks/useCoursesStore";
 import { useEffect } from "react";
@@ -80,8 +81,10 @@ const CoursesCards = ({
   if (reorderedCourses.length === 0) {
     return (
       <EmptyState
-        title="No courses found"
-        icon={<ArchiveBoxIcon width={100} height={100} />}
+        title="No course data available"
+        description="It looks like there aren’t any courses available right now. Please check back later or contact us for more information."
+        icon={<LuBookX className="w-24 h-24" />}
+        className="max-w-md"
       />
     );
   }
