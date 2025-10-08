@@ -526,7 +526,7 @@ export const TestAnalyticsOverview = () => {
             </div>
             <h4 className="mb-2 text-[var(--sb-ocean-bg-active)]">
               {data.timeSpentMinutes
-                ? formatMinutesToHHMMSS(parseTimeString(data.timeSpentMinutes))
+                ? getTimeFromSeconds(data.timeSpent)
                 : "00:00:00"}
             </h4>
             <p className="text-[var(--text-tertiary)]">Elapsed time</p>
