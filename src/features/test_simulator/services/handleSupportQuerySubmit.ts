@@ -14,7 +14,7 @@ export const handleSupportQuerySubmit = async (
 
   if (success) {
     setToast({
-      title: "Invite Sent to Teacher Successfully!",
+      title: "Your Query Sent to Teacher Successfully!",
       type: ToastType.SUCCESS,
       duration: 5000,
     });
