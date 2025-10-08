@@ -17,13 +17,20 @@ import { type NavigateFunction } from "react-router-dom";
 import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
 import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
+// Importing function to trigger the data layer push to gtm
+import { pushToDataLayer } from "../../../utils/gtm";
+
 export const HandleLogin = async (
   navigate: NavigateFunction,
   loginWith: string,
   deviceType: string | null
 ) => {
-  const { userId, password, setError, setLoading, setToken } =
-    useLoginStore.getState();
+  pushToDataLayer({
+    event: "login_click",
+    category: "engagement",
+    label: "Student Panel Login Button"
+  })
+  const { userId, password, setError, setLoading, setToken } = useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
   if (loginWith === "password") {
     try {
@@ -98,7 +105,7 @@ export const HandleLogin = async (
         schools: data?.schools,
         courses: courses,
         profilePic: data?.profilePic ?? "",
-        deleteFlag: data?.deleteFlag
+        deleteFlag: data?.deleteFlag,
       };
 
       if (deviceType && deviceType.length > 0) {
@@ -158,21 +165,19 @@ export const handleVerifyOtp = async (otp: string) => {
   try {
     const res: StudentDataResponse = await verifyOtpLogin(otp, token);
 
-        Cookies.set(
-        "accountDetails",
-        JSON.stringify({
-          sid: res?.studentId,
-          studentId: res?.studentId,
-          loginId: res?.loginId,
-          token: res?.token,
-          studentName: res?.studentName ?? "",
-          mobile: res?.phoneNo ?? "",
-          email: res?.emailId ?? "",
-        })
-      );
-      Cookies.set("token", `"${res?.token}"`);
-
-
+    Cookies.set(
+      "accountDetails",
+      JSON.stringify({
+        sid: res?.studentId,
+        studentId: res?.studentId,
+        loginId: res?.loginId,
+        token: res?.token,
+        studentName: res?.studentName ?? "",
+        mobile: res?.phoneNo ?? "",
+        email: res?.emailId ?? "",
+      })
+    );
+    Cookies.set("token", `"${res?.token}"`);
 
     const courses = res.courses.map((c) => {
       const tabs: Record<string, boolean> = {
