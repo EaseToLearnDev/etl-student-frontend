@@ -66,7 +66,7 @@ export const ActivityList = ({
     );
   }
 
-  const scroll = (direction: "left" | "right") => {
+  const scroll = (direction: "left" | "right" = 'right') => {
     if (scrollRef.current) {
       const containerWidth = scrollRef.current.clientWidth;
       scrollRef.current.scrollBy({

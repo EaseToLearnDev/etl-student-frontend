@@ -135,7 +135,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   }
   setLoading(false);
 
-  if (testData?.testType === 1) {
+  if (testData?.testType === 1 && testConfig?.assessmentMode === "beginner") {
     navigate(
       `/learning-testanalytics?testSession=${resData?.obj?.testSession}`
     );
