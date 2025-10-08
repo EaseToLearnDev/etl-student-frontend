@@ -2,57 +2,53 @@ import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
 import { getGhActivityByDayAPI } from "../api/getGhActivityByDay.api";
 
 export interface IGhActivityByDayResults {
-    courseId: number
-    testId: number
-    marksObtain: {
-        source: string
-        parsedValue: number
-    }
-    testSession: string
-    testTitle: string
-    fullMarks: {
-        source: string
-        parsedValue: number
-    }
-    correctCount: number
-    totalQuestions: number
-    incorrectCount: number
-    notAnsweredCount: number
+  courseId: number;
+  testId: number;
+  testType: number;
+  testTitle: string;
+  testMode: string;
+  marksObtain: number;
+  testSession: string;
+  fullMarks: number;
+  correctCount: number;
+  totalQuestions: number;
+  incorrectCount: number;
+  notAnsweredCount: number;
 }
 
+export const getGhActivityByDay = async (
+  date: string | null,
+  setLoadingGhActivityByDay: any
+) => {
+  const { studentData, activeCourse } = useStudentStore.getState();
 
-export const getGhActivityByDay = async (date: string | null, setLoadingGhActivityByDay: any) => {
-    const { studentData, activeCourse } = useStudentStore.getState();
+  if (!studentData || !activeCourse) return null;
 
-    if (!studentData || !activeCourse) return null;
+  if (!date) return null;
 
-    if (!date) return null;
+  const { loginId, token } = studentData;
+  const courseId = activeCourse?.courseId;
+  const studentId = studentData?.studentId;
 
-    const { loginId, token } = studentData;
-    const courseId = activeCourse?.courseId;
-    const studentId = studentData?.studentId;
+  if (!loginId || !token || !courseId || !studentId) return null;
 
-    if (!loginId || !token || !courseId || !studentId) return null;
+  setLoadingGhActivityByDay(true);
 
-    setLoadingGhActivityByDay(true);
+  try {
+    const data = (await getGhActivityByDayAPI({
+      loginId,
+      token,
+      courseId,
+      studentId,
+      date,
+    })) as any;
 
-    try {
-        const data = (await getGhActivityByDayAPI({
-            loginId,
-            token,
-            courseId,
-            studentId,
-            date
-        })) as any;
-
-        if(data?.length === 0) return null;
-        return data ?? null;
-    }
-    catch (error) {
-        console.log("Failed to load gh activity list: ", error);
-        return null;
-    }
-    finally {
-        setLoadingGhActivityByDay(false);
-    }
-}
+    if (data?.length === 0) return null;
+    return data ?? null;
+  } catch (error) {
+    console.log("Failed to load gh activity list: ", error);
+    return null;
+  } finally {
+    setLoadingGhActivityByDay(false);
+  }
+};
