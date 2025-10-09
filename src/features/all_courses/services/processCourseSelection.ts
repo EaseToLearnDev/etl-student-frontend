@@ -8,6 +8,13 @@ import {
 } from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useCoursesStore } from "../hooks/useCoursesStore";
+import { removePaymentFlag } from "./removePaymentFlag";
+
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 
 export const processCourseSelection = async ({
   option,
@@ -103,35 +110,70 @@ export const processCourseSelection = async ({
       promoCode: code ?? "",
     });
     // OPTION 3 FLOW
-    if (option === 3) {
-      // mobile in-app flow
-      window.location.href =
-        `inapppayment?orderId=${data.orderId}&token=${data.token}` +
-        `&amount=${data.amount}&firstname=${studentData.studentName}` +
-        `&email=${studentData.emailId}&phone=${studentData.phoneNo}` +
-        `&productinfo=${data.productinfo}`;
-      return;
-    }
+    // if (option === 3) {
+    //   // mobile in-app flow
+    //   window.location.href =
+    //     `inapppayment?orderId=${data.orderId}&token=${data.token}` +
+    //     `&amount=${data.amount}&firstname=${studentData.studentName}` +
+    //     `&email=${studentData.emailId}&phone=${studentData.phoneNo}` +
+    //     `&productinfo=${data.productinfo}`;
+    //   return;
+    // }
 
     // OPTION 2 FLOW
-
-    if (option === 2 && data.amount > 0) {
+    if (option === 3 && data.amount > 0) {
       // PayU form flow
-      let form = document.forms.namedItem("pgform") as HTMLFormElement | null;
-      if (!form) return console.error("PayU form not found in DOM");
+      // let form = document.forms.namedItem("pgform") as HTMLFormElement | null;
+      // if (!form) return console.error("PayU form not found in DOM");
 
-      form.key.value = data.key;
-      form.txnid.value = data.token;
-      form.amount.value = data.amount;
-      form.firstname.value = studentData.studentName;
-      form.email.value = studentData.emailId;
-      form.phone.value = studentData.phoneNo;
-      form.productinfo.value = data.productinfo;
-      form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
-      form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
-      form.hash.value = data.hashCode;
+      // form.key.value = data.key;
+      // form.txnid.value = data.token;
+      // form.amount.value = data.amount;
+      // form.firstname.value = studentData.studentName;
+      // form.email.value = studentData.emailId;
+      // form.phone.value = studentData.phoneNo;
+      // form.productinfo.value = data.productinfo;
+      // form.surl.value = import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL;
+      // form.furl.value = import.meta.env.VITE_URL + "/student/pgcancelled";
+      // form.hash.value = data.hashCode;
 
-      form.submit();
+      // form.submit();
+
+      // RazorPay Checkout
+      const options = {
+        key: data?.key,
+        order_id: data?.orderId,
+        amount: Math.round(Number(data?.amount) * 100),
+        currency: "INR",
+        name: "EaseToLearn",
+        image:
+          "https://ik.imagekit.io/rohitsahu/Email-template/Artboard%201HIGH.png",
+        callback_url: import.meta.env.VITE_PAYMENT_GATEWAY_SUCCESS_URL,
+        description: data?.productinfo,
+        prefill: {
+          name: studentData.studentName,
+          email: studentData.emailId,
+          contact: studentData.phoneNo,
+        },
+        notes: {
+          name: studentData.studentName,
+          promoCode: code,
+          device: "web",
+        },
+        theme: { color: "#0D6EFD" },
+        modal: {
+          ondismiss: () => {
+            removePaymentFlag();
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function () {
+        removePaymentFlag();
+        setToast({ title: "Payment Failed!",description: "Something went wrong. Try Again Later.", type: ToastType.DANGER });
+      });
+      rzp.open();
     } else if (data.organisations.length > 0) {
       const courses: Course[] = data.organisations.map((c: CourseResponse) => ({
         templateId: c.templateId,
