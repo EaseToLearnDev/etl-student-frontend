@@ -217,9 +217,9 @@ const LoginPage = () => {
                             // Push click id to GTM dataLayer so GTM triggers can use the 'clickId' variable
                             pushToDataLayer({
                               event: "Login_button_click",
-                              clickId: "login_button_click",
-                              label:
-                                loginWith === "password" ? "Login" : "Get OTP",
+                              // clickId: "login_button_click",
+                              // label:
+                              //   loginWith === "password" ? "Login" : "Get OTP",
                             });
 
                             HandleLogin(navigate, loginWith, deviceType);
