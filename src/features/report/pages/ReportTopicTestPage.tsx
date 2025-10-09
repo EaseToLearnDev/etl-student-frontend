@@ -4,6 +4,7 @@ import type { Column } from "../../../components/types";
 import type { TestReportdata } from "./ReportMockTestPage";
 import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
+import { LuFileSearch } from "react-icons/lu";
 
 interface ReportTopicTestPageProps {
   data: TestReportdata[];
@@ -43,11 +44,12 @@ const ReportTopicTestPage = ({
           />
         </div>
       ) : (
-        <EmptyState
-          title="No Topic Test Data Available"
-          icon={<ArchiveBoxXMarkIcon height={100} width={100} />}
-          className="min-h-[60vh]"
-        />
+      <EmptyState
+        title="No topic test data available"
+        description="No topic test data is available yet. Start engaging with courses, tests, or activities to see your summary here!"
+        icon={<LuFileSearch className="w-24 h-24" />}
+        className="max-w-md"
+      />
       )}
     </>
   );

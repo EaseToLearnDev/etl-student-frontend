@@ -2,6 +2,7 @@
 import EmptyState from "../../../components/EmptyState";
 import Topic from "./Topic";
 import GlobalSearch from "../../../components/GlobalSearch";
+import { LuFile, LuListTree } from "react-icons/lu";
 
 interface TopicListProps<T> {
   topics: T[];
@@ -43,7 +44,12 @@ const TopicTreeView = <T,>({
   const allTopics = flattenTopics(topics);
 
   if (!topics || topics.length === 0) {
-    return <EmptyState title="No Topics Available" />;
+    return  <EmptyState
+      title="No topic tree data available"
+      description="No topic tree data is available yet. Explore courses or lessons to see topics populate this section!"
+      icon={<LuListTree className="w-24 h-24" />}
+      className="max-w-md"
+    />
   }
   return (
     <div>

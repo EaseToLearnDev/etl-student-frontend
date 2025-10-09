@@ -21,10 +21,10 @@ const EmptyState: React.FC<EmptyStateProps> = ({
   className
 }) => {
   return (
-    <div className={cn("w-full h-full flex flex-col items-center justify-center text-center text-[var(--text-tertiary)]", className)}>
-      <div className="mb-3">{icon}</div>
-      <h5 className="text-[var(--text-tertiary)]">{title}</h5>
-      {description && <p className="text-[var(--text-tertiary)]">{description}</p>}
+    <div className={cn("w-full h-full flex flex-col items-center justify-center text-center text-[var(--text-tertiary)] mx-auto", className)}>
+      <div className="mb-3 opacity-60">{icon}</div>
+      <h5 className="text-[var(--text-tertiary)] font-black mb-1">{title}</h5>
+      {description && <p className="text-[var(--text-tertiary)] ">{description}</p>}
       {(buttonText && onClick) && <Button style="secondary" onClick={onClick} className="mt-4">{buttonText}</Button>}
     </div>
   );

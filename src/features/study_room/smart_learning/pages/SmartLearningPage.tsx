@@ -32,6 +32,7 @@ import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import loadSelfTestOptions from "../services/loadSelfTestOptions";
+import { LuArchive } from "react-icons/lu";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -178,7 +179,12 @@ const SmartLearningPage = () => {
                 }}
               />
             ) : (
-              <EmptyState title="No Data Available" />
+              <EmptyState
+                title="No data available"
+                description="No data available yet. Please refresh page!"
+                icon={<LuArchive className="w-24 h-24" />}
+                className="max-w-md"
+              />
             )
           }
           hideSecondary={

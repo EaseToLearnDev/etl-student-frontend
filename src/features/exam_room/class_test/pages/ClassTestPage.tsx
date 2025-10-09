@@ -22,6 +22,7 @@ import EmptyState from "../../../../components/EmptyState";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
+import { LuBookX, LuCalendarX } from "react-icons/lu";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -153,7 +154,12 @@ const ClassTestPage = () => {
     //     <p>No Class Tests Available</p>
     //   </div>
     // </div>
-    <EmptyState title="No Class Tests Available" />
+      <EmptyState
+        title="No class test data available"
+        description="No class tests have been scheduled yet. Check back later to see upcoming tests from your teacher!"
+        icon={<LuCalendarX className="w-24 h-24" />}
+        className="max-w-md "
+      />
   );
 };
 

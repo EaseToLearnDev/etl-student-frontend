@@ -20,6 +20,7 @@ import Button from "../../../components/Button";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { LuFileChartColumn, LuFileChartPie } from "react-icons/lu";
 
 export const LearningSessionOverview = () => {
   const params = useSearchParams();
@@ -32,14 +33,6 @@ export const LearningSessionOverview = () => {
 
   const navigate = useNavigate();
 
-  if (!testSession) {
-    return (
-      <EmptyState
-        title="No Test Selected"
-        description="Please go back and choose a test session."
-      />
-    );
-  }
 
   useEffect(() => {
     if (!testSession) return;
@@ -54,9 +47,22 @@ export const LearningSessionOverview = () => {
     fetchAnalyticData();
   }, []);
 
+
   if (loading) return <LearningSessionOverviewSkeleton />;
 
-  if (!data) return <EmptyState title="No Data Available" />;
+  if (!testSession || !data) {
+    return (
+        <EmptyState
+          title="No analytics data available"
+          description="No learning analytics data is available yet. Start engaging with tests, activities, or courses to see your progress here!"
+          icon={<LuFileChartColumn className="w-24 h-24" />}
+          className="max-w-md"
+          buttonText="Go Back"
+          onClick={() => navigate('/report')}
+        />
+    );
+  }
+
 
   const overallPerformanceData = data.overallResultList.map((d) => ({
     name: d.name,

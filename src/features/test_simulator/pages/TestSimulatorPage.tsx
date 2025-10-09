@@ -37,6 +37,7 @@ import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
 import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
+import { LuLock } from "react-icons/lu";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -163,6 +164,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       <EmptyState
         title="Limit Reached!"
         description={testError.message}
+        icon={<LuLock className="w-24 h-24" />}
         buttonText={status === "upgrade" ? "Upgrade": "Home"}
         onClick={() => navigate(status === "upgrade" ? `/selectcourse?cid=${activeCourse?.courseId}`: "/")}
         className="min-h-screen"
@@ -174,6 +176,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
     return (
       <EmptyState
         title={testError.message}
+        description={testError.message}
+        icon={<LuLock className="w-24 h-24" />}
         buttonText={"Go Back!"}
         onClick={() => navigate(-1)}
         className="min-h-screen"

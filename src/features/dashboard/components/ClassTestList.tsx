@@ -9,6 +9,7 @@ import StartTopicTestModalContent from "../../exam_room/shared/components/StartT
 import { useNavigate } from "react-router";
 import type { ClassTest } from "../../../global/types/classTest.types";
 import { handleStartTest } from "../../exam_room/shared/services/handleStartTest";
+import { LuCalendarMinus, LuCalendarX, LuFilePenLine } from "react-icons/lu";
 
 /**
  * Renders a list of class test cards using data from the CT store.
@@ -38,7 +39,12 @@ const ClassTestList = () => {
           </div>
         ))
       ) : (
-        <EmptyState title="No Class Tests Available" />
+        <EmptyState
+          title='No scheduled test available'
+          description='There are no upcoming tests scheduled at the moment. Please check back later.'
+          icon={<LuCalendarX className='w-20 h-20' />}
+          className="max-w-md lg:max-w-sm"
+        />
       )}
 
       <Modal
