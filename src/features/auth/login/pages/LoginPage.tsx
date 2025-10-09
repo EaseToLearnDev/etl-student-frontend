@@ -19,6 +19,10 @@ import { HandleLogin, handleVerifyOtp } from "../login.services";
 import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
+import { pushToDataLayer } from "../../../../utils/gtm";
+
+// GTM click id constants
+const LOGIN_BUTTON_ID = "login_button_click";
 
 
 /**
@@ -200,14 +204,26 @@ const LoginPage = () => {
                   </h6>
 
                   {/* Submit Button */}
+                  {/* Login CTA - id used for GTM click trigger (dataLayer variable 'clickId') */}
                   <Button
+                    id="login_button_click"
                     style="primary"
                     type="submit"
                     className="mt-8 w-full"
                     onClick={
                       loading
                         ? undefined
-                        : () => HandleLogin(navigate, loginWith, deviceType)
+                        : () => {
+                            // Push click id to GTM dataLayer so GTM triggers can use the 'clickId' variable
+                            pushToDataLayer({
+                              event: "Login_button_click",
+                              clickId: "login_button_click",
+                              label:
+                                loginWith === "password" ? "Login" : "Get OTP",
+                            });
+
+                            HandleLogin(navigate, loginWith, deviceType);
+                          }
                     }
                   >
                     <h6 className="!font-semibold">
