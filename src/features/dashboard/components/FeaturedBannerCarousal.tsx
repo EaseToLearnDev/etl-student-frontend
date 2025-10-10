@@ -78,7 +78,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     // Slide 1
     <div key="slide-1" className="relative w-full h-full flex-shrink-0">
       <img
-        src="/dashboard_banner.png"
+        src="./dashboard_banner.png"
         className="absolute top-0 left-0 w-full h-full object-cover select-none pointer-events-none z-10"
       />
 

@@ -7,51 +7,51 @@ const SelectCourse = () => {
   const courses = [
     {
       title: "NEET UG",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "CUET",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "NEET PG",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "SBI PO",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "JEE Main",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "JEE Advanced",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "CLAT",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "UPSC",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "SSC CGL",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "CAT",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "GATE",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "XAT",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
   ];
   return (

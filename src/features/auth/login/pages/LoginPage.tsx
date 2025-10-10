@@ -69,7 +69,7 @@ const LoginPage = () => {
           )}
         >
           <img
-            src="/etl_logo.svg"
+            src="./etl_logo.svg"
             alt="ETL"
             className="w-[150px] lg:w-[500px] aspect-auto object-contain select-none pointer-events-none"
           />
@@ -151,7 +151,7 @@ const LoginPage = () => {
                       <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
                         {loginWith === "otp" && (
                           <span className="flex items-center gap-1 ml-1 px-3 py-3 bg-[var(--surface-bg-secondary)] rounded-lg text-[var(--text-secondary)] select-none">
-                            <img src="/india.png" alt="IN" width={18} height={18} /> +91
+                            <img src="./india.png" alt="IN" width={18} height={18} /> +91
                           </span>
                         )}
 

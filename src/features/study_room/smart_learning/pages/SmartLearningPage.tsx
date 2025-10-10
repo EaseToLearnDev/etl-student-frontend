@@ -105,6 +105,7 @@ const SmartLearningPage = () => {
   // ========== Load Self Test Percentage on Topic-Select ==========
   useEffect(() => {
     const fetchSelfSessionPercentage = async () => {
+      setLastSelfTestPercentage(null)
       if (selectedTopic?.topicId) {
         const percentage = await loadLastSelfTestPercentage(
           selectedTopic?.topicName
