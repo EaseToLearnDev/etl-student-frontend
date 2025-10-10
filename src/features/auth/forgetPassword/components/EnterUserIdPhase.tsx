@@ -35,7 +35,6 @@ const EnterUserIdPhase = () => {
           }
           info={{ msg: userId.error, type: "error" }}
           required
-          pattern="(?:[0-9]{10}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})"
           placeholder="Enter Email or Mobile"
         />
 
@@ -45,7 +44,12 @@ const EnterUserIdPhase = () => {
           style="primary"
           type="submit"
           className="mt-8 w-full"
-          disabled={loading}
+          disabled={
+            loading ||
+            !/^(?:[0-9]{10}|[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})$/.test(
+              userId.data
+            )
+          }
           onClick={
             loading
               ? undefined

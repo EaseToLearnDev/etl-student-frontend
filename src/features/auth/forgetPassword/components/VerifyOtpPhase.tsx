@@ -16,9 +16,7 @@ const VerifyOtpPhase = () => {
   );
   const loading = useForgetPassStore((state) => state.loading);
   const setLoading = useForgetPassStore((state) => state.setLoading);
-  const currentPhaseIndex = useForgetPassStore(
-    (state) => state.currentPhase
-  );
+  const currentPhaseIndex = useForgetPassStore((state) => state.currentPhase);
   const setCurrentPhaseIndex = useForgetPassStore(
     (state) => state.setCurrentPhase
   );
@@ -67,7 +65,12 @@ const VerifyOtpPhase = () => {
           style="primary"
           type="submit"
           className="mt-4 w-full"
-          disabled={loading}
+          disabled={
+            loading ||
+            otp.data.length !== 6 ||
+            password.data.length === 0 ||
+            confirmPassword.data.length === 0
+          }
           onClick={
             loading
               ? undefined
