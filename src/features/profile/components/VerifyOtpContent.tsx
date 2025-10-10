@@ -17,6 +17,7 @@ interface VerifyOtpContentProps {
 
 const verify_otp_button_id = "verify_otp_button_click";
 const cancel_otp_button_id = "cancel_otp_button_click";
+const otp_resend_button_id = "otp_resend_button_click";
 
 const VerifyOtpContent = ({
   onVerify,
@@ -94,8 +95,8 @@ const VerifyOtpContent = ({
             onClick={() => {
               pushToDataLayer({
                 event: "verify_otp_button_click",
-                clickId: verify_otp_button_id,
-                label: "Verify",
+                // clickId: verify_otp_button_id,
+                // label: "Verify",
               });
 
               handleVerify();
@@ -108,8 +109,8 @@ const VerifyOtpContent = ({
             onClick={() => {
               pushToDataLayer({
                 event: "cancel_otp_button_click",
-                clickId: cancel_otp_button_id,
-                label: secondaryTitle,
+                // clickId: cancel_otp_button_id,
+                // label: secondaryTitle,
               });
 
               onCancel?.();
@@ -125,7 +126,12 @@ const VerifyOtpContent = ({
           </p>
         ) : (
           <button
-            onClick={handleResend}
+          id={otp_resend_button_id}
+            onClick={() => {
+              pushToDataLayer({
+                event: "otp_resend_button_click"
+              })
+              handleResend()}}
             className="text-[var(--sb-ocean-bg-active)] hover:underline"
           >
             Resend OTP

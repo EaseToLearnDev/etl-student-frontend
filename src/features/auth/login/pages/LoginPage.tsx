@@ -25,6 +25,7 @@ import { pushToDataLayer } from "../../../../utils/gtm";
 const LOGIN_BUTTON_CLICK_ID = "login_button_click";
 const GET_OTP_BUTTON_CLICK_ID = "get_otp_button_click";
 const Login_signup_click = "login_signup_click";
+const forget_password_button_id = "forget_password_button_click"
 
 
 /**
@@ -248,8 +249,13 @@ const LoginPage = () => {
                   {loginWith === "password" && (
                     <div className="flex justify-center mt-10 gap-[2px]">
                       <Link
+                      id={forget_password_button_id}
                         to={"/forget-password"}
                         className="text-[var(--sb-ocean-bg-active)]"
+                        onClick={() =>
+                          pushToDataLayer({
+                            event: "forget_password_button_click"
+                          })}
                       >
                         <h6 className="!font-bold hover:underline">
                           Forget Password?
