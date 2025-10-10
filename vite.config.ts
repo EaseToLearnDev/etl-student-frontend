@@ -11,6 +11,7 @@ export default defineConfig({
       open: true, // Automatically opens the visualizer in your browser
     }),
   ],
+  base: '/student',
   build: {
     rollupOptions: {
       output: {
