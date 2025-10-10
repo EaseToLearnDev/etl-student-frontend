@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Icons
 import { LuActivity, LuCalendarMinus2, LuFilePenLine } from "react-icons/lu";
@@ -57,9 +57,11 @@ export const ActivityList = ({
   const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
   const renderableData = seggregateGhHeatmapData(transformedData);
 
-  const scroll = (direction: "left" | "right" = "right") => {
+
+  const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
       const containerWidth = scrollRef.current.clientWidth;
+      console.log("containerWidth: ", containerWidth)
       scrollRef.current.scrollBy({
         left: direction === "left" ? -containerWidth : containerWidth,
         behavior: "smooth",
@@ -76,6 +78,19 @@ export const ActivityList = ({
 
   const [c0, c1, c2, c3, c4, c5] = getLegendColors();
   const legendColors = [c0, c1, c2, c3, c4, c5];
+
+
+
+  if (!renderableData) {
+    return (
+      <EmptyState
+        title='No activity data available'
+        description='No activity data available yet. Start giving tests, and your activity will appear here!'
+        icon={<LuActivity className='w-20 h-20' />}
+        className='max-w-md'
+      />
+    )
+  }
 
   return (
     <>
@@ -135,6 +150,7 @@ export const ActivityList = ({
           darkMode={darkMode}
           onDayClick={handleClickOnDay}
           scrollRef={scrollRef}
+          scroll={scroll}
         />
       )}
       <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">

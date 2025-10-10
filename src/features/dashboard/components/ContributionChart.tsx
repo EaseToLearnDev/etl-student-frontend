@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { getColor } from "../utils/getColor";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import EmptyState from "../../../components/EmptyState";
@@ -49,12 +49,14 @@ function ContributionChart({
   renderableData,
   darkMode,
   scrollRef,
+  scroll
 }: {
   color?: string;
   onDayClick: (day: ITransformedGhData) => void;
   renderableData: any;
   darkMode: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
+  scroll: (data: 'left' | 'right') => void
 }) {
   if (!renderableData) {
     return (
@@ -66,6 +68,10 @@ function ContributionChart({
       />
     );
   }
+
+  useEffect(() => {
+    scroll("right")
+  }, [scrollRef]);
 
   return (
     <div
