@@ -20,7 +20,6 @@ import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
 
-
 /**
  * Login page component for user authentication (Password + OTP).
  */
@@ -140,7 +139,13 @@ const LoginPage = () => {
                       <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
                         {loginWith === "otp" && (
                           <span className="flex items-center gap-1 ml-1 px-3 py-3 bg-[var(--surface-bg-secondary)] rounded-lg text-[var(--text-secondary)] select-none">
-                            <img src="./india.png" alt="IN" width={18} height={18} /> +91
+                            <img
+                              src="./india.png"
+                              alt="IN"
+                              width={18}
+                              height={18}
+                            />
+                            +91
                           </span>
                         )}
 
@@ -208,6 +213,11 @@ const LoginPage = () => {
                       loading
                         ? undefined
                         : () => HandleLogin(navigate, loginWith, deviceType)
+                    }
+                    disabled={
+                      loginWith === "password"
+                        ? userId.length === 0 || password.length === 0
+                        : userId.length === 0
                     }
                   >
                     <h6 className="!font-semibold">
