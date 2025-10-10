@@ -57,18 +57,7 @@ export const ActivityList = ({
   const transformedData = transformNormalizeGhData(normalizedGhAPIData, year);
   const renderableData = seggregateGhHeatmapData(transformedData);
 
-  if (!renderableData) {
-    return (
-      <EmptyState
-        title='No activity data available'
-        description='No activity data available yet. Start giving tests, and your activity will appear here!'
-        icon={<LuActivity className='w-20 h-20' />}
-        className='max-w-md'
-      />
-    )
-  }
-
-  const scroll = (direction: "left" | "right" = 'right') => {
+  const scroll = (direction: "left" | "right" = "right") => {
     if (scrollRef.current) {
       const containerWidth = scrollRef.current.clientWidth;
       scrollRef.current.scrollBy({

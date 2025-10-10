@@ -85,6 +85,12 @@ export const PlanBody = ({
 
     // set current plan
     setSelectedPlan(newPlan);
+
+    // Load Razorpay script dynamically if not already present
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
   }, []);
 
   useEffect(() => {
@@ -339,7 +345,8 @@ export const PlanBody = ({
                 className="w-full lg:w-fit"
                 onClick={() => {
                   processCourseSelection({
-                    option: deviceType === "web" ? 2 : 3,
+                    // option: deviceType === "web" ? 2 : 3,
+                    option: 3,
                     courseId,
                     courseTitle,
                     selectedPlanId,
@@ -360,7 +367,7 @@ export const PlanBody = ({
       </div>
 
       {/* PayU form */}
-      <form
+      {/* <form
         name="pgform"
         action="https://secure.payu.in/_payment"
         method="post"
@@ -376,7 +383,7 @@ export const PlanBody = ({
         <input type="hidden" name="surl" />
         <input type="hidden" name="furl" />
         <input type="hidden" name="hash" />
-      </form>
+      </form> */}
     </div>
   );
 };
