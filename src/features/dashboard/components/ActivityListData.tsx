@@ -34,7 +34,7 @@ function Test({
 
 
     return (
-        <div className="w-full pb-2 pt-5  border-(--border-primary) flex justify-between items-center shadow-sm dark:shadow-white/10 border  rounded-lg  px-4">
+        <div className="w-full pb-4 md:pb-2 pt-5  border-(--border-primary) flex flex-col md:flex-row justify-between items-start md:items-center shadow-sm dark:shadow-white/10 border  rounded-lg  px-4">
             <div>
                 <p>{testData.testTitle}</p>
                 <div className="flex gap-3 py-4 flex-wrap max-w-[80%] overflow-x-scroll">
