@@ -3,6 +3,7 @@ import Button from "../../../components/Button";
 import InputOTP from "../../../components/InputOTP";
 import cn from "../../../utils/classNames";
 import { BiEdit } from "react-icons/bi";
+import { pushToDataLayer } from "../../../utils/gtm";
 
 interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
@@ -13,6 +14,9 @@ interface VerifyOtpContentProps {
   error?: string | null;
   secondaryTitle?: string;
 }
+
+const verify_otp_button_id = "verify_otp_button_click";
+const cancel_otp_button_id = "cancel_otp_button_click";
 
 const VerifyOtpContent = ({
   onVerify,
@@ -67,10 +71,10 @@ const VerifyOtpContent = ({
               )}
               required
               value={value}
-              // onChange={}
+            // onChange={}
             />
             <BiEdit
-              onClick={onCancel}
+              onClick={() => onCancel?.()}
               width={18}
               height={18}
               className="mr-2 cursor-pointer"
@@ -84,10 +88,32 @@ const VerifyOtpContent = ({
         />
         {error && <p className="text-red-500 text-center">{error}</p>}
         <div className="flex justify-center gap-4">
-          <Button style="primary" onClick={handleVerify}>
+          <Button
+            id={verify_otp_button_id}
+            style="primary"
+            onClick={() => {
+              pushToDataLayer({
+                event: "verify_otp_button_click",
+                clickId: verify_otp_button_id,
+                label: "Verify",
+              });
+
+              handleVerify();
+            }}>
             Verify
           </Button>
-          <Button style="secondary" onClick={onCancel}>
+          <Button
+            id={cancel_otp_button_id}
+            style="secondary"
+            onClick={() => {
+              pushToDataLayer({
+                event: "cancel_otp_button_click",
+                clickId: cancel_otp_button_id,
+                label: secondaryTitle,
+              });
+
+              onCancel?.();
+            }}>
             {secondaryTitle}
           </Button>
         </div>
