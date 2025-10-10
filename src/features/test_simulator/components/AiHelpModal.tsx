@@ -38,7 +38,7 @@ const Main = () => {
     <div>
       <div className="flex items-center gap-2 mt-2">
         <img
-          src="/tony.jpeg"
+          src="./tony.jpeg"
           alt="Tony AI"
           width={60}
           height={60}

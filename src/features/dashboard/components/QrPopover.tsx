@@ -10,7 +10,7 @@ const QrPopoverContent = ({ qrCode }: { qrCode: string }) => {
     <div className="flex flex-col justify-center items-center gap-2">
       <span>Scan QR to download app</span>
       <img
-        src={`/${qrCode}`}
+        src={`./${qrCode}`}
         alt="Download App QR"
         className="size-[120px] aspect-square rounded-lg"
       />

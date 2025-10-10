@@ -16,7 +16,7 @@ const JumpBackInCard = ({
       className="w-full h-full rounded-lg overflow-hidden bg-[var(--surface-bg-primary)] cursor-pointer"
       onClick={onClick}
     >
-      <img src="/jump_in_card.png" className="w-full h-[120px] object-cover" />
+      <img src="./jump_in_card.png" className="w-full h-[120px] object-cover" />
       <div className="flex flex-col gap-2 p-4">
         <Badge
           theme={Theme.Neutral}
