@@ -32,7 +32,6 @@ const EnterUserIdPhase = () => {
           }
           info={{ msg: userId.error, type: "error" }}
           required
-          pattern="(?:[0-9]{10}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})"
           placeholder="Enter Email or Mobile"
         />
 
@@ -43,7 +42,7 @@ const EnterUserIdPhase = () => {
           className="mt-8 w-full"
           disabled={
             loading ||
-            !/(?:[0-9]{10}|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/.test(
+            !/^(?:[0-9]{10}|[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,})$/.test(
               userId.data
             )
           }
