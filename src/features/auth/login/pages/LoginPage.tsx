@@ -20,6 +20,7 @@ import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
 import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 // GTM click id constants
 const LOGIN_BUTTON_CLICK_ID = "login_button_click";
@@ -86,7 +87,7 @@ const LoginPage = () => {
               className="!font-bold text-[var(--sb-ocean-bg-active)]"
               id = {Login_signup_click}
               onClick={() => pushToDataLayer({
-                event: "Login_signup_click"
+                event: gtmEvents.login_signup_click
               })}
             >
               Sign Up
@@ -223,7 +224,7 @@ const LoginPage = () => {
                         : () => {
                             const isPassword = loginWith === "password";
                             const clickId = isPassword ? LOGIN_BUTTON_CLICK_ID : GET_OTP_BUTTON_CLICK_ID;
-                            const eventName = isPassword ? "login_button_click" : "get_otp_button_click";
+                            const eventName = isPassword ? gtmEvents.login_button_click : gtmEvents.get_otp_button_click;
 
                             // Push click id to GTM dataLayer so GTM triggers can use the 'clickId' variable
                             pushToDataLayer({
@@ -254,7 +255,7 @@ const LoginPage = () => {
                         className="text-[var(--sb-ocean-bg-active)]"
                         onClick={() =>
                           pushToDataLayer({
-                            event: "forget_password_button_click"
+                            event: gtmEvents.forget_password_button_click
                           })}
                       >
                         <h6 className="!font-bold hover:underline">

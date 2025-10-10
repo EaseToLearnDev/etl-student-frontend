@@ -4,6 +4,7 @@ import InputOTP from "../../../components/InputOTP";
 import cn from "../../../utils/classNames";
 import { BiEdit } from "react-icons/bi";
 import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface VerifyOtpContentProps {
   onVerify?: (otp: string) => void;
@@ -94,7 +95,7 @@ const VerifyOtpContent = ({
             style="primary"
             onClick={() => {
               pushToDataLayer({
-                event: "verify_otp_button_click",
+                event: gtmEvents.verify_otp_button_click,
                 // clickId: verify_otp_button_id,
                 // label: "Verify",
               });
@@ -108,7 +109,7 @@ const VerifyOtpContent = ({
             style="secondary"
             onClick={() => {
               pushToDataLayer({
-                event: "cancel_otp_button_click",
+                event: gtmEvents.cancel_otp_button_click,
                 // clickId: cancel_otp_button_id,
                 // label: secondaryTitle,
               });
@@ -129,7 +130,7 @@ const VerifyOtpContent = ({
           id={otp_resend_button_id}
             onClick={() => {
               pushToDataLayer({
-                event: "otp_resend_button_click"
+                event: gtmEvents.otp_resend_button_click
               })
               handleResend()}}
             className="text-[var(--sb-ocean-bg-active)] hover:underline"
