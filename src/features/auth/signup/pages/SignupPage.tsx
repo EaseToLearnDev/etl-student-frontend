@@ -42,7 +42,7 @@ const SignupPage = () => {
           )}
         >
           <img
-            src="/logo.svg"
+            src="./logo.svg"
             alt="ETL"
             className="w-[60px] lg:w-full lg:h-full lg:max-w-[480px] lg:max-h-[160px] aspect-auto object-contain select-none"
           />

@@ -56,7 +56,7 @@ const VerifyOtpContent = ({
           <div className="flex items-center rounded-lg border border-[var(--border-secondary)] focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out">
             {type === "Mobile" && (
               <span className="flex items-center gap-1 ml-1 px-3 py-3 bg-[var(--surface-bg-secondary)] rounded-lg text-[var(--text-secondary)] select-none">
-                <img src="/india.png" alt="IN" width={18} height={18} /> +91
+                <img src="./india.png" alt="IN" width={18} height={18} /> +91
               </span>
             )}
 

@@ -38,7 +38,7 @@ const CourseCard = ({
     >
       <div className="h-40 overflow-hidden flex justify-center items-center">
         <img
-          src={course.courseImageUrl ?? "/logo.svg"}
+          src={course.courseImageUrl ?? "./logo.svg"}
           alt={course.courseTitle}
           className={cn(
             "w-full object-contain p-2",

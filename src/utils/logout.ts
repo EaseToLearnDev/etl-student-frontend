@@ -10,7 +10,7 @@ const logout = () => {
   Cookies.remove("accountDetails");
   Cookies.remove("token");
   reset();
-  window.location.href = "/";
+  window.location.href = "/student";
 };
 
 export default logout;

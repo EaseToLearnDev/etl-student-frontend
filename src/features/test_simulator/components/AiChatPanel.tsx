@@ -41,7 +41,7 @@ const AiChatPanel = ({ onClose }: AiChatPanelProps) => {
         {/* Tony Image and Greeting */}
         <div className="flex flex-col justify-center items-center gap-2 p-5">
           <img
-            src="/tony-logo.svg"
+            src="./tony-logo.svg"
             width={78}
             height={78}
             alt="Tony AI"

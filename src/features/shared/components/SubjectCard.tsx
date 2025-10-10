@@ -34,7 +34,7 @@ const SubjectCard = ({ item }: SubjectCardProps) => {
       className="cursor-pointer border-1 border-[var(--border-secondary)] rounded-xl overflow-hidden p-[2px] pb-6 bg-[var(--surface-bg-primary)] hover:scale-[102%] transition-transform"
     >
       <img
-        src="/subject_static.png"
+        src="./subject_static.png"
         alt="Subject Image"
         className="w-full max-h-[200px] md:h-[224px] aspect-square object-cover rounded-lg rounded-b-none"
       />

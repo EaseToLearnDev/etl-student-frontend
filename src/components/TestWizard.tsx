@@ -258,7 +258,7 @@ const TestWizard = () => {
                 ? `${
                     import.meta.env.VITE_WHITE_LABEL_LOGO_URL
                   }/${window.location.hostname.replace(/\./g, "-")}.png`
-                : "/ease_to_learn_logo.png"
+                : "./ease_to_learn_logo.png"
             }
             alt="Site Logo"
             className="h-10"

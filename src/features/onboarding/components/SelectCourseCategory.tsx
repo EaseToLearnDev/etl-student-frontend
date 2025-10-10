@@ -14,51 +14,51 @@ const SelectCourseCategory = () => {
   const categories = [
     {
       title: "Engineering",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Medical",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Law",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Defence",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Engineering",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Medical",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Law",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Defence",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Engineering",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Medical",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Law",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
     {
       title: "Defence",
-      image: "/logo.svg",
+      image: "./logo.svg",
     },
   ];
   return (
