@@ -34,7 +34,7 @@ export const handleStartTest = async (
       searchQuery: selectedTopic.topicName,
       topicId: String(selectedTopic.topicId),
       examType: "objective",
-      assessmentMode: mode === "learning" ? "beginner" : "advance",
+      assessmentMode: mode === "Learning Session" ? "beginner" : "advance",
       templateId: String(activeCourse?.templateId),
       packTypeTitle: activeCourse?.packTypeTitle,
     };
