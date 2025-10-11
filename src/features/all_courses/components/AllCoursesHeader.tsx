@@ -10,6 +10,8 @@ import cn from "../../../utils/classNames";
 import GlobalSearch from "../../../components/GlobalSearch";
 import { useCoursesStore } from "../hooks/useCoursesStore";
 import { resetPromocode } from "../services/resetPromocode";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface AllCoursesHeaderProps {
   selectedCategory: CategoryType | null;
@@ -19,6 +21,9 @@ interface AllCoursesHeaderProps {
   setHideSecondary: (v: boolean) => void;
   className?: string;
 }
+
+// GTM Constant ID
+const ALL_COURSES_SEARCHBAR_ID = "all_courses_searchbar_id";
 
 /**
  * Header component for the All Courses page, providing search and category selection UI.
@@ -43,10 +48,14 @@ const AllCoursesHeader = ({
         <h3>Select Course</h3>
         <div className="flex items-center gap-4">
           <GlobalSearch
+            id={ALL_COURSES_SEARCHBAR_ID}
             placeholder="Search courses..."
             // onSearch={(data) => setSearch(data)}
             data={searchData ?? []}
             onSelect={(course: any) => {
+              pushToDataLayer({
+                event: gtmEvents.all_courses_searchbar_click,
+              })
               setSelectedCourse(course);
               setIsPlanModalOpen(true);
               resetPromocode();

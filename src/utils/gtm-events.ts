@@ -7,6 +7,7 @@ export const gtmEvents = {
     get_otp_button_click: "get_otp_button_click",
     forget_password_button_click: "forget_password_button_click",
     forget_password_submit_button_click: "forget_password_submit_button_click",
+    all_courses_searchbar_click: "all_courses_searchbar_click",
 
     //to-do:
     logout_button_click: "logout_button_click",
