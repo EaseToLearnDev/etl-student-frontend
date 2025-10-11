@@ -118,6 +118,8 @@ const SmartLearningPage = () => {
     fetchSelfSessionPercentage();
   }, [selectedTopic?.topicId]);
 
+  console.log("selectedTopic", selectedTopic);
+
   // ========== Render ==========
   return (
     <div className="h-full flex flex-col flex-grow">
