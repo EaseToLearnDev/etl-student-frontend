@@ -5,8 +5,6 @@ import { create } from "zustand";
 import { type PrevRunningTest, type Topic } from "../../../shared/types";
 import type { ModeType, TestOptions } from "../sl.types";
 
-
-
 interface SLStore {
   // Topic data structures
   topicTree: Topic[] | null;
@@ -16,6 +14,7 @@ interface SLStore {
   // Session state
   lastSelfTestPercentage: number | null;
   mode: ModeType;
+  barColor: string | null;
   previousRunningTest: PrevRunningTest | null;
 
   // Modal visibility
@@ -35,6 +34,7 @@ interface SLStore {
   setShowStartTestModal: (show: boolean) => void;
   setShowPreviousTestModal: (show: boolean) => void;
   setTestOptions: (options: TestOptions) => void;
+  setBarColor: (barColor: string | null) => void;
 
   getSelectedTopic: () => Topic | null;
   reset: () => void;
@@ -50,7 +50,8 @@ export const useSLStore = create<SLStore>((set, get) => ({
   selectedTopicId: null,
 
   lastSelfTestPercentage: null,
-  mode: "learning",
+  mode: "Learning Session",
+  barColor: null,
   previousRunningTest: null,
 
   showStartTestModal: false,
@@ -62,7 +63,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
     marksCorrectAns: 1,
     marksIncorrectAns: -0.25,
     marksNotAttempted: 0,
-    questionTypeList: []
+    questionTypeList: [],
   },
 
   // Actions
@@ -75,6 +76,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
   setShowStartTestModal: (show) => set({ showStartTestModal: show }),
   setShowPreviousTestModal: (show) => set({ showPreviousTestModal: show }),
   setTestOptions: (options) => set({ testOptions: options }),
+  setBarColor: (barColor) => set({ barColor: barColor }),
   getSelectedTopic: () => {
     const { selectedTopicId, topicFlatList } = get();
     if (!selectedTopicId || !topicFlatList) return null;
@@ -86,7 +88,8 @@ export const useSLStore = create<SLStore>((set, get) => ({
       topicFlatList: null,
       selectedTopicId: null,
       lastSelfTestPercentage: null,
-      mode: "learning",
+      mode: "Learning Session",
+      barColor: null,
       previousRunningTest: null,
       showStartTestModal: false,
       showPreviousTestModal: false,
@@ -96,7 +99,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
         marksCorrectAns: 1,
         marksIncorrectAns: -0.25,
         marksNotAttempted: 0,
-        questionTypeList: []
+        questionTypeList: [],
       },
     }),
 }));

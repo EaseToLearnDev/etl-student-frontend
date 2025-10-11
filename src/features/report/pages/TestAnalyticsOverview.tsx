@@ -851,6 +851,7 @@ export const TestAnalyticsOverview = () => {
     {
       label: "COMPARATIVE STUDY",
       content: <ComparativeStudyTab />,
+      hidden: testType !== 3,
     },
   ];
 

@@ -1,9 +1,10 @@
 // Constants
 import { competitiveRules } from "../../../shared/constants";
+import type { ModeType } from "../sl.types";
 import { LearningSessionInstructions } from "./LearningSessionInstructions";
 
 type SmartLearningInstructionsProps = {
-  learningMode: string;
+  learningMode: ModeType;
   hideTitle?: boolean;
 };
 
@@ -14,7 +15,7 @@ const SmartLearningInstructions = ({
   learningMode,
   hideTitle = false,
 }: SmartLearningInstructionsProps) => {
-  return learningMode === "learning" ? (
+  return learningMode === "Learning Session" ? (
     <div className="flex flex-col gap-3">
       {!hideTitle ? (
         <>

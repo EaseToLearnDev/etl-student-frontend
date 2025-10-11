@@ -15,16 +15,26 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 type TopicProgressChartProps = {
   progress: number; // 0 to 100
+  barColor: string | null;
 };
 
-const TopicProgressChart = ({ progress }: TopicProgressChartProps) => {
+const TopicProgressChart = ({
+  progress,
+  barColor,
+}: TopicProgressChartProps) => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const remainingColor = darkMode ? "#18181b" : "#f4f4f5";
+  let progressColor = "";
 
   // Get CSS variable value
-  const progressColor = getComputedStyle(document.documentElement)
-    .getPropertyValue("--sb-ocean-bg-active")
-    .trim() || "#007BFF";
+  if (barColor) {
+    progressColor = barColor;
+  } else {
+    progressColor =
+      getComputedStyle(document.documentElement)
+        .getPropertyValue("--sb-ocean-bg-active")
+        .trim() || "#007BFF";
+  }
 
   // Custom plugin to draw the progress text in center
   const centerTextPlugin: Plugin<"doughnut"> = {
@@ -69,7 +79,12 @@ const TopicProgressChart = ({ progress }: TopicProgressChartProps) => {
 
   return (
     <div className="w-full max-w-[250px] mx-auto aspect-[2/1] relative">
-      <Doughnut key={progress} data={data} options={options} plugins={[centerTextPlugin]} />
+      <Doughnut
+        key={progress}
+        data={data}
+        options={options}
+        plugins={[centerTextPlugin]}
+      />
     </div>
   );
 };
