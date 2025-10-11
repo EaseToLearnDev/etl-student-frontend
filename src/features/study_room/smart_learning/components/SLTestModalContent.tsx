@@ -59,7 +59,7 @@ const SLTestModalContent = ({
           className="w-fit border-1 !border-[var(--border-primary)] !font-semibold"
         >
           <span>
-            {mode === "learning" ? "Learning Mode" : "Competitive Mode"}
+            {mode}
           </span>
         </Badge>
         <h5 className="text-[var(--sb-ocean-bg-active)]">
@@ -68,7 +68,7 @@ const SLTestModalContent = ({
       </div>
 
       {/* Tabs */}
-      {mode === "competitive" && (
+      {mode === "Competitive Session" && (
         <div className="w-full flex justify-center items-center mt-2">
           <Tabs
             tabs={["Options", "Instructions"]}
@@ -82,7 +82,7 @@ const SLTestModalContent = ({
 
       {/* Scrollable Content */}
       <div className="mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4">
-        {selectedIndex === 0 && mode === "competitive" ? (
+        {selectedIndex === 0 && mode === "Competitive Session" ? (
           <form
             className="flex flex-col gap-5"
             onSubmit={(e) => e.preventDefault()}

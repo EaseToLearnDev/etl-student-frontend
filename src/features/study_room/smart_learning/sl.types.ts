@@ -1,4 +1,4 @@
-export type ModeType = "learning" | "competitive";
+export type ModeType = "Learning Session" | "Competitive Session";
 
 export interface TestOptions {
   totalQuestion: number;

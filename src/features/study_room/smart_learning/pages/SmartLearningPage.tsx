@@ -33,6 +33,8 @@ import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import loadSelfTestOptions from "../services/loadSelfTestOptions";
 import { LuArchive } from "react-icons/lu";
+import { FiTarget } from "react-icons/fi";
+import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -65,6 +67,9 @@ const SmartLearningPage = () => {
   const setShowPreviousTestModal = useSLStore(
     (s) => s.setShowPreviousTestModal
   );
+
+  const barColor = useSLStore((s) => s.barColor);
+  const setBarColor = useSLStore((s) => s.setBarColor);
 
   const showStartTestModal = useSLStore((s) => s.showStartTestModal);
   const setShowStartTestModal = useSLStore((s) => s.setShowStartTestModal);
@@ -105,18 +110,22 @@ const SmartLearningPage = () => {
   // ========== Load Self Test Percentage on Topic-Select ==========
   useEffect(() => {
     const fetchSelfSessionPercentage = async () => {
-      setLastSelfTestPercentage(null)
+      setLastSelfTestPercentage(null);
+      setBarColor(null);
       if (selectedTopic?.topicId) {
-        const percentage = await loadLastSelfTestPercentage(
-          selectedTopic?.topicName
-        );
+        const { percentage, barColor } =
+          (await loadLastSelfTestPercentage(selectedTopic?.topicName, mode)) ||
+          {};
         if (percentage) {
           setLastSelfTestPercentage(percentage);
+        }
+        if (barColor) {
+          setBarColor(barColor);
         }
       }
     };
     fetchSelfSessionPercentage();
-  }, [selectedTopic?.topicId]);
+  }, [mode, selectedTopic?.topicId]);
 
   // ========== Render ==========
   return (
@@ -145,11 +154,33 @@ const SmartLearningPage = () => {
                 getChildren={(t) => t?.children}
                 renderRightSection={(_, isActive) =>
                   isActive && (
-                    <div className="w-7 h-7 rounded-full p-1 overflow-hidden border-2 border-dashed border-[var(--border-primary)]">
-                      <div className="w-full h-full bg-[var(--surface-bg-tertiary)] rounded-full overflow-hidden relative">
-                        <div
-                          className="h-full bg-[var(--sb-ocean-bg-active)] z-4 relative"
-                          style={{ width: `${lastSelfTestPercentage || 0}%` }}
+                    // <div className="w-7 h-7 rounded-full p-1 overflow-hidden border-2 border-dashed border-[var(--border-primary)]">
+                    //   <div className="w-full h-full bg-[var(--surface-bg-tertiary)] rounded-full overflow-hidden relative">
+                    //     <div
+                    //       className="h-full bg-[var(--sb-ocean-bg-active)] z-4 relative"
+                    //       style={{ width: `${lastSelfTestPercentage || 0}%` }}
+                    //     />
+                    //   </div>
+                    // </div>
+                    <div className="relative">
+                      <CircleProgressBar
+                        percentage={lastSelfTestPercentage || 0}
+                        size={30}
+                        strokeWidth={2}
+                        stroke="var(--border-secondary)"
+                        progressColor={
+                          barColor ? barColor : "var(--sb-ocean-bg-active)"
+                        }
+                        startAngle={90}
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <FiTarget
+                          className="w-5 h-5"
+                          style={{
+                            color: barColor
+                              ? barColor
+                              : "var(--sb-ocean-bg-active)",
+                          }}
                         />
                       </div>
                     </div>
@@ -172,6 +203,7 @@ const SmartLearningPage = () => {
                 topicName={selectedTopic?.topicName ?? ""}
                 mode={mode}
                 setMode={setMode}
+                barColor={barColor}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
                 onClickHandler={() => {
                   getActiveCourseAccessStatus() === "renew"
