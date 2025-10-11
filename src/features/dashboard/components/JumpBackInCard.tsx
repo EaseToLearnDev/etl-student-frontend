@@ -2,17 +2,20 @@ import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 
 interface JumpBackInCardProps {
+  id?: string;
   topicTitle: string;
   testType: string;
   onClick: () => void;
 }
 const JumpBackInCard = ({
+  id,
   testType,
   topicTitle,
   onClick,
 }: JumpBackInCardProps) => {
   return (
     <div
+      id ={id}
       className="w-full h-full rounded-lg overflow-hidden bg-[var(--surface-bg-primary)] cursor-pointer"
       onClick={onClick}
     >

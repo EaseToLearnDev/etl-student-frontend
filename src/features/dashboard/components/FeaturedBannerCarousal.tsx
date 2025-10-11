@@ -14,6 +14,8 @@ import { LuGraduationCap } from "react-icons/lu";
 //Hooks & Stores
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useTutorialStore } from "../../tutorials/hooks/useTutorialStore";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 //Layouts & Components
 import {
@@ -43,6 +45,8 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
   );
 
   const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
+  const EXPLORE_FEATURES_BUTTON_ID = "explore_features_button_id";
+  const COMPLETE_PROFILE_BUTTON_ID = "complete_profile_button_id";
 
   const mobile = useIsMobile();
 
@@ -64,15 +68,27 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
 
         <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
           <button
+            id={EXPLORE_FEATURES_BUTTON_ID}
             className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
-            onClick={() => setShowTutorialModal(true)}
+            onClick={() => {
+              pushToDataLayer({
+                event: gtmEvents.explore_features_button_click,
+              });
+              setShowTutorialModal(true);
+            }}
           >
             Explore Features
           </button>
           {!isProfileComplete() && (
             <Link
+              id={COMPLETE_PROFILE_BUTTON_ID}
               to={"/profile"}
               className="sm:ml-auto border border-white/50 hover:bg-white/10 px-4 py-2 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl flex items-center justify-center gap-2 text-white transition-all duration-200 ease"
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.complete_profile_button_click,
+                });
+              }}
             >
               Complete Profile
               <ArrowRightIcon

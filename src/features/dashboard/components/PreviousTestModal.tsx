@@ -3,12 +3,16 @@ import { Modal } from "../../../components/Modal";
 import cn from "../../../utils/classNames";
 import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
 import Button from "../../../components/Button";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface PreviousTestModalProps {
   isOpen: boolean;
   onClose: () => void;
   onResume: () => void;
 }
+const continue_test_button_id = "continue_test_button_id";
+const cancel_previous_test_modal_id = "cancel_previous_test_modal_id";
 const PreviousTestModal = ({
   isOpen,
   onClose,
@@ -21,7 +25,9 @@ const PreviousTestModal = ({
         <h3 className="font-semibold text-lg mb-2">Resume Previous Test</h3>
         <div className="flex flex-col gap-2 mt-6">
           <div className="flex flex-col gap-1">
-            <span className="text-[var(--text-secondary)] font-medium">Test:</span>
+            <span className="text-[var(--text-secondary)] font-medium">
+              Test:
+            </span>
             <p>{prevRunningTest?.testName}</p>
           </div>
           <p className="text-[var(--text-secondary)] mt-1">
@@ -32,8 +38,28 @@ const PreviousTestModal = ({
         {/* Action Buttons */}
         <div className="flex justify-end mt-8">
           <div className="flex gap-4 items-center">
-            <Button onClick={onResume}>Continue Test</Button>
-            <Button style="secondary" onClick={onClose}>
+            <Button
+              id={continue_test_button_id}
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.continue_test_button_click,
+                });
+                onResume();
+              }}
+            >
+              Continue Test
+            </Button>
+            <Button 
+            id={cancel_previous_test_modal_id}
+            style="secondary" 
+            onClick={() =>{
+              pushToDataLayer({
+                event: gtmEvents.cancel_previous_test_modal_click,
+              });   
+            
+              onClose()
+              }}
+              >
               Cancel
             </Button>
           </div>

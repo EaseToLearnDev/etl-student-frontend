@@ -18,6 +18,8 @@ import ProfileHeader from "./ProfileHeader";
 import VerifyOtpContent from "./VerifyOtpContent";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { Toast } from "../../../components/Toast";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 /**
  * Renders the main profile content section for viewing and editing student profile details.
@@ -44,8 +46,8 @@ const ProfileContent = () => {
   const setPhoneNo = useProfileStore((state) => state.setPhoneNo);
   const showToast = useToastStore((state) => state.showToast);
   const toastData = useToastStore((state) => state.toastData);
-
   const [verifyType, setVerifyType] = useState<"Mobile" | "Email" | null>(null);
+  const save_profile_button_id = "save_profile_button_id";
 
   if (!studentData) return null;
 
@@ -225,8 +227,14 @@ const ProfileContent = () => {
       {editProfile && (
         <div className="flex flex-row justify-end gap-3">
           <Button
+            id={save_profile_button_id}
             style="primary"
-            onClick={handleSave}
+            onClick={() => {
+              pushToDataLayer({
+                event: gtmEvents.save_profile_button_click
+              });
+              handleSave();
+            }}
             disabled={isSaveDisabled()}
           >
             Save
