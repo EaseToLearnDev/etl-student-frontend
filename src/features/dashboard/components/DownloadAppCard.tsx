@@ -6,7 +6,11 @@ import { PiAndroidLogoFill, PiAppleLogoFill } from "react-icons/pi";
 import QrPopover from "./QrPopover";
 import useIsMobile from "../../../hooks/useIsMobile";
 import { Link } from "react-router";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
+const get_app_ios_button_click = "get_app_ios_button_click";
+const get_app_android_button_id = "get_app_android_button_id";
 interface DownloadAppCardProps {
   title?: string;
   subtitle?: string;
@@ -58,8 +62,14 @@ export default function DownloadAppCard({
           ) : (
             <QrPopover qrCode="IOSQrCode.png">
               <button
+               id={get_app_ios_button_click}
                 type="button"
                 className="max-w-[300px] inline-flex items-center gap-3 justify-between px-4 py-2 rounded-lg border border-[var(--border-secondary)] shadow-sm hover:shadow focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-colors w-full"
+             onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.get_app_ios_button_click,
+                });
+              }} 
               >
                 <div className="flex items-center gap-3">
                   <span className="flex items-center justify-center bg-[var(--surface-bg-secondary)] rounded-md p-2">
@@ -101,9 +111,15 @@ export default function DownloadAppCard({
           ) : (
             <QrPopover qrCode="AndroidQrcode.png">
               <button
+              id={get_app_android_button_id}
                 type="button"
                 className="max-w-[300px] inline-flex items-center gap-3 justify-between px-4 py-2 rounded-lg border border-[var(--border-secondary)] shadow-sm hover:shadow focus:shadow-outline focus:outline-none focus:ring-2 focus:ring-green-300 transition-colors w-full"
-              >
+                onClick={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.get_app_android_button_click,
+                  });
+                }}  
+                >
                 <div className="flex items-center gap-3">
                   <span className="flex items-center justify-center bg-[var(--surface-bg-secondary)] rounded-md p-2">
                     <PiAndroidLogoFill className="w-5 h-5 text-[var(--text-primary)]" />

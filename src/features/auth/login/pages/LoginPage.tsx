@@ -19,6 +19,14 @@ import { HandleLogin, handleVerifyOtp } from "../login.services";
 import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
+
+// GTM click id constants
+const LOGIN_BUTTON_CLICK_ID = "login_button_click";
+const GET_OTP_BUTTON_CLICK_ID = "get_otp_button_click";
+const Login_signup_click = "login_signup_click";
+const forget_password_button_id = "forget_password_button_click"
 
 /**
  * Login page component for user authentication (Password + OTP).
@@ -76,6 +84,10 @@ const LoginPage = () => {
             <a
               href={`${import.meta.env.VITE_FRONTEND_URL}/create-account`}
               className="!font-bold text-[var(--sb-ocean-bg-active)]"
+              id = {Login_signup_click}
+              onClick={() => pushToDataLayer({
+                event: gtmEvents.login_signup_click
+              })}
             >
               Sign Up
             </a>
@@ -94,7 +106,7 @@ const LoginPage = () => {
             {/* OTP Verification Section */}
             {token ? (
               <VerifyOtpContent
-                onCancel={() => setToken(null)}
+                onCancel={() => {setToken(null)}}
                 onVerify={handleVerifyOtp}
                 onResend={() => HandleLogin(navigate, loginWith, deviceType)}
                 error={errorMessage}
@@ -205,14 +217,29 @@ const LoginPage = () => {
                   </h6>
 
                   {/* Submit Button */}
+                  {/* Login CTA - push different GTM clickId/event for 'Login' vs 'Get OTP' */}
                   <Button
+                    id={loginWith === "password" ? LOGIN_BUTTON_CLICK_ID : GET_OTP_BUTTON_CLICK_ID}
                     style="primary"
                     type="submit"
                     className="mt-8 w-full"
                     onClick={
                       loading
                         ? undefined
-                        : () => HandleLogin(navigate, loginWith, deviceType)
+                        : () => {
+                            const isPassword = loginWith === "password";
+                            const clickId = isPassword ? LOGIN_BUTTON_CLICK_ID : GET_OTP_BUTTON_CLICK_ID;
+                            const eventName = isPassword ? gtmEvents.login_button_click : gtmEvents.get_otp_button_click;
+
+                            // Push click id to GTM dataLayer so GTM triggers can use the 'clickId' variable
+                            pushToDataLayer({
+                              event: eventName,
+                              // clickId,
+                              // label: isPassword ? "Login" : "Get OTP",
+                            });
+
+                            HandleLogin(navigate, loginWith, deviceType);
+                          }
                     }
                     disabled={
                       loginWith === "password"
@@ -233,8 +260,13 @@ const LoginPage = () => {
                   {loginWith === "password" && (
                     <div className="flex justify-center mt-10 gap-[2px]">
                       <Link
+                      id={forget_password_button_id}
                         to={"/forget-password"}
                         className="text-[var(--sb-ocean-bg-active)]"
+                        onClick={() =>
+                          pushToDataLayer({
+                            event: gtmEvents.forget_password_button_click
+                          })}
                       >
                         <h6 className="!font-bold hover:underline">
                           Forget Password?

@@ -3,6 +3,7 @@ import { FiSearch } from "react-icons/fi";
 import cn from "../utils/classNames";
 
 interface GlobalSearchProps {
+  id?: string;
   placeholder?: string;
   debounceDelay?: number;
   data: any[];
@@ -13,6 +14,7 @@ interface GlobalSearchProps {
 }
 
 const GlobalSearch = ({
+  id,
   placeholder = "Search...",
   debounceDelay = 300,
   data,
@@ -62,6 +64,7 @@ const GlobalSearch = ({
       >
         <FiSearch className="text-[var(--text-tertiary)] mr-2" />
         <input
+          id={id}
           type="text"
           placeholder={placeholder}
           value={search}

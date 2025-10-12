@@ -3,8 +3,10 @@ import type { ReactNode } from "react";
 
 // Utils
 import cn from "../utils/classNames";
+import { pushToDataLayer } from "../utils/gtm";
 
 interface ButtonProps {
+  id?: string;
   children: ReactNode;
   type?: "button" | "reset" | "submit";
   style?: "primary" | "secondary" | "neutral";
@@ -17,6 +19,7 @@ interface ButtonProps {
  * A customizable button component supporting "primary" and "secondary" styles.
  */
 const Button = ({
+  id,
   children,
   type = "button",
   style = "primary",
@@ -34,6 +37,7 @@ const Button = ({
   };
   return (
     <button
+      id={id}
       type={type}
       onClick={onClick}
       disabled={disabled}

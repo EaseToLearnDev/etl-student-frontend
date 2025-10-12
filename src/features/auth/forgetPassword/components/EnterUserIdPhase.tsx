@@ -4,6 +4,8 @@ import { useForgetPassStore } from "../hooks/useForgetPassStore";
 import { handleForgetPasswordToken } from "../services/handleForgetPasswordToken";
 import InputField from "../../../../components/InputField";
 import { useToastStore } from "../../../../global/hooks/useToastStore";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 const EnterUserIdPhase = () => {
   const loading = useForgetPassStore((state) => state.loading);
@@ -16,6 +18,7 @@ const EnterUserIdPhase = () => {
   );
   const setToken = useForgetPassStore((state) => state.setToken);
   const setToast = useToastStore((state) => state.setToast);
+  const forget_password_submit_id = "forget_password_submit_click";
 
   return (
     <>
@@ -37,6 +40,7 @@ const EnterUserIdPhase = () => {
 
         {/* Submit Button */}
         <Button
+          id={forget_password_submit_id}
           style="primary"
           type="submit"
           className="mt-8 w-full"
@@ -49,15 +53,19 @@ const EnterUserIdPhase = () => {
           onClick={
             loading
               ? undefined
-              : () =>
-                  handleForgetPasswordToken({
-                    userId,
-                    setUserId,
-                    setToken,
-                    setToast,
-                    setLoading,
-                    callback: () => setCurrentPhaseIndex(currentPhaseIndex + 1),
-                  })
+              : () => {
+                pushToDataLayer({
+                  event: gtmEvents.forget_password_submit_button_click
+                });
+                handleForgetPasswordToken({
+                  userId,
+                  setUserId,
+                  setToken,
+                  setToast,
+                  setLoading,
+                  callback: () => setCurrentPhaseIndex(currentPhaseIndex + 1),
+                })
+              }
           }
         >
           <h6 className="!font-semibold">

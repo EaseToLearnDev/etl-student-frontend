@@ -17,19 +17,12 @@ import { type NavigateFunction } from "react-router-dom";
 import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
 import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
-// Importing function to trigger the data layer push to gtm
-import { pushToDataLayer } from "../../../utils/gtm";
 
 export const HandleLogin = async (
   navigate: NavigateFunction,
   loginWith: string,
   deviceType: string | null
 ) => {
-  pushToDataLayer({
-    event: "login_click",
-    category: "engagement",
-    label: "Student Panel Login Button"
-  })
   const { userId, password, setError, setLoading, setToken } = useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
   if (loginWith === "password") {

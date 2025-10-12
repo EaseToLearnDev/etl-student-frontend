@@ -8,6 +8,8 @@ import { MdClose } from "react-icons/md";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { useFeedbackStore } from "../../../global/hooks/useFeedbackStore";
 import { submitStudentFeedback } from "../../../global/services/submitStudentFeedback";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface SupportSectionProps {
   className?: string;
@@ -19,6 +21,9 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
   const setSubject = useFeedbackStore((state) => state.setSubject);
   const setDetails = useFeedbackStore((s) => s.setDetails);
   const [openSupportModal, setOpenSupportModal] = useState<boolean>(false);
+  const Contact_Support_Button_Click = "contact_support_button_id";
+  const send_support_button_id = "send_support_button_id";
+
   return (
     <div className={cn("w-full", className)}>
       <h5>Support</h5>
@@ -27,9 +32,16 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
         team anytime.
       </p>
       <Button
+        id={Contact_Support_Button_Click}
         style="secondary"
         className="mt-6"
-        onClick={() => setOpenSupportModal(true)}
+        onClick={() => {
+          pushToDataLayer({
+            event: gtmEvents.contact_support_button_click,
+          });
+
+          setOpenSupportModal(true);
+        }}
       >
         <EnvelopeIcon className="h-5 w-5" />
         Contact Support
@@ -80,9 +92,13 @@ const SupportSection = ({ className = "" }: SupportSectionProps) => {
           <div className="flex justify-end mt-4">
             <div className="flex gap-4 items-center">
               <Button
+              id={send_support_button_id}
                 style="primary"
                 disabled={!subject.trim()}
                 onClick={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.send_support_button_click,
+                  });
                   submitStudentFeedback({
                     type: "Other",
                     subject: subject,
