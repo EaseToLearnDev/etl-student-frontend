@@ -13,7 +13,14 @@ import EmptyGhostIcon from "../../../components/icons/empty-ghost-icon";
 import PreviousTestModal from "./PreviousTestModal";
 import { handleResumeTest } from "../../study_room/smart_learning/services/handleTest";
 import { useNavigate } from "react-router";
-import { LuClipboardX, LuFileClock, LuFilePenLine, LuFileQuestion } from "react-icons/lu";
+import {
+  LuClipboardX,
+  LuFileClock,
+  LuFilePenLine,
+  LuFileQuestion,
+} from "react-icons/lu";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const JumpBackInList = () => {
   const navigate = useNavigate();
@@ -21,6 +28,7 @@ const JumpBackInList = () => {
   const [isPreviousTestModalOpen, setIsPreviousTestModalOpen] =
     useState<boolean>(false);
   const prevRunningTest = usePrevTestStore((s) => s.prevRunningTest);
+  const jump_back_in_button_id = "jump_back_in_button_id";
 
   // const scroll = (direction: "left" | "right") => {
   //   if (scrollRef.current) {
@@ -44,7 +52,14 @@ const JumpBackInList = () => {
         {prevRunningTest?.testName ? (
           <div className="snap-start min-w-[250px] mr-5 last:mr-0">
             <JumpBackInCard
-              onClick={() => setIsPreviousTestModalOpen(true)}
+              id={jump_back_in_button_id}
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.jump_back_in_button_click,
+                });
+
+                setIsPreviousTestModalOpen(true);
+              }}
               testType={prevRunningTest?.testMode || ""}
               topicTitle={prevRunningTest?.testName || ""}
             />
@@ -52,9 +67,9 @@ const JumpBackInList = () => {
         ) : (
           <div className="flex flex-col w-full items-center mt-12">
             <EmptyState
-              title='No previous tests available'
-              description='No previous test data is available at the moment.'
-              icon={<LuFileClock className='w-20 h-20' />}
+              title="No previous tests available"
+              description="No previous test data is available at the moment."
+              icon={<LuFileClock className="w-20 h-20" />}
               className="max-w-md lg:max-w-sm"
             />
           </div>

@@ -3,10 +3,13 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { useProfileStore } from "../hooks/useProfileStore";
 import ConfirmDeleteAccount from "./ConfirmDeleteAccount";
 import DeleteAccountOtpVerifyModal from "./DeleteAccountOtpVerifyModal";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const AccountRemovalSection = () => {
   const studentData = useStudentStore((s) => s.studentData);
   const setConfirmDeleteOpen = useProfileStore((s) => s.setConfirmDeleteOpen);
+  const delete_account_button_click = "delete_account_button_id";
 
   return (
     <div className="mt-10 pt-5 border-t border-[var(--border-primary)]">
@@ -24,9 +27,17 @@ const AccountRemovalSection = () => {
         </p>
       ) : (
         <Button
-          onClick={() => setConfirmDeleteOpen(true)}
-          style="secondary"
+        id="delete_account_button_id"
+        style="secondary"
           className="hover:bg-[var(--sb-valencia-bg-active)] hover:text-white"
+          onClick={() => 
+            {
+                pushToDataLayer({
+                  event: gtmEvents.delete_account_button_click,
+                });
+
+            setConfirmDeleteOpen(true)
+            }}
         >
           Delete Account
         </Button>
