@@ -227,7 +227,7 @@ const TutorialsModal = () => {
             <h6>Tutorials Videos</h6>
             <ArrowRightIcon width={20} height={20} />
           </div>
-          <div className="mt-3">
+          <div className="mt-3 max-h-[200px] overflow-y-auto scrollbar-hide">
             <Accordion
               data={data}
               icon={<AcademicCapIcon width={20} height={20} />}

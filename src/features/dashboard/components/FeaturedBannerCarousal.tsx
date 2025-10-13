@@ -13,7 +13,7 @@ import { LuGraduationCap } from "react-icons/lu";
 
 //Hooks & Stores
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { useTutorialStore } from "../../tutorials/hooks/useTutorialStore";
+// import { useTutorialStore } from "../../tutorials/hooks/useTutorialStore";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 
@@ -44,7 +44,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     (state) => state.studentData?.studentName
   );
 
-  const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
+  // const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
   const EXPLORE_FEATURES_BUTTON_ID = "explore_features_button_id";
   const COMPLETE_PROFILE_BUTTON_ID = "complete_profile_button_id";
 
@@ -74,7 +74,8 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               pushToDataLayer({
                 event: gtmEvents.explore_features_button_click,
               });
-              setShowTutorialModal(true);
+              // setShowTutorialModal(true);
+              setSelectedSlideIndex(1)
             }}
           >
             Explore Features

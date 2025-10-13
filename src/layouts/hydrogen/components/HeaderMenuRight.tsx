@@ -1,6 +1,6 @@
 // Components
-import RingBellSolidIcon from "../../../components/icons/ring-bell-solid-icon";
-import NotificationDropdown from "./notification-dropdown";
+// import RingBellSolidIcon from "../../../components/icons/ring-bell-solid-icon";
+// import NotificationDropdown from "./notification-dropdown";
 import ProfileMenuDropDown from "./ProfileMenu";
 import cn from "../../../utils/classNames";
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
@@ -12,7 +12,7 @@ const HeaderMenuRight = () => {
   const profilePic = useStudentStore((state) => state.studentData?.profilePic);
   return (
     <div className="relative ml-2 md:ms-auto flex items-center gap-2 text-[var(--text-primary)] xs:gap-3 xl:gap-4 justify-end">
-      <NotificationDropdown>
+      {/* <NotificationDropdown>
         <button
           aria-label="Notification"
           className={cn(
@@ -23,7 +23,7 @@ const HeaderMenuRight = () => {
         >
           <RingBellSolidIcon className="h-[18px] w-auto" />
         </button>
-      </NotificationDropdown>
+      </NotificationDropdown> */}
       <ProfileMenuDropDown>
         <button
           className={cn(

@@ -5,7 +5,6 @@ import { handleDeleteRequest } from "../services/handleDeleteRequest";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 
-
 const ConfirmDeleteAccount = () => {
   const confirmDeleteOpen = useProfileStore((s) => s.confirmDeleteOpen);
   const deleteAccountProgress = useProfileStore((s) => s.deleteAccountProgress);
@@ -23,7 +22,7 @@ const ConfirmDeleteAccount = () => {
         <h5 className="mb-5">Are you sure you want to delete your account?</h5>
         <div className="flex justify-center gap-4">
           <Button
-          id={delete_account_button_click}
+            id={delete_account_button_click}
             onClick={() => {
               pushToDataLayer({
                 event: gtmEvents.delete_account_button_click,
@@ -32,9 +31,9 @@ const ConfirmDeleteAccount = () => {
               handleDeleteRequest();
             }}
             style="primary"
-            className="hover:bg-[var(--sb-valencia-bg-active)] hover:text-white"
+            className="hover:bg-[var(--sb-valencia-bg-hover)] focus:ring-[var(--sb-valencia-bg-active)] bg-[var(--sb-valencia-bg-active)] hover:text-white"
           >
-            {deleteAccountProgress ? "Loading..." : "Yes, Delete"}
+            {deleteAccountProgress ? "Loading..." : "I Agree"}
           </Button>
           <Button onClick={() => setConfirmDeleteOpen(false)} style="secondary">
             Cancel

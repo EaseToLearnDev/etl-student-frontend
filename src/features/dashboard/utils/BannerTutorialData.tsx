@@ -38,6 +38,10 @@ export const tutorialCards: TutorialCard[] = [
           title: "What is My Study Material and how to use it?",
           videoLink: "https://www.youtube.com/embed/CmqiPLH7BGc",
         },
+        {
+          title: "How to Use Smart Learning",
+          videoLink: "https://www.youtube.com/embed/xq4ZZdm0mDY",
+        },
       ],
     },
   },
