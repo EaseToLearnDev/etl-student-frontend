@@ -60,7 +60,7 @@ export const ActivityList = ({
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const containerWidth = scrollRef.current.clientWidth;
+      const containerWidth = scrollRef.current.scrollWidth;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -containerWidth : containerWidth,
         behavior: "smooth",
