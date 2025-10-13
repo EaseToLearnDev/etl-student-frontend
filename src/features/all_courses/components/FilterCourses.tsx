@@ -5,6 +5,8 @@ import useIsMobile from "../../../hooks/useIsMobile";
 import cn from "../../../utils/classNames";
 import { Theme } from "../../../utils/colors";
 import type { CategoryType } from "../../shared/types";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface FilterCoursesProps {
   categories: CategoryType[];
@@ -12,7 +14,9 @@ interface FilterCoursesProps {
   setSelectedCategory: (category: CategoryType | null) => void;
   setHideSecondary: (v: boolean) => void;
 }
-
+// GTM ID's
+const all_courses_clear_filter_id = "all_courses_clear_filter_id";
+const all_courses_filter_category_ID = "all_courses_filter_category_id";
 /**
  * Renders a category filter component for selecting and clearing course categories.
  */
@@ -29,7 +33,13 @@ export const FilterCourses = ({
       <div className="sticky top-0 z-10 bg-[var(--surface-bg-primary)] flex gap-4 justify-between items-center pt-5 pb-2">
         <h5>Filters</h5>
         <p
-          onClick={() => setSelectedCategory(null)}
+          id={all_courses_clear_filter_id}
+          onClick={() => {
+            pushToDataLayer({
+              event: gtmEvents.all_courses_clear_filter_click,
+            });
+            setSelectedCategory(null)
+          }}
           className="cursor-pointer text-[var(--text-tertiary)] text-nowrap"
         >
           Clear
@@ -46,10 +56,16 @@ export const FilterCourses = ({
 
             return (
               <Badge
+                id={all_courses_filter_category_ID}
                 key={category.categoryId}
                 theme={isCategorySelected ? Theme.Ocean : Theme.Neutral}
                 style={isCategorySelected ? "filled" : "outline"}
-                onClickHandler={() =>  setSelectedCategory(isCategorySelected ? null : category)}
+                onClickHandler={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.all_courses_filter_category_click,
+                  });
+                  setSelectedCategory(isCategorySelected ? null : category);
+                }}
                 className={cn("border !border-[var(--border-secondary)]")}
               >
                 <p>{category.categoryName}</p>

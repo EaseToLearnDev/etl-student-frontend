@@ -15,7 +15,10 @@ import EmptyState from "../../../components/EmptyState";
 import { useCoursesStore } from "../hooks/useCoursesStore";
 import { useEffect } from "react";
 
+
+
 interface CoursesCardsProps {
+  id?: string;
   search: string;
   courseList: CourseType[];
   selectedCourse: CourseType | null;
@@ -28,6 +31,7 @@ interface CoursesCardsProps {
  * Displays a list of course cards filtered by search and selected categories.
  */
 const CoursesCards = ({
+  id,
   search,
   courseList,
   selectedCourse,
@@ -101,9 +105,12 @@ const CoursesCards = ({
           : "";
         return (
           <CourseCard
+            id={id}
             key={course?.courseId}
             course={course}
-            onClick={() => onCourseClick?.(course)}
+            onClick={() => {
+              onCourseClick?.(course)
+            }}
             status={status}
             isActive={selectedCourse?.courseId === course?.courseId}
           />

@@ -19,6 +19,10 @@ import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
 import { resetPromocode } from "../services/resetPromocode";
 import UpdateEmailModal from "../components/UpdateEmailModal";
 import { useLocation } from "react-router";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
+
+const ALL_COURSES_CARD_CLICK_ID = "all_courses_card_click";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
@@ -109,12 +113,19 @@ const AllCoursesPage = () => {
             <CoursesCardSkeleton />
           ) : (
             <CoursesCards
+              id={ALL_COURSES_CARD_CLICK_ID}
               search={search}
               courseList={courseList || []}
               selectedCourse={selectedCourse}
               hideSecondary={hideSecondary}
               selectedCategory={selectedCategory}
               onCourseClick={(course) => {
+                pushToDataLayer({
+                  event: gtmEvents.all_courses_card_click,
+                  courseId: course.courseId,
+                  courseName: course.courseTitle,
+                  id: ALL_COURSES_CARD_CLICK_ID
+                });
                 setSelectedCourse(course);
                 setIsPlanModalOpen(true);
                 resetPromocode();

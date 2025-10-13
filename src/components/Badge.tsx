@@ -5,6 +5,7 @@ import cn from "../utils/classNames";
 import { colors, Theme } from "../utils/colors";
 
 interface BadgeProps {
+  id?: string;
   children: ReactNode;
   className?: string;
   theme: Theme;
@@ -16,6 +17,7 @@ interface BadgeProps {
  * Renders a stylized badge component with customizable theme and click handler.
  */
 const Badge = ({
+  id,
   children,
   className,
   onClickHandler,
@@ -26,6 +28,7 @@ const Badge = ({
 
   return (
     <div
+      id={id}
       className={cn(
         "cursor-pointer flex justify-center items-center py-2 px-4 gap-1 rounded-full",
         className
