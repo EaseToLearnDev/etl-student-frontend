@@ -13,7 +13,6 @@ import { ActivityList } from "../components/ActivityList";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-// import TutorialsModal from "../../tutorials/pages/TutorialsModal";
 import { getGhActivity } from "../../../global/services/getGhActivity";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import { getGhActivityYears } from "../../../global/services/getGhActivityYears";
@@ -193,8 +192,6 @@ const DashboardPage = () => {
           duration={toastData.duration}
         />
       )}
-
-      {/* <TutorialsModal /> */}
     </div>
   );
 };

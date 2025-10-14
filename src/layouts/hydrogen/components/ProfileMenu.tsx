@@ -17,7 +17,15 @@ import { Popover } from "../../../components/Popover/Popover";
 import { PopoverTrigger } from "../../../components/Popover/PopoverTrigger";
 import { PopoverContent } from "../../../components/Popover/PopoverContent";
 import ThemeToggle from "../../../components/ThemeToggle";
-import { PiChatTextFill, PiStarFill, PiUserFill, PiUsersFill, PiVideoFill, PiWalletFill } from "react-icons/pi";
+import {
+  PiChatTextFill,
+  PiStarFill,
+  PiUserFill,
+  PiUsersFill,
+  PiVideoFill,
+  PiWalletFill,
+} from "react-icons/pi";
+import { useTutorialStore } from "../../../features/tutorials/hooks/useTutorialStore";
 
 export default function ProfileMenuDropDown({
   children,
@@ -90,6 +98,7 @@ const menuItems = [
 const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
   const studentName = useStudentStore((s) => s.studentData?.studentName);
   const emailId = useStudentStore((s) => s.studentData?.emailId);
+  const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
 
   const setShowInviteTeacherModal = useInviteTeacherStore(
     (s) => s.setShowInviteTeacherModal
@@ -155,7 +164,13 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
                 {item.name}
               </button>
             ) : item.name === "Tutorials" ? (
-              <button className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none">
+              <button
+                onClick={() => {
+                  setShowTutorialModal(true);
+                  onClose();
+                }}
+                className="w-full group my-0.5 flex items-center gap-2 rounded-md px-2.5 py-2 hover:bg-[var(--surface-bg-tertiary)] focus:outline-none"
+              >
                 <span className="text-[var(--text-secondary)]">
                   {item.icon}
                 </span>
