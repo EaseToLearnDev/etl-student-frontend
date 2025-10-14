@@ -90,11 +90,14 @@ const StartMockTestModalContent = ({
     },
   ];
 
-  const validFields = test?.sectionSet && test?.sectionSet?.length > 0 ? fields.slice(0, 3) : fields;
+  const validFields =
+    test?.sectionSet && test?.sectionSet?.length > 0
+      ? fields.slice(0, 3)
+      : fields;
   const isOdd = validFields.length % 2 !== 0;
 
   return (
-    <div className="relative p-2">
+    <div className="relative max-h-[600px] p-2">
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
@@ -104,9 +107,8 @@ const StartMockTestModalContent = ({
         <div
           onClick={onClose}
           className={cn(
-            "w-[40px] h-[40px] flex justify-center items-center cursor-pointer",
-            "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)]",
-            "border border-[var(--border-primary)] rounded-full"
+            "fixed top-3 right-3 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
           )}
         >
           <MdClose size={20} />
@@ -198,7 +200,7 @@ const StartMockTestModalContent = ({
       )}
 
       {/* Action Buttons */}
-      <div className="flex justify-end mt-7">
+      <div className="flex justify-end mt-7 pb-5 sm:pb-0">
         <div className="flex gap-4 items-center">
           <Button onClick={onStart}>Start Now</Button>
           <Button style="secondary" onClick={onClose}>

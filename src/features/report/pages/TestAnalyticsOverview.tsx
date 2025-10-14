@@ -1010,7 +1010,7 @@ export const TestAnalyticsOverview = () => {
         </Widget>
       </div>
 
-      <div className="flex items-center gap-3 overflow-x-auto">
+      <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
         <Tabs
           tabs={visibleTabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
