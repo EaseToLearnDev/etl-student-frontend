@@ -20,11 +20,16 @@ import ReportTablePage from "../components/ReportTablePage";
 import { useNavigate } from "react-router";
 import { loadTablsForReports } from "../services/loadTabsForReports";
 import { LuFileSearch, LuFileUser } from "react-icons/lu";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
+const REPORT_CATEGORY_TAB_ID = "report-category-tabs";
+const report_test_detail_click = "report_test_detail_click";
 
 const StudentReport = () => {
   const [selectedTabIndex, setSelectedTabIndex] = useState<number>(0);
   const [reportData, setReportData] = useState<TestReportdata[]>([]);
   const [sessionData, setSessionData] = useState<LearningSessionData[]>([]);
+  const tabTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const { loading } = useLoadingStore.getState();
   const navigate = useNavigate();
@@ -112,6 +117,11 @@ const StudentReport = () => {
     } else if (testType === "Class Test") {
       type = 4;
     }
+    pushToDataLayer({
+      event: gtmEvents.report_test_detail_click,
+      testType: testType,
+      id : report_test_detail_click
+    })
 
     if (testType === "Learning Session") {
       navigate(
@@ -200,9 +210,26 @@ const StudentReport = () => {
             const isActive = selectedTabIndex === index;
             return (
               <button
+                // id={REPORT_CATEGORY_TAB_ID}
                 key={tab}
                 data-index={index}
-                onClick={() => setSelectedTabIndex(index)}
+                onClick={() => {
+                  // Clear any existing timer when switching tabs
+                  if (tabTimerRef.current) {
+                    clearTimeout(tabTimerRef.current);
+                  }
+                  
+                  setSelectedTabIndex(index);
+                  
+                  // Set new timer - only call pushToDataLayer if user stays on tab for 3 seconds
+                  tabTimerRef.current = setTimeout(() => {
+                    pushToDataLayer({
+                      event: gtmEvents.report_category_tab_click,
+                      tab: tab,
+                      id: REPORT_CATEGORY_TAB_ID
+                    });
+                  }, 3000);
+                }}
                 className={cn(
                   "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
                   isActive && "text-[var(--sb-ocean-bg-active)]"

@@ -16,7 +16,10 @@ export const gtmEvents = {
   continue_test_button_click: "continue_test_button_click",
   cancel_previous_test_modal_click: "cancel_previous_test_modal_click",
   send_support_button_click: "send_support_button_click",
-    all_courses_clear_filter_click: "all_courses_clear_filter_click",
+  all_courses_clear_filter_click: "all_courses_clear_filter_click",
+  report_category_tab_click: "report_category_tab_click",
+  report_test_detail_click:"report_test_detail_click",
+
     
 
   //to-do:
