@@ -65,7 +65,7 @@ const MobileTestSimulator = () => {
         {/* Horizontal Section-wise Question List */}
         <SectionQuestionScroll />
         {/* Active Question Section */}
-        <div className="w-full h-[calc(100dvh-300px)]">
+        <div className="w-full h-[calc(110dvh-300px)]">
           <ActiveQuestionPanel />
         </div>
       </div>
