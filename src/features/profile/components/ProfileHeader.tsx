@@ -64,7 +64,7 @@ const ProfileHeader = () => {
     <div className="w-full bg-[var(--surface-bg-primary)] rounded-lg">
       <div
         className={cn(
-          "h-40 relative rounded-t-xl",
+          "h-25 sm:h-40 relative rounded-t-xl",
           darkMode ? "bg-[var(--surface-bg-secondary)]" : "bg-gray-700"
         )}
       >

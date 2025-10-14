@@ -225,7 +225,7 @@ const ProfileContent = () => {
       </form>
 
       {editProfile && (
-        <div className="flex flex-row justify-end gap-3">
+        <div className="flex flex-row justify-end gap-3 mt-4 sm:mt-0">
           <Button
             id={save_profile_button_id}
             style="primary"

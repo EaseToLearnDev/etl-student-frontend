@@ -54,7 +54,7 @@ export function PopoverContent({
         top: position.top,
         left: position.left,
         transform: position.transform,
-        zIndex: 9999,
+        zIndex: 9999999,
       }}
       className={`rounded-md shadow-${shadow} ${className}`}
     >
