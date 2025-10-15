@@ -97,7 +97,7 @@ const StartMockTestModalContent = ({
   const isOdd = validFields.length % 2 !== 0;
 
   return (
-    <div className="relative max-h-[600px] p-2">
+    <div className="relative max-h-[70vh] p-2">
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">

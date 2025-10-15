@@ -81,7 +81,7 @@ export default function StartTopicTestModalContent({
   );
 
   return (
-    <div className="relative p-2 px-4 max-h-[700px]">
+    <div className="relative p-2 px-4 max-h-[70vh]">
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">

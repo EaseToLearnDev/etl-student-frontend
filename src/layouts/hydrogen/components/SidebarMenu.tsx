@@ -15,6 +15,7 @@ import cn from "../../../utils/classNames";
 import { getFilteredMenuItems } from "../../../utils/menuFilter";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
+import useDrawerStore from "../../../store/useDrawerStore";
 
 /**
  * Renders the sidebar menu with navigation links and user info for the student dashboard.
@@ -25,6 +26,7 @@ export function SidebarMenu() {
   const setIsReleaseNotesModalOpen = useReleaseNotesStore(
     (s) => s.setIsReleaseNotesModalOpen
   );
+  const closeDrawer = useDrawerStore((state) => state.closeDrawer);
 
   const filteredMenuItems = getFilteredMenuItems(activeCourse);
 
@@ -83,7 +85,10 @@ export function SidebarMenu() {
         <div className="px-4 w-full">
           <div
             className="w-full h-full p-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer"
-            onClick={() => setIsReleaseNotesModalOpen(true)}
+            onClick={() => {
+              setIsReleaseNotesModalOpen(true);
+              closeDrawer();
+            }}
           >
             {/* card header */}
             <div className="text-white flex items-center justify-between gap-2">
