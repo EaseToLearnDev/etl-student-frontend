@@ -16,17 +16,22 @@ export const gtmEvents = {
   continue_test_button_click: "continue_test_button_click",
   cancel_previous_test_modal_click: "cancel_previous_test_modal_click",
   send_support_button_click: "send_support_button_click",
+  go_back_button_click: "go_back_button_click",
+  start_topic_test_button_click: "start_topic_test_button_click",
+  begin_now_test_button_click: "begin_now_test_button_click",
+  cancel_topic_test_button_click: "cancel_topic_test_button_click",
+  begin_mock_test_button_click: "begin_mock_test_button_click",
+  start_mock_test_button_click: "start_mock_test_button_click",
+  cancel_mock_test_button_click: "cancel_mock_test_button_click",
+  get_app_android_button_click: "get_app_android_button_click",
+  get_app_ios_button_click: "get_app_ios_button_click",
+  jump_back_in_button_click: "jump_back_in_button_click",
+  profile_menu_button_click: "profile_menu_button_click",
   all_courses_clear_filter_click: "all_courses_clear_filter_click",
   report_category_tab_click: "report_category_tab_click",
-  report_test_detail_click:"report_test_detail_click",
-
-    
-
+  report_test_detail_click: "report_test_detail_click",
   //to-do:
   logout_button_click: "logout_button_click",
-  jump_back_in_button_click: "jump_back_in_button_click",
-  get_app_ios_button_click: "get_app_ios_button_click",
-  get_app_android_button_click: "get_app_android_button_click",
   all_courses_filter_category_click: "all_courses_filter_category_click",
-    all_courses_card_click: "all_courses_card_click",
+  all_courses_card_click: "all_courses_card_click",
 };

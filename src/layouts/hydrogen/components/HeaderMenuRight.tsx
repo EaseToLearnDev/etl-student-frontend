@@ -4,7 +4,10 @@
 import ProfileMenuDropDown from "./ProfileMenu";
 import cn from "../../../utils/classNames";
 import { useStudentStore } from "../../../features/shared/hooks/useStudentStore";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
+const profile_menu_button_id = "profile_menu_button_id";
 const HeaderMenuRight = () => {
   const studentName = useStudentStore(
     (state) => state.studentData?.studentName
@@ -27,10 +30,16 @@ const HeaderMenuRight = () => {
       <ProfileMenuDropDown>
         <button
           className={cn(
-            "overflow-hidden rounded-full p-0.5 hover:scale-105 transition-all duration-200 ease outline-none focus-visible:ring-[1.5px]",
+            "overflow-hidden  rounded-full p-0.5 hover:scale-105 transition-all duration-200 ease outline-none focus-visible:ring-[1.5px]",
             "focus-visible:ring-gray-400 focus-visible:ring-offset-2 active:translate-y-px shadow-sm",
             profilePic ? "w-10 h-10" : "w-11 h-11"
           )}
+          onClick={() => {
+            pushToDataLayer({
+              event: gtmEvents.profile_menu_button_click,
+              id: profile_menu_button_id,
+            });
+          }}
         >
           <div
             className={cn(

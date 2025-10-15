@@ -16,6 +16,7 @@ declare global {
  */
 export const pushToDataLayer = (eventData: GTMEvent): void => {
   if (typeof window !== "undefined") {
+    console.log("Pushing to dataLayer:", eventData);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(eventData);
   } else {

@@ -22,6 +22,7 @@ import {
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 
+const cancel_previous_test_modal_id = "cancel_previous_test_modal_id";
 const JumpBackInList = () => {
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -52,10 +53,10 @@ const JumpBackInList = () => {
         {prevRunningTest?.testName ? (
           <div className="snap-start min-w-[250px] mr-5 last:mr-0">
             <JumpBackInCard
-              id={jump_back_in_button_id}
               onClick={() => {
                 pushToDataLayer({
                   event: gtmEvents.jump_back_in_button_click,
+                  id: jump_back_in_button_id,
                 });
 
                 setIsPreviousTestModalOpen(true);
@@ -78,7 +79,14 @@ const JumpBackInList = () => {
       <PreviousTestModal
         isOpen={isPreviousTestModalOpen}
         onResume={() => handleResumeTest(navigate, prevRunningTest)}
-        onClose={() => setIsPreviousTestModalOpen(false)}
+        onClose={() => {
+          pushToDataLayer({
+            event: gtmEvents.cancel_previous_test_modal_click,
+            id: cancel_previous_test_modal_id
+          
+          });
+          setIsPreviousTestModalOpen(false);
+        }}
       />
     </div>
   );

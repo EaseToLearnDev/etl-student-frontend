@@ -38,6 +38,8 @@ import PreviousTestModalContent from "../../../shared/components/PreviousTestMod
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import { Toast } from "../../../../components/Toast";
 import { useToastStore } from "../../../../global/hooks/useToastStore";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
@@ -62,8 +64,8 @@ const MockTestPage = () => {
 
   const reset = useMTStore((s) => s.reset);
 
-  const toastData = useToastStore(s => s.toastData)
-  const showToast = useToastStore(s => s.showToast)
+  const toastData = useToastStore((s) => s.toastData);
+  const showToast = useToastStore((s) => s.showToast);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -75,6 +77,8 @@ const MockTestPage = () => {
   const [hideSecondary, setHideSecondary] = useState(isMobile);
   const [selectedTabIndex, setSelectedTabIndex] = useState(0);
   const courseTitle = useStudentStore((s) => s.activeCourse?.organisationName);
+
+  const cancel_mock_test_button_id = "cancel_mock_test_button_id";
 
   const tabs = testList?.map((set) =>
     set?.categoryName
@@ -208,7 +212,13 @@ const MockTestPage = () => {
 
       <Modal
         isOpen={showStartTestModal}
-        onClose={() => setShowStartTestModal(false)}
+        onClose={() => {
+          setShowStartTestModal(false);
+          pushToDataLayer({
+            event: gtmEvents.cancel_mock_test_button_click,
+            id: cancel_mock_test_button_id,
+          });
+        }}
         size="lg"
         className="p-4"
       >
@@ -226,7 +236,13 @@ const MockTestPage = () => {
                 }),
             })
           }
-          onClose={() => setShowStartTestModal(false)}
+          onClose={() => {
+            setShowStartTestModal(false);
+            pushToDataLayer({
+              event: gtmEvents.cancel_mock_test_button_click,
+              id: cancel_mock_test_button_id,
+            });
+          }}
         />
       </Modal>
 

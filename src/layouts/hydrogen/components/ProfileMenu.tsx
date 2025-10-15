@@ -27,6 +27,7 @@ import {
 } from "react-icons/pi";
 import { useTutorialStore } from "../../../features/tutorials/hooks/useTutorialStore";
 
+
 export default function ProfileMenuDropDown({
   children,
 }: {
@@ -50,7 +51,7 @@ export default function ProfileMenuDropDown({
       shadow="sm"
       placement={isMobile ? "bottom" : "bottom-end"}
     >
-      <PopoverTrigger>{children}</PopoverTrigger>
+      <PopoverTrigger>{children}</PopoverTrigger> 
 
       <PopoverContent className="z-[9999] p-0 bg-[var(--surface-bg-secondary)] [&>svg]:dark:fill-gray-100">
         <DropdownMenu onClose={() => setIsOpen(false)} />

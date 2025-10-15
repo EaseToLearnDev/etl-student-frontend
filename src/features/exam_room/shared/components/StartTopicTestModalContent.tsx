@@ -10,6 +10,8 @@ import {
 import { FiTarget } from "react-icons/fi";
 import Button from "../../../../components/Button";
 import useDarkModeStore from "../../../../store/useDarkModeStore";
+import { gtmEvents } from "../../../../utils/gtm-events";
+import { pushToDataLayer } from "../../../../utils/gtm";
 
 interface TestDetails {
   totalQuestions?: number;
@@ -79,6 +81,8 @@ export default function StartTopicTestModalContent({
   const fields = rawFields.filter(
     (f) => f.value !== undefined && f.value !== null
   );
+  const begin_now_test_button_id = "begin_now_test_button_id";
+  const cancel_topic_test_button_id = "cancel_topic_test_button_id";
 
   return (
     <div className="relative p-2 px-4 max-h-[700px]">
@@ -140,8 +144,19 @@ export default function StartTopicTestModalContent({
       {/* Action Buttons */}
       <div className="flex justify-end mt-7">
         <div className="flex gap-4 items-center mb-8 sm:mb-0">
-          <Button onClick={onStart}>Start Now</Button>
-          <Button style="secondary" onClick={onClose}>
+          <Button
+            id={begin_now_test_button_id}
+            onClick={() => {
+              onStart();
+              pushToDataLayer({ event: gtmEvents.begin_now_test_button_click });
+            }}
+          >
+            Start Now
+          </Button>
+          <Button
+            style="secondary"
+            onClick={onClose}
+          >
             Cancel
           </Button>
         </div>

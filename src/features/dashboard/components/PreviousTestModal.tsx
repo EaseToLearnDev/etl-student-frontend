@@ -50,12 +50,12 @@ const PreviousTestModal = ({
               Continue Test
             </Button>
             <Button 
-            id={cancel_previous_test_modal_id}
+            // id={cancel_previous_test_modal_id}
             style="secondary" 
             onClick={() =>{
-              pushToDataLayer({
-                event: gtmEvents.cancel_previous_test_modal_click,
-              });   
+              // pushToDataLayer({
+              //   event: gtmEvents.cancel_previous_test_modal_click,
+              // });   
             
               onClose()
               }}
@@ -67,6 +67,7 @@ const PreviousTestModal = ({
       </div>
       <div
         onClick={onClose}
+        
         className={cn(
           "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
           " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"

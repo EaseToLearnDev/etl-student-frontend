@@ -21,6 +21,10 @@ import cn from "../../../../utils/classNames";
 // Components
 import Button from "../../../../components/Button";
 import useDarkModeStore from "../../../../store/useDarkModeStore";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
+
+const begin_mock_test_button_id = "begin_mock_test_button_id"
 
 const getSectionFields = (
   section: NonNullable<MockTest["sectionSet"]>[number]
@@ -47,7 +51,6 @@ interface StartMockTestModalContentParams {
   onStart: () => void;
   onClose: () => void;
 }
-
 const StartMockTestModalContent = ({
   test,
   onStart,
@@ -202,8 +205,22 @@ const StartMockTestModalContent = ({
       {/* Action Buttons */}
       <div className="flex justify-end mt-7 pb-5 sm:pb-0">
         <div className="flex gap-4 items-center">
-          <Button onClick={onStart}>Start Now</Button>
-          <Button style="secondary" onClick={onClose}>
+          <Button 
+          id={begin_mock_test_button_id}
+          onClick={()=> {
+            onStart();
+            pushToDataLayer({
+            event: gtmEvents.begin_mock_test_button_click,
+            test_name: test.testName,
+            mockTest_id: test.mocktestId
+          });
+    
+          }}>Start Now</Button>
+          <Button 
+          style="secondary" onClick={() => {
+              onClose();
+              
+            }}>
             Cancel
           </Button>
         </div>
