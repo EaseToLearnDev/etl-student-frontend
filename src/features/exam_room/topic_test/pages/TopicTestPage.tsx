@@ -42,6 +42,8 @@ import UpgradeModal from "../../../shared/components/UpgradeModal";
 import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { Toast } from "../../../../components/Toast";
 import { LuArchive, LuCalendarX, LuInfo } from "react-icons/lu";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -80,10 +82,13 @@ const TopicTestPage = () => {
     (s) => s.setIsUpgradeModalOpen
   );
 
-  const toastData = useToastStore(s => s.toastData)
-  const showToast = useToastStore(s => s.showToast)
+  const toastData = useToastStore((s) => s.toastData);
+  const showToast = useToastStore((s) => s.showToast);
 
   const loading = useLoadingStore((s) => s.loading);
+
+  const GO_BACK_BUTTON_ID = "go_back_button_id";
+  const cancel_topic_test_button_id = "cancel_topic_test_button_id";
 
   // States
   const [hideSecondary, setHideSecondary] = useState<boolean>(
@@ -127,7 +132,12 @@ const TopicTestPage = () => {
       <div className="flex items-center gap-2">
         {selectedTopic && testList && testList?.length > 0 && (
           <Button
-            onClick={resetSelectedTopic}
+            id={GO_BACK_BUTTON_ID}
+            onClick={() => {
+              pushToDataLayer({ event: gtmEvents.go_back_button_click });
+
+              resetSelectedTopic();
+            }}
             style="secondary"
             className="text-[var(--sb-ocean-bg-active)] hover:text-[var(--sb-ocean-bg-hover)] border-none"
           >
@@ -215,7 +225,13 @@ const TopicTestPage = () => {
       {/* Start Test Modal */}
       <Modal
         isOpen={showStartTestModal}
-        onClose={() => setShowStartTestModal(false)}
+        onClose={() => {
+          setShowStartTestModal(false);
+          pushToDataLayer({
+            event: gtmEvents.cancel_topic_test_button_click,
+            id: cancel_topic_test_button_id,
+          });
+        }}
         size="lg"
         className="p-4"
       >
@@ -233,7 +249,13 @@ const TopicTestPage = () => {
                 }),
             })
           }
-          onClose={() => setShowStartTestModal(false)}
+          onClose={() => {
+            setShowStartTestModal(false);
+            pushToDataLayer({
+              event: gtmEvents.cancel_topic_test_button_click,
+              id: cancel_topic_test_button_id,
+            });
+          }}
           details={{
             marksCorrect: selectedTest?.patternDetails?.markCorrectAns,
             marksIncorrect: selectedTest?.patternDetails?.markIncorrectAns,

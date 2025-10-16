@@ -8,6 +8,8 @@ export interface NormalizedTest {
   marks: number;
   difficulty?: string;
   score?: number;
+  eventId: string ;
+  event: string;
 }
 
 /**
@@ -27,6 +29,8 @@ export const normalizeTestData = (
       marks: mockTest.totalMarks,
       difficulty: mockTest.difficulty,
       score: mockTest.marks,
+      eventId: "start_mock_test_button_id",
+      event: "start_mock_test_button_click",
     };
   } else {
     // TopicTestType
@@ -37,6 +41,8 @@ export const normalizeTestData = (
       time: topicTest.patternDetails.totalTime,
       questions: topicTest.patternDetails.totalQuestion,
       marks: topicTest.patternDetails.totalMark,
+      eventId: "start_topic_test_button_id",
+      event: "start_topic_test_button_click",
     };
   }
 };
