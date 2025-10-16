@@ -23,7 +23,7 @@ const ReleaseNotesModal = () => {
     >
       <div className="max-h-[600px]">
         {/* Modal Header */}
-        <div className="fixed top-0 left-0 right-0 h-[70px] bg-[var(--surface-bg-secondary)] py-2 px-4 flex items-center justify-between gap-2">
+        <div className="fixed top-0 left-0 right-0 h-[70px] bg-[var(--surface-bg-secondary)] py-2 px-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 px-8">
             <Badge
               theme={Theme.Ocean}
@@ -44,7 +44,7 @@ const ReleaseNotesModal = () => {
           </div>
         </div>
 
-        <div className="p-8 pt-[70px] flex flex-col max-h-[530px] overflow-y-auto scrollbar-hide">
+        <div className="px-4 pt-[70px] flex flex-col max-h-[530px] overflow-y-auto scrollbar-hide">
           <div className="flex gap-4 items-center  pb-5 border-b border-[var(--border-primary)]">
             <div className="size-15 aspect-square rounded-md bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
               <LuUsersRound
