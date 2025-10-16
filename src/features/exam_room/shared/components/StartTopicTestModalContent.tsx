@@ -85,7 +85,7 @@ export default function StartTopicTestModalContent({
   const cancel_topic_test_button_id = "cancel_topic_test_button_id";
 
   return (
-    <div className="relative p-2 px-4 max-h-[700px]">
+    <div className="relative p-2 px-4 max-h-[70vh]">
       {/* Header */}
       <div className="flex justify-between gap-2">
         <div className="flex flex-col gap-1">
