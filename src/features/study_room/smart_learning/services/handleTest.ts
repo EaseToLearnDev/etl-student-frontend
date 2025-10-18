@@ -17,9 +17,11 @@ export const handleStartTest = async (
   selectedTopic: Topic | null,
   selectedTestOption: TestOption
 ) => {
+
   const { studentData, activeCourse } = useStudentStore.getState();
   if (!studentData || !activeCourse) return;
-
+  
+  console.log(selectedTestOption)
   if (selectedTopic) {
     let params = {
       testId: "0",

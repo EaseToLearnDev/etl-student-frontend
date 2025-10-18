@@ -32,7 +32,7 @@ export const setCurrentResponseHandler = ({
   action,
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
-
+  
   const isMarkedForReview =
     questionStatusMap[question?.questionId] ===
     QuestionStatus.MARKED_FOR_REVIEW;

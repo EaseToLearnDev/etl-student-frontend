@@ -41,6 +41,8 @@ export const initializeTestData = ({
       q.studentResponse && q.studentResponse.length > 0
         ? q.studentResponse.split("~")
         : [];
+    responseMap[q.questionId] = response;
+    
     timeMap[q.questionId] = q.timeSpent ?? 0;
   });
 

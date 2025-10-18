@@ -72,7 +72,6 @@ const ActiveQuestionPanel = () => {
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
 
-console.log("______----------",currentResponse);
   return (
     <div
       className={cn(
@@ -286,7 +285,6 @@ console.log("______----------",currentResponse);
                 <div className="flex items-center gap-4 mt-7">
                   <input
                     type="text"
-                    value={currentResponse?.text ?? ""}
                     onChange={(e) =>
                       setCurrentResponse(e.target.value, "replace")
                     }
@@ -338,7 +336,6 @@ console.log("______----------",currentResponse);
             ].includes(currentQuestion?.questionType || "") && (
                 <div className="flex flex-col gap-2 mt-7">
                   <textarea
-                    value={currentResponse?.text ?? ""}
                     onChange={(e) =>
                       setCurrentResponse(e.target.value, "replace")
                     }

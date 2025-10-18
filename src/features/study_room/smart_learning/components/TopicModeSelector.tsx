@@ -47,7 +47,6 @@ const TopicModeSelector = ({
   useEffect(() => {
     setSelectedTestOption({ ...testOptions[selectedExamTypeIndex] });
   }, [selectedExamTypeIndex]);
-  console.log(testOptions)
 
   return (
     <div className="relative flex flex-col w-full h-full">
