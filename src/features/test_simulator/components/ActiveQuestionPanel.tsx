@@ -325,6 +325,30 @@ const ActiveQuestionPanel = () => {
                 )}
               </div>
             )}
+
+            {/* Case: Subjective Type Questions */}
+            {[
+              "Subjective-Type-Very-Short",
+              "Subjective-Type-Short-Answer-I",
+              "Subjective-Type-Short-Answer-II",
+              "Subjective-Type-Long",
+            ].includes(currentQuestion?.questionType || "") && (
+              <div className="flex flex-col gap-2 mt-7">
+                <textarea
+                  value={currentResponse ?? ""}
+                  onChange={(e) =>
+                    setCurrentResponse(e.target.value, "replace")
+                  }
+                  disabled={correctResponseEnabled}
+                  placeholder={"Enter Your Answer"}
+                  className={cn(
+                    "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
+                    "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
+                    "min-h-[200px] max-h-[400px]"
+                  )}
+                ></textarea>
+              </div>
+            )}
           </div>
 
           {/* Explanation (Review Mode Only) */}
