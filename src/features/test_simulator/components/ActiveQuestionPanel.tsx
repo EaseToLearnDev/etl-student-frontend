@@ -11,6 +11,7 @@ import {
   MdChevronLeft,
   MdChevronRight,
   MdClose,
+  MdCloudUpload
 } from "react-icons/md";
 
 // Utils
@@ -31,6 +32,7 @@ import WidgetCard from "../../report/components/newreports/WidgetCard";
 import AiIcon from "../../../components/icons/ai-icon";
 import Badge from "../../../components/Badge";
 import Checkbox from "../../../components/Checkbox";
+import { handelFileUpload } from "../services/handleFileUpload";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -70,6 +72,7 @@ const ActiveQuestionPanel = () => {
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
   const isAiFeatureEnabled = useAiStore((s) => s.isAiFeatureEnabled);
 
+console.log("______----------",currentResponse);
   return (
     <div
       className={cn(
@@ -95,7 +98,7 @@ const ActiveQuestionPanel = () => {
           {/* Common Data Description  */}
           <div className="flex flex-col gap-4">
             {currentQuestion?.commonDataDescription &&
-            currentQuestion?.commonDataDescription?.length > 0 ? (
+              currentQuestion?.commonDataDescription?.length > 0 ? (
               <WidgetCard className="shadow-none">
                 <MathJax dynamic>
                   <div
@@ -132,7 +135,7 @@ const ActiveQuestionPanel = () => {
 
             {/* Columns */}
             {currentQuestion?.columns &&
-            currentQuestion?.columns?.length > 0 ? (
+              currentQuestion?.columns?.length > 0 ? (
               <table className="w-full">
                 <tr className="w-full grid grid-cols-2 gap-4">
                   {currentQuestion?.columns?.map((row, index) => (
@@ -224,7 +227,7 @@ const ActiveQuestionPanel = () => {
                       value={response?.responseId}
                       checked={
                         !!currentResponse &&
-                        currentResponse.includes(response.responseId)
+                        currentResponse.text.includes(response.responseId)
                       }
                       onChange={(e) => {
                         if (e.target.checked) {
@@ -241,7 +244,7 @@ const ActiveQuestionPanel = () => {
                       value={response?.responseId}
                       checked={
                         !!currentResponse &&
-                        currentResponse.includes(response.responseId)
+                        currentResponse.text.includes(response.responseId)
                       }
                       onChange={(e) => {
                         setCurrentResponse(e.target.value, "replace");
@@ -263,8 +266,8 @@ const ActiveQuestionPanel = () => {
                           </p>
                         </div>
                       ) : currentQuestion?.studentResponse
-                          ?.split("~")
-                          ?.includes(response?.responseId) ? (
+                        ?.split("~")
+                        ?.includes(response?.responseId) ? (
                         <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
                           <MdClose size={16} />
                           <p className="!font-semibold text-[var(--text-primary)]">
@@ -280,51 +283,51 @@ const ActiveQuestionPanel = () => {
             {/* Case: Fill in the Blank / Integer */}
             {(currentQuestion?.questionType === "Fill-in-Blank" ||
               currentQuestion?.questionType === "Integer-Type") && (
-              <div className="flex items-center gap-4 mt-7">
-                <input
-                  type="text"
-                  value={currentResponse ?? ""}
-                  onChange={(e) =>
-                    setCurrentResponse(e.target.value, "replace")
-                  }
-                  disabled={correctResponseEnabled}
-                  placeholder={"Enter Your Answer"}
-                  className="w-full max-w-[300px] px-3 py-2 border rounded-md text-base bg-[var(--surface-bg-primary)]"
-                />
+                <div className="flex items-center gap-4 mt-7">
+                  <input
+                    type="text"
+                    value={currentResponse?.text ?? ""}
+                    onChange={(e) =>
+                      setCurrentResponse(e.target.value, "replace")
+                    }
+                    disabled={correctResponseEnabled}
+                    placeholder={"Enter Your Answer"}
+                    className="w-full max-w-[300px] px-3 py-2 border rounded-md text-base bg-[var(--surface-bg-primary)]"
+                  />
 
-                {/* Correct Incorrect Labels */}
-                {correctResponseEnabled && (
-                  <>
-                    {currentQuestion?.studentResponse ===
-                    currentQuestion?.correctResponse ? (
-                      <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
-                        <MdCheck size={16} />
-                        <p className="!font-semibold text-[var(--text-primary)]">
-                          Correct Answer
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
-                          <MdClose size={16} />
-                          <p className="!font-semibold text-[var(--text-primary)]">
-                            Incorrect Answer
-                          </p>
-                        </div>
+                  {/* Correct Incorrect Labels */}
+                  {correctResponseEnabled && (
+                    <>
+                      {currentQuestion?.studentResponse ===
+                        currentQuestion?.correctResponse ? (
                         <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
                           <MdCheck size={16} />
-                          <MathJax dynamic>
-                            <p className="!font-semibold text-[var(--text-primary)]">
-                              Correct Answer: {currentQuestion?.correctResponse}
-                            </p>
-                          </MathJax>
+                          <p className="!font-semibold text-[var(--text-primary)]">
+                            Correct Answer
+                          </p>
                         </div>
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            )}
+                      ) : (
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-valencia-bg-active)] text-[var(--sb-valencia-bg-active)] rounded-md">
+                            <MdClose size={16} />
+                            <p className="!font-semibold text-[var(--text-primary)]">
+                              Incorrect Answer
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-1 p-2 px-3 border border-[var(--sb-green-haze-bg-active)] text-[var(--sb-green-haze-bg-active)] rounded-md">
+                            <MdCheck size={16} />
+                            <MathJax dynamic>
+                              <p className="!font-semibold text-[var(--text-primary)]">
+                                Correct Answer: {currentQuestion?.correctResponse}
+                              </p>
+                            </MathJax>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
 
             {/* Case: Subjective Type Questions */}
             {[
@@ -333,22 +336,70 @@ const ActiveQuestionPanel = () => {
               "Subjective-Type-Short-Answer-II",
               "Subjective-Type-Long",
             ].includes(currentQuestion?.questionType || "") && (
-              <div className="flex flex-col gap-2 mt-7">
-                <textarea
-                  value={currentResponse ?? ""}
-                  onChange={(e) =>
-                    setCurrentResponse(e.target.value, "replace")
+                <div className="flex flex-col gap-2 mt-7">
+                  <textarea
+                    value={currentResponse?.text ?? ""}
+                    onChange={(e) =>
+                      setCurrentResponse(e.target.value, "replace")
+                    }
+                    disabled={correctResponseEnabled}
+                    placeholder={"Enter Your Answer"}
+                    className={cn(
+                      "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
+                      "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
+                      "min-h-[200px] max-h-[400px]"
+                    )}
+                  ></textarea>
+
+                  {
+                    currentResponse?.url ? 
+                       <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-[var(--border-secondary)] bg-[var(--surface-bg-primary)]">
+                    <img
+                      src={currentResponse?.url}
+                      className="w-full object-cover"
+                    />
+                    <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[var(--surface-bg-secondary)]">
+                      <Button
+                        style="secondary"
+                        className="px-3 py-1 text-xs"
+                        onClick={() => {
+                           
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                    :
+                      <label
+                        htmlFor="subjective-image-upload"
+                        className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer hover:border-[var(--sb-ocean-bg-active)] transition-colors"
+                      >
+                        <MdCloudUpload size={32} className="text-[var(--text-secondary)]" />
+                        <div className="text-center">
+                          <p className="font-semibold">Upload Images</p>
+                          <p className="text-sm text-[var(--text-secondary)]">
+                            PNG, JPG up to 1GB each
+                          </p>
+                        </div>
+                        <Button style="secondary" className="px-4 py-2">
+                          Choose Files
+                        </Button>
+                        <input
+                          id="subjective-image-upload"
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(event) => {
+                            if (!event.target.files?.length) return;
+                             handelFileUpload(event.target.files[0]);
+                          }}
+                        />
+                      </label>
                   }
-                  disabled={correctResponseEnabled}
-                  placeholder={"Enter Your Answer"}
-                  className={cn(
-                    "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
-                    "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
-                    "min-h-[200px] max-h-[400px]"
-                  )}
-                ></textarea>
-              </div>
-            )}
+
+                </div>
+              )}
           </div>
 
           {/* Explanation (Review Mode Only) */}
@@ -398,7 +449,7 @@ const ActiveQuestionPanel = () => {
               onClick={markCurrentFoReview}
             >
               {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
-              currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
+                currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
                 ? "Unmark Review"
                 : "Mark for Review"}
             </Button>
