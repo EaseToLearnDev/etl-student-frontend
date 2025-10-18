@@ -5,11 +5,12 @@ import type {
   Pointer,
   SectionUI,
   Question,
+  ResponseType,
 } from "../test_simulator.types";
 
 export interface InitializeTestDataResult {
   statusMap: Record<number, QuestionStatus>;
-  responseMap: Record<number, Array<string>>;
+  responseMap: Record<number, ResponseType>;
   timeMap: Record<number, number>;
   sectionsUI: SectionUI[];
   initialPointer: Pointer;
@@ -24,13 +25,19 @@ export const initializeTestData = ({
   testData: TestData;
 }): InitializeTestDataResult => {
   const statusMap: Record<number, QuestionStatus> = {};
-  const responseMap: Record<number, Array<string>> = {};
+  const responseMap: Record<number, ResponseType> = {};
   const timeMap: Record<number, number> = {};
 
   testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] =
       QuestionStatusMap[q.backgroundImg ?? ""] ?? QuestionStatus.NOT_VISITED;
-    responseMap[q?.questionId] =
+
+    let response: ResponseType = {
+      text: [],
+      fileName: null,
+      url: null,
+    };
+    response.text =
       q.studentResponse && q.studentResponse.length > 0
         ? q.studentResponse.split("~")
         : [];

@@ -245,3 +245,10 @@ export interface Features {
   showDynamicStatusEnabled: boolean;
   fullScreenEnabled: boolean;
 }
+
+
+export interface ResponseType {
+  text: string[];
+  fileName: string | null;
+  url: string | null;
+}

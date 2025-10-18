@@ -63,6 +63,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     modelTestId: testData?.modelTestId,
     questionSet:
       testData?.questionSet.map((item) => {
+        const currentResponse = questionResponseMap[item.questionId];
         const baseObj: any = {
           itemId: item.itemId,
           questionId: item.questionId,
@@ -73,7 +74,10 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           notAnswerMarks: item.notAnswerMarks,
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
-          studentResponse: questionResponseMap[item.questionId].join("~") || "",
+          studentResponse:
+            currentResponse.fileName && currentResponse.url
+              ? currentResponse
+              : currentResponse.text.join("~") || "",
         };
 
         if (testData?.testType === 3) {

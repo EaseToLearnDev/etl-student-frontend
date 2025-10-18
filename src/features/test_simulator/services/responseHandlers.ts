@@ -2,6 +2,7 @@ import {
   QuestionStatus,
   type Pointer,
   type Question,
+  type ResponseType,
   type TestData,
 } from "../test_simulator.types";
 
@@ -10,13 +11,13 @@ import {
 export interface SetCurrentResponseParams {
   question: Question | null;
   response: string;
-  questionResponseMap: Record<number, Array<string>>;
+  questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
   action: "push" | "pop" | "replace";
 }
 
 export interface SetCurrentResponseResult {
-  newResponseMap: Record<number, Array<string>>;
+  newResponseMap: Record<number, ResponseType>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -52,20 +53,20 @@ export const setCurrentResponseHandler = ({
   let newResponseMap = questionResponseMap;
   switch (action) {
     case "push":
-      const isDuplicateResponse = questionResponseMap[question.questionId].find(
-        (r) => r.toLowerCase() === response.toLowerCase()
-      );
+      const isDuplicateResponse = questionResponseMap[
+        question.questionId
+      ].text.find((r) => r.toLowerCase() === response.toLowerCase());
       if (!isDuplicateResponse) {
-        newResponseMap[question.questionId].push(response);
+        newResponseMap[question.questionId].text.push(response);
       }
       break;
     case "pop":
-      newResponseMap[question.questionId] = newResponseMap[
+      newResponseMap[question.questionId].text = newResponseMap[
         question.questionId
-      ].filter((r) => r.toLowerCase() !== response.toLowerCase());
+      ].text.filter((r) => r.toLowerCase() !== response.toLowerCase());
       break;
     case "replace":
-      newResponseMap[question.questionId] = [response];
+      newResponseMap[question.questionId].text = [response];
       break;
     default:
       break;
@@ -84,12 +85,12 @@ export const setCurrentResponseHandler = ({
 
 export interface ClearCurrentResponseParams {
   question: Question | null;
-  questionResponseMap: Record<number, Array<string>>;
+  questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
 export interface ClearCurrentResponseResult {
-  newResponseMap: Record<number, Array<string>>;
+  newResponseMap: Record<number, ResponseType>;
   newStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -115,7 +116,7 @@ export const clearCurrentResponseHandler = ({
   return {
     newResponseMap: {
       ...questionResponseMap,
-      [question.questionId]: [],
+      [question.questionId]: { text: [], fileName: null, url: null },
     },
     newStatusMap: {
       ...questionStatusMap,
@@ -131,7 +132,7 @@ export interface IsMaxQuestionLimitReachedParams {
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
-export type IsMaxQuestionLimitReachedResult = 'NONE' | 'GLOBAL' | 'SECTION';
+export type IsMaxQuestionLimitReachedResult = "NONE" | "GLOBAL" | "SECTION";
 
 /**
  * Function to check max attempted questions
@@ -142,7 +143,7 @@ export const isMaxQuestionLimitReached = ({
   question,
   questionStatusMap,
 }: IsMaxQuestionLimitReachedParams): IsMaxQuestionLimitReachedResult => {
-  if (!question || !testData) return 'NONE';
+  if (!question || !testData) return "NONE";
 
   const attemptedQuestionsCount = Object.values(questionStatusMap).filter(
     (status) =>
@@ -158,7 +159,7 @@ export const isMaxQuestionLimitReached = ({
     testData?.noQuestionAttempt > 0 &&
     attemptedQuestionsCount >= testData?.noQuestionAttempt
   ) {
-    return 'GLOBAL';
+    return "GLOBAL";
   }
 
   // Check for section attempted limit
@@ -177,8 +178,110 @@ export const isMaxQuestionLimitReached = ({
     question?.noQuestionAttempt > 0 &&
     currentSectionAttemptedCount >= question?.noQuestionAttempt
   ) {
-    return 'SECTION';
+    return "SECTION";
   }
 
-  return 'NONE';
+  return "NONE";
+};
+
+interface SetCurrentFileUrlHandlerParams {
+  question: Question | null;
+  fileName: string;
+  url: string;
+  questionResponseMap: Record<number, ResponseType>;
+  questionStatusMap: Record<number, QuestionStatus>;
+}
+
+export interface SetCurrentFileUrlHandlerResult {
+  newResponseMap: Record<number, ResponseType>;
+  newStatusMap: Record<number, QuestionStatus>;
+}
+
+export const setCurrentFileUrlHandler = ({
+  question,
+  fileName,
+  url,
+  questionResponseMap,
+  questionStatusMap,
+}: SetCurrentFileUrlHandlerParams): SetCurrentFileUrlHandlerResult | null => {
+  if (!question || !fileName || !url) return null;
+
+  const isMarkedForReview =
+    questionStatusMap[question?.questionId] ===
+    QuestionStatus.MARKED_FOR_REVIEW;
+  const isAnsweredAndReview =
+    questionStatusMap[question?.questionId] ===
+    QuestionStatus.ANSWERED_AND_REVIEW;
+
+  let newStatus: QuestionStatus;
+  newStatus =
+    isMarkedForReview || isAnsweredAndReview
+      ? QuestionStatus.ANSWERED_AND_REVIEW
+      : QuestionStatus.ATTEMPTED;
+
+  return {
+    newResponseMap: {
+      ...questionResponseMap,
+      [question.questionId]: {
+        text: questionResponseMap[question.questionId].text,
+        fileName: fileName,
+        url: url,
+      },
+    },
+    newStatusMap: {
+      ...questionStatusMap,
+      [question.questionId]: newStatus,
+    },
+  };
+};
+
+interface ClearCurrentFileUrlHandlerParams {
+  question: Question | null;
+  questionResponseMap: Record<number, ResponseType>;
+  questionStatusMap: Record<number, QuestionStatus>;
+}
+
+export interface ClearCurrentFileUrlHandlerResult {
+  newResponseMap: Record<number, ResponseType>;
+  newStatusMap: Record<number, QuestionStatus>;
+}
+
+export const clearCurrentFileUrlHandler = ({
+  question,
+  questionResponseMap,
+  questionStatusMap,
+}: ClearCurrentFileUrlHandlerParams): ClearCurrentFileUrlHandlerResult | null => {
+  if (!question) return null;
+
+  const prevStatus = questionStatusMap[question.questionId];
+  let newStatus: QuestionStatus;
+
+  // Preserve review states first
+  if (
+    prevStatus === QuestionStatus.ANSWERED_AND_REVIEW ||
+    prevStatus === QuestionStatus.MARKED_FOR_REVIEW
+  ) {
+    newStatus = QuestionStatus.MARKED_FOR_REVIEW;
+  } else {
+    // Otherwise determine based on remaining text responses
+    newStatus =
+      questionResponseMap[question.questionId].text.length === 0
+        ? QuestionStatus.NOT_ATTEMPTED
+        : QuestionStatus.ATTEMPTED;
+  }
+
+  return {
+    newResponseMap: {
+      ...questionResponseMap,
+      [question.questionId]: {
+        text: questionResponseMap[question.questionId].text,
+        fileName: null,
+        url: null,
+      },
+    },
+    newStatusMap: {
+      ...questionStatusMap,
+      [question.questionId]: newStatus,
+    },
+  };
 };

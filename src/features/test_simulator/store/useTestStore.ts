@@ -1,7 +1,7 @@
 // Zustand
 import { create } from "zustand";
 // Types
-import { QuestionStatus } from "../test_simulator.types";
+import { QuestionStatus, QuestionStatusMap } from "../test_simulator.types";
 import type {
   TestData,
   Question,
@@ -9,6 +9,7 @@ import type {
   Pointer,
   TestConfig,
   Features,
+  ResponseType,
 } from "../test_simulator.types";
 import { Severity, ToastType, type Error } from "../../shared/types";
 
@@ -19,8 +20,10 @@ import {
   setCurrentQuestionHandler,
 } from "../services/navigation";
 import {
+  clearCurrentFileUrlHandler,
   clearCurrentResponseHandler,
   isMaxQuestionLimitReached,
+  setCurrentFileUrlHandler,
   setCurrentResponseHandler,
 } from "../services/responseHandlers";
 import {
@@ -77,12 +80,13 @@ export interface TestStore {
 
   jumpToQuestion: (question: Question | null) => void;
 
-  questionResponseMap: Record<number, Array<string>>;
-  getCurrentResponse: () => Array<string>;
+  questionResponseMap: Record<number, ResponseType>;
+  getCurrentResponse: () => ResponseType | null;
   setCurrentResponse: (
     response: string,
     action: "push" | "pop" | "replace"
   ) => void;
+  setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
 
   questionTimeMap: Record<number, number>;
@@ -415,7 +419,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
-    if (!question) return [];
+    if (!question) return null;
 
     return getResponseForQuestionHandler({
       questionId: question.questionId,
@@ -472,6 +476,47 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap: result.newStatusMap,
     });
   },
+
+  setCurrentFileUrl: (fileName, url) => {
+    const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
+      get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
+    const result = setCurrentFileUrlHandler({
+      question,
+      fileName,
+      url,
+      questionResponseMap,
+      questionStatusMap,
+    });
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
+    });
+  },
+
+    clearCurrentFileUrl: () => {
+    const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
+      get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
+    const result = clearCurrentFileUrlHandler({
+      question,
+      questionResponseMap,
+      questionStatusMap,
+    });
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
+    });
+  },
+
   // Clear Current Response Handler
   clearCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
