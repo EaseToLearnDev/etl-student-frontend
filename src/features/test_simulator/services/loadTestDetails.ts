@@ -53,7 +53,6 @@ export const loadTestDetails = async ({
               ...testConfig,
               templateId: activeCourse?.templateId,
               packTypeTitle,
-              examType: "objective",
               loginId: studentData?.loginId,
               token: studentData?.token,
             });

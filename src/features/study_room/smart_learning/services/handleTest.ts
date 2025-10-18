@@ -1,7 +1,7 @@
 // Types
 import type { NavigateFunction } from "react-router-dom";
 import type { Topic } from "../../../shared/types";
-import type { ModeType, TestOptions } from "../sl.types";
+import type { ModeType, TestOption } from "../sl.types";
 import { type PrevRunningTest } from "../../../shared/types";
 
 // Utils
@@ -15,25 +15,26 @@ export const handleStartTest = async (
   navigate: NavigateFunction,
   mode: ModeType,
   selectedTopic: Topic | null,
-  testOptions: TestOptions
+  selectedTestOption: TestOption
 ) => {
-  const {studentData, activeCourse} = useStudentStore.getState();
-  if(!studentData || !activeCourse) return;
+  const { studentData, activeCourse } = useStudentStore.getState();
+  if (!studentData || !activeCourse) return;
 
   if (selectedTopic) {
     let params = {
       testId: "0",
       testType: "1",
-      questionType: testOptions.questionTypeList.join(",") ?? "Multiple Choice",
-      totalQuestion: String(testOptions.totalQuestion),
-      totalTime: String(testOptions.totalTime),
-      marksCorrectAnswer: String(testOptions.marksCorrectAns),
-      marksIncorrectAnswer: String(testOptions.marksIncorrectAns),
-      marksNotAttempted: String(testOptions.marksNotAttempted),
+      questionType:
+        selectedTestOption.questionTypeList.join(",") ?? "Multiple Choice",
+      totalQuestion: String(selectedTestOption.totalQuestions),
+      totalTime: String(selectedTestOption.duration),
+      marksCorrectAnswer: String(selectedTestOption.marksCorrectAns),
+      marksIncorrectAnswer: String(selectedTestOption.marksIncorrectAns),
+      marksNotAttempted: String(selectedTestOption.marksNotAnswer),
       searchFlag: "Topic",
       searchQuery: selectedTopic.topicName,
       topicId: String(selectedTopic.topicId),
-      examType: "objective",
+      examType: selectedTestOption?.examType,
       assessmentMode: mode === "Learning Session" ? "beginner" : "advance",
       templateId: String(activeCourse?.templateId),
       packTypeTitle: activeCourse?.packTypeTitle,
