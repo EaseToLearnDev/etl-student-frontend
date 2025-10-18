@@ -115,6 +115,9 @@ export interface TestStore {
   isSwitchSectionModalOpen: boolean;
   setIsSwitchSectionModalOpen: (v: boolean) => void;
 
+  isSubjectiveMediaModalOpen: boolean;
+  setIsSubjectiveMediaModalOpen: (v: boolean) => void;
+
   reset: () => void;
 }
 
@@ -629,6 +632,9 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   isSwitchSectionModalOpen: false,
   setIsSwitchSectionModalOpen: (v) => set({ isSwitchSectionModalOpen: v }),
+
+  isSubjectiveMediaModalOpen: false,
+  setIsSubjectiveMediaModalOpen: (v) => set({isSubjectiveMediaModalOpen: v}),
 
   // Reset state
   reset: () => {

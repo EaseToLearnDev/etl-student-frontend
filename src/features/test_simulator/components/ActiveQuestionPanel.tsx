@@ -33,6 +33,7 @@ import AiIcon from "../../../components/icons/ai-icon";
 import Badge from "../../../components/Badge";
 import Checkbox from "../../../components/Checkbox";
 import { handelFileUpload } from "../services/handleFileUpload";
+import { handelFileRemove } from "../services/handleFileRemove";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -67,6 +68,7 @@ const ActiveQuestionPanel = () => {
     ? questionStatusMap[currentQuestion.questionId]
     : null;
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
+  const  setIsSubjectiveMediaModalOpen = useTestStore(s => s.setIsSubjectiveMediaModalOpen);
 
   // Ai Store
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
@@ -348,51 +350,54 @@ const ActiveQuestionPanel = () => {
                     )}
                   ></textarea>
 
-                  {
-                    currentResponse?.url ? 
-                       <div className="relative w-full max-w-md overflow-hidden rounded-xl border border-[var(--border-secondary)] bg-[var(--surface-bg-primary)]">
-                    <img
-                      src={currentResponse?.url}
-                      className="w-full object-cover"
-                    />
-                    <div className="flex items-center justify-between gap-3 px-4 py-3 bg-[var(--surface-bg-secondary)]">
-                      <Button
-                        style="secondary"
-                        className="px-3 py-1 text-xs"
-                        onClick={() => {
-                           
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                    :
-                      <label
-                        htmlFor="subjective-image-upload"
-                        className="flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer hover:border-[var(--sb-ocean-bg-active)] transition-colors"
-                      >
-                        <MdCloudUpload size={32} className="text-[var(--text-secondary)]" />
-                        <div className="text-center">
-                          <p className="font-semibold">Upload Images</p>
-                          <p className="text-sm text-[var(--text-secondary)]">
-                            PNG, JPG up to 1GB each
-                          </p>
-                        </div>
-                        <Button style="secondary" className="px-4 py-2">
-                          Choose Files
-                        </Button>
-                        <input
-                          id="subjective-image-upload"
-                          type="file"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(event) => {
-                            if (!event.target.files?.length) return;
-                             handelFileUpload(event.target.files[0]);
+                  {currentResponse?.url ? (
+                    <div className="flex items-center h-44 gap-2 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer px-5">
+                      <img
+                        src={currentResponse.url}
+                        className="w-40 object-cover"
+                        onClick={() => setIsSubjectiveMediaModalOpen(true)}
+                      />
+                      <div className="flex flex-1 items-center justify-end ml-10">
+                        <Button
+                          style="secondary"
+                          className="px-3 py-1 text-xs"
+                          onClick={() => {
+                            if (currentResponse?.fileName) {
+                              handelFileRemove(currentResponse.fileName);
+                            }
                           }}
-                        />
-                      </label>
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                    :
+                    <label
+                      htmlFor="subjective-image-upload"
+                      className="flex flex-col items-center justify-center gap-2 h-44 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer hover:border-[var(--sb-ocean-bg-active)] transition-colors"
+                    >
+                      <MdCloudUpload size={32} className="text-[var(--text-secondary)]" />
+                      <div className="text-center">
+                        <p className="font-semibold">Upload Images</p>
+                        <p className="text-sm text-[var(--text-secondary)]">
+                          PNG, JPG up to 10MB each
+                        </p>
+                      </div>
+                      <Button style="secondary" className="px-4 py-2">
+                        Choose Files
+                      </Button>
+                      <input
+                        id="subjective-image-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(event) => {
+                          if (!event.target.files?.length) return;
+                          handelFileUpload(event.target.files[0]);
+                        }}
+                      />
+                    </label>
                   }
 
                 </div>

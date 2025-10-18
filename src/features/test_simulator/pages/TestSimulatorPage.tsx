@@ -38,6 +38,7 @@ import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 import { LuLock } from "react-icons/lu";
+import SubjectiveMediaModal from "../components/SubjectiveMediaModal";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -232,6 +233,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           setIsSwitchSectionModalOpen(false);
         }}
       />
+
+      <SubjectiveMediaModal />
 
       <GuestTestSubmitModal />
 
