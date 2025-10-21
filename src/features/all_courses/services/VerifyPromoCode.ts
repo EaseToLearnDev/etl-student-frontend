@@ -17,7 +17,7 @@ export const applyPromoCode = async (tabs: string[], promoCode?: string, courseI
   if (!promoCode || !courseId) return;
 
   if (!studentData) {
-    console.log("No student data found");
+    console.error("No student data found");
     return null;
   }
 
@@ -47,7 +47,7 @@ export const applyPromoCode = async (tabs: string[], promoCode?: string, courseI
 
     return res;
   } catch (error) {
-    console.log("Failed to Verify Promo Code: ", error);
+    console.error("Failed to Verify Promo Code: ", error);
     setError(true);
     setApplied(false);
     return null;

@@ -33,7 +33,7 @@ export const handlePaymentButton = ({
     });
     return data;
   } catch (error) {
-    console.log("Failed to Direct to the Payment: ", error);
+    console.error("Failed to Direct to the Payment: ", error);
     return null;
   }
 };

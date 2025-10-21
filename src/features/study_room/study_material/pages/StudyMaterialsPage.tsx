@@ -41,6 +41,8 @@ import { useContentLimitStore } from "../hooks/useContentLimitStore";
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 import LimitReachedModal from "../components/LimitReachedModal";
 import { LuBookOpen, LuListTree } from "react-icons/lu";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -140,6 +142,14 @@ const StudyMaterialsPage = () => {
       return;
     }
 
+    pushToDataLayer({
+      event: gtmEvents[`Study_material_content_item_click`],
+      id: `Study_material_content_item_id`,
+      content_title: content?.contentTitle,
+      content_type: content?.contentType,
+      content_id: content?.id,
+    });
+
     // Check if content limit has reached or not
     if (canOpenContent(activeCourse.courseId, content)) {
       addOrUpdateCounter(
@@ -176,9 +186,15 @@ const StudyMaterialsPage = () => {
               <TopicTreeView
                 topics={topicTree || []}
                 selectedTopic={selectedTopic}
-                onClickHandler={(t) =>
-                  setSelectedTopicId(t ? t?.topicId : null)
-                }
+                onClickHandler={(t) => {
+                  setSelectedTopicId(t ? t?.topicId : null);
+                  pushToDataLayer({
+                    event: gtmEvents[`Study_material_topic_button_click`],
+                    id: `Study_material_topic_button_id`,
+                    topic_name: t?.topicName,
+                    topic_id: t?.topicId,
+                  });
+                }}
                 getId={(t) => t.topicId}
                 getLabel={(t) => t.topicName}
                 getChildren={(t) => t.children}
@@ -227,6 +243,10 @@ const StudyMaterialsPage = () => {
           onClose={() => {
             setSelectedContent(null);
             setTextContent(null);
+            pushToDataLayer({
+              event: gtmEvents.close_content_modal_button_click,
+              id: `close_content_modal_button_id`,
+            });
           }}
           size="xl"
           className="p-4 lg:p-10"
@@ -243,7 +263,13 @@ const StudyMaterialsPage = () => {
               </NoCopyWrapper>
             )}
             <div
-              onClick={() => setSelectedContent(null)}
+              onClick={() => {
+                setSelectedContent(null);
+                pushToDataLayer({
+                  event: gtmEvents.close_content_modal_button_click,
+                  id: `close_content_modal_button_id`,
+                });
+              }}
               className={cn(
                 "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
                 "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"

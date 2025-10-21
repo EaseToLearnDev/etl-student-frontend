@@ -7,6 +7,8 @@ import { Theme } from "../../../../utils/colors";
 import type { ModeType, TestOptions } from "../sl.types";
 import SmartLearningInstructions from "./SmartLearningInstructions";
 import { useState } from "react";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 interface SLTestModalContentProps {
   mode: ModeType;
@@ -26,7 +28,7 @@ const SLTestModalContent = ({
 }: SLTestModalContentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
 
-  const fields : {id: keyof TestOptions; label: string}[] = [
+  const fields: { id: keyof TestOptions; label: string }[] = [
     {
       id: "totalQuestion",
       label: "Total Question",
@@ -49,6 +51,8 @@ const SLTestModalContent = ({
     },
   ];
 
+  const tabs = ["Options", "Instructions"];
+
   return (
     <div className="relative p-2 px-4 max-h-[90vh] flex flex-col">
       {/* Header */}
@@ -58,9 +62,7 @@ const SLTestModalContent = ({
           style="outline"
           className="w-fit border-1 !border-[var(--border-primary)] !font-semibold"
         >
-          <span>
-            {mode}
-          </span>
+          <span>{mode}</span>
         </Badge>
         <h5 className="text-[var(--sb-ocean-bg-active)]">
           {topicName || "Characteristic of Living Organism"}
@@ -71,10 +73,19 @@ const SLTestModalContent = ({
       {mode === "Competitive Session" && (
         <div className="w-full flex justify-center items-center mt-2">
           <Tabs
-            tabs={["Options", "Instructions"]}
+            tabs={tabs}
             selectedIndex={selectedIndex}
-            onSelect={setSelectedIndex}
-            activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
+            onSelect={(index) => {
+              setSelectedIndex(index);
+              pushToDataLayer({
+                event:
+                  gtmEvents[
+                    `competitive_session_${tabs[index]}_button_click` as keyof typeof gtmEvents
+                  ],
+                id: `competitive_session_${tabs[index]}_button_id`,
+              });
+            }}
+            activeTabClassName="bg-[var(--sb-ocean-bg-active)] w-[100px] sm:w-[150px] text-white"
             tabClassName="w-[100px] sm:w-[150px] border-2 border-[var(--border-primary)]"
           />
         </div>

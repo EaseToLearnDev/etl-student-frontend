@@ -1,3 +1,5 @@
+import StudyMaterialsPage from "../features/study_room/study_material/pages/StudyMaterialsPage";
+
 export const gtmEvents = {
   verify_otp_button_click: "verify_otp_button_click",
   cancel_otp_button_click: "cancel_otp_button_click",
@@ -30,8 +32,25 @@ export const gtmEvents = {
   all_courses_clear_filter_click: "all_courses_clear_filter_click",
   report_category_tab_click: "report_category_tab_click",
   report_test_detail_click: "report_test_detail_click",
-  //to-do:
   logout_button_click: "logout_button_click",
+  Smart_learning_topic_button_click: "Smart_learning_topic_button_click",
+  competitive_session_button_click: "competitive_session_button_click",
+  learning_session_button_click: "learning_session_button_click",
+  cancel_competitive_session_button_click: "cancel_competitive_session_button_click",
+  cancel_learning_session_button_click: "cancel_learning_session_button_click",
+  start_learning_session_button_click: "start_learning_session_button_click",
+  start_competitive_session_button_click: "start_competitive_session_button_click",
+  next_competitive_session_button_click: "next_competitive_session_button_click",
+  next_learning_session_button_click: "next_learning_session_button_click",
+  competitive_session_Options_button_click: "competitive_session_Options_button_click",
+  competitive_session_Instructions_button_click: "competitive_session_Instructions_button_click",
+  Study_material_topic_button_click: "Study_material_topic_button_click",
+  Study_material_content_item_click: "Study_material_content_item_click",
+  close_content_modal_button_click: "close_content_modal_button_click",
+  study_material_filter_button_click: "study_material_filter_button_click",
+  topic_tree_expand_click: "topic_tree_expand_click",
+  
+  //to-do:
   all_courses_filter_category_click: "all_courses_filter_category_click",
   all_courses_card_click: "all_courses_card_click",
 };

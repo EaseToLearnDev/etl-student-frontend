@@ -7,7 +7,8 @@ import TopicProgressChart from "./topic-progress-chart/TopicProgressChart";
 import SmartLearningInstructions from "./SmartLearningInstructions";
 import type { ModeType } from "../sl.types";
 import Tabs from "../../../../components/Tabs";
-
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 interface TopicModeSelectorProps {
   topicName: string;
   lastSelfTestPercentage: number;
@@ -31,6 +32,8 @@ const TopicModeSelector = ({
   // const isLearning = mode === "learning";
   const selectedIndex = mode === "Learning Session" ? 0 : 1;
 
+  console.log("TopicModeSelector Rendered with mode:", mode);
+
   return (
     <div className="relative flex flex-col w-full h-full">
       {/* Mode selection section */}
@@ -41,9 +44,21 @@ const TopicModeSelector = ({
         <Tabs
           tabs={["Learning", "Competitive"]}
           selectedIndex={selectedIndex}
-          onSelect={(index) =>
-            setMode(index === 0 ? "Learning Session" : "Competitive Session")
-          }
+          onSelect={(index) => {
+            const newMode = index === 0 ? "Learning Session" : "Competitive Session";
+            setMode(newMode);
+
+            const newEventType =
+              newMode === "Learning Session" ? "learning_session" : "competitive_session";
+
+            pushToDataLayer({
+              event:
+                gtmEvents[
+                  `${newEventType}_button_click` as keyof typeof gtmEvents
+                ],
+              id: `${newEventType}_button_id`,
+            });
+          }}
           containerClassName="justify-center"
           tabClassName="px-3 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200 nowrap"
           activeTabClassName="px-3 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
@@ -53,7 +68,10 @@ const TopicModeSelector = ({
       {/* Progress section */}
       <div className="flex flex-col items-center gap-5 mt-4">
         <p className="text-center font-semibold">Topic Progress</p>
-        <TopicProgressChart progress={lastSelfTestPercentage ?? 0} barColor={barColor} />
+        <TopicProgressChart
+          progress={lastSelfTestPercentage ?? 0}
+          barColor={barColor}
+        />
       </div>
 
       <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">

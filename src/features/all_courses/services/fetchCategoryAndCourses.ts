@@ -12,7 +12,6 @@ export const fetchCategoryAndCourses = () => {
     const data = categoryAndCourses({ loginId, token });
     return data ?? null;  
   } catch (error) {
-    console.log("Failed to fetch Courses: ", error);
     return null;
   }
 };
