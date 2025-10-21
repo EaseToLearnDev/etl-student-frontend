@@ -88,7 +88,7 @@ export interface TestStore {
   ) => void;
   setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
-
+  clearCurrentFileUrl: () => void;
   questionTimeMap: Record<number, number>;
   getTimeByQuestionId: (questionId: number) => number;
   incrementTimeByQuestionId: (questionId: number) => void;
