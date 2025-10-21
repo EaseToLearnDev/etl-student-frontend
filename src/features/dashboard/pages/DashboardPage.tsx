@@ -152,7 +152,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
         <WidgetCard
           title="Tests activity "
-          className="min-h-[400px] relative overflow-y-auto scrollbar-hide"
+          className="min-h-[400px] relative "
         >
           {loadingGhActivityByDay ? (
             <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
