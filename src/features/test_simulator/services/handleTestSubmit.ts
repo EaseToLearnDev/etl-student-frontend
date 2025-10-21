@@ -141,16 +141,16 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
 
   if (testData?.testType === 1 && testConfig?.assessmentMode === "beginner") {
     navigate(
-      `/learning-testanalytics?testSession=${resData?.obj?.testSession}`
+      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`,
     );
     setToast({
-      title: "Test Submit Successfully",
+      title: "Test Submitted Successfully",
       type: ToastType.SUCCESS,
     });
   } else {
-    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}`);
+    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`);
     setToast({
-      title: "Test Submit Successfully",
+      title: "Test Submitted Successfully",
       type: ToastType.SUCCESS,
     });
   }

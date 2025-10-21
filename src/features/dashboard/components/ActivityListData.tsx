@@ -1,5 +1,5 @@
 import EmptyState from "../../../components/EmptyState";
-import type { IGhActivityByDayResults } from "../../../global/services/getGhActivityByDay";
+import type { IGhActivityByDayResults } from "../services/getGhActivityByDay";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 import Button from "../../../components/Button";
@@ -12,7 +12,7 @@ function Test({
   onNavigate,
 }: {
   testData: IGhActivityByDayResults;
-  onNavigate: (testSession: string, testMode: string) => void;
+  onNavigate: (testSession: string, testMode: string, testType: number) => void;
 }) {
   const getTestType = (testType: number, testMode: string) => {
     switch (testType) {
@@ -81,7 +81,7 @@ function Test({
       <Button
         style="secondary"
         type="button"
-        onClick={() => onNavigate(testData.testSession, testData.testMode)}
+        onClick={() => onNavigate(testData.testSession, testData.testMode, testData.testType)}
         className="text-xs rounded-full py-2"
       >
         View test
@@ -109,11 +109,11 @@ function ActivityListData({
     );
   }
 
-  const handleTestNavigation = (testSession: string, testMode: string) => {
+  const handleTestNavigation = (testSession: string, testMode: string, testType: number) => {
     if (testMode === "Learning Session") {
-      navigate(`/learning-testanalytics?testSession=${testSession}`);
+      navigate(`/learning-testanalytics?testSession=${testSession}&testType=${testType}`);
     } else {
-      navigate(`/testanalytics?testSession=${testSession}`);
+      navigate(`/testanalytics?testSession=${testSession}&testType=${testType}`);
     }
   };
 
