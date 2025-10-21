@@ -67,6 +67,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       })),
       questionSet:
         testData?.questionSet.map((item) => {
+          const currentResponse = questionResponseMap[item.questionId];
           const baseObj: any = {
             questionId: item.questionId,
             questionDisplayId: item.questionDisplayId,
@@ -77,7 +78,10 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             columns: item.columns,
             topicId: item.topicId,
             timeSpent: questionTimeMap[item.questionId] || 0,
-            studentResponse: questionResponseMap[item.questionId].join("~"),
+            studentResponse:
+              currentResponse.fileName && currentResponse.url
+                ? currentResponse
+                : currentResponse.text.join("~") || "",
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,
