@@ -118,7 +118,7 @@ function ActivityListData({
   };
 
   return (
-    <div className="flex flex-col gap-4 pt-4">
+    <div className="flex flex-col gap-4 mt-4 px-2 max-h-[300px] overflow-y-auto">
       {dataByDay.map((testData: IGhActivityByDayResults, index: number) => {
         return (
           <Test
