@@ -13,17 +13,14 @@ import { ActivityList } from "../components/ActivityList";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { getGhActivity } from "../../../global/services/getGhActivity";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
-import { getGhActivityYears } from "../../../global/services/getGhActivityYears";
-import {
-  getGhActivityByDay,
-  type IGhActivityByDayResults,
-} from "../../../global/services/getGhActivityByDay";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { getGhActivityByDay, type IGhActivityByDayResults } from "../services/getGhActivityByDay";
+import { getGhActivityYears } from "../services/getGhActivityYears";
+import { getGhActivity } from "../services/getGhActivity";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
