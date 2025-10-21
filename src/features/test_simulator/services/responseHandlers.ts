@@ -33,6 +33,7 @@ export const setCurrentResponseHandler = ({
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
   
+  const isAnswered = response && response.length > 0 || questionResponseMap[question.questionId].url !== null;
   const isMarkedForReview =
     questionStatusMap[question?.questionId] ===
     QuestionStatus.MARKED_FOR_REVIEW;
@@ -41,13 +42,14 @@ export const setCurrentResponseHandler = ({
     QuestionStatus.ANSWERED_AND_REVIEW;
 
   let newStatus: QuestionStatus;
-  if (response) {
+  if (isAnswered) {
     newStatus =
       isMarkedForReview || isAnsweredAndReview
         ? QuestionStatus.ANSWERED_AND_REVIEW
         : QuestionStatus.ATTEMPTED;
   } else {
     newStatus = QuestionStatus.NOT_ATTEMPTED;
+
   }
 
   let newResponseMap = questionResponseMap;
@@ -265,9 +267,9 @@ export const clearCurrentFileUrlHandler = ({
   } else {
     // Otherwise determine based on remaining text responses
     newStatus =
-      questionResponseMap[question.questionId].text.length === 0
-        ? QuestionStatus.NOT_ATTEMPTED
-        : QuestionStatus.ATTEMPTED;
+      questionResponseMap[question.questionId].text[0]
+        ? QuestionStatus.ATTEMPTED
+        : QuestionStatus.NOT_ATTEMPTED;
   }
 
   return {

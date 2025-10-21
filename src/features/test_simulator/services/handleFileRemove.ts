@@ -10,7 +10,7 @@ export const handelFileRemove = async (fileName: string) => {
 
     const { studentData } = useStudentStore.getState();
     const { setToast }  = useToastStore.getState();
-    const { clearCurrentResponse } = useTestStore.getState();
+    const { clearCurrentFileUrl } = useTestStore.getState();
 
     if(!studentData) return;
 
@@ -21,7 +21,7 @@ export const handelFileRemove = async (fileName: string) => {
     const res: any = await removeFile({loginId ,token, data})
     
     if(res?.responseTxt === "success"){
-        clearCurrentResponse();
+        clearCurrentFileUrl();
     }
     else{
         setToast({title: "File Removed Failed" , type: ToastType.DANGER});
