@@ -54,7 +54,7 @@ const SLTestModalContent = ({
   const tabs = ["Options", "Instructions"];
 
   return (
-    <div className="relative p-2 px-4 max-h-[90vh] flex flex-col">
+    <div className="relative p-2 px-4 max-h-[70vh] flex flex-col">
       {/* Header */}
       <div className="w-full flex flex-col gap-2">
         <Badge
