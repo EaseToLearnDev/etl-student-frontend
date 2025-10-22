@@ -32,8 +32,10 @@ export const setCurrentResponseHandler = ({
   action,
 }: SetCurrentResponseParams): SetCurrentResponseResult | null => {
   if (!question) return null;
-  
-  const isAnswered = response && response.length > 0 || questionResponseMap[question.questionId].url !== null;
+
+  const isAnswered =
+    (response && response.length > 0) ||
+    questionResponseMap[question.questionId].url !== null;
   const isMarkedForReview =
     questionStatusMap[question?.questionId] ===
     QuestionStatus.MARKED_FOR_REVIEW;
@@ -49,12 +51,11 @@ export const setCurrentResponseHandler = ({
         : QuestionStatus.ATTEMPTED;
   } else {
     newStatus = QuestionStatus.NOT_ATTEMPTED;
-
   }
 
-  let newResponseMap = questionResponseMap;
+  const newResponseMap = questionResponseMap;
   switch (action) {
-    case "push":
+    case "push": {
       const isDuplicateResponse = questionResponseMap[
         question.questionId
       ].text.find((r) => r.toLowerCase() === response.toLowerCase());
@@ -62,13 +63,14 @@ export const setCurrentResponseHandler = ({
         newResponseMap[question.questionId].text.push(response);
       }
       break;
+    }
     case "pop":
       newResponseMap[question.questionId].text = newResponseMap[
         question.questionId
       ].text.filter((r) => r.toLowerCase() !== response.toLowerCase());
       break;
     case "replace":
-      newResponseMap[question.questionId].text = [response];
+      newResponseMap[question.questionId].text[0] = response;
       break;
     default:
       break;
@@ -150,7 +152,7 @@ export const isMaxQuestionLimitReached = ({
   const attemptedQuestionsCount = Object.values(questionStatusMap).filter(
     (status) =>
       status === QuestionStatus.ATTEMPTED ||
-      status === QuestionStatus.ANSWERED_AND_REVIEW
+      status === QuestionStatus.ANSWERED_AND_REVIEW,
   ).length;
 
   // Check for global attempted limit
@@ -170,7 +172,7 @@ export const isMaxQuestionLimitReached = ({
   const currentSectionAttemptedCount = currentSectionQuestionList.filter(
     (q) =>
       questionStatusMap[q?.questionId] === QuestionStatus.ATTEMPTED ||
-      questionStatusMap[q?.questionId] === QuestionStatus.ANSWERED_AND_REVIEW
+      questionStatusMap[q?.questionId] === QuestionStatus.ANSWERED_AND_REVIEW,
   ).length;
   if (
     question?.questionId &&
@@ -215,8 +217,7 @@ export const setCurrentFileUrlHandler = ({
     questionStatusMap[question?.questionId] ===
     QuestionStatus.ANSWERED_AND_REVIEW;
 
-  let newStatus: QuestionStatus;
-  newStatus =
+  const newStatus =
     isMarkedForReview || isAnsweredAndReview
       ? QuestionStatus.ANSWERED_AND_REVIEW
       : QuestionStatus.ATTEMPTED;
@@ -266,10 +267,9 @@ export const clearCurrentFileUrlHandler = ({
     newStatus = QuestionStatus.MARKED_FOR_REVIEW;
   } else {
     // Otherwise determine based on remaining text responses
-    newStatus =
-      questionResponseMap[question.questionId].text[0]
-        ? QuestionStatus.ATTEMPTED
-        : QuestionStatus.NOT_ATTEMPTED;
+    newStatus = questionResponseMap[question.questionId].text[0]
+      ? QuestionStatus.ATTEMPTED
+      : QuestionStatus.NOT_ATTEMPTED;
   }
 
   return {

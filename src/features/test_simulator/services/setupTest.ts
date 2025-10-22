@@ -23,7 +23,7 @@ export const setupTest = async (
   setMode: (mode: string) => void,
   setLoading: (loading: boolean) => void,
   setCurrentQuestion: (question: Question | null) => void,
-  isMobile: boolean
+  isMobile: boolean,
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -59,7 +59,10 @@ export const setupTest = async (
       error: { id: string; message: string } | null;
     } = result;
 
-    if (error?.id === "limit_reached" || error?.id === "question_limit_reached") {
+    if (
+      error?.id === "limit_reached" ||
+      error?.id === "question_limit_reached"
+    ) {
       setError({
         id: error?.id,
         message: error.message,
@@ -71,7 +74,7 @@ export const setupTest = async (
 
     if (data) setTestData(data);
 
-    let features;
+    let features: Features;
     switch (mode) {
       case "guest":
       case "registered":
@@ -82,6 +85,7 @@ export const setupTest = async (
             testConfig?.assessmentMode === "advance" ||
             testConfig?.testType !== 1,
           fullScreenEnabled: false,
+          subjectiveMarksEditEnabled: false,
         };
 
         break;
@@ -91,6 +95,7 @@ export const setupTest = async (
           showDynamicStatusEnabled: false,
           timerEnabled: false,
           fullScreenEnabled: false,
+          subjectiveMarksEditEnabled: data?.testStatus === 1 ? false : true,
         };
         break;
     }
@@ -102,12 +107,19 @@ export const setupTest = async (
         startTestTimer(data?.remainingTime ?? 0);
       }
     }
+
     if (
-      mode === "review" ||
-      (testConfig?.testType === 1 && testConfig?.assessmentMode === "beginner")
+      (testConfig?.testType === 1 &&
+        testConfig?.assessmentMode === "beginner") ||
+      mode === "review"
     ) {
       setIsAiFeatureEnabled(true);
-    } else {
+    }
+
+    if (
+      (mode !== "review" && testConfig?.assessmentMode === "advance") ||
+      (testConfig?.testType && testConfig?.testType !== 1)
+    ) {
       features.fullScreenEnabled = !isMobile ? true : false;
     }
 

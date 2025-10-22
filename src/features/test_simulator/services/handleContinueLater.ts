@@ -9,6 +9,7 @@ import useTestTimerStore from "../store/useTestTimerStore";
 import { QuestionStatusReverseMap } from "../test_simulator.types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
+import { serializeStudentSubjectiveResponse } from "./studentResponseHandler";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -80,7 +81,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             timeSpent: questionTimeMap[item.questionId] || 0,
             studentResponse:
               currentResponse.fileName && currentResponse.url
-                ? currentResponse
+                ? serializeStudentSubjectiveResponse(currentResponse)
                 : currentResponse.text.join("~") || "",
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
