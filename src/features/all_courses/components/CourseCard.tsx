@@ -8,7 +8,6 @@ import cn from "../../../utils/classNames";
 
 
 interface CourseCardProps {
-  id?: string;
   course: CourseType;
   onClick: (course: CourseType) => void;
   status?: string;
@@ -20,7 +19,6 @@ interface CourseCardProps {
  * Displays a card for a course with image, title, subtitle, and an optional purchased badge.
  */
 const CourseCard = ({
-  id,
   course,
   onClick,
   status,
@@ -29,7 +27,6 @@ const CourseCard = ({
 }: CourseCardProps) => {
   return (
     <div
-      id={id}
       onClick={() => onClick?.(course)}
       className={cn(
         "bg-[var(--surface-bg-primary)] border rounded-xl overflow-hidden",

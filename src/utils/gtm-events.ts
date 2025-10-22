@@ -1,4 +1,3 @@
-import StudyMaterialsPage from "../features/study_room/study_material/pages/StudyMaterialsPage";
 
 export const gtmEvents = {
   verify_otp_button_click: "verify_otp_button_click",
@@ -30,6 +29,7 @@ export const gtmEvents = {
   jump_back_in_button_click: "jump_back_in_button_click",
   profile_menu_button_click: "profile_menu_button_click",
   all_courses_clear_filter_click: "all_courses_clear_filter_click",
+  all_courses_filter_category_click: "all_courses_filter_category_click",
   report_category_tab_click: "report_category_tab_click",
   report_test_detail_click: "report_test_detail_click",
   logout_button_click: "logout_button_click",
@@ -49,8 +49,5 @@ export const gtmEvents = {
   close_content_modal_button_click: "close_content_modal_button_click",
   study_material_filter_button_click: "study_material_filter_button_click",
   topic_tree_expand_click: "topic_tree_expand_click",
-  
-  //to-do:
-  all_courses_filter_category_click: "all_courses_filter_category_click",
   all_courses_card_click: "all_courses_card_click",
 };

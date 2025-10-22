@@ -22,7 +22,7 @@ import { useLocation } from "react-router";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 
-const ALL_COURSES_CARD_CLICK_ID = "all_courses_card_click";
+const ALL_COURSES_CARD_CLICK_ID = "all_courses_card_id";
 
 /**
  * Renders the All Courses page, displaying a list of courses with filtering options.
@@ -113,7 +113,6 @@ const AllCoursesPage = () => {
             <CoursesCardSkeleton />
           ) : (
             <CoursesCards
-              id={ALL_COURSES_CARD_CLICK_ID}
               search={search}
               courseList={courseList || []}
               selectedCourse={selectedCourse}
@@ -122,8 +121,8 @@ const AllCoursesPage = () => {
               onCourseClick={(course) => {
                 pushToDataLayer({
                   event: gtmEvents.all_courses_card_click,
-                  courseId: course.courseId,
-                  courseName: course.courseTitle,
+                  course_id: course.courseId,
+                  course_name: course.courseTitle,
                   id: ALL_COURSES_CARD_CLICK_ID
                 });
                 setSelectedCourse(course);

@@ -18,7 +18,6 @@ import { useEffect } from "react";
 
 
 interface CoursesCardsProps {
-  id?: string;
   search: string;
   courseList: CourseType[];
   selectedCourse: CourseType | null;
@@ -31,7 +30,6 @@ interface CoursesCardsProps {
  * Displays a list of course cards filtered by search and selected categories.
  */
 const CoursesCards = ({
-  id,
   search,
   courseList,
   selectedCourse,
@@ -105,7 +103,6 @@ const CoursesCards = ({
           : "";
         return (
           <CourseCard
-            id={id}
             key={course?.courseId}
             course={course}
             onClick={() => {

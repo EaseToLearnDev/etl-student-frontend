@@ -56,13 +56,13 @@ export const FilterCourses = ({
 
             return (
               <Badge
-                id={all_courses_filter_category_ID}
-                key={category.categoryId}
                 theme={isCategorySelected ? Theme.Ocean : Theme.Neutral}
                 style={isCategorySelected ? "filled" : "outline"}
                 onClickHandler={() => {
                   pushToDataLayer({
                     event: gtmEvents.all_courses_filter_category_click,
+                    id: all_courses_filter_category_ID,
+                    category_name: category.categoryName,
                   });
                   setSelectedCategory(isCategorySelected ? null : category);
                 }}
