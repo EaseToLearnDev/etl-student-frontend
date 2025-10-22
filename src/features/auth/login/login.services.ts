@@ -104,7 +104,7 @@ export const HandleLogin = async (
       if (deviceType && deviceType.length > 0) {
         studentData.deviceType = deviceType;
       } else {
-        studentData.deviceType = "web";
+        studentData.deviceType = "android";
       }
 
       setStudentData(studentData);
