@@ -4,6 +4,7 @@ import type {
   TestData,
   Pointer,
   Question,
+  ResponseType,
 } from "../test_simulator.types";
 
 // Services
@@ -14,7 +15,7 @@ import { updateStatusOnVisit } from "./statusHandlers";
 interface GoToNextParams {
   testData: TestData;
   currentPointer: Pointer;
-  questionResponseMap: Record<number, Array<string>>;
+  questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -47,7 +48,7 @@ export const goToNextQuestionHandler = ({
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].length === 0
+    questionResponseMap[currQId].text.length === 0
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
@@ -84,7 +85,7 @@ export const goToNextQuestionHandler = ({
 interface GoToPrevParams {
   testData: TestData;
   currentPointer: Pointer;
-  questionResponseMap: Record<number, Array<string>>;
+  questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
 }
 
@@ -117,7 +118,7 @@ export const goToPrevQuestionHandler = ({
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].length === 0
+    questionResponseMap[currQId].text.length === 0
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
@@ -157,7 +158,7 @@ interface SetCurrentQuestionParams {
   testData: TestData;
   currentPointer: Pointer;
   questionStatusMap: Record<number, QuestionStatus>;
-  questionResponseMap: Record<number, Array<string>>;
+  questionResponseMap: Record<number, ResponseType>;
   question: Question;
 }
 
@@ -187,7 +188,7 @@ export const setCurrentQuestionHandler = ({
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].length === 0
+    questionResponseMap[currQId].text.length === 0
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }

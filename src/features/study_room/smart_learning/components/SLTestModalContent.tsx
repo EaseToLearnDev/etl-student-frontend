@@ -4,35 +4,33 @@ import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import cn from "../../../../utils/classNames";
 import { Theme } from "../../../../utils/colors";
-import type { ModeType, TestOptions } from "../sl.types";
+import type { ModeType, TestOption, TestOptions } from "../sl.types";
 import SmartLearningInstructions from "./SmartLearningInstructions";
 import { useState } from "react";
+import { useSLStore } from "../hooks/useSLStore";
 
 interface SLTestModalContentProps {
-  mode: ModeType;
   topicName: string;
-  testOptions: TestOptions;
-  setTestOptions: (options: TestOptions) => void;
   onStart: () => void;
   onClose: () => void;
 }
 const SLTestModalContent = ({
-  mode,
   topicName,
-  testOptions,
-  setTestOptions,
   onClose,
   onStart,
 }: SLTestModalContentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
+  const mode = useSLStore((s) => s.mode);
+  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
+  const setSelectedTestOption = useSLStore((s) => s.setSelectedTestOption);
 
-  const fields : {id: keyof TestOptions; label: string}[] = [
+  const fields: { id: keyof TestOption; label: string }[] = [
     {
-      id: "totalQuestion",
+      id: "totalQuestions",
       label: "Total Question",
     },
     {
-      id: "totalTime",
+      id: "duration",
       label: "Total Time",
     },
     {
@@ -44,7 +42,7 @@ const SLTestModalContent = ({
       label: "Mark for Incorrect Answers",
     },
     {
-      id: "marksNotAttempted",
+      id: "marksNotAnswer",
       label: "Mark for Questions Not Attempted",
     },
   ];
@@ -58,9 +56,7 @@ const SLTestModalContent = ({
           style="outline"
           className="w-fit border-1 !border-[var(--border-primary)] !font-semibold"
         >
-          <span>
-            {mode}
-          </span>
+          <span>{mode}</span>
         </Badge>
         <h5 className="text-[var(--sb-ocean-bg-active)]">
           {topicName || "Characteristic of Living Organism"}
@@ -98,7 +94,7 @@ const SLTestModalContent = ({
                 <input
                   type="text"
                   className="flex px-4 py-3 rounded-lg border border-[var(--border-secondary)] text-base"
-                  value={testOptions[field.id] ?? 0}
+                  value={selectedTestOption[field.id] ?? 0}
                   onChange={(e) => {
                     const val = e.target.value;
                     const re = /^-?\d{0,2}(?:\.\d{0,6})?$/;
@@ -106,8 +102,8 @@ const SLTestModalContent = ({
                     if (isNaN(Number(val))) return;
 
                     if (val === "" || re.test(val)) {
-                      setTestOptions({
-                        ...testOptions,
+                      setSelectedTestOption({
+                        ...selectedTestOption,
                         [field.id]: Number(val),
                       });
                     }

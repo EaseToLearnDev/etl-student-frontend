@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 // Types
 import { type PrevRunningTest, type Topic } from "../../../shared/types";
-import type { ModeType, TestOptions } from "../sl.types";
+import type { ModeType, TestOption, TestOptions } from "../sl.types";
 
 interface SLStore {
   // Topic data structures
@@ -23,6 +23,7 @@ interface SLStore {
 
   // Test configuration
   testOptions: TestOptions;
+  selectedTestOption: TestOption;
 
   // Actions
   setTopicTree: (tree: Topic[] | null) => void;
@@ -34,11 +35,25 @@ interface SLStore {
   setShowStartTestModal: (show: boolean) => void;
   setShowPreviousTestModal: (show: boolean) => void;
   setTestOptions: (options: TestOptions) => void;
+  setSelectedTestOption: (option: TestOption) => void;
   setBarColor: (barColor: string | null) => void;
 
   getSelectedTopic: () => Topic | null;
   reset: () => void;
 }
+
+export const defaultTestOptions: TestOptions = [
+  {
+    examType: "objective",
+    totalQuestions: 20,
+    totalQuestionsKwd: 5,
+    duration: 60,
+    marksCorrectAns: 1,
+    marksIncorrectAns: -0.25,
+    marksNotAnswer: 0,
+    questionTypeList: [],
+  },
+];
 
 /**
  * Zustand store for managing Smart Learning feature state and actions.
@@ -57,14 +72,11 @@ export const useSLStore = create<SLStore>((set, get) => ({
   showStartTestModal: false,
   showPreviousTestModal: false,
 
-  testOptions: {
-    totalQuestion: 20,
-    totalTime: 60,
-    marksCorrectAns: 1,
-    marksIncorrectAns: -0.25,
-    marksNotAttempted: 0,
-    questionTypeList: [],
-  },
+  // Shallow copy to avoid modifying default options
+  testOptions: [...defaultTestOptions],
+  selectedTestOption: { ...defaultTestOptions[0] },
+
+  setSelectedTestOption: (option) => set({ selectedTestOption: { ...option } }),
 
   // Actions
   setTopicTree: (tree) => set({ topicTree: tree }),
@@ -93,13 +105,7 @@ export const useSLStore = create<SLStore>((set, get) => ({
       previousRunningTest: null,
       showStartTestModal: false,
       showPreviousTestModal: false,
-      testOptions: {
-        totalQuestion: 20,
-        totalTime: 60,
-        marksCorrectAns: 1,
-        marksIncorrectAns: -0.25,
-        marksNotAttempted: 0,
-        questionTypeList: [],
-      },
+      testOptions: [...defaultTestOptions],
+      selectedTestOption: { ...defaultTestOptions[0] },
     }),
 }));

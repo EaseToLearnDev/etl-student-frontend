@@ -5,7 +5,7 @@ import { useSLStore } from "../hooks/useSLStore";
 const loadSelfTestOptions = async () => {
   try {
     const { studentData, activeCourse } = useStudentStore.getState();
-    const { setTestOptions, testOptions } = useSLStore.getState();
+    const { setTestOptions } = useSLStore.getState();
 
     if (!studentData || !activeCourse) return;
 
@@ -17,14 +17,11 @@ const loadSelfTestOptions = async () => {
     const data = await selfTestFormOptions({ loginId, token, templateId });
     if (!data || data?.length === 0) return;
 
-    const options = {
-      totalQuestion: data[0]?.totalQuestions,
-      totalTime: data[0]?.duration,
-      marksCorrectAns: data[0]?.marksCorrectAns,
-      marksIncorrectAns: data[0]?.marksIncorrectAns,
-      marksNotAttempted: data[0]?.marksNotAnswer,
-      questionTypeList: data[0]?.questionTypeList.map((q: any) => q.typeTitle) ?? null,
-    };
+    const options = data.map((option: any) => ({
+      ...option,
+      questionTypeList:
+        option?.questionTypeList?.map((q: any) => q.typeTitle) ?? null,
+    }));
 
     setTestOptions(options);
   } catch (error) {

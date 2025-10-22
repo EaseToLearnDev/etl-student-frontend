@@ -1,6 +1,7 @@
 export interface Response {
   responseId: string;
   responseText: string;
+  partMarks?: string;
 }
 
 export interface Question {
@@ -49,7 +50,7 @@ export interface Section {
   questionNumbers: {
     questionIndex: number;
     questionId: number;
-    answerStatus: string;
+    answerStatus?: string;
   }[];
 }
 
@@ -239,9 +240,18 @@ export interface LinkItem {
 }
 
 export type SimulatorMode = "guest" | "registered" | "review";
+
 export interface Features {
   timerEnabled: boolean;
   correctResponseEnabled: boolean;
   showDynamicStatusEnabled: boolean;
   fullScreenEnabled: boolean;
+  subjectiveMarksEditEnabled: boolean;
 }
+
+export interface ResponseType {
+  text: string[];
+  fileName: string | null;
+  url: string | null;
+}
+

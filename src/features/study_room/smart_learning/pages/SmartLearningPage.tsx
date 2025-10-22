@@ -35,6 +35,7 @@ import loadSelfTestOptions from "../services/loadSelfTestOptions";
 import { LuArchive } from "react-icons/lu";
 import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
+import { openStartTestModal } from "../services/openStartTestModal";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -79,7 +80,7 @@ const SmartLearningPage = () => {
     (s) => s.setIsUpgradeModalOpen
   );
   const testOptions = useSLStore((s) => s.testOptions);
-  const setTestOptions = useSLStore((s) => s.setTestOptions);
+  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -201,14 +202,12 @@ const SmartLearningPage = () => {
             ) : selectedTopic ? (
               <TopicModeSelector
                 topicName={selectedTopic?.topicName ?? ""}
-                mode={mode}
-                setMode={setMode}
                 barColor={barColor}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
                 onClickHandler={() => {
                   getActiveCourseAccessStatus() === "renew"
                     ? setIsUpgradeModalOpen(true)
-                    : setShowStartTestModal(true);
+                    : openStartTestModal();
                 }}
               />
             ) : (
@@ -238,15 +237,12 @@ const SmartLearningPage = () => {
         className="p-4"
       >
         <SLTestModalContent
-          mode={mode}
-          testOptions={testOptions}
-          setTestOptions={setTestOptions}
           onStart={() =>
             handleShowPreviousOrStartTest({
               setPreviousRunningTest,
               setShowPreviousTestModal,
               startTestCallback: () =>
-                handleStartTest(navigate, mode, selectedTopic, testOptions),
+                handleStartTest(navigate, mode, selectedTopic, selectedTestOption),
             })
           }
           onClose={() => setShowStartTestModal(false)}
@@ -263,7 +259,7 @@ const SmartLearningPage = () => {
       >
         <PreviousTestModalContent
           onStart={() =>
-            handleStartTest(navigate, mode, selectedTopic, testOptions)
+            handleStartTest(navigate, mode, selectedTopic, selectedTestOption)
           }
           onResume={() => {
             handleResumeTest(navigate, previousRunningTest);

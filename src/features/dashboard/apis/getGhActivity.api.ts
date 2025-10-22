@@ -1,26 +1,32 @@
-import { makeRequest } from "../../utils/http";
+import { makeRequest } from "../../../utils/http";
 
 
-interface GhActivityYearsTypes {
+interface GhActivityTypes {
     loginId: string;
     token: string;
     studentId: number;
     courseId: number;
+    year?: number;
 }
 
-export const getGhActivityYearsAPI = async ({
+export const getGhActivityAPI = async ({
     loginId,
     token,
     studentId,
     courseId,
-}: GhActivityYearsTypes) => {
+    year
+}: GhActivityTypes) => {
 
     const params = new URLSearchParams({
         studentId: studentId.toString(),
-        courseId: courseId.toString()
+        courseId: courseId.toString(),
     })
 
-    const res = await makeRequest('get', `/get-activity-years?${params.toString()}`, null, {
+    if(year) {
+        params.append('year', year.toString());
+    }
+
+    const res = await makeRequest('get', `/get-activity?${params.toString()}`, null, {
         headers: {
             loginId,
             token,
