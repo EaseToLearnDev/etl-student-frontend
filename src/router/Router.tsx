@@ -47,7 +47,7 @@ const Router = () => {
   const location = useLocation();
   useEffect(() => {
     const matchedKey = Object.keys(tabTitles).find((key) =>
-      location.pathname.includes(key)
+      location.pathname.includes(key),
     );
     if (!matchedKey) {
       // TODO: HANDLE WHITELABELING
@@ -159,13 +159,22 @@ const Router = () => {
       </Route>
       <Route
         path="test-simulator"
-        element={<TestSimulatorPage mode="registered" />}
+        element={
+          <TestSimulatorPage key={window.location.pathname} mode="registered" />
+        }
       />
       <Route
         path="guest-testsimulator"
-        element={<TestSimulatorPage mode="guest" />}
+        element={
+          <TestSimulatorPage key={window.location.pathname} mode="guest" />
+        }
       />
-      <Route path="testview" element={<TestSimulatorPage mode="review" />} />
+      <Route
+        path="testview"
+        element={
+          <TestSimulatorPage key={window.location.pathname} mode="review" />
+        }
+      />
       <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="selectyourcourse" element={<SelectYourCoursePage />} />
       <Route path="/logout" element={<LogoutPage />} />

@@ -10,6 +10,7 @@ import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
 import useTestTimerStore from "../store/useTestTimerStore";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { serializeStudentSubjectiveResponse } from "./studentResponseHandler";
 
 /**
  * Handles the submission of a test by collecting relevant test, student, and course data,
@@ -64,7 +65,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     questionSet:
       testData?.questionSet.map((item) => {
         const currentResponse = questionResponseMap[item.questionId];
-        const baseObj: any = {
+        const baseObj: Record<string, any> = {
           itemId: item.itemId,
           questionId: item.questionId,
           topicId: item.topicId,
@@ -75,8 +76,8 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
           studentResponse:
-            currentResponse.fileName && currentResponse.url
-              ? currentResponse
+            testConfig?.examType === "subjective"
+              ? serializeStudentSubjectiveResponse(currentResponse)
               : currentResponse.text.join("~") || "",
         };
 
@@ -139,18 +140,29 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   }
   setLoading(false);
 
-  if (testData?.testType === 1 && testConfig?.assessmentMode === "beginner") {
+  // navigate to testview for subjective test
+  if (testData?.testType === 1 && testConfig?.examType === "subjective") {
+    navigate(`/testview?testSession=st${resData?.obj?.testSession}`);
+    setToast({
+      title: "Test Submit Successfully",
+      type: ToastType.SUCCESS,
+    });
+  } else if (
+    testData?.testType === 1 &&
+    testConfig?.assessmentMode === "beginner" &&
+    testConfig?.examType === "objective"
+  ) {
     navigate(
-      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`,
+      `/learning-testanalytics?testSession=${resData?.obj?.testSession}`,
     );
     setToast({
-      title: "Test Submitted Successfully",
+      title: "Test Submit Successfully",
       type: ToastType.SUCCESS,
     });
   } else {
-    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`);
+    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}`);
     setToast({
-      title: "Test Submitted Successfully",
+      title: "Test Submit Successfully",
       type: ToastType.SUCCESS,
     });
   }

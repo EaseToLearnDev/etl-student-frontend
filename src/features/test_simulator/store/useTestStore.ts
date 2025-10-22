@@ -1,7 +1,7 @@
 // Zustand
 import { create } from "zustand";
 // Types
-import { QuestionStatus, QuestionStatusMap } from "../test_simulator.types";
+import { QuestionStatus } from "../test_simulator.types";
 import type {
   TestData,
   Question,
@@ -10,6 +10,7 @@ import type {
   TestConfig,
   Features,
   ResponseType,
+  SimulatorMode,
 } from "../test_simulator.types";
 import { Severity, ToastType, type Error } from "../../shared/types";
 
@@ -65,7 +66,7 @@ export interface TestStore {
 
   currentPointer: Pointer;
 
-  testMode: string | null;
+  testMode: SimulatorMode | null;
   setMode: (mode: string) => void;
 
   pendingQuestion: Question | null;
@@ -84,7 +85,7 @@ export interface TestStore {
   getCurrentResponse: () => ResponseType | null;
   setCurrentResponse: (
     response: string,
-    action: "push" | "pop" | "replace"
+    action: "push" | "pop" | "replace",
   ) => void;
   setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
@@ -99,7 +100,7 @@ export interface TestStore {
 
   changeStatusByQuestionId: (
     questionId: number,
-    status: QuestionStatus
+    status: QuestionStatus,
   ) => void;
   getQuestionCountByStatus: (status: QuestionStatus) => number;
 
@@ -146,6 +147,7 @@ const useTestStore = create<TestStore>((set, get) => ({
     correctResponseEnabled: false,
     showDynamicStatusEnabled: false,
     fullScreenEnabled: false,
+    subjectiveMarksEditEnabled: false,
   },
   setFeatures: (features) =>
     set({
@@ -217,7 +219,7 @@ const useTestStore = create<TestStore>((set, get) => ({
       const nextSection = testData.sectionSet[currentPointer.sectionPos + 1];
       const firstQuestion = nextSection.questionNumbers[0];
       const pendingQuestion = testData.questionSet.find(
-        (q) => q.questionId === firstQuestion.questionId
+        (q) => q.questionId === firstQuestion.questionId,
       );
       // store next question pointer
       set({
@@ -320,7 +322,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId)
+      section.questionNumbers.some((q) => q.questionId === question.questionId),
     );
 
     if (targetSectionPos === -1) return;
@@ -360,7 +362,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId)
+      section.questionNumbers.some((q) => q.questionId === question.questionId),
     );
 
     if (targetSectionPos === -1) return;
@@ -414,7 +416,7 @@ const useTestStore = create<TestStore>((set, get) => ({
     if (!currentQuestion) return -1;
 
     return testData.questionSet.findIndex(
-      (q) => q.questionId === currentQuestion.questionId
+      (q) => q.questionId === currentQuestion.questionId,
     );
   },
 
@@ -501,7 +503,7 @@ const useTestStore = create<TestStore>((set, get) => ({
     });
   },
 
-    clearCurrentFileUrl: () => {
+  clearCurrentFileUrl: () => {
     const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
       get();
     const question = getCurrentQuestion();
@@ -634,7 +636,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   setIsSwitchSectionModalOpen: (v) => set({ isSwitchSectionModalOpen: v }),
 
   isSubjectiveMediaModalOpen: false,
-  setIsSubjectiveMediaModalOpen: (v) => set({isSubjectiveMediaModalOpen: v}),
+  setIsSubjectiveMediaModalOpen: (v) => set({ isSubjectiveMediaModalOpen: v }),
 
   // Reset state
   reset: () => {
@@ -658,6 +660,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         showDynamicStatusEnabled: false,
         timerEnabled: false,
         fullScreenEnabled: false,
+        subjectiveMarksEditEnabled: false,
       },
       helpCount: 0,
     });
