@@ -1,6 +1,7 @@
 export interface Response {
   responseId: string;
   responseText: string;
+  partMarks?: string;
 }
 
 export interface Question {
@@ -49,7 +50,7 @@ export interface Section {
   questionNumbers: {
     questionIndex: number;
     questionId: number;
-    answerStatus: string;
+    answerStatus?: string;
   }[];
 }
 

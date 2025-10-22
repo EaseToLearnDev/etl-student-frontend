@@ -284,6 +284,9 @@ span {
   max-width: 100%;
   overflow-x: auto;
 }
+.math-container svg {
+  width: 100%;
+}
 math {
   display: block;
   max-width: 100%;

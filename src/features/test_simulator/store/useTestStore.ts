@@ -67,7 +67,7 @@ export interface TestStore {
   currentPointer: Pointer;
 
   testMode: SimulatorMode | null;
-  setMode: (mode: string) => void;
+  setMode: (mode: SimulatorMode) => void;
 
   pendingQuestion: Question | null;
   setPendingQuestion: (question: Question | null) => void;
