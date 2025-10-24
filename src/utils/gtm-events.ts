@@ -30,6 +30,14 @@ export const gtmEvents = {
     all_courses_clear_filter_click: "all_courses_clear_filter_click",
     report_category_tab_click: "report_category_tab_click",
     report_test_detail_click: "report_test_detail_click",
+    
+    // Sidebar menu click events
+    sidebar_dashboard_click: "sidebar_dashboard_click",
+    sidebar_study_room_click: "sidebar_study_room_click",
+    sidebar_exam_room_click: "sidebar_exam_room_click",
+    sidebar_reports_click: "sidebar_reports_click",
+    sidebar_all_courses_click: "sidebar_all_courses_click",
+    sidebar_whats_new_click: "sidebar_whats_new_click",
 
     // page-view events
     dashboard_page_visit: "dashboard_page_visit",
@@ -45,6 +53,7 @@ export const gtmEvents = {
     detail_report_class_mock_test_page_visit: "detail_report_class_mock_test_page_visit",
     detail_report_learning_session_page_visit: "detail_report_learning_session_page_visit",
     detail_report_competitive_session_page_visit: "detail_report_competitive_session_page_visit",
+    all_courses_page_visit: "all_courses_page_visit",
 
 
 

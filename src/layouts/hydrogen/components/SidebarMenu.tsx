@@ -16,6 +16,8 @@ import { getFilteredMenuItems } from "../../../utils/menuFilter";
 import Badge from "../../../components/Badge";
 import { Theme } from "../../../utils/colors";
 import useDrawerStore from "../../../store/useDrawerStore";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 /**
  * Renders the sidebar menu with navigation links and user info for the student dashboard.
@@ -47,6 +49,24 @@ export function SidebarMenu() {
                       ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
                       : "transition-colors duration-200 text-[var(--text-secondary)]"
                   )}
+                  onClick={() => {
+                    // Track sidebar menu clicks based on item name
+                    const eventMap: Record<string, string> = {
+                      "Dashboard": gtmEvents.sidebar_dashboard_click,
+                      "Study Room": gtmEvents.sidebar_study_room_click,
+                      "Exam Room": gtmEvents.sidebar_exam_room_click,
+                      "Reports": gtmEvents.sidebar_reports_click,
+                      "All Courses": gtmEvents.sidebar_all_courses_click,
+                    };
+                    
+                    const eventName = eventMap[item.name];
+                    if (eventName) {
+                      pushToDataLayer({
+                        event: eventName,
+                        id: item.name.toLowerCase().replace(/\s+/g, '_')
+                      });
+                    }
+                  }}
                 >
                   <div className="flex items-center truncate">
                     {item?.icon && (
@@ -86,6 +106,11 @@ export function SidebarMenu() {
           <div
             className="w-full h-full p-4 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg cursor-pointer"
             onClick={() => {
+              // Track What's New click
+              pushToDataLayer({
+                event: gtmEvents.sidebar_whats_new_click,
+                id: "whats_new_card",
+              });
               setIsReleaseNotesModalOpen(true);
               closeDrawer();
             }}

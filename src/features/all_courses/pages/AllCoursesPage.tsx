@@ -21,6 +21,7 @@ import UpdateEmailModal from "../components/UpdateEmailModal";
 import { useLocation } from "react-router";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
+import { usePageTracking } from "../../../hooks/usePageTracking";
 
 const ALL_COURSES_CARD_CLICK_ID = "all_courses_card_click";
 
@@ -56,6 +57,8 @@ const AllCoursesPage = () => {
   );
 
   const courseId = new URLSearchParams(location.search).get("cid");
+
+  usePageTracking( gtmEvents.all_courses_page_visit)
 
   // fetch categories & courses on mount
   useEffect(() => {
