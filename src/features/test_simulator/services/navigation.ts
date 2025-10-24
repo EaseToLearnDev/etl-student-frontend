@@ -1,5 +1,5 @@
 // Types
-import { QuestionStatus } from "../test_simulator.types";
+import { QuestionStatus, subjectiveTypes } from "../test_simulator.types";
 import type {
   TestData,
   Pointer,
@@ -9,6 +9,8 @@ import type {
 
 // Services
 import { updateStatusOnVisit } from "./statusHandlers";
+const getQuestionType = (testData: TestData, qid: number) =>
+  testData.questionSet.find((q) => q.questionId === qid)?.questionType;
 
 // ------------------GO TO NEXT------------------
 
@@ -17,6 +19,7 @@ interface GoToNextParams {
   currentPointer: Pointer;
   questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
+  isSubjectiveMarkingMode: boolean;
 }
 
 interface GoToNextResult {
@@ -33,6 +36,7 @@ export const goToNextQuestionHandler = ({
   currentPointer,
   questionResponseMap,
   questionStatusMap,
+  isSubjectiveMarkingMode,
 }: GoToNextParams): GoToNextResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
@@ -48,31 +52,42 @@ export const goToNextQuestionHandler = ({
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].text.length === 0
+    (questionResponseMap[currQId].text.length === 0 ||
+      (!questionResponseMap[currQId].url &&
+        !questionResponseMap[currQId].fileName))
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
-
   // Next question in same section
-  if (qi + 1 < section.questionNumbers.length) {
+  for (let nextQ = qi + 1; nextQ < section.questionNumbers.length; nextQ++) {
     const nextQId = section.questionNumbers[qi + 1].questionId;
-    return {
-      newPointer: { sectionPos: si, questionPos: qi + 1 },
-      newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
-      reachedEnd: false,
-    };
+    const nextType = getQuestionType(testData, nextQId) || "";
+
+    if (!isSubjectiveMarkingMode || subjectiveTypes.includes(nextType)) {
+      return {
+        newPointer: { sectionPos: si, questionPos: nextQ },
+        newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
+        reachedEnd: false,
+      };
+    }
   }
 
   // First question of next section
   for (let s = si + 1; s < testData.sectionSet.length; s++) {
     const nextSec = testData.sectionSet[s];
-    if (nextSec?.questionNumbers.length > 0) {
-      const nextQId = nextSec.questionNumbers[0].questionId;
-      return {
-        newPointer: { sectionPos: s, questionPos: 0 },
-        newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
-        reachedEnd: false,
-      };
+    if (!nextSec?.questionNumbers.length) continue;
+
+    for (let qIndex = 0; qIndex < nextSec?.questionNumbers?.length; qIndex++) {
+      const nextQId = nextSec?.questionNumbers[qIndex].questionId;
+      const nextType = getQuestionType(testData, nextQId) || "";
+
+      if (!isSubjectiveMarkingMode || subjectiveTypes.includes(nextType)) {
+        return {
+          newPointer: { sectionPos: s, questionPos: qIndex },
+          newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
+          reachedEnd: false,
+        };
+      }
     }
   }
 
@@ -84,6 +99,7 @@ export const goToNextQuestionHandler = ({
 
 interface GoToPrevParams {
   testData: TestData;
+  isSubjectiveMarkingMode: boolean;
   currentPointer: Pointer;
   questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
@@ -100,6 +116,7 @@ interface GoToPrevResult {
  */
 export const goToPrevQuestionHandler = ({
   testData,
+  isSubjectiveMarkingMode,
   currentPointer,
   questionResponseMap,
   questionStatusMap,
@@ -115,38 +132,52 @@ export const goToPrevQuestionHandler = ({
 
   const newStatusMap = { ...questionStatusMap };
 
+  const currentResponse = questionResponseMap[currQId];
+
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].text.length === 0
+    (!currentResponse.text.length ||
+      (!currentResponse.url && !currentResponse.fileName))
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
 
   // Previous in same section
-  if (qi > 0) {
+  for (let prevQ = qi - 1; prevQ >= 0; prevQ--) {
     const prevQId = section.questionNumbers[qi - 1].questionId;
-    return {
-      newPointer: { sectionPos: si, questionPos: qi - 1 },
-      newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
-      reachedStart: false,
-    };
+    const prevType = getQuestionType(testData, prevQId) || "";
+
+    if (!isSubjectiveMarkingMode || subjectiveTypes.includes(prevType)) {
+      return {
+        newPointer: { sectionPos: si, questionPos: prevQ },
+        newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
+        reachedStart: false,
+      };
+    }
   }
 
   // Last question of previous section
   for (let s = si - 1; s >= 0; s--) {
     const prevSec = testData.sectionSet[s];
-    if (prevSec?.questionNumbers.length > 0) {
+    if (!prevSec?.questionNumbers?.length) continue;
+
+    for (
+      let qIndex = prevSec?.questionNumbers?.length - 1;
+      qIndex >= 0;
+      qIndex--
+    ) {
       const prevQId =
         prevSec.questionNumbers[prevSec.questionNumbers.length - 1].questionId;
-      return {
-        newPointer: {
-          sectionPos: s,
-          questionPos: prevSec.questionNumbers.length - 1,
-        },
-        newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
-        reachedStart: false,
-      };
+      const prevType = getQuestionType(testData, prevQId) || "";
+
+      if (!isSubjectiveMarkingMode || subjectiveTypes.includes(prevType)) {
+        return {
+          newPointer: { sectionPos: s, questionPos: qIndex },
+          newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
+          reachedStart: false,
+        };
+      }
     }
   }
 
@@ -185,16 +216,18 @@ export const setCurrentQuestionHandler = ({
 
   const newStatusMap = { ...questionStatusMap };
 
+  const currentResponse = questionResponseMap[currQId];
+
   // If current question is VISITED and has no response, mark as NOT_ATTEMPTED
   if (
     newStatusMap[currQId] === QuestionStatus.VISITED &&
-    questionResponseMap[currQId].text.length === 0
+    (!currentResponse.text.length ||
+      (!currentResponse.url && !currentResponse.fileName))
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
-
   const nextSectionIndex = testData.sectionSet.findIndex(
-    (sec) => sec.sectionName === question.sectionName
+    (sec) => sec.sectionName === question.sectionName,
   );
   if (nextSectionIndex < 0) return null;
 

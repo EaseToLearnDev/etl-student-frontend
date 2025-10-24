@@ -1,6 +1,5 @@
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
 import type { Column } from "../../../components/types";
-import { ChartBarIcon } from "@heroicons/react/24/outline";
 import EmptyState from "../../../components/EmptyState";
 import Button from "../../../components/Button";
 import { MdArrowRight } from "react-icons/md";
@@ -9,6 +8,7 @@ import { LuFileChartColumnIncreasing } from "react-icons/lu";
 export interface LearningSessionData {
   testTitle: string;
   testType: string;
+  examType: string;
   date: string;
   totalQuestions: number;
   helpCounter: number;
@@ -55,7 +55,11 @@ const ReportLearningSessionPage = ({
     {
       header: "Actions",
       render: (row) => (
-        <Button style="secondary" className="rounded-full font-[500]" onClick={() => onViewMore(row)}>
+        <Button
+          style="secondary"
+          className="rounded-full font-[500]"
+          onClick={() => onViewMore(row)}
+        >
           View Details
           <MdArrowRight size={16} />
         </Button>
@@ -63,11 +67,12 @@ const ReportLearningSessionPage = ({
     },
   ];
   const learningSessionData = data.filter(
-    (item) => item.testType === "Learning Session"
+    (item) => item.testType === "Learning Session",
   );
+
   return (
     <>
-       {learningSessionData.length > 0 ? (
+      {learningSessionData.length > 0 ? (
         <div className="flex">
           <PaginatedTable
             columns={columns}
@@ -77,7 +82,6 @@ const ReportLearningSessionPage = ({
           />
         </div>
       ) : (
-
         <EmptyState
           title="No learning session data available"
           description="No learning session data is available yet. Start engaging with courses or lessons to see your sessions appear here!"

@@ -1,5 +1,4 @@
 import PaginatedTable from "../../../components/PaginatedTable/PaginatedTable";
-import { ArchiveBoxXMarkIcon } from "@heroicons/react/24/outline";
 import type { Column } from "../../../components/types";
 import Button from "../../../components/Button";
 import EmptyState from "../../../components/EmptyState";
@@ -32,7 +31,11 @@ const ReportTablePage = ({
     {
       header: "Actions",
       render: (row) => (
-        <Button style="secondary" className="rounded-full font-[500]" onClick={() => onViewMore(row)}>
+        <Button
+          style="secondary"
+          className="rounded-full font-[500]"
+          onClick={() => onViewMore(row)}
+        >
           View Details
           <MdArrowRight size={16} />
         </Button>
@@ -44,7 +47,7 @@ const ReportTablePage = ({
 
   if (testTypeId === 1) {
     filteredData = data.filter(
-      (item) => item.testType === "Competitive Session"
+      (item) => item.testType === "Competitive Session",
     );
   } else {
     filteredData = data.filter((item) => item.testTypeId === testTypeId);
@@ -63,7 +66,10 @@ const ReportTablePage = ({
         </div>
       ) : (
         <EmptyState
-          title={emptyTitle?.toLowerCase()[0].toUpperCase()+emptyTitle?.toLowerCase().slice(1, emptyTitle.length)}
+          title={
+            emptyTitle?.toLowerCase()[0].toUpperCase() +
+            emptyTitle?.toLowerCase().slice(1, emptyTitle.length)
+          }
           description="No report data is available at this moment. Your reports will populate this section as you complete activities on the platform."
           icon={<LuFileChartPie className="w-24 h-24" />}
           className="max-w-md"

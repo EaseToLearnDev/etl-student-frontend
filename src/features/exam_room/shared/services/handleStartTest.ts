@@ -15,7 +15,7 @@ export const handleStartTest = async ({
 }: HandleStartTestParams) => {
   if (!testId || !testType) return;
 
-  let params: { testId: string; testType: string; classTestId?: string } = {
+  const params: { testId: string; testType: string; classTestId?: string } = {
     testId: String(testId),
     testType: String(testType),
   };

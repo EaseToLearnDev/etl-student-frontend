@@ -11,6 +11,7 @@ import type {
   Features,
   ResponseType,
   SimulatorMode,
+  MarksType,
 } from "../test_simulator.types";
 import { Severity, ToastType, type Error } from "../../shared/types";
 
@@ -49,7 +50,12 @@ import { useToastStore } from "../../../global/hooks/useToastStore";
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
+  subjectiveSectionsUI: SectionUI[];
   setTestData: (data: TestData | null) => void;
+
+  getActiveSectionsUI: () => SectionUI[];
+
+  isSubjectiveMarkingMode: boolean;
 
   helpCount: number;
   setHelpCount: (n: number) => void;
@@ -90,6 +96,11 @@ export interface TestStore {
   setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
   clearCurrentFileUrl: () => void;
+
+  questionMarksMap: Record<number, MarksType>;
+  updateCurrentTotalMarks: (marks: number) => void;
+  updateCurrentMarksObj: (resIdx: number, isChecked: boolean) => void;
+
   questionTimeMap: Record<number, number>;
   getTimeByQuestionId: (questionId: number) => number;
   incrementTimeByQuestionId: (questionId: number) => void;
@@ -128,6 +139,7 @@ export interface TestStore {
 const useTestStore = create<TestStore>((set, get) => ({
   testData: null,
   sectionsUI: [],
+  subjectiveSectionsUI: [],
   testConfig: null,
   testError: null,
   pendingQuestion: null,
@@ -139,8 +151,10 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionResponseMap: {},
   questionTimeMap: {},
   questionStatusMap: {},
+  questionMarksMap: {},
   _questionTimerId: null,
   helpCount: 0,
+  isSubjectiveMarkingMode: false,
 
   features: {
     timerEnabled: false,
@@ -161,7 +175,8 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   // Initialize test data
-  setTestData: (data) =>
+  setTestData: (data) => {
+    const { testMode } = get();
     set(() => {
       if (!data) {
         return {
@@ -170,22 +185,46 @@ const useTestStore = create<TestStore>((set, get) => ({
           questionStatusMap: {},
           questionResponseMap: {},
           questionTimeMap: {},
+          questionMarksMap: {},
           currentPointer: { sectionPos: -1, questionPos: -1 },
         };
       }
 
-      const { statusMap, responseMap, timeMap, sectionsUI, initialPointer } =
-        initializeTestData({ testData: data });
+      const {
+        statusMap,
+        responseMap,
+        timeMap,
+        sectionsUI,
+        marksMap,
+        subjectiveSectionsUI,
+        initialPointer,
+      } = initializeTestData({ testData: data });
 
       return {
         testData: data,
         sectionsUI,
+        subjectiveSectionsUI,
         questionStatusMap: statusMap,
         questionResponseMap: responseMap,
         questionTimeMap: timeMap,
+        questionMarksMap: marksMap,
         currentPointer: initialPointer,
+        isSubjectiveMarkingMode:
+          testMode === "review" && data?.testStatus === 2,
       };
-    }),
+    });
+  },
+
+  getActiveSectionsUI: () => {
+    const { testMode, testData, sectionsUI, subjectiveSectionsUI } = get();
+
+    // If we're in review mode of incomplete session (subjective marking)
+    if (testMode === "review" && testData?.testStatus === 2) {
+      return subjectiveSectionsUI;
+    } else {
+      return sectionsUI;
+    }
+  },
 
   setTestError: (error) => set({ testError: error }),
 
@@ -199,6 +238,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToNext: () => {
     const {
       testData,
+      isSubjectiveMarkingMode,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -232,6 +272,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToNextQuestionHandler({
       testData,
+      isSubjectiveMarkingMode,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -255,6 +296,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToPrev: () => {
     const {
       testData,
+      isSubjectiveMarkingMode,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -283,6 +325,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToPrevQuestionHandler({
       testData,
+      isSubjectiveMarkingMode,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -418,6 +461,60 @@ const useTestStore = create<TestStore>((set, get) => ({
     return testData.questionSet.findIndex(
       (q) => q.questionId === currentQuestion.questionId,
     );
+  },
+
+  // Marks Handler
+  updateCurrentTotalMarks: (marks) => {
+    const { questionMarksMap, getCurrentQuestion } = get();
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    const totalMarks = question?.responseChoice?.reduce(
+      (sum, c) => sum + (Number(c.partMarks) || 0),
+      0,
+    );
+    const finalVal = marks > totalMarks ? totalMarks : marks;
+
+    set({
+      questionMarksMap: {
+        ...questionMarksMap,
+        [question?.questionId]: {
+          ...questionMarksMap[question?.questionId],
+          totalMark: finalVal,
+        },
+      },
+    });
+  },
+
+  updateCurrentMarksObj: (resIdx, isChecked) => {
+    const { testData, getCurrentQuestion, questionMarksMap } = get();
+    const question = getCurrentQuestion();
+    if (!question || !testData) return;
+
+    const currentQuestionMarkObj = questionMarksMap[question?.questionId];
+    if (!currentQuestionMarkObj) return;
+
+    const newOptions = [...currentQuestionMarkObj.options];
+    newOptions[resIdx] = isChecked ? "yes" : "no";
+
+    const newTotalMark = newOptions.reduce((acc, opt, idx) => {
+      if (opt === "yes") {
+        const parsedMarks = Number(question?.responseChoice[idx]?.partMarks);
+        return acc + (!isNaN(parsedMarks) ? parsedMarks : 0);
+      }
+      return acc;
+    }, 0);
+
+    set((state) => ({
+      questionMarksMap: {
+        ...state.questionMarksMap,
+        [question.questionId]: {
+          ...currentQuestionMarkObj,
+          options: newOptions,
+          totalMark: newTotalMark,
+        },
+      },
+    }));
   },
 
   // Response Handler
