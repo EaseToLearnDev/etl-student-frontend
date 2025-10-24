@@ -42,7 +42,7 @@ export const PlanBody = ({
 
   const [selectedPlan, setSelectedPlan] = useState<PriceList | null>(null);
   const [coursePriceList, setCoursePriceList] = useState<PriceList[] | null>(
-    null
+    null,
   );
 
   const code = useCoursesStore((s) => s.code);
@@ -136,7 +136,7 @@ export const PlanBody = ({
   };
 
   const isCourseOwned = Boolean(
-    studentData?.courses?.find((c) => c.courseId === courseId)
+    studentData?.courses?.find((c) => c.courseId === courseId),
   );
   const tabs = isCourseOwned ? ["ACE", "PRO"] : ["FREE", "ACE", "PRO"];
 
@@ -144,7 +144,7 @@ export const PlanBody = ({
     <div
       className={cn(
         "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)] scrollbar-hide",
-        isMobile ? "overflow-y-auto" : "overflow-hidden"
+        isMobile ? "overflow-y-auto" : "overflow-hidden",
       )}
     >
       <div className="w-full h-[120px] p-4">
@@ -165,11 +165,11 @@ export const PlanBody = ({
           {/* Features Section */}
           <WidgetCard
             className={cn(
-              "shadow-none flex flex-col scrollbar-hide !p-4",
+              "shadow-none flex flex-col !p-4",
               // mobile: full width, auto height
               "w-full h-auto",
               // desktop: flex-1 and scrollable
-              "lg:max-h-full lg:overflow-y-auto lg:flex-1"
+              "lg:max-h-full lg:overflow-y-auto lg:flex-1",
             )}
             title="Features"
           >
@@ -180,10 +180,10 @@ export const PlanBody = ({
                     ? 2
                     : 1
                   : selectedTabIndex === 1
-                  ? 2
-                  : selectedTabIndex === 2
-                  ? 1
-                  : 0;
+                    ? 2
+                    : selectedTabIndex === 2
+                      ? 1
+                      : 0;
                 return (
                   <PlanFeature key={idx} feature={feat} packIdx={packIdx} />
                 );
@@ -196,7 +196,7 @@ export const PlanBody = ({
             <div className="flex flex-col gap-4 w-full lg:flex-1 lg:min-h-full lg:overflow-y-auto scrollbar-hide">
               {tabs[selectedTabIndex] !== "FREE" && (
                 <WidgetCard
-                  className="shadow-none h-auto lg:flex-1 lg:overflow-y-auto scrollbar-hide !p-4"
+                  className="shadow-none h-auto lg:flex-1 lg:overflow-y-auto !p-4"
                   title="Plans"
                 >
                   <div className="flex flex-col gap-3 mt-4">
@@ -247,7 +247,7 @@ export const PlanBody = ({
                         disabled={applied}
                         className={cn(
                           "w-full flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                          "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                          "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
                         )}
                       />
                       <Button
@@ -303,7 +303,7 @@ export const PlanBody = ({
                     disabled={applied}
                     className={cn(
                       "w-full flex px-4 py-2 items-center gap-2 self-stretch rounded-md border-1 border-[var(--border-secondary)] text-base",
-                      "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                      "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
                     )}
                   />
                   <Button
@@ -358,8 +358,8 @@ export const PlanBody = ({
                 {payableAmount !== null && payableAmount < 1 && applied
                   ? "Get It Free"
                   : payableAmount !== null && payableAmount > 0 && applied
-                  ? `Just Pay ₹ ${payableAmount}`
-                  : "Proceed To Pay"}
+                    ? `Just Pay ₹ ${payableAmount}`
+                    : "Proceed To Pay"}
               </Button>
             )}
           </div>
