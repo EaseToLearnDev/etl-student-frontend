@@ -6,7 +6,6 @@ import type { FeaturesList, PriceList } from "../../shared/types";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import cn from "../../../utils/classNames";
 import Button from "../../../components/Button";
-import { BiCheck } from "react-icons/bi";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import PlanFeature from "../../shared/components/PlanFeature";
 import { MdClose } from "react-icons/md";
@@ -19,7 +18,6 @@ import { resetPromocode } from "../services/resetPromocode";
 import useIsMobile from "../../../hooks/useIsMobile";
 
 // Constants
-const deviceType = "web";
 
 interface PlanBodyProps {
   features?: FeaturesList[];
@@ -143,8 +141,8 @@ export const PlanBody = ({
   return (
     <div
       className={cn(
-        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)] scrollbar-hide",
-        isMobile ? "overflow-y-auto" : "overflow-hidden",
+        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)]",
+        isMobile ? "overflow-y-auto" : "overflow-hidden scrollbar-hide",
       )}
     >
       <div className="w-full h-[120px] p-4">
