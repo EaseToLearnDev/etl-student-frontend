@@ -21,6 +21,10 @@ import { getHelpContent } from "../services/getHelpContent";
 import TopicContentItem from "../../study_room/study_material/components/TopicContentItem";
 import useIsMobile from "../../../hooks/useIsMobile";
 import { RiLoader4Fill } from "react-icons/ri";
+import { loadTextContent } from "../../study_room/study_material/services/loadTextContent";
+import NoCopyWrapper from "../../../global/noCopyWrapper";
+import TextContentModalView from "../../study_room/study_material/components/TextContentModalView";
+import MediaContentModalView from "../../study_room/study_material/components/MediaContentModalVIew";
 
 interface AiHelpModalInterface {
   isOpen: boolean;
@@ -33,6 +37,7 @@ const Main = () => {
   const currentQuestion = useTestStore((s) => s.getCurrentQuestion());
   const incrementHelpCount = useTestStore((s) => s.incrementHelpCount);
   const setSolution = useAiStore((s) => s.setSolution);
+  const testStatus = useTestStore((s) => s.testData?.testStatus);
 
   return (
     <div>
@@ -61,13 +66,14 @@ const Main = () => {
         className="mt-7 w-full"
         disabled={loading}
         onClick={() =>
-          handleOpenAI({ questionId: currentQuestion?.questionId }).then(
-            (v) => {
-              setSolution(v ? v : "");
-              setCurrentModalView(AIModalView.AIContent);
-              incrementHelpCount();
-            }
-          )
+          handleOpenAI({
+            questionId: currentQuestion?.questionId,
+            itemId: currentQuestion?.itemId,
+          }).then((v) => {
+            setSolution(v ? v : "");
+            setCurrentModalView(AIModalView.AIContent);
+            incrementHelpCount();
+          })
         }
       >
         {!loading ? (
@@ -83,10 +89,10 @@ const Main = () => {
       </Button>
 
       {/* Secondary Actions */}
-      <div className="grid grid-cols-2 items-center gap-2 mt-4">
+      <div className="flex items-center gap-2 mt-4">
         <Button
           style="secondary"
-          className="hover:bg-[var(--surface-bg-tertiary)]"
+          className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
           onClick={() =>
             goGoogle({
               questionText: currentQuestion?.questionBody,
@@ -97,14 +103,20 @@ const Main = () => {
           <MagnifyingGlassIcon width={20} height={20} />
           Search Google
         </Button>
-        <Button
-          style="secondary"
-          className="hover:bg-[var(--surface-bg-tertiary)]"
-          onClick={() => setCurrentModalView(AIModalView.StudyMaterialContent)}
-        >
-          <BookOpenIcon width={20} height={20} />
-          Study Material
-        </Button>
+        {!testStatus || testStatus !== 1 ? (
+          <Button
+            style="secondary"
+            className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
+            onClick={() =>
+              setCurrentModalView(AIModalView.StudyMaterialContent)
+            }
+          >
+            <BookOpenIcon width={20} height={20} />
+            Study Material
+          </Button>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
@@ -164,6 +176,27 @@ const AIContent = () => {
 const StudyMaterialContent = () => {
   const setCurrentModalView = useAiStore((s) => s.setCurrentModalView);
   const studyMaterial = useAiStore((s) => s.studyMaterial);
+  const selectedContent = useAiStore((s) => s.selectedContent);
+  const setSelectedContent = useAiStore((s) => s.setSelectedContent);
+  const textContent = useAiStore((s) => s.textContent);
+  const setTextContent = useAiStore((s) => s.setTextContent);
+  // ========== Load Text Content on Content Select ==========
+  useEffect(() => {
+    const getTextContent = async () => {
+      if (
+        selectedContent?.id &&
+        selectedContent.contentType === "Text" &&
+        textContent?.id !== selectedContent?.id
+      ) {
+        const data = await loadTextContent(selectedContent);
+        if (data) {
+          setTextContent(data);
+        }
+      }
+    };
+
+    getTextContent();
+  }, [selectedContent?.id]);
 
   return (
     <div>
@@ -185,7 +218,9 @@ const StudyMaterialContent = () => {
               <TopicContentItem
                 key={content?.id}
                 content={content}
-                onClickHandler={() => {}}
+                onClickHandler={() => {
+                  setSelectedContent(content);
+                }}
               />
             ))
           ) : (
@@ -197,6 +232,39 @@ const StudyMaterialContent = () => {
           )}
         </div>
       </WidgetCard>
+      {selectedContent && (
+        <Modal
+          isOpen={selectedContent !== null}
+          onClose={() => {
+            setSelectedContent(null);
+            setTextContent(null);
+          }}
+          size="xl"
+          className="p-4 lg:p-10"
+          containerClassName="!h-full !w-full !max-w-full"
+        >
+          <>
+            {selectedContent?.contentType === "Text" && textContent ? (
+              <NoCopyWrapper className="w-full h-full">
+                <TextContentModalView content={textContent} />
+              </NoCopyWrapper>
+            ) : (
+              <NoCopyWrapper className="w-full h-full">
+                <MediaContentModalView content={selectedContent} />
+              </NoCopyWrapper>
+            )}
+            <div
+              onClick={() => setSelectedContent(null)}
+              className={cn(
+                "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
+              )}
+            >
+              <MdClose size={20} />
+            </div>
+          </>
+        </Modal>
+      )}
     </div>
   );
 };
@@ -208,6 +276,7 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
   const testConfig = useTestStore((s) => s.testConfig);
   const currentQuestion = useTestStore((s) => s.getCurrentQuestion());
   const setStudyMaterial = useAiStore((s) => s.setStudyMaterial);
+  const testName = useTestStore((s) => s.testData?.testName);
 
   // map enum to component
   const views = {
@@ -251,13 +320,15 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
               <div className="flex justify-center items-center size-8 aspect-square bg-[var(--sb-ocean-bg-active)] rounded-md">
                 <BookOpenIcon width={16} height={16} className="text-white" />
               </div>
-              <h5 className="!font-bold">Physics</h5>
+              <h5 className="!font-bold text-ellipsis line-clamp-2">
+                {testName || ""}
+              </h5>
             </div>
             <div
               onClick={onClose}
               className={cn(
                 "size-10 aspect-square flex justify-center items-center cursor-pointer",
-                " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+                " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
               )}
             >
               <MdClose size={20} />

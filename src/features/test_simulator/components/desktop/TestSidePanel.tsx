@@ -15,10 +15,10 @@ import { useGuestStore } from "../../../../global/hooks/useGuestStore";
  */
 const TestSidePanel = () => {
   const setIsSubmissionModalOpen = useTestStore(
-    (state) => state.setIsSubmissionModalOpen
+    (state) => state.setIsSubmissionModalOpen,
   );
   const setShowGuestTestSubmitModal = useGuestStore(
-    (s) => s.setShowGuestTestSubmitModal
+    (s) => s.setShowGuestTestSubmitModal,
   );
   const testMode = useTestStore((s) => s.testMode);
   const { correctResponseEnabled } = useTestStore((s) => s.features);

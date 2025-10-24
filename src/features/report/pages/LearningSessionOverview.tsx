@@ -20,7 +20,7 @@ import Button from "../../../components/Button";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
-import { LuFileChartColumn, LuFileChartPie } from "react-icons/lu";
+import { LuFileChartColumn } from "react-icons/lu";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
 
@@ -35,9 +35,6 @@ export const LearningSessionOverview = () => {
 
   const navigate = useNavigate();
 
-  // Track viewing the learning session overview page
-  usePageTracking(gtmEvents.detail_report_learning_session_page_visit);
-
 
   useEffect(() => {
     if (!testSession) return;
@@ -50,24 +47,22 @@ export const LearningSessionOverview = () => {
       }
     };
     fetchAnalyticData();
-  }, []);
-
+  }, [testSession]);
 
   if (loading) return <LearningSessionOverviewSkeleton />;
 
   if (!testSession || !data) {
     return (
-        <EmptyState
-          title="No analytics data available"
-          description="No learning analytics data is available yet. Start engaging with tests, activities, or courses to see your progress here!"
-          icon={<LuFileChartColumn className="w-24 h-24" />}
-          className="max-w-md"
-          buttonText="Go Back"
-          onClick={() => navigate('/report')}
-        />
+      <EmptyState
+        title="No analytics data available"
+        description="No learning analytics data is available yet. Start engaging with tests, activities, or courses to see your progress here!"
+        icon={<LuFileChartColumn className="w-24 h-24" />}
+        className="max-w-md"
+        buttonText="Go Back"
+        onClick={() => navigate("/report")}
+      />
     );
   }
-
 
   const overallPerformanceData = data.overallResultList.map((d) => ({
     name: d.name,
@@ -152,7 +147,7 @@ export const LearningSessionOverview = () => {
                 {renderPieChart(
                   overallPerformanceData,
                   data.totalQuestion,
-                  "Total Questions"
+                  "Total Questions",
                 )}
               </div>
             </Widget>
@@ -161,7 +156,7 @@ export const LearningSessionOverview = () => {
                 {renderPieChart(
                   withHelpData,
                   data.helpCounter,
-                  "Help in Questions"
+                  "Help in Questions",
                 )}
               </div>
             </Widget>
@@ -170,7 +165,7 @@ export const LearningSessionOverview = () => {
                 {renderPieChart(
                   withoutHelpData,
                   data.totalQuestion - data.helpCounter,
-                  "Without Help"
+                  "Without Help",
                 )}
               </div>
             </Widget>

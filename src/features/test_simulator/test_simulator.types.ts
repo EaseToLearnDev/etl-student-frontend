@@ -132,6 +132,13 @@ export type QuestionType =
   | "Subjective Type Short Answer II"
   | "Subjective Type Long";
 
+export const subjectiveTypes = [
+  "Subjective-Type-Very-Short",
+  "Subjective-Type-Short-Answer-I",
+  "Subjective-Type-Short-Answer-II",
+  "Subjective-Type-Long",
+];
+
 export type SearchFlag = "Topic" | "Keyword";
 export type ExamType = "objective" | "subjective";
 export type AssessmentMode = "beginner" | "advance";
@@ -255,3 +262,7 @@ export interface ResponseType {
   url: string | null;
 }
 
+export interface MarksType {
+  options: string[];
+  totalMark: number;
+}

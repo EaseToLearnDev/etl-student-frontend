@@ -64,14 +64,14 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
-    (s) => s.setIsSubmissionModalOpen
+    (s) => s.setIsSubmissionModalOpen,
   );
 
   const isSwitchSectionModalOpen = useTestStore(
-    (s) => s.isSwitchSectionModalOpen
+    (s) => s.isSwitchSectionModalOpen,
   );
   const setIsSwitchSectionModalOpen = useTestStore(
-    (s) => s.setIsSwitchSectionModalOpen
+    (s) => s.setIsSwitchSectionModalOpen,
   );
   const pendingQuestion = useTestStore((s) => s.pendingQuestion);
   const setPendingQuestion = useTestStore((s) => s.setPendingQuestion);
@@ -89,7 +89,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const resetAi = useAiStore((s) => s.reset);
 
   const setShowGuestTestSubmitModal = useGuestStore(
-    (s) => s.setShowGuestTestSubmitModal
+    (s) => s.setShowGuestTestSubmitModal,
   );
   const testData = useTestStore((s) => s.testData);
 
@@ -103,7 +103,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const setLoading = useLoadingStore((s) => s.setLoading);
 
   const { hasExited, reEnter, exit } = useFullscreenProtection(
-    features?.fullScreenEnabled ?? false
+    features?.fullScreenEnabled ?? false,
   );
 
   const status = getActiveCourseAccessStatus();
@@ -122,7 +122,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       setMode,
       setLoading,
       setCurrentQuestion,
-      isMobile
+      isMobile,
     );
     return () => {
       if (features?.timerEnabled) {
@@ -166,13 +166,19 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         title="Limit Reached!"
         description={testError.message}
         icon={<LuLock className="w-24 h-24" />}
-        buttonText={status === "upgrade" ? "Upgrade": "Home"}
-        onClick={() => navigate(status === "upgrade" ? `/selectcourse?cid=${activeCourse?.courseId}`: "/")}
+        buttonText={status === "upgrade" ? "Upgrade" : "Home"}
+        onClick={() =>
+          navigate(
+            status === "upgrade"
+              ? `/selectcourse?cid=${activeCourse?.courseId}`
+              : "/",
+          )
+        }
         className="min-h-screen"
       />
     );
   }
-  
+
   if (testError?.id === "question_limit_reached") {
     return (
       <EmptyState

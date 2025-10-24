@@ -15,15 +15,13 @@ export const handleStartTest = async (
   navigate: NavigateFunction,
   mode: ModeType,
   selectedTopic: Topic | null,
-  selectedTestOption: TestOption
+  selectedTestOption: TestOption,
 ) => {
-
   const { studentData, activeCourse } = useStudentStore.getState();
   if (!studentData || !activeCourse) return;
-  
-  console.log(selectedTestOption)
+
   if (selectedTopic) {
-    let params = {
+    const params = {
       testId: "0",
       testType: "1",
       questionType:
@@ -52,7 +50,7 @@ export const handleStartTest = async (
  */
 export const handleResumeTest = async (
   navigate: NavigateFunction,
-  previousRunningTest: PrevRunningTest | null
+  previousRunningTest: PrevRunningTest | null,
 ) => {
   if (previousRunningTest) {
     let params = {

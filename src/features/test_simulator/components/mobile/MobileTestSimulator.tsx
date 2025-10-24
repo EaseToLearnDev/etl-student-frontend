@@ -22,6 +22,7 @@ import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "../ActiveQuestionPanel";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
+import useTestStore from "../../store/useTestStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
@@ -33,7 +34,7 @@ const MobileTestSimulator = () => {
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const isExpired = useTestTimerStore((state) => state.isExpired);
   const isRunning = useTestTimerStore((state) => state.isRunning);
-
+  const timerEnabled = useTestStore((state) => state.features.timerEnabled);
   // Hooks
   // const {
   //   isSecondaryHidden,
@@ -50,16 +51,18 @@ const MobileTestSimulator = () => {
       {/* Header */}
       <TestHeader />
       {/* Timer */}
-      <div className="flex flex-col items-center mt-4">
-        {isRunning ? (
-          <span className="text-center">Time Remaining</span>
-        ) : (
-          <></>
-        )}
-        <div className="text-center">
-          <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
+      {timerEnabled && (
+        <div className="flex flex-col items-center mt-4">
+          {isRunning ? (
+            <span className="text-center">Time Remaining</span>
+          ) : (
+            <></>
+          )}
+          <div className="text-center">
+            <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="flex flex-col w-full h-full gap-2 p-2">
         {/* Horizontal Section-wise Question List */}
@@ -89,7 +92,10 @@ const MobileTestSimulator = () => {
           openDrawer({
             view: (
               <div className="w-full h-full flex flex-col p-4 gap-5 items-center bg-[var(--surface-bg-secondary)]">
-                <div className="w-full flex gap-3 items-center" onClick={() => closeDrawer()}>
+                <div
+                  className="w-full flex gap-3 items-center"
+                  onClick={() => closeDrawer()}
+                >
                   <div className="size-10 aspect-square border-1 border-[var(--border-primary)] flex justify-center items-center rounded-lg hover:bg-[var(--surface-bg-tertiary)]">
                     <MdArrowBack size={18} />
                   </div>

@@ -8,6 +8,7 @@ import EmptyState from "../../../components/EmptyState";
 export interface TestReportdata {
   testTitle: string;
   testType: string;
+  examType: string;
   date: string;
   totalQuestions: number;
   fullMarks: number;

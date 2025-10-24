@@ -1,11 +1,12 @@
 import type { Error } from "../../shared/types";
 import { Severity } from "../../shared/types";
-import type {
-  Features,
-  Question,
-  SimulatorMode,
-  TestConfig,
-  TestData,
+import {
+  subjectiveTypes,
+  type Features,
+  type Question,
+  type SimulatorMode,
+  type TestConfig,
+  type TestData,
 } from "../test_simulator.types";
 import { handleTestConfigSetup } from "./handleTestConfigSetup";
 import { loadTestDetails } from "./loadTestDetails";
@@ -20,7 +21,7 @@ export const setupTest = async (
   startTestTimer: (timer: number) => void,
   setIsAiFeatureEnabled: (v: boolean) => void,
   startQuestionTimer: () => void,
-  setMode: (mode: string) => void,
+  setMode: (mode: SimulatorMode) => void,
   setLoading: (loading: boolean) => void,
   setCurrentQuestion: (question: Question | null) => void,
   isMobile: boolean,
@@ -95,7 +96,7 @@ export const setupTest = async (
           showDynamicStatusEnabled: false,
           timerEnabled: false,
           fullScreenEnabled: false,
-          subjectiveMarksEditEnabled: data?.testStatus === 1 ? false : true,
+          subjectiveMarksEditEnabled: data?.testStatus === 2 ? true : false,
         };
         break;
     }
@@ -123,7 +124,26 @@ export const setupTest = async (
       features.fullScreenEnabled = !isMobile ? true : false;
     }
 
-    setCurrentQuestion(data?.questionSet[data.lastQuestionIndex ?? 0] ?? null);
+    // Is subjective marking is enabled, try to load first subjective question
+    if (features.subjectiveMarksEditEnabled) {
+      const firstSubjective = data?.questionSet?.find((q) =>
+        subjectiveTypes.includes(q?.questionType),
+      );
+
+      if (firstSubjective) {
+        setCurrentQuestion(firstSubjective);
+      } else {
+        // fallback case
+        setCurrentQuestion(
+          data?.questionSet[data?.lastQuestionIndex ?? 0] ?? null,
+        );
+      }
+    } else {
+      // normal behaviour: start from lastQuestionIndex or zero
+      setCurrentQuestion(
+        data?.questionSet[data.lastQuestionIndex ?? 0] ?? null,
+      );
+    }
 
     setFeatures(features);
     setLoading(false);
