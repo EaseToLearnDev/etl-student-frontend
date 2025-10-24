@@ -40,6 +40,7 @@ import { Toast } from "../../../../components/Toast";
 import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".
@@ -91,6 +92,8 @@ const MockTestPage = () => {
   const setIsUpgradeModalOpen = useUpgradeModalStore(
     (s) => s.setIsUpgradeModalOpen
   );
+
+  usePageTracking(gtmEvents.mock_test_page_visit)
 
   useEffect(() => {
     loadMockTestList();

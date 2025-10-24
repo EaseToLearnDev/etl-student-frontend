@@ -41,6 +41,8 @@ import { useContentLimitStore } from "../hooks/useContentLimitStore";
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 import LimitReachedModal from "../components/LimitReachedModal";
 import { LuBookOpen, LuListTree } from "react-icons/lu";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 /**
  * SMTopicListPage displays a list of study material topics and their content.
@@ -79,6 +81,8 @@ const StudyMaterialsPage = () => {
   const resetLimitReachedModal = useContentLimitStore((s) => s.reset);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  usePageTracking(gtmEvents.study_material_page_visit, 5000)
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {

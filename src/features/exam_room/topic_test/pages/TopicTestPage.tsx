@@ -44,6 +44,7 @@ import { Toast } from "../../../../components/Toast";
 import { LuArchive, LuCalendarX, LuInfo } from "react-icons/lu";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -95,6 +96,8 @@ const TopicTestPage = () => {
     isMobile ? true : false
   );
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  usePageTracking(gtmEvents.topic_test_page_visit)
 
   // useEffects
   useEffect(() => {

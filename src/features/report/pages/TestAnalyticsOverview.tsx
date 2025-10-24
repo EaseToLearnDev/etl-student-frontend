@@ -40,6 +40,8 @@ import {
 } from "../services/loadStudentAnalyticsData";
 import EmptyState from "../../../components/EmptyState";
 import { useNavigate, useSearchParams } from "react-router";
+import { usePageTracking } from "../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../utils/gtm-events";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
 import Button from "../../../components/Button";
@@ -69,6 +71,37 @@ export const TestAnalyticsOverview = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const navigate = useNavigate();
+
+  // Fire a page-view event depending on the test type.
+  // Use a switch for clarity and easier future extension.
+  const _pageEvent = (() => {
+  let event;
+
+  switch (testType) {
+    case 3:
+      event = gtmEvents.detail_report_mock_test_page_visit;
+      break;
+    case 2:
+      event = gtmEvents.detail_report_topic_test_page_visit;
+      break;
+    case 4:
+      event = gtmEvents.detail_report_class_test_page_visit;
+      break;
+    case 5:
+      event = gtmEvents.detail_report_class_mock_test_page_visit;
+      break;
+    case 1:
+      event = gtmEvents.detail_report_competitive_session_page_visit;
+      break;
+    default:
+      event = "null";
+  }
+
+  return event;
+})();
+
+
+  usePageTracking(_pageEvent);
 
   if (!testSession) {
     return (

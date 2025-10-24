@@ -36,6 +36,8 @@ import { LuArchive } from "react-icons/lu";
 import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
 import { openStartTestModal } from "../services/openStartTestModal";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -85,6 +87,8 @@ const SmartLearningPage = () => {
   const loading = useLoadingStore((s) => s.loading);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  usePageTracking(gtmEvents.smart_learning_page_visit, 5000)
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {

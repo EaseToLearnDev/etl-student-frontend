@@ -15,12 +15,16 @@ import EmptyState from "../../../components/EmptyState";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { ReportOverviewSkeleton } from "../../../components/ReportOverviewSkeleton";
 import { LuFileChartColumnIncreasing, LuFileQuestion, LuFileScan, LuFileSearch, LuFileSearch2, LuFileText } from "react-icons/lu";
+import { usePageTracking } from "../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const ReportOverviewPage = () => {
   const overviewData = useReportOverviewStore((s) => s.overviewData);
   const setOverviewData = useReportOverviewStore((s) => s.setOverviewData);
   const reset = useReportOverviewStore((s) => s.reset);
   const loading = useLoadingStore((s) => s.loading);
+
+  usePageTracking(gtmEvents.report_overview_page_visit)
 
   // useEffects
   useEffect(() => {
