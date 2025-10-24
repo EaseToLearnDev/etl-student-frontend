@@ -35,6 +35,9 @@ export const LearningSessionOverview = () => {
 
   const navigate = useNavigate();
 
+  // Track viewing the learning session overview page
+  usePageTracking(gtmEvents.detail_report_learning_session_page_visit);
+
 
   useEffect(() => {
     if (!testSession) return;
