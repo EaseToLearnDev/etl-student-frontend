@@ -48,6 +48,8 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
     const response = await fn();
     const data = (response as any)?.data ?? response;
     if (data.responseTxt === "invalidToken"){
+      // Removing stored cache from localStorage to clear session in native app
+      localStorage.removeItem('student-storage');
       window.location.href = '/student/logout';
     }
     return {
@@ -60,6 +62,8 @@ export const apiWrapper = async <T>(fn: () => Promise<T>) => {
     const errorMsg = error?.response?.data?.message || error?.message || "Something went wrong";
     const status = error?.response?.status 
     if (errorMsg === "invalidToken") {
+      // Removing stored cache from localStorage to clear session in native app
+      localStorage.removeItem('student-storage');
       window.location.href = '/student/logout';
     }
     console.log("API Error", error);

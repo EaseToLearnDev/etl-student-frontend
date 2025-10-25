@@ -9,6 +9,9 @@ import type {
   Pointer,
   TestConfig,
   Features,
+  ResponseType,
+  SimulatorMode,
+  MarksType,
 } from "../test_simulator.types";
 import { Severity, ToastType, type Error } from "../../shared/types";
 
@@ -19,8 +22,10 @@ import {
   setCurrentQuestionHandler,
 } from "../services/navigation";
 import {
+  clearCurrentFileUrlHandler,
   clearCurrentResponseHandler,
   isMaxQuestionLimitReached,
+  setCurrentFileUrlHandler,
   setCurrentResponseHandler,
 } from "../services/responseHandlers";
 import {
@@ -45,7 +50,10 @@ import { useToastStore } from "../../../global/hooks/useToastStore";
 export interface TestStore {
   testData: TestData | null;
   sectionsUI: SectionUI[];
+  subjectiveSectionsUI: SectionUI[];
   setTestData: (data: TestData | null) => void;
+
+  getActiveSectionsUI: () => SectionUI[];
 
   helpCount: number;
   setHelpCount: (n: number) => void;
@@ -62,8 +70,8 @@ export interface TestStore {
 
   currentPointer: Pointer;
 
-  testMode: string | null;
-  setMode: (mode: string) => void;
+  testMode: SimulatorMode | null;
+  setMode: (mode: SimulatorMode) => void;
 
   pendingQuestion: Question | null;
   setPendingQuestion: (question: Question | null) => void;
@@ -77,13 +85,19 @@ export interface TestStore {
 
   jumpToQuestion: (question: Question | null) => void;
 
-  questionResponseMap: Record<number, Array<string>>;
-  getCurrentResponse: () => Array<string>;
+  questionResponseMap: Record<number, ResponseType>;
+  getCurrentResponse: () => ResponseType | null;
   setCurrentResponse: (
     response: string,
-    action: "push" | "pop" | "replace"
+    action: "push" | "pop" | "replace",
   ) => void;
+  setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
+  clearCurrentFileUrl: () => void;
+
+  questionMarksMap: Record<number, MarksType>;
+  updateCurrentTotalMarks: (marks: number) => void;
+  updateCurrentMarksObj: (resIdx: number, isChecked: boolean) => void;
 
   questionTimeMap: Record<number, number>;
   getTimeByQuestionId: (questionId: number) => number;
@@ -95,7 +109,7 @@ export interface TestStore {
 
   changeStatusByQuestionId: (
     questionId: number,
-    status: QuestionStatus
+    status: QuestionStatus,
   ) => void;
   getQuestionCountByStatus: (status: QuestionStatus) => number;
 
@@ -111,6 +125,9 @@ export interface TestStore {
   isSwitchSectionModalOpen: boolean;
   setIsSwitchSectionModalOpen: (v: boolean) => void;
 
+  isSubjectiveMediaModalOpen: boolean;
+  setIsSubjectiveMediaModalOpen: (v: boolean) => void;
+
   reset: () => void;
 }
 
@@ -120,6 +137,7 @@ export interface TestStore {
 const useTestStore = create<TestStore>((set, get) => ({
   testData: null,
   sectionsUI: [],
+  subjectiveSectionsUI: [],
   testConfig: null,
   testError: null,
   pendingQuestion: null,
@@ -131,6 +149,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionResponseMap: {},
   questionTimeMap: {},
   questionStatusMap: {},
+  questionMarksMap: {},
   _questionTimerId: null,
   helpCount: 0,
 
@@ -139,6 +158,7 @@ const useTestStore = create<TestStore>((set, get) => ({
     correctResponseEnabled: false,
     showDynamicStatusEnabled: false,
     fullScreenEnabled: false,
+    subjectiveMarksEditEnabled: false,
   },
   setFeatures: (features) =>
     set({
@@ -152,7 +172,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   },
 
   // Initialize test data
-  setTestData: (data) =>
+  setTestData: (data) => {
     set(() => {
       if (!data) {
         return {
@@ -161,22 +181,44 @@ const useTestStore = create<TestStore>((set, get) => ({
           questionStatusMap: {},
           questionResponseMap: {},
           questionTimeMap: {},
+          questionMarksMap: {},
           currentPointer: { sectionPos: -1, questionPos: -1 },
         };
       }
 
-      const { statusMap, responseMap, timeMap, sectionsUI, initialPointer } =
-        initializeTestData({ testData: data });
+      const {
+        statusMap,
+        responseMap,
+        timeMap,
+        sectionsUI,
+        marksMap,
+        subjectiveSectionsUI,
+        initialPointer,
+      } = initializeTestData({ testData: data });
 
       return {
         testData: data,
         sectionsUI,
+        subjectiveSectionsUI,
         questionStatusMap: statusMap,
         questionResponseMap: responseMap,
         questionTimeMap: timeMap,
+        questionMarksMap: marksMap,
         currentPointer: initialPointer,
       };
-    }),
+    });
+  },
+
+  getActiveSectionsUI: () => {
+    const { testMode, testData, sectionsUI, subjectiveSectionsUI } = get();
+
+    // If we're in review mode of incomplete session (subjective marking)
+    if (testMode === "review" && testData?.testStatus === 2) {
+      return subjectiveSectionsUI;
+    } else {
+      return sectionsUI;
+    }
+  },
 
   setTestError: (error) => set({ testError: error }),
 
@@ -190,6 +232,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToNext: () => {
     const {
       testData,
+      features,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -210,7 +253,7 @@ const useTestStore = create<TestStore>((set, get) => ({
       const nextSection = testData.sectionSet[currentPointer.sectionPos + 1];
       const firstQuestion = nextSection.questionNumbers[0];
       const pendingQuestion = testData.questionSet.find(
-        (q) => q.questionId === firstQuestion.questionId
+        (q) => q.questionId === firstQuestion.questionId,
       );
       // store next question pointer
       set({
@@ -223,6 +266,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToNextQuestionHandler({
       testData,
+      subjectiveMarkEditEnabled: features.subjectiveMarksEditEnabled,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -246,6 +290,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToPrev: () => {
     const {
       testData,
+      features,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -274,6 +319,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToPrevQuestionHandler({
       testData,
+      subjectiveMarkEditEnabled: features.subjectiveMarksEditEnabled,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -313,7 +359,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId)
+      section.questionNumbers.some((q) => q.questionId === question.questionId),
     );
 
     if (targetSectionPos === -1) return;
@@ -353,7 +399,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId)
+      section.questionNumbers.some((q) => q.questionId === question.questionId),
     );
 
     if (targetSectionPos === -1) return;
@@ -407,15 +453,69 @@ const useTestStore = create<TestStore>((set, get) => ({
     if (!currentQuestion) return -1;
 
     return testData.questionSet.findIndex(
-      (q) => q.questionId === currentQuestion.questionId
+      (q) => q.questionId === currentQuestion.questionId,
     );
+  },
+
+  // Marks Handler
+  updateCurrentTotalMarks: (marks) => {
+    const { questionMarksMap, getCurrentQuestion } = get();
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    const totalMarks = question?.responseChoice?.reduce(
+      (sum, c) => sum + (Number(c.partMarks) || 0),
+      0,
+    );
+    const finalVal = marks > totalMarks ? totalMarks : marks;
+
+    set({
+      questionMarksMap: {
+        ...questionMarksMap,
+        [question?.questionId]: {
+          ...questionMarksMap[question?.questionId],
+          totalMark: finalVal,
+        },
+      },
+    });
+  },
+
+  updateCurrentMarksObj: (resIdx, isChecked) => {
+    const { testData, getCurrentQuestion, questionMarksMap } = get();
+    const question = getCurrentQuestion();
+    if (!question || !testData) return;
+
+    const currentQuestionMarkObj = questionMarksMap[question?.questionId];
+    if (!currentQuestionMarkObj) return;
+
+    const newOptions = [...currentQuestionMarkObj.options];
+    newOptions[resIdx] = isChecked ? "yes" : "no";
+
+    const newTotalMark = newOptions.reduce((acc, opt, idx) => {
+      if (opt === "yes") {
+        const parsedMarks = Number(question?.responseChoice[idx]?.partMarks);
+        return acc + (!isNaN(parsedMarks) ? parsedMarks : 0);
+      }
+      return acc;
+    }, 0);
+
+    set((state) => ({
+      questionMarksMap: {
+        ...state.questionMarksMap,
+        [question.questionId]: {
+          ...currentQuestionMarkObj,
+          options: newOptions,
+          totalMark: newTotalMark,
+        },
+      },
+    }));
   },
 
   // Response Handler
   getCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap } = get();
     const question = getCurrentQuestion();
-    if (!question) return [];
+    if (!question) return null;
 
     return getResponseForQuestionHandler({
       questionId: question.questionId,
@@ -472,6 +572,47 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap: result.newStatusMap,
     });
   },
+
+  setCurrentFileUrl: (fileName, url) => {
+    const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
+      get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
+    const result = setCurrentFileUrlHandler({
+      question,
+      fileName,
+      url,
+      questionResponseMap,
+      questionStatusMap,
+    });
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
+    });
+  },
+
+  clearCurrentFileUrl: () => {
+    const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
+      get();
+    const question = getCurrentQuestion();
+    if (!question) return null;
+
+    const result = clearCurrentFileUrlHandler({
+      question,
+      questionResponseMap,
+      questionStatusMap,
+    });
+    if (!result) return;
+
+    set({
+      questionResponseMap: result.newResponseMap,
+      questionStatusMap: result.newStatusMap,
+    });
+  },
+
   // Clear Current Response Handler
   clearCurrentResponse: () => {
     const { getCurrentQuestion, questionResponseMap, questionStatusMap } =
@@ -585,6 +726,9 @@ const useTestStore = create<TestStore>((set, get) => ({
   isSwitchSectionModalOpen: false,
   setIsSwitchSectionModalOpen: (v) => set({ isSwitchSectionModalOpen: v }),
 
+  isSubjectiveMediaModalOpen: false,
+  setIsSubjectiveMediaModalOpen: (v) => set({ isSubjectiveMediaModalOpen: v }),
+
   // Reset state
   reset: () => {
     const { stopQuestionTimer: stopTimer } = get();
@@ -607,6 +751,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         showDynamicStatusEnabled: false,
         timerEnabled: false,
         fullScreenEnabled: false,
+        subjectiveMarksEditEnabled: false,
       },
       helpCount: 0,
     });

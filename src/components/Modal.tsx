@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import cn from "../utils/classNames";
 
 const modalStyles = {
-  root: "fixed inset-0 z-[999] overflow-y-auto overflow-x-hidden",
+  root: "fixed inset-0 z-[99999999] overflow-y-auto overflow-x-hidden",
   area: "flex min-h-screen flex-col items-center justify-center",
   overlay:
     "fixed inset-0 cursor-pointer bg-black bg-opacity-60 dark:bg-opacity-80 z-10 duration-300 ease-in-out data-[closed]:opacity-0",
@@ -89,7 +89,7 @@ export function Modal({
       className={cn(
         modalStyles.root,
         "flex items-center justify-center transition-opacity duration-300",
-        className
+        className,
       )}
     >
       {/* Overlay */}
@@ -99,7 +99,7 @@ export function Modal({
           "fixed inset-0 bg-black/40 dark:bg-black/60 z-10",
           modalStyles.blur[blur],
           show ? "opacity-100" : "opacity-0",
-          overlayClassName
+          overlayClassName,
         )}
       />
       {/* Panel */}
@@ -110,7 +110,7 @@ export function Modal({
           !customSize && modalStyles.size[size],
           modalStyles.rounded[rounded],
           !noGutter && "p-4 sm:p-5",
-          containerClassName
+          containerClassName,
         )}
         style={customSize ? { maxWidth: `${customSize}px` } : undefined}
       >

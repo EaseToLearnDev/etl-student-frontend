@@ -1,11 +1,12 @@
 import type { Error } from "../../shared/types";
 import { Severity } from "../../shared/types";
-import type {
-  Features,
-  Question,
-  SimulatorMode,
-  TestConfig,
-  TestData,
+import {
+  subjectiveTypes,
+  type Features,
+  type Question,
+  type SimulatorMode,
+  type TestConfig,
+  type TestData,
 } from "../test_simulator.types";
 import { handleTestConfigSetup } from "./handleTestConfigSetup";
 import { loadTestDetails } from "./loadTestDetails";
@@ -20,10 +21,10 @@ export const setupTest = async (
   startTestTimer: (timer: number) => void,
   setIsAiFeatureEnabled: (v: boolean) => void,
   startQuestionTimer: () => void,
-  setMode: (mode: string) => void,
+  setMode: (mode: SimulatorMode) => void,
   setLoading: (loading: boolean) => void,
   setCurrentQuestion: (question: Question | null) => void,
-  isMobile: boolean
+  isMobile: boolean,
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -59,7 +60,11 @@ export const setupTest = async (
       error: { id: string; message: string } | null;
     } = result;
 
-    if (error?.id === "limit_reached" || error?.id === "question_limit_reached") {
+    if (
+      error?.id === "limit_reached" ||
+      error?.id === "question_limit_reached" ||
+      error?.id === "internal_server_error"
+    ) {
       setError({
         id: error?.id,
         message: error.message,
@@ -71,7 +76,7 @@ export const setupTest = async (
 
     if (data) setTestData(data);
 
-    let features;
+    let features: Features;
     switch (mode) {
       case "guest":
       case "registered":
@@ -82,6 +87,7 @@ export const setupTest = async (
             testConfig?.assessmentMode === "advance" ||
             testConfig?.testType !== 1,
           fullScreenEnabled: false,
+          subjectiveMarksEditEnabled: false,
         };
 
         break;
@@ -91,6 +97,7 @@ export const setupTest = async (
           showDynamicStatusEnabled: false,
           timerEnabled: false,
           fullScreenEnabled: false,
+          subjectiveMarksEditEnabled: data?.testStatus === 2 ? true : false,
         };
         break;
     }
@@ -102,16 +109,42 @@ export const setupTest = async (
         startTestTimer(data?.remainingTime ?? 0);
       }
     }
+
     if (
-      mode === "review" ||
-      (testConfig?.testType === 1 && testConfig?.assessmentMode === "beginner")
+      (testConfig?.testType === 1 &&
+        testConfig?.assessmentMode === "beginner") ||
+      mode === "review"
     ) {
       setIsAiFeatureEnabled(true);
-    } else {
+    }
+
+    if (
+      (mode !== "review" && testConfig?.assessmentMode === "advance") ||
+      (testConfig?.testType && testConfig?.testType !== 1)
+    ) {
       features.fullScreenEnabled = !isMobile ? true : false;
     }
 
-    setCurrentQuestion(data?.questionSet[data.lastQuestionIndex ?? 0] ?? null);
+    // Is subjective marking is enabled, try to load first subjective question
+    if (features.subjectiveMarksEditEnabled) {
+      const firstSubjective = data?.questionSet?.find((q) =>
+        subjectiveTypes.includes(q?.questionType),
+      );
+
+      if (firstSubjective) {
+        setCurrentQuestion(firstSubjective);
+      } else {
+        // fallback case
+        setCurrentQuestion(
+          data?.questionSet[data?.lastQuestionIndex ?? 0] ?? null,
+        );
+      }
+    } else {
+      // normal behaviour: start from lastQuestionIndex or zero
+      setCurrentQuestion(
+        data?.questionSet[data?.lastQuestionIndex || 0] ?? null,
+      );
+    }
 
     setFeatures(features);
     setLoading(false);

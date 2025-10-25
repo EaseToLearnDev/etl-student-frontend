@@ -6,9 +6,13 @@ import useTestStore from "../store/useTestStore";
 import { testStop } from "../api/testStop.api";
 import type { NavigateFunction } from "react-router";
 import useTestTimerStore from "../store/useTestTimerStore";
-import { QuestionStatusReverseMap } from "../test_simulator.types";
+import {
+  QuestionStatusReverseMap,
+  subjectiveTypes,
+} from "../test_simulator.types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
+import { serializeStudentSubjectiveResponse } from "./studentResponseHandler";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -67,6 +71,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       })),
       questionSet:
         testData?.questionSet.map((item) => {
+          const currentResponse = questionResponseMap[item.questionId];
           const baseObj: any = {
             questionId: item.questionId,
             questionDisplayId: item.questionDisplayId,
@@ -77,7 +82,9 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             columns: item.columns,
             topicId: item.topicId,
             timeSpent: questionTimeMap[item.questionId] || 0,
-            studentResponse: questionResponseMap[item.questionId].join("~"),
+            studentResponse: subjectiveTypes.includes(item?.questionType || "")
+              ? serializeStudentSubjectiveResponse(currentResponse)
+              : currentResponse.text.join("~") || "",
             correctAnswerMarks: item.correctAnswerMarks,
             incorrectAnswerMarks: item.incorrectAnswerMarks,
             notAnswerMarks: item.notAnswerMarks,
@@ -103,7 +110,6 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
         }) ?? [],
     },
   ];
-  console.log(testDetail);
 
   const { loginId, token } = studentData;
 

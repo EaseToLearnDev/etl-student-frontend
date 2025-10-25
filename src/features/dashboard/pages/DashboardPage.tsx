@@ -13,17 +13,14 @@ import { ActivityList } from "../components/ActivityList";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { getGhActivity } from "../../../global/services/getGhActivity";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
-import { getGhActivityYears } from "../../../global/services/getGhActivityYears";
-import {
-  getGhActivityByDay,
-  type IGhActivityByDayResults,
-} from "../../../global/services/getGhActivityByDay";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { getGhActivityByDay, type IGhActivityByDayResults } from "../services/getGhActivityByDay";
+import { getGhActivityYears } from "../services/getGhActivityYears";
+import { getGhActivity } from "../services/getGhActivity";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -155,7 +152,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
         <WidgetCard
           title="Tests activity "
-          className="min-h-[400px] relative overflow-y-auto scrollbar-hide"
+          className="min-h-[400px] relative "
         >
           {loadingGhActivityByDay ? (
             <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />

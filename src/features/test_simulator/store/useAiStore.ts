@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { AIModalView, } from "../test_simulator.types";
+import { AIModalView } from "../test_simulator.types";
 import type { Content } from "../../study_room/study_material/sm.types";
 
 interface AiStore {
@@ -11,6 +11,12 @@ interface AiStore {
   setSolution: (solution: string) => void;
   studyMaterial: Content[] | null;
   setStudyMaterial: (contentList: Content[] | null) => void;
+
+  selectedContent: Content | null;
+  setSelectedContent: (content: Content | null) => void;
+
+  textContent: Content | null;
+  setTextContent: (text: Content | null) => void;
 
   isHelpModalOpen: boolean;
   setIsHelpModalOpen: (v: boolean) => void;
@@ -30,6 +36,12 @@ export const useAiStore = create<AiStore>((set) => ({
   studyMaterial: null,
   setStudyMaterial: (contentList) => set({ studyMaterial: contentList }),
 
+  selectedContent: null,
+  setSelectedContent: (content) => set({ selectedContent: content }),
+
+  textContent: null,
+  setTextContent: (text) => set({ textContent: text }),
+
   isHelpModalOpen: false,
   setIsHelpModalOpen: (v) => set({ isHelpModalOpen: v }),
 
@@ -39,5 +51,7 @@ export const useAiStore = create<AiStore>((set) => ({
       solution: "",
       isHelpModalOpen: false,
       isAiFeatureEnabled: false,
+      selectedContent: null,
+      textContent: null,
     }),
 }));
