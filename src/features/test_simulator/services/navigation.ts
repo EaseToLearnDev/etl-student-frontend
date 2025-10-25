@@ -210,10 +210,8 @@ export const setCurrentQuestionHandler = ({
 }: SetCurrentQuestionParams): SetCurrentQuestionResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
-
   const currQId = testData?.sectionSet[si]?.questionNumbers[qi]?.questionId;
   if (!currQId) return null;
-
   const newStatusMap = { ...questionStatusMap };
 
   const currentResponse = questionResponseMap[currQId];
@@ -226,16 +224,15 @@ export const setCurrentQuestionHandler = ({
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
-  const nextSectionIndex = testData.sectionSet.findIndex(
+  let nextSectionIndex = testData.sectionSet.findIndex(
     (sec) => sec.sectionName === question.sectionName,
   );
-  if (nextSectionIndex < 0) return null;
+  nextSectionIndex = nextSectionIndex > 0 ? nextSectionIndex : 0;
 
   const nextQuestionIndex = testData.sectionSet[
     nextSectionIndex
   ]?.questionNumbers.findIndex((q) => q.questionId === question.questionId);
   if (nextQuestionIndex < 0) return null;
-
   return {
     newPointer: {
       sectionPos: nextSectionIndex,

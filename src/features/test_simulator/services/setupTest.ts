@@ -142,7 +142,7 @@ export const setupTest = async (
     } else {
       // normal behaviour: start from lastQuestionIndex or zero
       setCurrentQuestion(
-        data?.questionSet[data.lastQuestionIndex ?? 0] ?? null,
+        data?.questionSet[data?.lastQuestionIndex || 0] ?? null,
       );
     }
 
