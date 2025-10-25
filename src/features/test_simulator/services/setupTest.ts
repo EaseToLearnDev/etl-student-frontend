@@ -62,7 +62,8 @@ export const setupTest = async (
 
     if (
       error?.id === "limit_reached" ||
-      error?.id === "question_limit_reached"
+      error?.id === "question_limit_reached" ||
+      error?.id === "internal_server_error"
     ) {
       setError({
         id: error?.id,
