@@ -36,6 +36,7 @@ import loadSelfTestOptions from "../services/loadSelfTestOptions";
 import { LuArchive } from "react-icons/lu";
 import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
+import { pushToDataLayer } from "../../../../utils/gtm";
 import { openStartTestModal } from "../services/openStartTestModal";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../../utils/gtm-events";
@@ -95,6 +96,7 @@ const SmartLearningPage = () => {
 
   usePageTracking(gtmEvents.smart_learning_page_visit, 5000)
 
+  const eventType = mode == "Learning Session" ? "learning_session" : "competitive_session";
   // ========== Initial Topic Tree ==========
   useEffect(() => {
     const fetchTopicTree = async () => {
@@ -156,9 +158,15 @@ const SmartLearningPage = () => {
               <TopicTreeView
                 topics={topicTree || []}
                 selectedTopic={selectedTopic}
-                onClickHandler={(t) =>
-                  setSelectedTopicId(t ? t?.topicId : null)
-                }
+                onClickHandler={(t) => {
+                  setSelectedTopicId(t ? t?.topicId : null);
+                  pushToDataLayer({
+                    event: gtmEvents[`Smart_learning_topic_button_click`],
+                    id: `Smart_learning_topic_button_id`,
+                    topic_nameopic_name: t?.topicName,
+                    topic_id: t?.topicId,
+                  });
+                }}
                 getId={(t) => t?.topicId}
                 getLabel={(t) => t?.topicName}
                 getChildren={(t) => t?.children}
@@ -217,6 +225,10 @@ const SmartLearningPage = () => {
                   getActiveCourseAccessStatus() === "renew"
                     ? setIsUpgradeModalOpen(true)
                     : openStartTestModal();
+                  pushToDataLayer({
+                    event: gtmEvents[`next_${eventType}_button_click`],
+                    id: `next_${eventType}_button_id`,
+                  });
                 }}
               />
             ) : (
@@ -241,12 +253,18 @@ const SmartLearningPage = () => {
       {/* Start Session Modal */}
       <Modal
         isOpen={showStartTestModal}
-        onClose={() => setShowStartTestModal(false)}
+        onClose={() => {
+          setShowStartTestModal(false);
+          pushToDataLayer({
+            event: gtmEvents[`cancel_${eventType}_button_click`],
+            id: `cancel_${eventType}_button_id`,
+          });
+        }}
         size="lg"
         className="p-4"
       >
         <SLTestModalContent
-          onStart={() =>
+          onStart={() => {
             handleShowPreviousOrStartTest({
               setPreviousRunningTest,
               setShowPreviousTestModal,
@@ -258,9 +276,20 @@ const SmartLearningPage = () => {
                   selectedTestOption
                 ),
             })
-          }
-          onClose={() => setShowStartTestModal(false)}
-          topicName={selectedTopic?.topicName || ""}
+            pushToDataLayer({
+              event: gtmEvents[`start_${eventType}_button_click`],
+              id: `start_${eventType}_button_id`,
+              test_name: selectedTopic?.topicName,
+              test_id: selectedTopic?.topicId,
+            });
+          }}
+          onClose={() => {
+            setShowStartTestModal(false);
+            pushToDataLayer({
+              event: gtmEvents[`cancel_${eventType}_button_click`],
+              id: `cancel_${eventType}_button_id`,
+            });
+          }} topicName={selectedTopic?.topicName || ""}
         />
       </Modal>
 

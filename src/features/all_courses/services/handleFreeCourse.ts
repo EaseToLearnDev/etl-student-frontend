@@ -12,7 +12,7 @@ export const handleFreeCourse = (courseId: number) => {
     const res = selectMyCourse({ courseId, loginId, token });
     return res;
   } catch (error) {
-    console.log("Failed to Fetch Selected Course: ", error);
+    console.error("Failed to Fetch Selected Course: ", error);
     return null;
   }
 };

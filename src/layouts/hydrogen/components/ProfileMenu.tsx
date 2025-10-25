@@ -26,7 +26,8 @@ import {
   PiWalletFill,
 } from "react-icons/pi";
 import { useTutorialStore } from "../../../features/tutorials/hooks/useTutorialStore";
-
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 export default function ProfileMenuDropDown({
   children,
@@ -51,7 +52,7 @@ export default function ProfileMenuDropDown({
       shadow="sm"
       placement={isMobile ? "bottom" : "bottom-end"}
     >
-      <PopoverTrigger>{children}</PopoverTrigger> 
+      <PopoverTrigger>{children}</PopoverTrigger>
 
       <PopoverContent className="z-[9999] p-0 bg-[var(--surface-bg-secondary)] [&>svg]:dark:fill-gray-100">
         <DropdownMenu onClose={() => setIsOpen(false)} />
@@ -108,6 +109,8 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
   const setShowStudentRatingModal = useRatingCourseStore(
     (s) => s.setShowStudentRatingModal
   );
+
+  const logout_button_id = "logout_button_id";
 
   return (
     <div className="w-64 text-left rtl:text-right">
@@ -196,8 +199,12 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
 
       <div className="px-2 py-4 border-t-1 border-t-[var(--border-primary)]">
         <Link
+          id={logout_button_id}
           to={"/logout"}
           className="font-medium w-full flex items-center gap-2 px-4 rounded-lg outline-none border-none"
+          onClick={() => {
+            pushToDataLayer({ event: gtmEvents.logout_button_click });
+          }}
         >
           <MdLogout size={14} />
           <p>Log Out</p>

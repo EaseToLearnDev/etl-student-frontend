@@ -1,5 +1,5 @@
 // React
-import { useState } from "react";
+import { act, useEffect, useState } from "react";
 // ICons
 import { PiCaretUpBold } from "react-icons/pi";
 
@@ -8,6 +8,8 @@ import cn from "../../../utils/classNames";
 
 // Hooks
 import useIsMobile from "../../../hooks/useIsMobile";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 interface TopicProps<T> {
   topic: T;
@@ -39,6 +41,13 @@ const Topic = <T,>({
   const handleExpand = (e: React.MouseEvent) => {
     e.stopPropagation();
     setExpanded((prev) => !prev);
+    onclick=() => {
+      pushToDataLayer({
+        event: gtmEvents.topic_tree_expand_click,
+        id: "topic_tree_expand_id",
+        topic_name: getLabel(topic),
+      });
+    }
   };
 
   const isActive = activeTopic

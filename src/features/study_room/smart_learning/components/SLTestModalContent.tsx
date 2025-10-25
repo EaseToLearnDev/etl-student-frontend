@@ -7,6 +7,8 @@ import { Theme } from "../../../../utils/colors";
 import type { ModeType, TestOption, TestOptions } from "../sl.types";
 import SmartLearningInstructions from "./SmartLearningInstructions";
 import { useState } from "react";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 import { useSLStore } from "../hooks/useSLStore";
 
 interface SLTestModalContentProps {
@@ -47,6 +49,8 @@ const SLTestModalContent = ({
     },
   ];
 
+  const tabs = ["Options", "Instructions"];
+
   return (
     <div className="relative p-2 px-4 max-h-[70vh] flex flex-col">
       {/* Header */}
@@ -67,10 +71,19 @@ const SLTestModalContent = ({
       {mode === "Competitive Session" && (
         <div className="w-full flex justify-center items-center mt-2">
           <Tabs
-            tabs={["Options", "Instructions"]}
+            tabs={tabs}
             selectedIndex={selectedIndex}
-            onSelect={setSelectedIndex}
-            activeTabClassName="bg-[var(--sb-ocean-bg-active)] text-white"
+            onSelect={(index) => {
+              setSelectedIndex(index);
+              pushToDataLayer({
+                event:
+                  gtmEvents[
+                    `competitive_session_${tabs[index]}_button_click` as keyof typeof gtmEvents
+                  ],
+                id: `competitive_session_${tabs[index]}_button_id`,
+              });
+            }}
+            activeTabClassName="bg-[var(--sb-ocean-bg-active)] w-[100px] sm:w-[150px] text-white"
             tabClassName="w-[100px] sm:w-[150px] border-2 border-[var(--border-primary)]"
           />
         </div>

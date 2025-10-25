@@ -10,6 +10,8 @@ import TopicContentItem from "./TopicContentItem";
 import FilterDropdown from "./FilterDropdown";
 import EmptyState from "../../../../components/EmptyState";
 import { LuBookOpen } from "react-icons/lu";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 interface TopicContentPanelProps {
   selectedTopic: Topic;
@@ -45,7 +47,13 @@ const TopicContentPanel = ({
         </h6>
         <div className="flex gap-4">
           <FilterDropdown>
-            <div className="relative">
+            <div className="relative" 
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents[`study_material_filter_button_click`],
+                  id: `study_material_filter_button_id`,
+                });
+              }}>
               <FiFilter size={20} className="cursor-pointer" />
               {contentFilterType !== "All" ? (
                 <div className="absolute top-0 right-0 w-2 h-2 aspect-square rounded-full bg-[var(--sb-ocean-bg-active)]" />
