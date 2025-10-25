@@ -60,7 +60,7 @@ const MockTestPage = () => {
 
   const showPreviousTestModal = useMTStore((s) => s.showPreviousTestModal);
   const setShowPreviousTestModal = useMTStore(
-    (s) => s.setShowPreviousTestModal
+    (s) => s.setShowPreviousTestModal,
   );
 
   const reset = useMTStore((s) => s.reset);
@@ -84,13 +84,13 @@ const MockTestPage = () => {
   const tabs = testList?.map((set) =>
     set?.categoryName
       ?.replace(courseTitle || "", "")
-      .replace("MOCK TESTS", "")
-      .trim()
+      .replace(/\bmock tests?\b/i, "")
+      .trim(),
   );
 
   const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
   const setIsUpgradeModalOpen = useUpgradeModalStore(
-    (s) => s.setIsUpgradeModalOpen
+    (s) => s.setIsUpgradeModalOpen,
   );
 
   usePageTracking(gtmEvents.mock_test_page_visit)
@@ -125,13 +125,13 @@ const MockTestPage = () => {
       <div
         className={cn(
           "flex lg:items-center gap-2 md:max-w-[60%] lg:max-w-[70%]",
-          !isMobile ? " pr-5" : ""
+          !isMobile ? " pr-5" : "",
         )}
       >
         <button
           onClick={() => {
             setSelectedTabIndex(
-              selectedTabIndex !== 0 ? selectedTabIndex - 1 : 0
+              selectedTabIndex !== 0 ? selectedTabIndex - 1 : 0,
             );
             scrollTabs("left");
           }}
@@ -159,7 +159,7 @@ const MockTestPage = () => {
             setSelectedTabIndex(
               selectedTabIndex !== (tabs || [])?.length - 1
                 ? selectedTabIndex + 1
-                : selectedTabIndex
+                : selectedTabIndex,
             );
             scrollTabs("right");
           }}

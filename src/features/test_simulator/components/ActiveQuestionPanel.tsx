@@ -47,22 +47,22 @@ const ActiveQuestionPanel = () => {
   const navigate = useNavigate();
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   const setIsTeacherSupportModalOpen = useTeacherSupportStore(
-    (s) => s.setIsTeacherSupportModalOpen,
+    (s) => s.setIsTeacherSupportModalOpen
   );
   const goToPrev = useTestStore((state) => state.goToPrev);
   const goToNext = useTestStore((state) => state.goToNext);
   const markCurrentFoReview = useTestStore(
-    (state) => state.markCurrentForReview,
+    (state) => state.markCurrentForReview
   );
   const clearCurrentResponse = useTestStore(
-    (state) => state.clearCurrentResponse,
+    (state) => state.clearCurrentResponse
   );
   const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
   const currentResponse = useTestStore((s) =>
-    currentQuestion ? s.questionResponseMap[currentQuestion?.questionId] : null,
+    currentQuestion ? s.questionResponseMap[currentQuestion?.questionId] : null
   );
   const getCurrentQuestionIndex = useTestStore((state) =>
-    state.getCurrentQuestionIndex(),
+    state.getCurrentQuestionIndex()
   );
   const questionStatusMap = useTestStore((s) => s.questionStatusMap);
   const currentQuestionStatus = currentQuestion
@@ -70,20 +70,18 @@ const ActiveQuestionPanel = () => {
     : null;
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
   const setIsSubjectiveMediaModalOpen = useTestStore(
-    (s) => s.setIsSubjectiveMediaModalOpen,
+    (s) => s.setIsSubjectiveMediaModalOpen
   );
 
   const mode = useTestStore((s) => s.testMode);
   const currentMarksObj = useTestStore((s) =>
-    currentQuestion ? s.questionMarksMap[currentQuestion?.questionId] : null,
+    currentQuestion ? s.questionMarksMap[currentQuestion?.questionId] : null
   );
   const updateCurrentMarksObj = useTestStore((s) => s.updateCurrentMarksObj);
   const updateCurrentTotalMarks = useTestStore(
-    (s) => s.updateCurrentTotalMarks,
+    (s) => s.updateCurrentTotalMarks
   );
-  const isSubjectiveMarkingMode = useTestStore(
-    (s) => s.isSubjectiveMarkingMode,
-  );
+  const features = useTestStore((s) => s.features);
 
   // Ai Store
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
@@ -95,7 +93,7 @@ const ActiveQuestionPanel = () => {
         "w-full h-full relative flex flex-col justify-between",
         isMobile
           ? "flex-1 bg-[var(--surface-bg-primary)] rounded-[20px] p-5"
-          : "",
+          : ""
       )}
     >
       {/* Active Question Panel */}
@@ -123,7 +121,7 @@ const ActiveQuestionPanel = () => {
                       __html: checkForTable(
                         currentQuestion?.commonDataDescription
                           .trim()
-                          .replace(/[\r\n]+/g, ""),
+                          .replace(/[\r\n]+/g, "")
                       ),
                     }}
                   />
@@ -140,7 +138,7 @@ const ActiveQuestionPanel = () => {
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.questionBody ?? "",
-                      "test_simulator_table",
+                      "test_simulator_table"
                     )
                       .trim()
                       .replace(/[\r\n]+/g, ""),
@@ -236,7 +234,7 @@ const ActiveQuestionPanel = () => {
                   <h6>{`${response?.responseId}.`}</h6>
                   {/* Case Multiple Response */}
                   {["MR-Matching-Type", "Multiple-Response"].includes(
-                    currentQuestion?.questionType || "",
+                    currentQuestion?.questionType || ""
                   ) ? (
                     <Checkbox
                       label={response?.responseText}
@@ -365,7 +363,7 @@ const ActiveQuestionPanel = () => {
                   className={cn(
                     "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
                     "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
-                    "min-h-[200px] max-h-[400px]",
+                    "min-h-[200px] max-h-[400px]"
                   )}
                 ></textarea>
 
@@ -376,7 +374,7 @@ const ActiveQuestionPanel = () => {
                       className="w-40 object-cover"
                       onClick={() => setIsSubjectiveMediaModalOpen(true)}
                     />
-                    <div className="flex flex-1 items-center justify-end ml-10">
+                    <div className="flex flex-1 items-center justify-end ">
                       <Button
                         style="secondary"
                         className="px-3 py-1 text-xs"
@@ -436,7 +434,7 @@ const ActiveQuestionPanel = () => {
                     __html: checkForTable(
                       currentQuestion?.explanations
                         .trim()
-                        .replace(/[\r\n]+/g, ""),
+                        .replace(/[\r\n]+/g, "")
                     ),
                   }}
                 />
@@ -455,13 +453,14 @@ const ActiveQuestionPanel = () => {
           "Subjective-Type-Short-Answer-II",
           "Subjective-Type-Long",
         ].includes(currentQuestion?.questionType || "") && mode === "review" ? (
-          <div className="w-full max-h-[calc(100%-300px)] border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto">
+          <div className="w-full max-h-[400px] sm:max-h-[500px] border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto">
+            {/* Answer Container */}
             <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
               <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
                 <p className="font-semibold">Your Answer</p>
                 <input
                   type="text"
-                  disabled={!isSubjectiveMarkingMode}
+                  disabled={!features.subjectiveMarksEditEnabled}
                   value={currentMarksObj?.totalMark}
                   onChange={(e) => {
                     const val = Number(e.target.value);
@@ -474,7 +473,7 @@ const ActiveQuestionPanel = () => {
                   /{" "}
                   {currentQuestion?.responseChoice?.reduce(
                     (sum, c) => sum + (Number(c.partMarks) || 0),
-                    0,
+                    0
                   )}
                 </p>
               </div>
@@ -484,27 +483,32 @@ const ActiveQuestionPanel = () => {
                   <img
                     onClick={() => setIsSubjectiveMediaModalOpen(true)}
                     src={currentResponse?.url}
-                    className="w-full aspect-auto object-contain rounded-lg cursor-pointer"
+                    className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
                   />
                 ) : (
                   <></>
                 )}
               </div>
             </div>
-            <div className="w-full h-full flex flex-col">
-              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-t lg:border-t-0 border-b border-[var(--border-secondary)]">
+
+            {/* Solution Container */}
+            <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
+              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
                 <p className="font-semibold">Solution</p>
               </div>
 
               <div className="w-full h-full p-2 flex flex-col gap-2">
                 {currentQuestion?.responseChoice?.map((choice, index) => (
-                  <div className="w-full flex  border-b border-b-[var(--border-secondary)]">
+                  <div
+                    key={index}
+                    className="w-full flex border-b border-b-[var(--border-secondary)]"
+                  >
                     <MathJax dynamic className="flex-1 p-2">
                       <div
                         className="math-container text-sm"
                         dangerouslySetInnerHTML={{
                           __html: checkForTable(
-                            choice?.responseText.trim().replace(/[\r\n]+/g, ""),
+                            choice?.responseText.trim().replace(/[\r\n]+/g, "")
                           ),
                         }}
                       />
@@ -513,7 +517,7 @@ const ActiveQuestionPanel = () => {
                       <Checkbox
                         label={choice?.partMarks || ""}
                         value={choice?.partMarks || ""}
-                        disabled={!isSubjectiveMarkingMode}
+                        disabled={!features.subjectiveMarksEditEnabled}
                         checked={
                           currentMarksObj?.options[index] === "yes"
                             ? true
@@ -538,10 +542,10 @@ const ActiveQuestionPanel = () => {
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
+            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={() => {
-            if (isSubjectiveMarkingMode) {
+            if (features.subjectiveMarksEditEnabled) {
               handleUpdateMarksTest()?.then(goToPrev);
             } else goToPrev();
           }}
@@ -570,7 +574,7 @@ const ActiveQuestionPanel = () => {
           </>
         ) : (
           <>
-            {isSubjectiveMarkingMode && (
+            {features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
@@ -582,7 +586,7 @@ const ActiveQuestionPanel = () => {
               </Button>
             )}
 
-            {!isSubjectiveMarkingMode && (
+            {!features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
@@ -596,7 +600,9 @@ const ActiveQuestionPanel = () => {
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
               onClick={() =>
-                isSubjectiveMarkingMode ? navigate("/report") : navigate(-1)
+                features.subjectiveMarksEditEnabled
+                  ? navigate("/report")
+                  : navigate(-1)
               }
             >
               Exit
@@ -606,10 +612,10 @@ const ActiveQuestionPanel = () => {
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
+            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={() => {
-            if (isSubjectiveMarkingMode) {
+            if (features.subjectiveMarksEditEnabled) {
               handleUpdateMarksTest()?.then(goToNext);
             } else goToNext();
           }}
@@ -625,7 +631,7 @@ const ActiveQuestionPanel = () => {
             "flex flex-col items-center gap-1",
             isMobile
               ? "fixed bottom-[75px] right-[32px]"
-              : "absolute bottom-2 right-8",
+              : "absolute bottom-2 right-8"
           )}
           onClick={() => {
             setIsHelpModalOpen(true);

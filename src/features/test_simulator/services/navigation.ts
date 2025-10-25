@@ -19,7 +19,7 @@ interface GoToNextParams {
   currentPointer: Pointer;
   questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
-  isSubjectiveMarkingMode: boolean;
+  subjectiveMarkEditEnabled: boolean;
 }
 
 interface GoToNextResult {
@@ -36,7 +36,7 @@ export const goToNextQuestionHandler = ({
   currentPointer,
   questionResponseMap,
   questionStatusMap,
-  isSubjectiveMarkingMode,
+  subjectiveMarkEditEnabled,
 }: GoToNextParams): GoToNextResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
@@ -63,7 +63,7 @@ export const goToNextQuestionHandler = ({
     const nextQId = section.questionNumbers[qi + 1].questionId;
     const nextType = getQuestionType(testData, nextQId) || "";
 
-    if (!isSubjectiveMarkingMode || subjectiveTypes.includes(nextType)) {
+    if (!subjectiveMarkEditEnabled || subjectiveTypes.includes(nextType)) {
       return {
         newPointer: { sectionPos: si, questionPos: nextQ },
         newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
@@ -81,7 +81,7 @@ export const goToNextQuestionHandler = ({
       const nextQId = nextSec?.questionNumbers[qIndex].questionId;
       const nextType = getQuestionType(testData, nextQId) || "";
 
-      if (!isSubjectiveMarkingMode || subjectiveTypes.includes(nextType)) {
+      if (!subjectiveMarkEditEnabled || subjectiveTypes.includes(nextType)) {
         return {
           newPointer: { sectionPos: s, questionPos: qIndex },
           newStatusMap: updateStatusOnVisit(newStatusMap, nextQId),
@@ -99,7 +99,7 @@ export const goToNextQuestionHandler = ({
 
 interface GoToPrevParams {
   testData: TestData;
-  isSubjectiveMarkingMode: boolean;
+  subjectiveMarkEditEnabled: boolean;
   currentPointer: Pointer;
   questionResponseMap: Record<number, ResponseType>;
   questionStatusMap: Record<number, QuestionStatus>;
@@ -116,7 +116,7 @@ interface GoToPrevResult {
  */
 export const goToPrevQuestionHandler = ({
   testData,
-  isSubjectiveMarkingMode,
+  subjectiveMarkEditEnabled,
   currentPointer,
   questionResponseMap,
   questionStatusMap,
@@ -148,7 +148,7 @@ export const goToPrevQuestionHandler = ({
     const prevQId = section.questionNumbers[qi - 1].questionId;
     const prevType = getQuestionType(testData, prevQId) || "";
 
-    if (!isSubjectiveMarkingMode || subjectiveTypes.includes(prevType)) {
+    if (!subjectiveMarkEditEnabled || subjectiveTypes.includes(prevType)) {
       return {
         newPointer: { sectionPos: si, questionPos: prevQ },
         newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
@@ -171,7 +171,7 @@ export const goToPrevQuestionHandler = ({
         prevSec.questionNumbers[prevSec.questionNumbers.length - 1].questionId;
       const prevType = getQuestionType(testData, prevQId) || "";
 
-      if (!isSubjectiveMarkingMode || subjectiveTypes.includes(prevType)) {
+      if (!subjectiveMarkEditEnabled || subjectiveTypes.includes(prevType)) {
         return {
           newPointer: { sectionPos: s, questionPos: qIndex },
           newStatusMap: updateStatusOnVisit(newStatusMap, prevQId),
@@ -210,10 +210,8 @@ export const setCurrentQuestionHandler = ({
 }: SetCurrentQuestionParams): SetCurrentQuestionResult | null => {
   const { sectionPos: si, questionPos: qi } = currentPointer;
   if (si < 0 || qi < 0) return null;
-
   const currQId = testData?.sectionSet[si]?.questionNumbers[qi]?.questionId;
   if (!currQId) return null;
-
   const newStatusMap = { ...questionStatusMap };
 
   const currentResponse = questionResponseMap[currQId];
@@ -226,16 +224,15 @@ export const setCurrentQuestionHandler = ({
   ) {
     newStatusMap[currQId] = QuestionStatus.NOT_ATTEMPTED;
   }
-  const nextSectionIndex = testData.sectionSet.findIndex(
+  let nextSectionIndex = testData.sectionSet.findIndex(
     (sec) => sec.sectionName === question.sectionName,
   );
-  if (nextSectionIndex < 0) return null;
+  nextSectionIndex = nextSectionIndex > 0 ? nextSectionIndex : 0;
 
   const nextQuestionIndex = testData.sectionSet[
     nextSectionIndex
   ]?.questionNumbers.findIndex((q) => q.questionId === question.questionId);
   if (nextQuestionIndex < 0) return null;
-
   return {
     newPointer: {
       sectionPos: nextSectionIndex,

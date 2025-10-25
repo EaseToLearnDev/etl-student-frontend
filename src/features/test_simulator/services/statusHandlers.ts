@@ -22,12 +22,11 @@ export const markForReviewHandler = ({
 
   const currQId = testData.sectionSet[si]?.questionNumbers[qi]?.questionId;
   const currentQuestion = testData.questionSet.find(
-    (q) => q.questionId === currQId
+    (q) => q.questionId === currQId,
   );
   if (!currQId || !currentQuestion) return null;
 
   const questionStatus = questionStatusMap[currQId];
-  console.log(questionStatus);
   let newStatus = QuestionStatus.VISITED;
   if (
     questionStatus === QuestionStatus.VISITED ||
@@ -99,7 +98,7 @@ export const countQuestionsByStatusHandler = ({
 /** Updates question status to VISITED if it was previously NOT_VISITED. */
 export const updateStatusOnVisit = (
   statusMap: Record<number, QuestionStatus>,
-  questionId: number
+  questionId: number,
 ): Record<number, QuestionStatus> => {
   return statusMap[questionId] === QuestionStatus.NOT_VISITED
     ? { ...statusMap, [questionId]: QuestionStatus.VISITED }

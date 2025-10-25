@@ -64,10 +64,10 @@ const TextContentModalView = ({ content }: TextContentModalViewProps) => {
       {list && list?.length > 0 && (
         <div
           ref={tocRef}
-          className="w-full min-h-[400px] lg:w-[35%] xl:w-[25%] 2xl:w-[20%] border-1 border-[var(--border-primary)] rounded-xl overflow-hidden p-4 flex flex-col"
+          className="w-full min-h-[200px] lg:w-[35%] xl:w-[25%] 2xl:w-[20%] border-1 border-[var(--border-primary)] rounded-xl overflow-hidden p-4 flex flex-col"
         >
           <h5 className="!font-bold">Table of Contents</h5>
-          <div className="mt-4 flex flex-col gap-3 flex-1 overflow-y-auto pb-[50px]">
+          <div className="mt-4 flex flex-col gap-3 flex-1 overflow-y-auto">
             <NestedList items={list} />
           </div>
         </div>

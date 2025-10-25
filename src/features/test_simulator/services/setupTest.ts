@@ -62,7 +62,8 @@ export const setupTest = async (
 
     if (
       error?.id === "limit_reached" ||
-      error?.id === "question_limit_reached"
+      error?.id === "question_limit_reached" ||
+      error?.id === "internal_server_error"
     ) {
       setError({
         id: error?.id,
@@ -141,7 +142,7 @@ export const setupTest = async (
     } else {
       // normal behaviour: start from lastQuestionIndex or zero
       setCurrentQuestion(
-        data?.questionSet[data.lastQuestionIndex ?? 0] ?? null,
+        data?.questionSet[data?.lastQuestionIndex || 0] ?? null,
       );
     }
 

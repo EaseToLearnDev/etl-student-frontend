@@ -1,7 +1,8 @@
 import useTestStore from "../store/useTestStore";
-import type {
-  TestSubmitRequest,
-  TestSubmitResponse,
+import {
+  subjectiveTypes,
+  type TestSubmitRequest,
+  type TestSubmitResponse,
 } from "../test_simulator.types";
 import { testSubmit } from "../api/testSubmit.api";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
@@ -75,10 +76,9 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
           notAnswerMarks: item.notAnswerMarks,
           bloomId: item?.bloomId ?? 0,
           noQuestionAttempt: item.noQuestionAttempt ?? 0,
-          studentResponse:
-            testConfig?.examType === "subjective"
-              ? serializeStudentSubjectiveResponse(currentResponse)
-              : currentResponse.text.join("~") || "",
+          studentResponse: subjectiveTypes.includes(item?.questionType || "")
+            ? serializeStudentSubjectiveResponse(currentResponse)
+            : currentResponse.text.join("~") || "",
         };
 
         if (testData?.testType === 3) {
@@ -153,14 +153,14 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testConfig?.examType === "objective"
   ) {
     navigate(
-      `/learning-testanalytics?testSession=${resData?.obj?.testSession}`,
+      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData.testType}`,
     );
     setToast({
       title: "Test Submit Successfully",
       type: ToastType.SUCCESS,
     });
   } else {
-    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}`);
+    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`);
     setToast({
       title: "Test Submit Successfully",
       type: ToastType.SUCCESS,
