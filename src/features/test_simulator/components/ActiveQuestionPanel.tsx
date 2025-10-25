@@ -81,9 +81,7 @@ const ActiveQuestionPanel = () => {
   const updateCurrentTotalMarks = useTestStore(
     (s) => s.updateCurrentTotalMarks,
   );
-  const isSubjectiveMarkingMode = useTestStore(
-    (s) => s.isSubjectiveMarkingMode,
-  );
+  const features = useTestStore((s) => s.features);
 
   // Ai Store
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
@@ -461,7 +459,7 @@ const ActiveQuestionPanel = () => {
                 <p className="font-semibold">Your Answer</p>
                 <input
                   type="text"
-                  disabled={!isSubjectiveMarkingMode}
+                  disabled={!features.subjectiveMarksEditEnabled}
                   value={currentMarksObj?.totalMark}
                   onChange={(e) => {
                     const val = Number(e.target.value);
@@ -513,7 +511,7 @@ const ActiveQuestionPanel = () => {
                       <Checkbox
                         label={choice?.partMarks || ""}
                         value={choice?.partMarks || ""}
-                        disabled={!isSubjectiveMarkingMode}
+                        disabled={!features.subjectiveMarksEditEnabled}
                         checked={
                           currentMarksObj?.options[index] === "yes"
                             ? true
@@ -541,7 +539,7 @@ const ActiveQuestionPanel = () => {
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
           )}
           onClick={() => {
-            if (isSubjectiveMarkingMode) {
+            if (features.subjectiveMarksEditEnabled) {
               handleUpdateMarksTest()?.then(goToPrev);
             } else goToPrev();
           }}
@@ -570,7 +568,7 @@ const ActiveQuestionPanel = () => {
           </>
         ) : (
           <>
-            {isSubjectiveMarkingMode && (
+            {features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
@@ -582,7 +580,7 @@ const ActiveQuestionPanel = () => {
               </Button>
             )}
 
-            {!isSubjectiveMarkingMode && (
+            {!features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
@@ -596,7 +594,9 @@ const ActiveQuestionPanel = () => {
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
               onClick={() =>
-                isSubjectiveMarkingMode ? navigate("/report") : navigate(-1)
+                features.subjectiveMarksEditEnabled
+                  ? navigate("/report")
+                  : navigate(-1)
               }
             >
               Exit
@@ -609,7 +609,7 @@ const ActiveQuestionPanel = () => {
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
           )}
           onClick={() => {
-            if (isSubjectiveMarkingMode) {
+            if (features.subjectiveMarksEditEnabled) {
               handleUpdateMarksTest()?.then(goToNext);
             } else goToNext();
           }}

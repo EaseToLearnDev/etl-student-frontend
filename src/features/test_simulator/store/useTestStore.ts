@@ -55,8 +55,6 @@ export interface TestStore {
 
   getActiveSectionsUI: () => SectionUI[];
 
-  isSubjectiveMarkingMode: boolean;
-
   helpCount: number;
   setHelpCount: (n: number) => void;
   incrementHelpCount: () => void;
@@ -154,7 +152,6 @@ const useTestStore = create<TestStore>((set, get) => ({
   questionMarksMap: {},
   _questionTimerId: null,
   helpCount: 0,
-  isSubjectiveMarkingMode: false,
 
   features: {
     timerEnabled: false,
@@ -176,7 +173,6 @@ const useTestStore = create<TestStore>((set, get) => ({
 
   // Initialize test data
   setTestData: (data) => {
-    const { testMode } = get();
     set(() => {
       if (!data) {
         return {
@@ -209,8 +205,6 @@ const useTestStore = create<TestStore>((set, get) => ({
         questionTimeMap: timeMap,
         questionMarksMap: marksMap,
         currentPointer: initialPointer,
-        isSubjectiveMarkingMode:
-          testMode === "review" && data?.testStatus === 2,
       };
     });
   },
@@ -238,7 +232,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToNext: () => {
     const {
       testData,
-      isSubjectiveMarkingMode,
+      features,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -272,7 +266,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToNextQuestionHandler({
       testData,
-      isSubjectiveMarkingMode,
+      subjectiveMarkEditEnabled: features.subjectiveMarksEditEnabled,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -296,7 +290,7 @@ const useTestStore = create<TestStore>((set, get) => ({
   goToPrev: () => {
     const {
       testData,
-      isSubjectiveMarkingMode,
+      features,
       currentPointer,
       questionResponseMap,
       questionStatusMap,
@@ -325,7 +319,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const result = goToPrevQuestionHandler({
       testData,
-      isSubjectiveMarkingMode,
+      subjectiveMarkEditEnabled: features.subjectiveMarksEditEnabled,
       currentPointer,
       questionResponseMap,
       questionStatusMap,

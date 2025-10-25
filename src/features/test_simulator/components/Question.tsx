@@ -12,6 +12,7 @@ import useTestStore from "../store/useTestStore";
 import cn from "../../../utils/classNames";
 import { colors, getActiveBg, Theme } from "../../../utils/colors";
 import useDrawerStore from "../../../store/useDrawerStore";
+import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
 
 /* ---------------------------- Theme Mappings ---------------------------- */
 const statusThemeMap: Record<string, Theme> = {
@@ -51,6 +52,8 @@ const QuestionCard = ({
   const questionStatus = useTestStore((s) =>
     s.getStatusByQuestionId(question?.questionId),
   );
+  const features = useTestStore((s) => s.features);
+  const testMode = useTestStore((s) => s.testMode);
   const closeDrawer = useDrawerStore((s) => s.closeDrawer);
 
   const isActive = question.questionId === activeQuestion?.questionId;
@@ -60,14 +63,17 @@ const QuestionCard = ({
     ? reviewThemeMap[question.answerStatus ?? "NotAnswer"]
     : statusThemeMap[questionStatus ?? QuestionStatus.NOT_VISITED];
 
-  const activeTheme = subjectiveTypes.includes(question?.questionType)
-    ? colors[Theme.Neutral]
-    : colors[theme];
+  const activeTheme =
+    subjectiveTypes.includes(question?.questionType) && testMode === "review"
+      ? colors[Theme.Neutral]
+      : colors[theme];
 
   return (
     <button
       onClick={() => {
-        jumpToQuestion(question);
+        if (features.subjectiveMarksEditEnabled) {
+          handleUpdateMarksTest()?.then(() => jumpToQuestion(question));
+        } else jumpToQuestion(question);
         closeDrawer();
       }}
       className={cn(
