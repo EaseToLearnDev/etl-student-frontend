@@ -16,7 +16,6 @@ export const getWeekScheduledClasses = async () => {
 
   try {
     const data = await getWeekClasses({ loginId, token, classId });
-    console.log(data);
     return data;
   } catch (error) {
     console.error("Failed to fetch Week Class Tests", error);
