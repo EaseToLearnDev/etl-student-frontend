@@ -39,6 +39,7 @@ import type { Content } from "../sm.types";
 import { useContentLimitStore } from "../hooks/useContentLimitStore";
 import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 import LimitReachedModal from "../components/LimitReachedModal";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
 import { LuBookOpen, LuListTree } from "react-icons/lu";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
@@ -80,6 +81,8 @@ const StudyMaterialsPage = () => {
   const resetLimitReachedModal = useContentLimitStore((s) => s.reset);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  usePageTracking(gtmEvents.study_material_page_visit, 5000)
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {

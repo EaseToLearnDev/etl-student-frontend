@@ -37,8 +37,9 @@ import { LuArchive } from "react-icons/lu";
 import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
 import { pushToDataLayer } from "../../../../utils/gtm";
-import { gtmEvents } from "../../../../utils/gtm-events";
 import { openStartTestModal } from "../services/openStartTestModal";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../../utils/gtm-events";
 import { Toast } from "../../../../components/Toast";
 
 /**
@@ -92,6 +93,8 @@ const SmartLearningPage = () => {
   const loading = useLoadingStore((s) => s.loading);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+
+  usePageTracking(gtmEvents.smart_learning_page_visit, 5000)
 
   const eventType = mode == "Learning Session" ? "learning_session" : "competitive_session";
   // ========== Initial Topic Tree ==========

@@ -21,6 +21,8 @@ import useIsMobile from "../../../hooks/useIsMobile";
 import { getGhActivityByDay, type IGhActivityByDayResults } from "../services/getGhActivityByDay";
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
+import { usePageTracking } from "../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -60,6 +62,8 @@ const DashboardPage = () => {
   };
 
   const isClassTest = activeCourse?.tabs?.classTest;
+
+  usePageTracking(gtmEvents.dashboard_page_visit);
 
   useEffect(() => {
     const fetchData = async () => {

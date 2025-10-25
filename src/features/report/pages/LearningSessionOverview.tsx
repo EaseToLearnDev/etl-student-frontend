@@ -21,6 +21,8 @@ import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { LuFileChartColumn } from "react-icons/lu";
+import { usePageTracking } from "../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 export const LearningSessionOverview = () => {
   const params = useSearchParams();
@@ -32,6 +34,10 @@ export const LearningSessionOverview = () => {
   const [data, setData] = useState<LearningAnalyticsData | null>(null);
 
   const navigate = useNavigate();
+
+  // Track viewing the learning session overview page
+  usePageTracking(gtmEvents.detail_report_learning_session_page_visit);
+
 
   useEffect(() => {
     if (!testSession) return;
