@@ -7,6 +7,8 @@ import Button from "../../../components/Button";
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { submitCourseRating } from "../../../global/services/submitCourseRating";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 export const StudentRatingCourseModal = () => {
   const rating = useRatingCourseStore((s) => s.rating);
@@ -22,6 +24,7 @@ export const StudentRatingCourseModal = () => {
   const reset = useRatingCourseStore((s) => s.reset);
 
   const [hover, setHover] = useState<number | null>(null);
+  const send_rate_course_button_id = "send_rate_course_button_id";
 
   return (
     <Modal
@@ -45,7 +48,13 @@ export const StudentRatingCourseModal = () => {
                   ? "text-[var(--sb-sunglow-bg-active)]"
                   : "text-gray-300"
               )}
-              onClick={() => setRating(star)}
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.rate_course_button_click,
+                  id: "rate_course_button_id",
+                });
+                setRating(star);
+              }}
               onMouseEnter={() => setHover(star)}
               onMouseLeave={() => setHover(null)}
             />
@@ -80,8 +89,12 @@ export const StudentRatingCourseModal = () => {
         <div className="flex justify-end mt-7">
           <div className="flex gap-4 items-center">
             <Button
+            id={send_rate_course_button_id}
               disabled={!rating || !remarks.trim()}
               onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.send_rate_course_button_click,
+                });
                 submitCourseRating();
                 reset();
                 setShowStudentRatingModal(false);

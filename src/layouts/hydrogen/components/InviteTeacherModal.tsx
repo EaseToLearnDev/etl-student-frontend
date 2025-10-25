@@ -5,6 +5,8 @@ import cn from "../../../utils/classNames";
 import Button from "../../../components/Button";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { MdClose } from "react-icons/md";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const InviteTeacherModal = () => {
   const showInviteTeacherModal = useInviteTeacherStore(
@@ -15,10 +17,17 @@ const InviteTeacherModal = () => {
   const setShowInviteTeacherModal = useInviteTeacherStore(
     (s) => s.setShowInviteTeacherModal
   );
+  const invite_teacher_send_id = "invite_teacher_send_id";
   return (
     <Modal
       isOpen={showInviteTeacherModal}
-      onClose={() => setShowInviteTeacherModal(false)}
+      onClose={() => {
+        setShowInviteTeacherModal(false);
+        pushToDataLayer({
+          event: gtmEvents.cancel_invite_teacher_send_button_click,
+          id: "cancel_invite_teacher_send_id",
+        });
+      }}
       size="md"
       className="p-4"
     >
@@ -41,16 +50,29 @@ const InviteTeacherModal = () => {
         <div className="flex justify-end mt-4">
           <div className="flex gap-4 items-center">
             <Button
+              id={invite_teacher_send_id}
               disabled={!teacherLoginId.trim()}
               style="primary"
-              onClick={() => handleStudentInvite({ teacherLoginId })}
+              onClick={() => {
+                handleStudentInvite({ teacherLoginId });
+                pushToDataLayer({
+                  event: gtmEvents.invite_teacher_send_button_click,
+                });
+                setShowInviteTeacherModal(false);
+              }}
             >
               <PiPaperPlaneTiltFill size={16} />
               Invite
             </Button>
             <Button
               style="secondary"
-              onClick={() => setShowInviteTeacherModal(false)}
+              onClick={() => {
+                setShowInviteTeacherModal(false);
+                pushToDataLayer({
+                  event: gtmEvents.cancel_invite_teacher_send_button_click,
+                  id: "cancel_invite_teacher_send_id",
+                });
+              }}
             >
               Cancel
             </Button>
