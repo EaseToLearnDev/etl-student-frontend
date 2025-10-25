@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 
 // Hooks
 import { useSLStore } from "../hooks/useSLStore";
+import { useToastStore } from "../../../../global/hooks/useToastStore";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
@@ -37,6 +38,8 @@ import { FiTarget } from "react-icons/fi";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
+import { openStartTestModal } from "../services/openStartTestModal";
+import { Toast } from "../../../../components/Toast";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -81,7 +84,10 @@ const SmartLearningPage = () => {
     (s) => s.setIsUpgradeModalOpen
   );
   const testOptions = useSLStore((s) => s.testOptions);
-  const setTestOptions = useSLStore((s) => s.setTestOptions);
+  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
+
+  const showToast = useToastStore((s) => s.showToast);
+  const toastData = useToastStore((s) => s.toastData);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -210,14 +216,12 @@ const SmartLearningPage = () => {
             ) : selectedTopic ? (
               <TopicModeSelector
                 topicName={selectedTopic?.topicName ?? ""}
-                mode={mode}
-                setMode={setMode}
                 barColor={barColor}
                 lastSelfTestPercentage={lastSelfTestPercentage ?? 0}
                 onClickHandler={() => {
                   getActiveCourseAccessStatus() === "renew"
                     ? setIsUpgradeModalOpen(true)
-                    : setShowStartTestModal(true);
+                    : openStartTestModal();
                   pushToDataLayer({
                     event: gtmEvents[`next_${eventType}_button_click`],
                     id: `next_${eventType}_button_id`,
@@ -257,16 +261,18 @@ const SmartLearningPage = () => {
         className="p-4"
       >
         <SLTestModalContent
-          mode={mode}
-          testOptions={testOptions}
-          setTestOptions={setTestOptions}
           onStart={() => {
             handleShowPreviousOrStartTest({
               setPreviousRunningTest,
               setShowPreviousTestModal,
               startTestCallback: () =>
-                handleStartTest(navigate, mode, selectedTopic, testOptions),
-            });
+                handleStartTest(
+                  navigate,
+                  mode,
+                  selectedTopic,
+                  selectedTestOption
+                ),
+            })
             pushToDataLayer({
               event: gtmEvents[`start_${eventType}_button_click`],
               id: `start_${eventType}_button_id`,
@@ -280,8 +286,7 @@ const SmartLearningPage = () => {
               event: gtmEvents[`cancel_${eventType}_button_click`],
               id: `cancel_${eventType}_button_id`,
             });
-          }}
-          topicName={selectedTopic?.topicName || ""}
+          }} topicName={selectedTopic?.topicName || ""}
         />
       </Modal>
 
@@ -294,7 +299,7 @@ const SmartLearningPage = () => {
       >
         <PreviousTestModalContent
           onStart={() =>
-            handleStartTest(navigate, mode, selectedTopic, testOptions)
+            handleStartTest(navigate, mode, selectedTopic, selectedTestOption)
           }
           onResume={() => {
             handleResumeTest(navigate, previousRunningTest);
@@ -308,6 +313,15 @@ const SmartLearningPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
+
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };

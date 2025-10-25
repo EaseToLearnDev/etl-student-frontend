@@ -22,15 +22,15 @@ const SectionWiseQuestionList = ({
   className,
 }: SectionWiseQuestionListProps) => {
   const testData = useTestStore((state) => state.testData);
-  const sections = useTestStore((state) => state.sectionsUI);
-  const currentQuestion = useTestStore(state => state.getCurrentQuestion());
+  const sections = useTestStore((state) => state.getActiveSectionsUI());
+  const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
   const activeQuestionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (activeQuestionRef.current) {
       activeQuestionRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
+        behavior: "smooth",
+        block: "center",
       });
     }
   }, [currentQuestion?.questionId]);
@@ -39,7 +39,7 @@ const SectionWiseQuestionList = ({
     <div
       className={cn(
         "flex flex-col gap-5 overflow-y-auto max-h-full",
-        className
+        className,
       )}
     >
       {sections?.map((section, index) => {
@@ -53,11 +53,18 @@ const SectionWiseQuestionList = ({
               {section.questionList.map((q, i: number) => (
                 <div
                   key={q.questionId}
-                  ref={currentQuestion?.questionId === q.questionId ? activeQuestionRef : null}
+                  ref={
+                    currentQuestion?.questionId === q.questionId
+                      ? activeQuestionRef
+                      : null
+                  }
                 >
                   <Question
                     question={q}
-                    questionNumber={(testData?.sectionSet[index].questionNumbers[i].questionIndex ?? 0) + 1}
+                    questionNumber={
+                      (testData?.sectionSet[index].questionNumbers[i]
+                        .questionIndex ?? 0) + 1
+                    }
                   />
                 </div>
               ))}

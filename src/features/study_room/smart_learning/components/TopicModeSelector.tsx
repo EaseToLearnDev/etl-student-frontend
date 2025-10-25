@@ -9,12 +9,14 @@ import type { ModeType } from "../sl.types";
 import Tabs from "../../../../components/Tabs";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
+import Select from "../../../../components/Select";
+import { useEffect, useState } from "react";
+import { useSLStore } from "../hooks/useSLStore";
+
 interface TopicModeSelectorProps {
   topicName: string;
   lastSelfTestPercentage: number;
-  mode: ModeType;
   barColor: string | null;
-  setMode: (mode: ModeType) => void;
   onClickHandler: () => void;
 }
 
@@ -24,13 +26,29 @@ interface TopicModeSelectorProps {
 const TopicModeSelector = ({
   topicName,
   lastSelfTestPercentage,
-  mode,
   barColor,
-  setMode,
   onClickHandler,
 }: TopicModeSelectorProps) => {
   // const isLearning = mode === "learning";
+  const mode = useSLStore((s) => s.mode);
+  const setMode = useSLStore((s) => s.setMode);
+  const testOptions = useSLStore((s) => s.testOptions);
+  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
+  const setSelectedTestOption = useSLStore((s) => s.setSelectedTestOption);
   const selectedIndex = mode === "Learning Session" ? 0 : 1;
+  const [isExamTypeSelectionOpen, setIsExamTypeSelectionOpen] = useState(false);
+  const [selectedExamTypeIndex, setSelectedExamTypeIndex] = useState(
+    selectedTestOption
+      ? testOptions.findIndex(
+          (opt) => opt.examType === selectedTestOption.examType
+        )
+      : 0
+  );
+
+  // Set Selected test options on Exam Type change
+  useEffect(() => {
+    setSelectedTestOption({ ...testOptions[selectedExamTypeIndex] });
+  }, [selectedExamTypeIndex]);
 
   console.log("TopicModeSelector Rendered with mode:", mode);
 
@@ -73,6 +91,23 @@ const TopicModeSelector = ({
           barColor={barColor}
         />
       </div>
+
+      {testOptions && testOptions.length > 1 && (
+        <div className="mt-7">
+          <Select
+            isOpen={isExamTypeSelectionOpen}
+            items={testOptions.map((option) => option.examType) as string[]}
+            selectedIndex={selectedExamTypeIndex}
+            type="Exam Type"
+            onSelect={setSelectedExamTypeIndex}
+            onToggle={() =>
+              setIsExamTypeSelectionOpen(!isExamTypeSelectionOpen)
+            }
+            className="w-full"
+            dropdownClassName="w-full"
+          />
+        </div>
+      )}
 
       <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">
         <SmartLearningInstructions learningMode={mode} />

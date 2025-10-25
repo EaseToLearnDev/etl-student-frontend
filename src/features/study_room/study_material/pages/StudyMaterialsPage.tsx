@@ -34,7 +34,6 @@ import UpgradeModal from "../../../shared/components/UpgradeModal";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import EmptyState from "../../../../components/EmptyState";
-import type { ContentType } from "recharts/types/component/Label";
 import canOpenContent from "../services/canOpenContent";
 import type { Content } from "../sm.types";
 import { useContentLimitStore } from "../hooks/useContentLimitStore";
@@ -71,12 +70,12 @@ const StudyMaterialsPage = () => {
   const setSelectedContent = useSMStore((s) => s.setSelectedContent);
   const setTextContent = useSMStore((s) => s.setTextContent);
   const setIsUpgradeModalOpen = useUpgradeModalStore(
-    (s) => s.setIsUpgradeModalOpen
+    (s) => s.setIsUpgradeModalOpen,
   );
   const setLimits = useContentLimitStore((s) => s.setLimits);
   const addOrUpdateCounter = useContentLimitStore((s) => s.addOrUpdateCounter);
   const setIsLimitReachedmodalOpen = useContentLimitStore(
-    (s) => s.setIsLimitReachedmodalOpen
+    (s) => s.setIsLimitReachedmodalOpen,
   );
   const resetLimitReachedModal = useContentLimitStore((s) => s.reset);
 
@@ -155,7 +154,7 @@ const StudyMaterialsPage = () => {
       addOrUpdateCounter(
         activeCourse.courseId,
         content.contentType,
-        content.id
+        content.id,
       );
       // update selected content and reset text content
       // if content is type 'Text' then text content will be retrieved from api call
@@ -272,7 +271,7 @@ const StudyMaterialsPage = () => {
               }}
               className={cn(
                 "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
               )}
             >
               <MdClose size={20} />

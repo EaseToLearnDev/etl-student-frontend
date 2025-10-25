@@ -12,7 +12,9 @@ const SectionQuestionScroll = () => {
   const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
   const testData = useTestStore((s) => s.testData);
   const currentSection = useTestStore((state) =>
-    state.sectionsUI.find((s) => s.sectionName === currentQuestion?.sectionName)
+    state
+      .getActiveSectionsUI()
+      .find((s) => s.sectionName === currentQuestion?.sectionName),
   );
   const currentRef = useRef<HTMLDivElement | null>(null);
 
@@ -39,7 +41,7 @@ const SectionQuestionScroll = () => {
                     question={q}
                     questionNumber={
                       (testData?.sectionSet.find(
-                        (s) => s.sectionName === currentSection.sectionName
+                        (s) => s.sectionName === currentSection.sectionName,
                       )?.questionNumbers[i].questionIndex ?? 0) + 1
                     }
                   />

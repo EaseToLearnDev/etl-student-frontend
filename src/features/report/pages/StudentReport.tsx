@@ -46,7 +46,7 @@ const StudentReport = () => {
   useLayoutEffect(() => {
     if (!menuRef.current) return;
     const activeElement = menuRef.current.querySelector(
-      `[data-index="${selectedTabIndex}"]`
+      `[data-index="${selectedTabIndex}"]`,
     ) as HTMLElement | null;
 
     if (activeElement) {
@@ -73,6 +73,7 @@ const StudentReport = () => {
           const mappedData: TestReportdata[] = data.map((item) => ({
             testTitle: item.mockTestName,
             testType: item.testType,
+            examType: item.examType,
             date: item.submitDateTime,
             totalQuestions: item.totalQuestions,
             fullMarks: item.fullMarks,
@@ -85,6 +86,7 @@ const StudentReport = () => {
           const mappedSessionData: LearningSessionData[] = data.map((item) => ({
             testTitle: item.mockTestName,
             testType: item.testType,
+            examType: item.examType,
             date: item.submitDateTime,
             totalQuestions: item.totalQuestions,
             helpCounter: item.helpCounter,
@@ -106,7 +108,13 @@ const StudentReport = () => {
   }, []);
 
   const handleViewMore = (reportData: TestReportdata | LearningSessionData) => {
-    const { testSession, testType } = reportData;
+    const { testSession, testType, examType } = reportData;
+
+    if (examType === "subjective") {
+      navigate(`/testview?testSession=st${testSession}`);
+      return;
+    }
+
     let type = 0;
     if (testType === "Learning Session" || testType === "Competitive Session") {
       type = 1;
@@ -125,7 +133,7 @@ const StudentReport = () => {
 
     if (testType === "Learning Session") {
       navigate(
-        `/learning-testanalytics?testSession=${testSession}&testType=${type}`
+        `/learning-testanalytics?testSession=${testSession}&testType=${type}`,
       );
     } else {
       navigate(`/testanalytics?testSession=${testSession}&testType=${type}`);
@@ -133,13 +141,14 @@ const StudentReport = () => {
   };
 
   if (!reportData || !sessionData)
-    return <EmptyState
+    return (
+      <EmptyState
         title="No student report data available"
         description="No student reports are available yet. Once tests, activities, or assignments are completed, reports will appear here!"
         icon={<LuFileUser className="w-24 h-24" />}
         className="max-w-md"
       />
-;
+    );
 
   const tabContentsMap: Record<string, JSX.Element> = {
     Overview: <ReportOverviewPage />,
@@ -232,7 +241,7 @@ const StudentReport = () => {
                 }}
                 className={cn(
                   "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
-                  isActive && "text-[var(--sb-ocean-bg-active)]"
+                  isActive && "text-[var(--sb-ocean-bg-active)]",
                 )}
               >
                 {tab}

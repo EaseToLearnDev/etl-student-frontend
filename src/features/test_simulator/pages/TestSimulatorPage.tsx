@@ -38,6 +38,7 @@ import { Spinner } from "../../../components/Spinner";
 import EmptyState from "../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 import { LuLock } from "react-icons/lu";
+import SubjectiveMediaModal from "../components/SubjectiveMediaModal";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -165,18 +166,26 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         title="Limit Reached!"
         description={testError.message}
         icon={<LuLock className="w-24 h-24" />}
-        buttonText={status === "upgrade" ? "Upgrade": "Home"}
-        onClick={() => navigate(status === "upgrade" ? `/selectcourse?cid=${activeCourse?.courseId}`: "/")}
+        buttonText={status === "upgrade" ? "Upgrade" : "Home"}
+        onClick={() =>
+          navigate(
+            status === "upgrade"
+              ? `/selectcourse?cid=${activeCourse?.courseId}`
+              : "/"
+          )
+        }
         className="min-h-screen"
       />
     );
   }
-  
-  if (testError?.id === "question_limit_reached") {
+
+  if (
+    testError?.id === "question_limit_reached" ||
+    testError?.id === "internal_server_error"
+  ) {
     return (
       <EmptyState
         title={testError.message}
-        description={testError.message}
         icon={<LuLock className="w-24 h-24" />}
         buttonText={"Go Back!"}
         onClick={() => navigate(-1)}
@@ -232,6 +241,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           setIsSwitchSectionModalOpen(false);
         }}
       />
+
+      <SubjectiveMediaModal />
 
       <GuestTestSubmitModal />
 

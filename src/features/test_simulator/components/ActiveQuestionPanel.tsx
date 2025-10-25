@@ -11,6 +11,7 @@ import {
   MdChevronLeft,
   MdChevronRight,
   MdClose,
+  MdCloudUpload,
 } from "react-icons/md";
 
 // Utils
@@ -31,6 +32,9 @@ import WidgetCard from "../../report/components/newreports/WidgetCard";
 import AiIcon from "../../../components/icons/ai-icon";
 import Badge from "../../../components/Badge";
 import Checkbox from "../../../components/Checkbox";
+import { handelFileUpload } from "../services/handleFileUpload";
+import { handelFileRemove } from "../services/handleFileRemove";
+import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -65,6 +69,19 @@ const ActiveQuestionPanel = () => {
     ? questionStatusMap[currentQuestion.questionId]
     : null;
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
+  const setIsSubjectiveMediaModalOpen = useTestStore(
+    (s) => s.setIsSubjectiveMediaModalOpen
+  );
+
+  const mode = useTestStore((s) => s.testMode);
+  const currentMarksObj = useTestStore((s) =>
+    currentQuestion ? s.questionMarksMap[currentQuestion?.questionId] : null
+  );
+  const updateCurrentMarksObj = useTestStore((s) => s.updateCurrentMarksObj);
+  const updateCurrentTotalMarks = useTestStore(
+    (s) => s.updateCurrentTotalMarks
+  );
+  const features = useTestStore((s) => s.features);
 
   // Ai Store
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
@@ -224,7 +241,7 @@ const ActiveQuestionPanel = () => {
                       value={response?.responseId}
                       checked={
                         !!currentResponse &&
-                        currentResponse.includes(response.responseId)
+                        currentResponse.text.includes(response.responseId)
                       }
                       onChange={(e) => {
                         if (e.target.checked) {
@@ -241,7 +258,7 @@ const ActiveQuestionPanel = () => {
                       value={response?.responseId}
                       checked={
                         !!currentResponse &&
-                        currentResponse.includes(response.responseId)
+                        currentResponse.text.includes(response.responseId)
                       }
                       onChange={(e) => {
                         setCurrentResponse(e.target.value, "replace");
@@ -283,7 +300,7 @@ const ActiveQuestionPanel = () => {
               <div className="flex items-center gap-4 mt-7">
                 <input
                   type="text"
-                  value={currentResponse ?? ""}
+                  value={currentResponse?.text[0]}
                   onChange={(e) =>
                     setCurrentResponse(e.target.value, "replace")
                   }
@@ -325,6 +342,86 @@ const ActiveQuestionPanel = () => {
                 )}
               </div>
             )}
+
+            {/* Case: Subjective Type Questions */}
+            {[
+              "Subjective-Type-Very-Short",
+              "Subjective-Type-Short-Answer-I",
+              "Subjective-Type-Short-Answer-II",
+              "Subjective-Type-Long",
+            ].includes(currentQuestion?.questionType || "") &&
+            mode &&
+            mode !== "review" ? (
+              <div className="flex flex-col gap-2 mt-7">
+                <textarea
+                  onChange={(e) =>
+                    setCurrentResponse(e.target.value, "replace")
+                  }
+                  value={currentResponse?.text[0]}
+                  disabled={correctResponseEnabled}
+                  placeholder={"Enter Your Answer"}
+                  className={cn(
+                    "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
+                    "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
+                    "min-h-[200px] max-h-[400px]"
+                  )}
+                ></textarea>
+
+                {currentResponse?.url ? (
+                  <div className="flex items-center h-44 gap-2 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer px-5">
+                    <img
+                      src={currentResponse.url}
+                      className="w-40 object-cover"
+                      onClick={() => setIsSubjectiveMediaModalOpen(true)}
+                    />
+                    <div className="flex flex-1 items-center justify-end ">
+                      <Button
+                        style="secondary"
+                        className="px-3 py-1 text-xs"
+                        onClick={() => {
+                          if (currentResponse?.fileName) {
+                            handelFileRemove(currentResponse.fileName);
+                          }
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <label
+                    htmlFor="subjective-image-upload"
+                    className="flex flex-col items-center justify-center gap-2 h-44 border-2 border-dashed border-[var(--border-secondary)] bg-[var(--surface-bg-primary)] rounded-xl py-6 cursor-pointer hover:border-[var(--sb-ocean-bg-active)] transition-colors"
+                  >
+                    <MdCloudUpload
+                      size={32}
+                      className="text-[var(--text-secondary)]"
+                    />
+                    <div className="text-center">
+                      <p className="font-semibold">Upload Images</p>
+                      <p className="text-sm text-[var(--text-secondary)]">
+                        PNG, JPG up to 10MB each
+                      </p>
+                    </div>
+                    <Button style="secondary" className="px-4 py-2">
+                      Choose Files
+                    </Button>
+                    <input
+                      id="subjective-image-upload"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(event) => {
+                        if (!event.target.files?.length) return;
+                        handelFileUpload(event.target.files[0]);
+                      }}
+                    />
+                  </label>
+                )}
+              </div>
+            ) : (
+              <></>
+            )}
           </div>
 
           {/* Explanation (Review Mode Only) */}
@@ -347,6 +444,98 @@ const ActiveQuestionPanel = () => {
             <></>
           )}
         </div>
+
+        {/* TODO: REDO SUBJECTIVE UI IN REVIEW MODE (DOES NOT LOOK GOOD) */}
+        {/* Subjective Review Mode */}
+        {[
+          "Subjective-Type-Very-Short",
+          "Subjective-Type-Short-Answer-I",
+          "Subjective-Type-Short-Answer-II",
+          "Subjective-Type-Long",
+        ].includes(currentQuestion?.questionType || "") && mode === "review" ? (
+          <div className="w-full max-h-[400px] sm:max-h-[500px] border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto">
+            {/* Answer Container */}
+            <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
+              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
+                <p className="font-semibold">Your Answer</p>
+                <input
+                  type="text"
+                  disabled={!features.subjectiveMarksEditEnabled}
+                  value={currentMarksObj?.totalMark}
+                  onChange={(e) => {
+                    const val = Number(e.target.value);
+                    if (isNaN(val)) return;
+                    updateCurrentTotalMarks(val);
+                  }}
+                  className="text-center w-full max-w-[50px] border rounded-md text-base bg-[var(--surface-bg-primary)] disabled:bg-[var(--surface-bg-tertiary)] disabled:text-[var(--text-tertiary)]"
+                />
+                <p className="font-semibold">
+                  /{" "}
+                  {currentQuestion?.responseChoice?.reduce(
+                    (sum, c) => sum + (Number(c.partMarks) || 0),
+                    0
+                  )}
+                </p>
+              </div>
+              <div className="w-full h-full flex flex-col gap-4 p-4">
+                <p>{currentResponse?.text || ""}</p>
+                {currentResponse?.url ? (
+                  <img
+                    onClick={() => setIsSubjectiveMediaModalOpen(true)}
+                    src={currentResponse?.url}
+                    className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+            </div>
+
+            {/* Solution Container */}
+            <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
+              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
+                <p className="font-semibold">Solution</p>
+              </div>
+
+              <div className="w-full h-full p-2 flex flex-col gap-2">
+                {currentQuestion?.responseChoice?.map((choice, index) => (
+                  <div
+                    key={index}
+                    className="w-full flex border-b border-b-[var(--border-secondary)]"
+                  >
+                    <MathJax dynamic className="flex-1 p-2">
+                      <div
+                        className="math-container text-sm"
+                        dangerouslySetInnerHTML={{
+                          __html: checkForTable(
+                            choice?.responseText.trim().replace(/[\r\n]+/g, "")
+                          ),
+                        }}
+                      />
+                    </MathJax>
+                    <div className="min-w-[80px] min-h-full flex justify-center items-center border-l border-l-[var(--border-secondary)]">
+                      <Checkbox
+                        label={choice?.partMarks || ""}
+                        value={choice?.partMarks || ""}
+                        disabled={!features.subjectiveMarksEditEnabled}
+                        checked={
+                          currentMarksObj?.options[index] === "yes"
+                            ? true
+                            : false
+                        }
+                        onChange={(e) =>
+                          updateCurrentMarksObj(index, e.target.checked)
+                        }
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
       {/* Navigation Buttons */}
       <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
@@ -355,7 +544,11 @@ const ActiveQuestionPanel = () => {
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
-          onClick={goToPrev}
+          onClick={() => {
+            if (features.subjectiveMarksEditEnabled) {
+              handleUpdateMarksTest()?.then(goToPrev);
+            } else goToPrev();
+          }}
         >
           <MdChevronLeft size={22} />
         </div>
@@ -381,17 +574,36 @@ const ActiveQuestionPanel = () => {
           </>
         ) : (
           <>
+            {features.subjectiveMarksEditEnabled && (
+              <Button
+                style="secondary"
+                className="!min-w-10 px-2 sm:px-4"
+                onClick={() =>
+                  handleUpdateMarksTest(true)?.then(() => navigate("/report"))
+                }
+              >
+                Finish Test
+              </Button>
+            )}
+
+            {!features.subjectiveMarksEditEnabled && (
+              <Button
+                style="secondary"
+                className="!min-w-10 px-2 sm:px-4"
+                onClick={() => setIsTeacherSupportModalOpen(true)}
+              >
+                Teacher Support
+              </Button>
+            )}
+
             <Button
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
-              onClick={() => setIsTeacherSupportModalOpen(true)}
-            >
-              Teacher Support
-            </Button>
-            <Button
-              style="secondary"
-              className="!min-w-10 px-2 sm:px-4"
-              onClick={() => navigate(-1)}
+              onClick={() =>
+                features.subjectiveMarksEditEnabled
+                  ? navigate("/report")
+                  : navigate(-1)
+              }
             >
               Exit
             </Button>
@@ -402,7 +614,11 @@ const ActiveQuestionPanel = () => {
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
-          onClick={goToNext}
+          onClick={() => {
+            if (features.subjectiveMarksEditEnabled) {
+              handleUpdateMarksTest()?.then(goToNext);
+            } else goToNext();
+          }}
         >
           <MdChevronRight size={22} />
         </div>
@@ -414,14 +630,14 @@ const ActiveQuestionPanel = () => {
           className={cn(
             "flex flex-col items-center gap-1",
             isMobile
-              ? "fixed bottom-[120px] right-[32px]"
+              ? "fixed bottom-[75px] right-[32px]"
               : "absolute bottom-2 right-8"
           )}
           onClick={() => {
             setIsHelpModalOpen(true);
           }}
         >
-          <div className="cursor-pointer size-12 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
+          <div className="cursor-pointer size-10 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
             <AiIcon width={28} height={28} />
           </div>
           <span className="font-semibold !text-xs">ASK TONY</span>

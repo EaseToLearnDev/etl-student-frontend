@@ -1,8 +1,9 @@
-import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
-import { useLoadingStore } from "../../hooks/useLoadingStore";
-import { getGhActivityYearsAPI } from "../api/getGhActivityYears.api";
+import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { getGhActivityAPI } from "../apis/getGhActivity.api";
 
-export const getGhActivityYears = async (setLoadingGhActivityYears: any) => {
+export const getGhActivity = async (year: number | null, setLoadingGhActivity: any) => {
     const { studentData, activeCourse } = useStudentStore.getState();
     const { setLoading } = useLoadingStore.getState();
 
@@ -14,15 +15,16 @@ export const getGhActivityYears = async (setLoadingGhActivityYears: any) => {
 
     if (!loginId || !token || !courseId || !studentId) return null;
 
-    setLoadingGhActivityYears(true);
+    setLoadingGhActivity(true);
 
     try {
-        const list = (await getGhActivityYearsAPI({
+        const list = (await getGhActivityAPI({
             loginId,
             token,
             courseId,
             studentId,
-        })) as number[];
+            ...(year && {year})
+        })) as ITransformedGhData[][];
 
         return list ?? null;
     }
@@ -31,6 +33,6 @@ export const getGhActivityYears = async (setLoadingGhActivityYears: any) => {
         return null;
     }
     finally {
-        setLoadingGhActivityYears(false);
+        setLoadingGhActivity(false);
     }
 }

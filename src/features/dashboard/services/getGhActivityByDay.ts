@@ -1,5 +1,5 @@
-import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
-import { getGhActivityByDayAPI } from "../api/getGhActivityByDay.api";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { getGhActivityByDayAPI } from "../apis/getGhActivityByDay.api";
 
 export interface IGhActivityByDayResults {
   courseId: number;

@@ -53,7 +53,6 @@ export const loadTestDetails = async ({
               ...testConfig,
               templateId: activeCourse?.templateId,
               packTypeTitle,
-              examType: "objective",
               loginId: studentData?.loginId,
               token: studentData?.token,
             });
@@ -63,6 +62,9 @@ export const loadTestDetails = async ({
         }
         if(res.responseTxt.includes('No question')) {
           return {data: null, error: {id: 'question_limit_reached', message: res?.responseTxt}};
+        }
+        if(res.responseTxt.includes('Internal')) {
+          return {data: null, error: {id: 'internal_server_error', message: res?.responseTxt}};
         }
         if(res?.obj?.[0]) {
           return {data: res?.obj?.[0], error: null};
