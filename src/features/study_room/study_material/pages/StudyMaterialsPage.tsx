@@ -143,7 +143,7 @@ const StudyMaterialsPage = () => {
     }
 
     pushToDataLayer({
-      event: gtmEvents[`Study_material_content_item_click`],
+      event: gtmEvents.Study_material_content_item_click,
       id: `Study_material_content_item_id`,
       content_title: content?.contentTitle,
       content_type: content?.contentType,

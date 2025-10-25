@@ -111,6 +111,8 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
   );
 
   const logout_button_id = "logout_button_id";
+  const tutorial_menu_id:string = "tutorial_menu_id";
+
 
   return (
     <div className="w-64 text-left rtl:text-right">
@@ -169,7 +171,11 @@ const DropdownMenu = ({ onClose }: { onClose: () => void }) => {
               </button>
             ) : item.name === "Tutorials" ? (
               <button
+                id={tutorial_menu_id}
                 onClick={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.tutorial_menu_click,
+                  });
                   setShowTutorialModal(true);
                   onClose();
                 }}

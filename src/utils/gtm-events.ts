@@ -50,4 +50,12 @@ export const gtmEvents = {
   study_material_filter_button_click: "study_material_filter_button_click",
   topic_tree_expand_click: "topic_tree_expand_click",
   all_courses_card_click: "all_courses_card_click",
+  invite_teacher_send_button_click: "invite_teacher_send_button_click",
+  cancel_invite_teacher_send_button_click: "cancel_invite_teacher_send_button_click",
+  send_feedback_button_click: "send_feedback_button_click", 
+  cancel_feedback_modal_click: "cancel_feedback_modal_click",
+  send_rate_course_button_click: "send_rate_course_button_click",
+  rate_course_button_click: "rate_course_button_click",
+  tutorial_menu_click: "tutorial_menu_click",
+  tutorial_video_link_click: "tutorial_video_link_click"
 };

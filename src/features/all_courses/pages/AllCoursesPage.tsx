@@ -167,5 +167,4 @@ const AllCoursesPage = () => {
     </div>
   );
 };
-
 export default AllCoursesPage;
