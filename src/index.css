@@ -605,3 +605,12 @@ img {
 .parent > *:hover {
   opacity: 1; /* keep hovered child fully visible */
 }
+
+
+/* .scroll-container {
+  scroll-snap-type: x mandatory;
+}
+
+.scroll-child {
+  scroll-snap-align: end;
+} */

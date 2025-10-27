@@ -123,7 +123,7 @@ const DashboardPage = () => {
           <FeaturedBannerCarousal className="min-h-[250px] max-h-[250px]" />
           <WidgetCard
             title="Activity Chart"
-            className="w-full min-h-[300px] max-h-full"
+            className="w-full min-h-[300px] max-h-full "
           >
             <ActivityList
               yearsOptions={yearsOptions}

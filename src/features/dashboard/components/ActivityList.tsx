@@ -59,14 +59,23 @@ export const ActivityList = ({
 
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const containerWidth = scrollRef.current.offsetWidth;
-      console.log(containerWidth);
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -containerWidth : containerWidth,
-        behavior: "smooth",
-      });
-    }
+
+    if (scrollRef.current === null) return;
+
+    const { right } = scrollRef.current.getBoundingClientRect();
+
+    scrollRef.current.scrollBy({
+      left: right,
+      behavior: "smooth",
+    });
+
+    // if (scrollRef.current) {
+    //   const containerWidth = scrollRef.current.scrollWidth;
+    //   scrollRef.current.scrollBy({
+    //     left: direction === "left" ? -containerWidth : containerWidth,
+    //     behavior: "smooth",
+    //   });
+    // }
   };
 
   const getLegendColors = () => {
@@ -81,7 +90,7 @@ export const ActivityList = ({
 
   return (
     <>
-      <div className="w-full mb-4 flex items-start justify-between mt-5">
+      <div className="w-full mb-4 flex items-start justify-between mt-5 ">
         <div>
           <label
             htmlFor="choose-year"
