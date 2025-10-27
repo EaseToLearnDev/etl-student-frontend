@@ -1,5 +1,5 @@
 
-export const gtmEvents = {
+export const gtmEvents: Record<string, any> = {
     verify_otp_button_click: "verify_otp_button_click",
     cancel_otp_button_click: "cancel_otp_button_click",
     otp_resend_button_click: "otp_resend_button_click",
@@ -31,7 +31,9 @@ export const gtmEvents = {
     all_courses_clear_filter_click: "all_courses_clear_filter_click",
     report_category_tab_click: "report_category_tab_click",
     report_test_detail_click: "report_test_detail_click",
-    
+    all_courses_filter_category_click: "all_courses_filter_category_click",
+    all_courses_card_click: "all_courses_card_click",
+
     // Sidebar menu click events
     sidebar_dashboard_click: "sidebar_dashboard_click",
     sidebar_study_room_click: "sidebar_study_room_click",
@@ -61,6 +63,5 @@ export const gtmEvents = {
 
     //to-do:
     logout_button_click: "logout_button_click",
-    all_courses_filter_category_click: "all_courses_filter_category_click",
-    all_courses_card_click: "all_courses_card_click",
+
 };
