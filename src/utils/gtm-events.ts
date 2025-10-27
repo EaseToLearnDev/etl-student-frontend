@@ -30,6 +30,17 @@ export const gtmEvents: Record<string, any> = {
   all_courses_clear_filter_click: "all_courses_clear_filter_click",
   report_category_tab_click: "report_category_tab_click",
   report_test_detail_click: "report_test_detail_click",
+  logout_button_click: "logout_button_click",
+  all_courses_filter_category_click: "all_courses_filter_category_click",
+  all_courses_card_click: "all_courses_card_click",
+  invite_teacher_send_button_click: "invite_teacher_send_button_click",
+  cancel_invite_teacher_send_button_click:"cancel_invite_teacher_send_button_click",
+  send_feedback_button_click: "send_feedback_button_click",
+  cancel_feedback_modal_click: "cancel_feedback_modal_click",
+  send_rate_course_button_click: "send_rate_course_button_click",
+  rate_course_button_click: "rate_course_button_click",
+  tutorial_menu_click: "tutorial_menu_click",
+  tutorial_video_link_click: "tutorial_video_link_click",
 
   // Sidebar menu click events
   sidebar_dashboard_click: "sidebar_dashboard_click",
@@ -50,25 +61,30 @@ export const gtmEvents: Record<string, any> = {
   report_overview_page_visit: "report_overview_page_visit",
   detail_report_mock_test_page_visit: "detail_report_mock_test_page_visit",
   detail_report_class_test_page_visit: "detail_report_class_test_page_visit",
-  detail_report_class_mock_test_page_visit:
-    "detail_report_class_mock_test_page_visit",
-  detail_report_learning_session_page_visit:
-    "detail_report_learning_session_page_visit",
-  detail_report_competitive_session_page_visit:
-    "detail_report_competitive_session_page_visit",
+  detail_report_class_mock_test_page_visit:"detail_report_class_mock_test_page_visit",
+  detail_report_learning_session_page_visit:"detail_report_learning_session_page_visit",
+  detail_report_competitive_session_page_visit:"detail_report_competitive_session_page_visit",
   all_courses_page_visit: "all_courses_page_visit",
 
-  //to-do:
-  logout_button_click: "logout_button_click",
-  all_courses_filter_category_click: "all_courses_filter_category_click",
-  all_courses_card_click: "all_courses_card_click",
 
-  invite_teacher_send_button_click: "invite_teacher_send_button_click",
-  cancel_invite_teacher_send_button_click:"cancel_invite_teacher_send_button_click",
-  send_feedback_button_click: "send_feedback_button_click",
-  cancel_feedback_modal_click: "cancel_feedback_modal_click",
-  send_rate_course_button_click: "send_rate_course_button_click",
-  rate_course_button_click: "rate_course_button_click",
-  tutorial_menu_click: "tutorial_menu_click",
-  tutorial_video_link_click: "tutorial_video_link_click",
+  Smart_learning_topic_button_click: "Smart_learning_topic_button_click",
+  competitive_session_button_click: "competitive_session_button_click",
+  learning_session_button_click: "learning_session_button_click",
+  cancel_competitive_session_button_click: "cancel_competitive_session_button_click",
+  cancel_learning_session_button_click: "cancel_learning_session_button_click",
+  start_learning_session_button_click: "start_learning_session_button_click",
+  start_competitive_session_button_click: "start_competitive_session_button_click",
+  next_competitive_session_button_click: "next_competitive_session_button_click",
+  next_learning_session_button_click: "next_learning_session_button_click",
+  competitive_session_Options_button_click: "competitive_session_Options_button_click",
+  competitive_session_Instructions_button_click: "competitive_session_Instructions_button_click",
+  Study_material_topic_button_click: "Study_material_topic_button_click",
+  Study_material_content_item_click: "Study_material_content_item_click",
+  close_content_modal_button_click: "close_content_modal_button_click",
+  study_material_filter_button_click: "study_material_filter_button_click",
+  topic_tree_expand_click: "topic_tree_expand_click",
+
+
+  
+  
 };
