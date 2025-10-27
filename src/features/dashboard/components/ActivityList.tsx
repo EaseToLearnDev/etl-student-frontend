@@ -50,6 +50,7 @@ export const ActivityList = ({
 }: IActivityListProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollChildRef = useRef<HTMLDivElement>(null);
   const { darkMode } = useDarkModeStore();
   const currentYear = new Date().getFullYear();
 
@@ -60,9 +61,11 @@ export const ActivityList = ({
 
   const scroll = (direction: "left" | "right") => {
 
-    if (scrollRef.current === null) return;
+    if (scrollRef.current === null || scrollChildRef.current === null) return;
 
-    const { right } = scrollRef.current.getBoundingClientRect();
+    const { right } = scrollChildRef.current.getBoundingClientRect();
+
+    console.log("right: ", right);
 
     scrollRef.current.scrollBy({
       left: right,
@@ -146,6 +149,7 @@ export const ActivityList = ({
           darkMode={darkMode}
           onDayClick={handleClickOnDay}
           scrollRef={scrollRef}
+          scrollChildRef={scrollChildRef}
           scroll={scroll}
         />
       )}

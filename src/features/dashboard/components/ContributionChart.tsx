@@ -49,6 +49,7 @@ function ContributionChart({
   renderableData,
   darkMode,
   scrollRef,
+scrollChildRef,
   scroll,
 }: {
   color?: string;
@@ -56,22 +57,9 @@ function ContributionChart({
   renderableData: any;
   darkMode: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
+  scrollChildRef?: React.RefObject<HTMLDivElement | null>;
   scroll: (data: "left" | "right") => void;
 }) {
-  if (!renderableData) {
-    return (
-      <EmptyState
-        title="No activity data available"
-        description="No activity data available yet. Start giving tests, and your activity will appear here!"
-        icon={<LuActivity className="w-20 h-20" />}
-        className="max-w-md"
-      />
-    );
-  }
-
-  useEffect(() => {
-    scroll("right");
-  }, [scrollRef]);
 
   return (
     <div
@@ -94,7 +82,7 @@ function ContributionChart({
           );
         })}
       </div> */}
-      <div className="flex flex-col justify-start gap-4">
+      <div ref={scrollChildRef} className="flex flex-col justify-start gap-4">
         <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)] ">
           <div className="flex flex-col justify-between items-start mt-7  h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)]  text-xs text-[var(--text-tertiary)] text-bold">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => (
