@@ -50,6 +50,7 @@ export const ActivityList = ({
 }: IActivityListProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollChildRef = useRef<HTMLDivElement>(null);
   const { darkMode } = useDarkModeStore();
   const currentYear = new Date().getFullYear();
 
@@ -59,13 +60,23 @@ export const ActivityList = ({
 
 
   const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const containerWidth = scrollRef.current.scrollWidth - 1;
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -containerWidth : containerWidth,
-        behavior: "smooth",
-      });
-    }
+
+    if (scrollRef.current === null || scrollChildRef.current === null) return;
+
+    const { right } = scrollChildRef.current.getBoundingClientRect();
+
+    scrollRef.current.scrollBy({
+      left: right,
+      behavior: "smooth",
+    });
+
+    // if (scrollRef.current) {
+    //   const containerWidth = scrollRef.current.scrollWidth;
+    //   scrollRef.current.scrollBy({
+    //     left: direction === "left" ? -containerWidth : containerWidth,
+    //     behavior: "smooth",
+    //   });
+    // }
   };
 
   const getLegendColors = () => {
@@ -80,7 +91,7 @@ export const ActivityList = ({
 
   return (
     <>
-      <div className="w-full mb-4 flex items-start justify-between mt-5">
+      <div className="w-full mb-4 flex items-start justify-between mt-5 ">
         <div>
           <label
             htmlFor="choose-year"
@@ -135,8 +146,6 @@ export const ActivityList = ({
           renderableData={renderableData}
           darkMode={darkMode}
           onDayClick={handleClickOnDay}
-          scrollRef={scrollRef}
-          scroll={scroll}
         />
       )}
       <div className="flex items-center justify-end gap-3 mt-2 text-[var(--text-tertiary)]">

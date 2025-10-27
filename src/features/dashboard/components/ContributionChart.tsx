@@ -48,35 +48,16 @@ function ContributionChart({
   onDayClick,
   renderableData,
   darkMode,
-  scrollRef,
-  scroll
 }: {
   color?: string;
   onDayClick: (day: ITransformedGhData) => void;
   renderableData: any;
   darkMode: boolean;
-  scrollRef?: React.RefObject<HTMLDivElement | null>;
-  scroll: (data: 'left' | 'right') => void
 }) {
-  if (!renderableData) {
-    return (
-      <EmptyState
-        title="No activity data available"
-        description="No activity data available yet. Start giving tests, and your activity will appear here!"
-        icon={<LuActivity className="w-20 h-20" />}
-        className="max-w-md"
-      />
-    );
-  }
-
-  useEffect(() => {
-    scroll("right")
-  }, [scrollRef]);
 
   return (
     <div
-      ref={scrollRef}
-      className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4 h-[180px] mb-3 "
+      className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4 h-[180px] mb-3"
     >
       {/* <div
         className="flex text-xs text-[var(--text-tertiary)] text-bold mb-1"
@@ -123,19 +104,32 @@ function ContributionChart({
                         <div
                           key={weekIdx}
                           className="flex flex-col gap-1 parent "
+                          ref={(el) => {
+                          if (!el) return;
+                          if (
+                            monthIdx === renderableData.length - 1 &&
+                            weekIdx === month.weeks.length - 1
+                          ) {
+                            el.scrollIntoView({
+                            behavior: "auto",
+                            block: "nearest",
+                            inline: "end",
+                            });
+                          }
+                          }}
                         >
                           {week.map((day: any, dayIdx: any) => {
-                            return (
-                              <DayCell
-                                key={dayIdx}
-                                day={day}
-                                color={color}
-                                onHover={() => {}}
-                                onLeave={() => {}}
-                                onDayClick={onDayClick}
-                                darkMode={darkMode}
-                              />
-                            );
+                          return (
+                            <DayCell
+                            key={dayIdx}
+                            day={day}
+                            color={color}
+                            onHover={() => {}}
+                            onLeave={() => {}}
+                            onDayClick={onDayClick}
+                            darkMode={darkMode}
+                            />
+                          );
                           })}
                         </div>
                       );
