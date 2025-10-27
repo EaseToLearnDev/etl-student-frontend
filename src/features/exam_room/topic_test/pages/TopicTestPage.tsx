@@ -91,11 +91,6 @@ const TopicTestPage = () => {
   );
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
-<<<<<<< Updated upstream
-=======
-  usePageTracking(gtmEvents.topic_test_page_visit);
-
->>>>>>> Stashed changes
   // useEffects
   useEffect(() => {
     const fetchTopicTree = async () => {

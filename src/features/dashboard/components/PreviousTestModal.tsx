@@ -46,17 +46,6 @@ const PreviousTestModal = ({
             >
               Continue Test
             </Button>
-<<<<<<< Updated upstream
-            <Button 
-            id={cancel_previous_test_modal_id}
-            style="secondary" 
-            onClick={() =>{
-              pushToDataLayer({
-                event: gtmEvents.cancel_previous_test_modal_click,
-              });   
-            
-              onClose()
-=======
             <Button
               // id={cancel_previous_test_modal_id}
               style="secondary"
@@ -66,7 +55,6 @@ const PreviousTestModal = ({
                 // });
 
                 onClose();
->>>>>>> Stashed changes
               }}
             >
               Cancel

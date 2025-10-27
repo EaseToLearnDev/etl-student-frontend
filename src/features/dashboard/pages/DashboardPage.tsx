@@ -16,7 +16,6 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
-import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
 import {
   getGhActivityByDay,
@@ -24,13 +23,7 @@ import {
 } from "../services/getGhActivityByDay";
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
-<<<<<<< Updated upstream
-=======
-import { usePageTracking } from "../../../hooks/usePageTracking";
-import { gtmEvents } from "../../../utils/gtm-events";
-import { Modal } from "../../../components/Modal";
 import FirstTimeUserModal from "../components/FirstTimeUser";
->>>>>>> Stashed changes
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -56,7 +49,7 @@ const DashboardPage = () => {
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
-    null,
+    null
   );
 
   const createDate = (_date: Date) => {
@@ -173,15 +166,11 @@ const DashboardPage = () => {
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
-<<<<<<< Updated upstream
         <WidgetCard
           title="Tests activity "
           description={date}
           className="min-h-[400px] relative "
         >
-=======
-        <WidgetCard title="Tests activity " className="min-h-[400px] relative ">
->>>>>>> Stashed changes
           {loadingGhActivityByDay ? (
             <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
           ) : (

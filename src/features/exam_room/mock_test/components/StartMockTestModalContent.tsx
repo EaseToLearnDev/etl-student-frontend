@@ -21,13 +21,6 @@ import cn from "../../../../utils/classNames";
 // Components
 import Button from "../../../../components/Button";
 import useDarkModeStore from "../../../../store/useDarkModeStore";
-<<<<<<< Updated upstream
-=======
-import { pushToDataLayer } from "../../../../utils/gtm";
-import { gtmEvents } from "../../../../utils/gtm-events";
-
-const begin_mock_test_button_id = "begin_mock_test_button_id";
->>>>>>> Stashed changes
 
 const getSectionFields = (
   section: NonNullable<MockTest["sectionSet"]>[number],
@@ -212,30 +205,8 @@ const StartMockTestModalContent = ({
       {/* Action Buttons */}
       <div className="flex justify-end items-center absolute bottom-0 left-0 w-full h-full px-4 py-2 max-h-[80px] bg-[var(--surface-bg-secondary)]">
         <div className="flex gap-4 items-center">
-<<<<<<< Updated upstream
           <Button onClick={onStart}>Start Now</Button>
           <Button style="secondary" onClick={onClose}>
-=======
-          <Button
-            id={begin_mock_test_button_id}
-            onClick={() => {
-              onStart();
-              pushToDataLayer({
-                event: gtmEvents.begin_mock_test_button_click,
-                test_name: test.testName,
-                mockTest_id: test.mocktestId,
-              });
-            }}
-          >
-            Start Now
-          </Button>
-          <Button
-            style="secondary"
-            onClick={() => {
-              onClose();
-            }}
-          >
->>>>>>> Stashed changes
             Cancel
           </Button>
         </div>

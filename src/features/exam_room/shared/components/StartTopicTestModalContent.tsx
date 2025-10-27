@@ -140,23 +140,9 @@ export default function StartTopicTestModalContent({
       </div>
 
       {/* Action Buttons */}
-<<<<<<< Updated upstream
       <div className="flex justify-end mt-7">
         <div className="flex gap-4 items-center mb-8 sm:mb-0">
           <Button onClick={onStart}>Start Now</Button>
-=======
-      <div className="flex justify-end items-center absolute bottom-0 left-0 w-full h-full px-4 py-2 max-h-[80px] bg-[var(--surface-bg-secondary)]">
-        <div className="flex gap-4 items-center">
-          <Button
-            id={begin_now_test_button_id}
-            onClick={() => {
-              onStart();
-              pushToDataLayer({ event: gtmEvents.begin_now_test_button_click });
-            }}
-          >
-            Start Now
-          </Button>
->>>>>>> Stashed changes
           <Button style="secondary" onClick={onClose}>
             Cancel
           </Button>
