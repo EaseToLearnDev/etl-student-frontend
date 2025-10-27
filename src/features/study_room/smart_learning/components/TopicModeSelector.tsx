@@ -49,12 +49,14 @@ const TopicModeSelector = ({
   }, [selectedExamTypeIndex]);
 
   return (
-    <div className="relative flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-full">
       {/* Mode selection section */}
-      <h6 className="!font-semibold text-ellipsis line-clamp-2 text-center pb-2">
-        {topicName}
-      </h6>
-      <div className="flex justify-center my-4">
+      <div className="flex items-center justify-center">
+        <h6 className="!font-semibold text-ellipsis line-clamp-2">
+          {topicName}
+        </h6>
+      </div>
+      <div className="flex justify-center mt-3">
         <Tabs
           tabs={["Learning", "Competitive"]}
           selectedIndex={selectedIndex}
@@ -93,10 +95,10 @@ const TopicModeSelector = ({
         </div>
       )}
 
-      <div className="flex flex-col gap-3 mt-6 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">
+      <div className="flex flex-col gap-3 mt-3 overflow-y-auto min-h-[100px] max-h-[500px] pb-[50px] scrollbar-thin">
         <SmartLearningInstructions learningMode={mode} />
       </div>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-center items-center bg-[var(--surface-bg-primary)]">
+      <div className="absolute bottom-0 left-0 right-0 pb-4 px-4 flex justify-center items-center bg-[var(--surface-bg-primary)]">
         <Button className="w-full" style="primary" onClick={onClickHandler}>
           Next
         </Button>

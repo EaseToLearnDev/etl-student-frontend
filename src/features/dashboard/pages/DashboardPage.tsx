@@ -18,7 +18,10 @@ import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
 import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
-import { getGhActivityByDay, type IGhActivityByDayResults } from "../services/getGhActivityByDay";
+import {
+  getGhActivityByDay,
+  type IGhActivityByDayResults,
+} from "../services/getGhActivityByDay";
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
 
@@ -152,6 +155,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
         <WidgetCard
           title="Tests activity "
+          description={date}
           className="min-h-[400px] relative "
         >
           {loadingGhActivityByDay ? (

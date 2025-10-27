@@ -89,21 +89,21 @@ const Main = () => {
       </Button>
 
       {/* Secondary Actions */}
-      <div className="flex items-center gap-2 mt-4">
-        <Button
-          style="secondary"
-          className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
-          onClick={() =>
-            goGoogle({
-              questionText: currentQuestion?.questionBody,
-              responseChoices: currentQuestion?.responseChoice,
-            })
-          }
-        >
-          <MagnifyingGlassIcon width={20} height={20} />
-          Search Google
-        </Button>
-        {!testStatus || testStatus !== 1 ? (
+      {!testStatus || testStatus !== 1 ? (
+        <div className="flex items-center gap-2 mt-4">
+          <Button
+            style="secondary"
+            className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
+            onClick={() =>
+              goGoogle({
+                questionText: currentQuestion?.questionBody,
+                responseChoices: currentQuestion?.responseChoice,
+              })
+            }
+          >
+            <MagnifyingGlassIcon width={20} height={20} />
+            Search Google
+          </Button>
           <Button
             style="secondary"
             className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
@@ -114,10 +114,10 @@ const Main = () => {
             <BookOpenIcon width={20} height={20} />
             Study Material
           </Button>
-        ) : (
-          <></>
-        )}
-      </div>
+        </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
@@ -257,7 +257,7 @@ const StudyMaterialContent = () => {
               onClick={() => setSelectedContent(null)}
               className={cn(
                 "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
+                "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
               )}
             >
               <MdClose size={20} />
@@ -328,7 +328,7 @@ const AiHelpModal = ({ isOpen, onClose }: AiHelpModalInterface) => {
               onClick={onClose}
               className={cn(
                 "size-10 aspect-square flex justify-center items-center cursor-pointer",
-                " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
+                " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
               )}
             >
               <MdClose size={20} />
