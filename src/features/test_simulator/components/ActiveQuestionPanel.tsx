@@ -47,22 +47,22 @@ const ActiveQuestionPanel = () => {
   const navigate = useNavigate();
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   const setIsTeacherSupportModalOpen = useTeacherSupportStore(
-    (s) => s.setIsTeacherSupportModalOpen
+    (s) => s.setIsTeacherSupportModalOpen,
   );
   const goToPrev = useTestStore((state) => state.goToPrev);
   const goToNext = useTestStore((state) => state.goToNext);
   const markCurrentFoReview = useTestStore(
-    (state) => state.markCurrentForReview
+    (state) => state.markCurrentForReview,
   );
   const clearCurrentResponse = useTestStore(
-    (state) => state.clearCurrentResponse
+    (state) => state.clearCurrentResponse,
   );
   const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
   const currentResponse = useTestStore((s) =>
-    currentQuestion ? s.questionResponseMap[currentQuestion?.questionId] : null
+    currentQuestion ? s.questionResponseMap[currentQuestion?.questionId] : null,
   );
   const getCurrentQuestionIndex = useTestStore((state) =>
-    state.getCurrentQuestionIndex()
+    state.getCurrentQuestionIndex(),
   );
   const questionStatusMap = useTestStore((s) => s.questionStatusMap);
   const currentQuestionStatus = currentQuestion
@@ -70,16 +70,16 @@ const ActiveQuestionPanel = () => {
     : null;
   const setCurrentResponse = useTestStore((state) => state.setCurrentResponse);
   const setIsSubjectiveMediaModalOpen = useTestStore(
-    (s) => s.setIsSubjectiveMediaModalOpen
+    (s) => s.setIsSubjectiveMediaModalOpen,
   );
 
   const mode = useTestStore((s) => s.testMode);
   const currentMarksObj = useTestStore((s) =>
-    currentQuestion ? s.questionMarksMap[currentQuestion?.questionId] : null
+    currentQuestion ? s.questionMarksMap[currentQuestion?.questionId] : null,
   );
   const updateCurrentMarksObj = useTestStore((s) => s.updateCurrentMarksObj);
   const updateCurrentTotalMarks = useTestStore(
-    (s) => s.updateCurrentTotalMarks
+    (s) => s.updateCurrentTotalMarks,
   );
   const features = useTestStore((s) => s.features);
 
@@ -93,7 +93,7 @@ const ActiveQuestionPanel = () => {
         "w-full h-full relative flex flex-col justify-between",
         isMobile
           ? "flex-1 bg-[var(--surface-bg-primary)] rounded-[20px] p-5"
-          : ""
+          : "",
       )}
     >
       {/* Active Question Panel */}
@@ -121,7 +121,7 @@ const ActiveQuestionPanel = () => {
                       __html: checkForTable(
                         currentQuestion?.commonDataDescription
                           .trim()
-                          .replace(/[\r\n]+/g, "")
+                          .replace(/[\r\n]+/g, ""),
                       ),
                     }}
                   />
@@ -138,7 +138,7 @@ const ActiveQuestionPanel = () => {
                   dangerouslySetInnerHTML={{
                     __html: checkForTable(
                       currentQuestion?.questionBody ?? "",
-                      "test_simulator_table"
+                      "test_simulator_table",
                     )
                       .trim()
                       .replace(/[\r\n]+/g, ""),
@@ -234,7 +234,7 @@ const ActiveQuestionPanel = () => {
                   <h6>{`${response?.responseId}.`}</h6>
                   {/* Case Multiple Response */}
                   {["MR-Matching-Type", "Multiple-Response"].includes(
-                    currentQuestion?.questionType || ""
+                    currentQuestion?.questionType || "",
                   ) ? (
                     <Checkbox
                       label={response?.responseText}
@@ -363,7 +363,7 @@ const ActiveQuestionPanel = () => {
                   className={cn(
                     "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
                     "focus:outline-none focus:ring-0 focus:border-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out resize-y",
-                    "min-h-[200px] max-h-[400px]"
+                    "min-h-[200px] max-h-[400px]",
                   )}
                 ></textarea>
 
@@ -403,9 +403,9 @@ const ActiveQuestionPanel = () => {
                         PNG, JPG up to 10MB each
                       </p>
                     </div>
-                    <Button style="secondary" className="px-4 py-2">
+                    <div className="px-4 py-2 border border-[var(--border-secondary)] rounded-lg text-[var(--text-secondary)]">
                       Choose Files
-                    </Button>
+                    </div>
                     <input
                       id="subjective-image-upload"
                       type="file"
@@ -434,7 +434,7 @@ const ActiveQuestionPanel = () => {
                     __html: checkForTable(
                       currentQuestion?.explanations
                         .trim()
-                        .replace(/[\r\n]+/g, "")
+                        .replace(/[\r\n]+/g, ""),
                     ),
                   }}
                 />
@@ -473,7 +473,7 @@ const ActiveQuestionPanel = () => {
                   /{" "}
                   {currentQuestion?.responseChoice?.reduce(
                     (sum, c) => sum + (Number(c.partMarks) || 0),
-                    0
+                    0,
                   )}
                 </p>
               </div>
@@ -508,7 +508,7 @@ const ActiveQuestionPanel = () => {
                         className="math-container text-sm"
                         dangerouslySetInnerHTML={{
                           __html: checkForTable(
-                            choice?.responseText.trim().replace(/[\r\n]+/g, "")
+                            choice?.responseText.trim().replace(/[\r\n]+/g, ""),
                           ),
                         }}
                       />
@@ -542,7 +542,7 @@ const ActiveQuestionPanel = () => {
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
+            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
           )}
           onClick={() => {
             if (features.subjectiveMarksEditEnabled) {
@@ -612,7 +612,7 @@ const ActiveQuestionPanel = () => {
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
+            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out",
           )}
           onClick={() => {
             if (features.subjectiveMarksEditEnabled) {
@@ -631,7 +631,7 @@ const ActiveQuestionPanel = () => {
             "flex flex-col items-center gap-1",
             isMobile
               ? "fixed bottom-[75px] right-[32px]"
-              : "absolute bottom-2 right-8"
+              : "absolute bottom-2 right-8",
           )}
           onClick={() => {
             setIsHelpModalOpen(true);

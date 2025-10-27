@@ -8,10 +8,10 @@ import { LuUsersRound } from "react-icons/lu";
 
 const ReleaseNotesModal = () => {
   const isReleaseNotesModalOpen = useReleaseNotesStore(
-    (s) => s.isReleaseNotesModalOpen
+    (s) => s.isReleaseNotesModalOpen,
   );
   const setIsReleaseNotesModalOpen = useReleaseNotesStore(
-    (s) => s.setIsReleaseNotesModalOpen
+    (s) => s.setIsReleaseNotesModalOpen,
   );
   return (
     <Modal
@@ -21,10 +21,10 @@ const ReleaseNotesModal = () => {
       className="p-4"
       containerClassName="scrollbar-hide overflow-hidden"
     >
-      <div className="max-h-[600px]">
+      <div className="max-h-[70dvh]">
         {/* Modal Header */}
-        <div className="fixed top-0 left-0 right-0 h-[70px] bg-[var(--surface-bg-secondary)] py-2 px-2 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2 px-8">
+        <div className="absolute top-0 left-0 right-0 h-[70px] bg-[var(--surface-bg-secondary)] py-2 px-4 flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2 px-4">
             <Badge
               theme={Theme.Ocean}
               style="filled"
@@ -37,7 +37,7 @@ const ReleaseNotesModal = () => {
             onClick={() => setIsReleaseNotesModalOpen(false)}
             className={cn(
               "w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-              " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+              " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
             )}
           >
             <MdClose size={20} />
