@@ -58,13 +58,13 @@ export const Toast: React.FC<ToastProps> = ({
   title,
   description,
   button,
-  duration = 5000,
+  duration = 3000,
   onExpire,
   onClick,
   className,
 }) => {
   const [visible, setVisible] = useState(true);
-  const resetToast = useToastStore(s => s.resetToast)
+  const resetToast = useToastStore((s) => s.resetToast);
 
   const handleOnClick = () => {
     setVisible(false);
@@ -89,7 +89,7 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <div
       className={cn(
-        "z-9999 fixed top-5 right-5 w-md items-start flex gap-3 border rounded-xl shadow-lg p-4",
+        "z-[9999] fixed top-3 right-3 max-w-[300px] w-full sm:w-md flex items-start gap-3 border rounded-xl shadow-lg p-4",
         colorMap[type],
         className
       )}
@@ -114,14 +114,12 @@ export const Toast: React.FC<ToastProps> = ({
         </div>
       </div>
 
-      <div
+      <button
         onClick={handleOnClick}
-        className={cn(
-          "fixed top-7 right-7 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer"
-        )}
+        className="flex-shrink-0 flex justify-center items-center p-1 rounded hover:bg-black/10 transition"
       >
-        <MdClose size={20} />
-      </div>
+        <MdClose size={18} />
+      </button>
     </div>
   );
 };

@@ -30,21 +30,23 @@ function Test({
   };
 
   return (
-    <div className="w-full pb-4 md:pb-2 pt-5  border-(--border-primary) flex flex-col md:flex-row justify-between items-start md:items-start shadow-sm dark:shadow-white/10 border  rounded-lg  px-4">
+    <div className="w-full pb-4 md:pb-2 pt-5  border-(--border-primary) flex flex-col gap-1 md:flex-row justify-between items-start md:items-start shadow-sm dark:shadow-white/10 border  rounded-lg  px-4">
       <div>
-        <div className="flex items-center gap-2">
-          <p title={testData?.testTitle}>
-            {testData?.testTitle.length > 20
-              ? testData?.testTitle?.slice(0, 20) + "..."
-              : testData?.testTitle}
-          </p>
-          <Badge
-            theme={Theme.Neutral}
-            className="text-xs h-3 py-3 !bg-amber-100 !border !border-amber-600 !text-amber-600"
-            style="filled"
-          >
-            {getTestType(testData?.testType, testData?.testMode)}
-          </Badge>
+        <div className="flex items-center">
+          <div className="flex flex-row gap-2 items-center justify-between">
+            <p title={testData?.testTitle}>
+              {testData?.testTitle.length > 20
+                ? testData?.testTitle?.slice(0, 20) + "..."
+                : testData?.testTitle}
+            </p>
+            <Badge
+              theme={Theme.Neutral}
+              className="text-xs py-2 !bg-amber-100 !border !border-amber-600 !text-amber-600"
+              style="filled"
+            >
+              {getTestType(testData?.testType, testData?.testMode)}
+            </Badge>
+          </div>
         </div>
         <div className="flex gap-3 py-4 flex-wrap max-w-[80%] overflow-x-scroll">
           <Badge
@@ -81,7 +83,9 @@ function Test({
       <Button
         style="secondary"
         type="button"
-        onClick={() => onNavigate(testData.testSession, testData.testMode, testData.testType)}
+        onClick={() =>
+          onNavigate(testData.testSession, testData.testMode, testData.testType)
+        }
         className="text-xs rounded-full py-2"
       >
         View test
@@ -109,16 +113,24 @@ function ActivityListData({
     );
   }
 
-  const handleTestNavigation = (testSession: string, testMode: string, testType: number) => {
+  const handleTestNavigation = (
+    testSession: string,
+    testMode: string,
+    testType: number
+  ) => {
     if (testMode === "Learning Session") {
-      navigate(`/learning-testanalytics?testSession=${testSession}&testType=${testType}`);
+      navigate(
+        `/learning-testanalytics?testSession=${testSession}&testType=${testType}`
+      );
     } else {
-      navigate(`/testanalytics?testSession=${testSession}&testType=${testType}`);
+      navigate(
+        `/testanalytics?testSession=${testSession}&testType=${testType}`
+      );
     }
   };
 
   return (
-    <div className="flex flex-col gap-4 mt-4 px-2 max-h-[300px] overflow-y-auto">
+    <div className="flex flex-col gap-4 mt-4 px-2 max-h-[260px] overflow-y-auto">
       {dataByDay.map((testData: IGhActivityByDayResults, index: number) => {
         return (
           <Test
