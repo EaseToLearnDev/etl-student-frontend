@@ -246,7 +246,7 @@ export const LearningSessionOverview = () => {
           </div>
 
           <p className="text-[var(--text-secondary)] text-center">
-            not upto mark. Continue Learning
+            Not upto mark. Continue Learning
           </p>
         </div>
       </Widget>

@@ -55,10 +55,6 @@ export interface TestStore {
 
   getActiveSectionsUI: () => SectionUI[];
 
-  helpCount: number;
-  setHelpCount: (n: number) => void;
-  incrementHelpCount: () => void;
-
   features: Features;
   setFeatures: (features: Features) => void;
 
@@ -85,11 +81,14 @@ export interface TestStore {
 
   jumpToQuestion: (question: Question | null) => void;
 
+  questionHelpMap: Record<number, boolean>;
+  setCurrentHelpStatus: (value: boolean) => void;
+
   questionResponseMap: Record<number, ResponseType>;
   getCurrentResponse: () => ResponseType | null;
   setCurrentResponse: (
     response: string,
-    action: "push" | "pop" | "replace",
+    action: "push" | "pop" | "replace"
   ) => void;
   setCurrentFileUrl: (fileName: string, url: string) => void;
   clearCurrentResponse: () => void;
@@ -109,7 +108,7 @@ export interface TestStore {
 
   changeStatusByQuestionId: (
     questionId: number,
-    status: QuestionStatus,
+    status: QuestionStatus
   ) => void;
   getQuestionCountByStatus: (status: QuestionStatus) => number;
 
@@ -146,12 +145,12 @@ const useTestStore = create<TestStore>((set, get) => ({
     sectionPos: -1,
     questionPos: -1,
   },
+  questionHelpMap: {},
   questionResponseMap: {},
   questionTimeMap: {},
   questionStatusMap: {},
   questionMarksMap: {},
   _questionTimerId: null,
-  helpCount: 0,
 
   features: {
     timerEnabled: false,
@@ -165,12 +164,6 @@ const useTestStore = create<TestStore>((set, get) => ({
       features: features,
     }),
 
-  setHelpCount: (n) => set({ helpCount: n }),
-  incrementHelpCount: () => {
-    const { helpCount } = get();
-    set({ helpCount: helpCount + 1 });
-  },
-
   // Initialize test data
   setTestData: (data) => {
     set(() => {
@@ -178,6 +171,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         return {
           testData: null,
           sectionsUI: [],
+          questionHelpMap: {},
           questionStatusMap: {},
           questionResponseMap: {},
           questionTimeMap: {},
@@ -192,6 +186,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         timeMap,
         sectionsUI,
         marksMap,
+        helpMap,
         subjectiveSectionsUI,
         initialPointer,
       } = initializeTestData({ testData: data });
@@ -204,6 +199,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         questionResponseMap: responseMap,
         questionTimeMap: timeMap,
         questionMarksMap: marksMap,
+        questionHelpMap: helpMap,
         currentPointer: initialPointer,
       };
     });
@@ -253,7 +249,7 @@ const useTestStore = create<TestStore>((set, get) => ({
       const nextSection = testData.sectionSet[currentPointer.sectionPos + 1];
       const firstQuestion = nextSection.questionNumbers[0];
       const pendingQuestion = testData.questionSet.find(
-        (q) => q.questionId === firstQuestion.questionId,
+        (q) => q.questionId === firstQuestion.questionId
       );
       // store next question pointer
       set({
@@ -359,7 +355,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId),
+      section.questionNumbers.some((q) => q.questionId === question.questionId)
     );
 
     if (targetSectionPos === -1) return;
@@ -399,7 +395,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     // find section index of target question
     const targetSectionPos = testData.sectionSet.findIndex((section) =>
-      section.questionNumbers.some((q) => q.questionId === question.questionId),
+      section.questionNumbers.some((q) => q.questionId === question.questionId)
     );
 
     if (targetSectionPos === -1) return;
@@ -453,8 +449,22 @@ const useTestStore = create<TestStore>((set, get) => ({
     if (!currentQuestion) return -1;
 
     return testData.questionSet.findIndex(
-      (q) => q.questionId === currentQuestion.questionId,
+      (q) => q.questionId === currentQuestion.questionId
     );
+  },
+
+  // Help Handler
+  setCurrentHelpStatus: (value) => {
+    const { getCurrentQuestion, questionHelpMap } = get();
+    const question = getCurrentQuestion();
+    if (!question) return;
+
+    set({
+      questionHelpMap: {
+        ...questionHelpMap,
+        [question.questionId]: value,
+      },
+    });
   },
 
   // Marks Handler
@@ -465,7 +475,7 @@ const useTestStore = create<TestStore>((set, get) => ({
 
     const totalMarks = question?.responseChoice?.reduce(
       (sum, c) => sum + (Number(c.partMarks) || 0),
-      0,
+      0
     );
     const finalVal = marks > totalMarks ? totalMarks : marks;
 
@@ -742,6 +752,7 @@ const useTestStore = create<TestStore>((set, get) => ({
         sectionPos: -1,
         questionPos: -1,
       },
+      questionHelpMap: {},
       questionStatusMap: {},
       questionResponseMap: {},
       questionTimeMap: {},
@@ -753,7 +764,6 @@ const useTestStore = create<TestStore>((set, get) => ({
         fullScreenEnabled: false,
         subjectiveMarksEditEnabled: false,
       },
-      helpCount: 0,
     });
   },
 }));

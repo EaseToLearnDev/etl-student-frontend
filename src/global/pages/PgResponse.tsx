@@ -1,8 +1,15 @@
+import { useEffect } from "react";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { LuLoader } from "react-icons/lu";
+import { useNavigate } from "react-router";
+import { handleFetchMyCourses } from "../services/handleFetchMyCourses";
 
 const PgResponse = () => {
-    
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    handleFetchMyCourses(navigate);
+  }, [navigate]);
   return (
     <div className="min-h-screen grid place-items-center">
       <div className="flex flex-col items-center justify-center gap-2">

@@ -24,7 +24,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
     questionStatusMap,
     testConfig,
     questionTimeMap,
-    helpCount,
+    questionHelpMap,
   } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
@@ -95,6 +95,13 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             bloomId: item.bloomId,
           };
 
+          if (testMode === "Learning Session") {
+            const helpTaken = questionHelpMap[item.questionId];
+            if (helpTaken) {
+              baseObj.help = +helpTaken;
+            }
+          }
+
           if (testData?.testType === 3) {
             baseObj.sectionId = item.sectionId;
             baseObj.sectionName = item.sectionName;
@@ -112,6 +119,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   ];
 
   const { loginId, token } = studentData;
+  // count of all truthy values
+  const helpCount = Object.values(questionHelpMap).filter(Boolean).length;
 
   const data = new FormData();
   data.append("courseId", String(activeCourse?.courseId));

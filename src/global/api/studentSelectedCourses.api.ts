@@ -1,16 +1,15 @@
 import { makeRequest } from "../../utils/http";
-
-interface FetchMyCoursesParams {
+interface StudentSelectedCoursesParams {
   loginId: string;
   token: string;
 }
-export const fetchMyCourses = async ({
+export const studentSelectedCourses = async ({
   loginId,
   token,
-}: FetchMyCoursesParams) => {
+}: StudentSelectedCoursesParams) => {
   if (!loginId || !token) return;
 
-  const res = await makeRequest("get", "/fetchmycourses", null, {
+  const res = await makeRequest("get", "/student-selected-courses", null, {
     headers: { loginId, token, device: "web" },
   });
 

@@ -17,6 +17,7 @@ import FeedbackModal from "./FeedbackModal";
 import { StudentRatingCourseModal } from "./StudentRatingCourseModal";
 import InviteTeacherModal from "./InviteTeacherModal";
 import CourseMenu from "./CourseMenu";
+import { loadStudentSelectedCourses } from "../../../global/services/loadStudentSelectedCourses";
 
 export default function Header({ className }: { className?: string }) {
   const location = useLocation();
@@ -25,6 +26,7 @@ export default function Header({ className }: { className?: string }) {
 
   useEffect(() => {
     loadNotificationList();
+    loadStudentSelectedCourses();
   }, [location.pathname]);
 
   return (

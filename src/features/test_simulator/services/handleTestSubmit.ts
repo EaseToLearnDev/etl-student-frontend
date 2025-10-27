@@ -22,7 +22,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testConfig,
     questionResponseMap,
     questionTimeMap,
-    helpCount,
+    questionHelpMap,
   } = useTestStore.getState();
   const { setToast } = useToastStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
@@ -48,6 +48,8 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   ) {
     testMode = "Competitive Session";
   }
+
+  // count of all truthy values
   const obj: Record<string, any> = {
     courseId: activeCourse?.courseId,
     templateId: activeCourse?.templateId,
@@ -81,6 +83,15 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
             : currentResponse.text.join("~") || "",
         };
 
+        // Only for learning sessions
+        if (testMode === "Learning Session") {
+          const helpTaken = questionHelpMap[item.questionId];
+          if (helpTaken) {
+            baseObj.help = +helpTaken;
+          }
+        }
+
+        // Only for mock tests
         if (testData?.testType === 3) {
           baseObj.sectionId = item.sectionId;
           baseObj.sectionName = item.sectionName;
@@ -89,8 +100,11 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
         return baseObj;
       }) ?? [],
     noQuestionAttempt: testData?.noQuestionAttempt,
-    helpCounter: helpCount,
   };
+
+  const helpCount = Object.values(questionHelpMap).filter(Boolean).length;
+  obj.helpCounter = helpCount;
+
   const { schools } = studentData;
   if (schools && schools.length > 0) {
     if (
@@ -153,14 +167,16 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testConfig?.examType === "objective"
   ) {
     navigate(
-      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData.testType}`,
+      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData.testType}`
     );
     setToast({
       title: "Test Submit Successfully",
       type: ToastType.SUCCESS,
     });
   } else {
-    navigate(`/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`);
+    navigate(
+      `/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`
+    );
     setToast({
       title: "Test Submit Successfully",
       type: ToastType.SUCCESS,

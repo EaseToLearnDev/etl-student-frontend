@@ -1,9 +1,8 @@
-import type { NavigateFunction } from "react-router";
 import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
+import { studentSelectedCourses } from "../api/studentSelectedCourses.api";
 import type { Course, CourseResponse } from "../../features/shared/types";
-import { fetchMyCourses } from "../api/fetchMyCourses.api";
 
-export const handleFetchMyCourses = async (navigate: NavigateFunction) => {
+export const loadStudentSelectedCourses = async () => {
   try {
     const { studentData, setStudentData } = useStudentStore.getState();
     if (!studentData) return;
@@ -11,7 +10,7 @@ export const handleFetchMyCourses = async (navigate: NavigateFunction) => {
     const { loginId, token } = studentData;
     if (!loginId || !token) return;
 
-    const data = await fetchMyCourses({ loginId, token });
+    const data = await studentSelectedCourses({ loginId, token });
     if (!data || !data?.obj || !data?.obj?.length) return;
 
     const courses: Course[] = data?.obj?.map((c: CourseResponse) => ({
@@ -37,10 +36,8 @@ export const handleFetchMyCourses = async (navigate: NavigateFunction) => {
         otherCourses: !!c.otherCourses,
       },
     }));
-    const openedCourse = courses?.length - 1;
-    setStudentData({ ...studentData, courses, openedCourse });
-    navigate("/dashboard");
+    setStudentData({ ...studentData, courses });
   } catch (error: any) {
-    console.log("Failed to handle fetch my courses:", error.message);
+    console.log("Failed to handle student selected courses:", error.message);
   }
 };

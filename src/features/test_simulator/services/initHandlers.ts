@@ -15,6 +15,7 @@ export interface InitializeTestDataResult {
   responseMap: Record<number, ResponseType>;
   timeMap: Record<number, number>;
   marksMap: Record<number, MarksType>;
+  helpMap: Record<number, boolean>;
   sectionsUI: SectionUI[];
   subjectiveSectionsUI: SectionUI[];
   initialPointer: Pointer;
@@ -32,17 +33,19 @@ export const initializeTestData = ({
   const responseMap: Record<number, ResponseType> = {};
   const timeMap: Record<number, number> = {};
   const marksMap: Record<number, MarksType> = {};
+  const helpMap: Record<number, boolean> = {};
 
   testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] =
       QuestionStatusMap[q.backgroundImg ?? ""] ?? QuestionStatus.NOT_VISITED;
 
     const response = deserializeStudentSubjecitveResponse(
-      q.studentResponse || "",
+      q.studentResponse || ""
     );
     responseMap[q.questionId] = response;
 
     timeMap[q.questionId] = q.timeSpent ?? 0;
+    helpMap[q.questionId] = q?.help ?? false;
 
     // Only create marksObj if responseChoices are available
     if (q.responseChoice && q?.responseChoice?.length > 0) {
@@ -72,7 +75,7 @@ export const initializeTestData = ({
           "Subjective-Type-Short-Answer-I",
           "Subjective-Type-Short-Answer-II",
           "Subjective-Type-Long",
-        ].includes(q.questionType),
+        ].includes(q.questionType)
       ),
     }))
     .filter((section) => section.questionList.length > 0);
@@ -85,7 +88,7 @@ export const initializeTestData = ({
 
   // Mark first question as visited
   const firstSection = testData?.sectionSet?.find(
-    (sec) => sec.questionNumbers.length > 0,
+    (sec) => sec.questionNumbers.length > 0
   );
   if (firstSection) {
     initialPointer = {
@@ -97,6 +100,7 @@ export const initializeTestData = ({
     statusMap,
     responseMap,
     timeMap,
+    helpMap,
     marksMap,
     sectionsUI,
     subjectiveSectionsUI,
