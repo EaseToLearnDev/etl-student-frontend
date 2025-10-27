@@ -48,6 +48,14 @@ export default function Accordion({
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  const handleCloseModal = () => {
+    pushToDataLayer({
+      event: gtmEvents.close_tutorial_video_modal,
+      id: "close_tutorial_video_modal_id",
+    });
+    setSelectedVideo(null);
+  };
+
   return (
     <div className={cn("space-y-4", className)}>
       {data.map((section, index) => (
@@ -88,17 +96,15 @@ export default function Accordion({
                     "cursor-default text-[var(--text-secondary)]"
                   )}
                   onClick={() => {
-                      pushToDataLayer({
+                    pushToDataLayer({
                       event: gtmEvents.tutorial_video_link_click,
                       id: "tutorial_video_link_id",
-                      title: item.title
-                      
+                      title: item.title,
                     });
                     item.videoLink
                       ? setSelectedVideo(item.videoLink)
-                      : undefined
-                  }
-                  }
+                      : undefined;
+                  }}
                 >
                   <h6
                     className={cn(
@@ -118,7 +124,10 @@ export default function Accordion({
       {selectedVideo && (
         <Modal
           isOpen={!!selectedVideo}
-          onClose={() => setSelectedVideo(null)}
+          onClose={() => {
+            setSelectedVideo(null);
+            handleCloseModal();
+          }}
           className="p-4 lg:p-10"
           containerClassName="!h-full !w-full !max-w-full"
         >
@@ -132,7 +141,10 @@ export default function Accordion({
             }}
           />
           <div
-            onClick={() => setSelectedVideo(null)}
+            onClick={() => {
+              handleCloseModal();
+              setSelectedVideo(null);
+            }}
             className={cn(
               "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
               "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"

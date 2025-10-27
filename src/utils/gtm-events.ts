@@ -4,6 +4,7 @@ export const gtmEvents: Record<string, any> = {
   otp_resend_button_click: "otp_resend_button_click",
   login_button_click: "login_button_click",
   login_signup_click: "login_signup_click",
+  logout_button_click: "logout_button_click",
   get_otp_button_click: "get_otp_button_click",
   forget_password_button_click: "forget_password_button_click",
   forget_password_submit_button_click: "forget_password_submit_button_click",
@@ -30,7 +31,6 @@ export const gtmEvents: Record<string, any> = {
   all_courses_clear_filter_click: "all_courses_clear_filter_click",
   report_category_tab_click: "report_category_tab_click",
   report_test_detail_click: "report_test_detail_click",
-  logout_button_click: "logout_button_click",
   all_courses_filter_category_click: "all_courses_filter_category_click",
   all_courses_card_click: "all_courses_card_click",
   invite_teacher_send_button_click: "invite_teacher_send_button_click",
@@ -41,6 +41,12 @@ export const gtmEvents: Record<string, any> = {
   rate_course_button_click: "rate_course_button_click",
   tutorial_menu_click: "tutorial_menu_click",
   tutorial_video_link_click: "tutorial_video_link_click",
+  close_tutorial_video_modal: "close_tutorial_video_modal",
+  activity_view_test_modal_click: "activity_view_test_modal_click",
+  activity_chart_day_click: "activity_chart_day_click",
+  feature_banner_video_link_click: "feature_banner_video_link_click",
+  feature_banner_tutorial_cards_click:"feature_banner_tutorial_cards_click",
+  feature_banner_close_button_click: "feature_banner_close_button_click",
 
   // Sidebar menu click events
   sidebar_dashboard_click: "sidebar_dashboard_click",
