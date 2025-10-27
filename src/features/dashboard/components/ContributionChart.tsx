@@ -73,7 +73,7 @@ function ContributionChart({
     // small delay allows Safari to finalize layout before scrolling
     const timeout = setTimeout(() => {
       scroll("right");
-    }, 100);
+    }, 3000);
 
     return () => clearTimeout(timeout);
   }, [scrollRef]);
