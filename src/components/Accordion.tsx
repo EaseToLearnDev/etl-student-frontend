@@ -4,6 +4,8 @@ import { MdClose } from "react-icons/md";
 import cn from "../utils/classNames";
 import { Modal } from "./Modal";
 import MediaContentModalView from "../features/study_room/study_material/components/MediaContentModalVIew";
+import { pushToDataLayer } from "../utils/gtm";
+import { gtmEvents } from "../utils/gtm-events";
 
 type Theme = "primary" | "success" | "warning" | "danger";
 
@@ -85,10 +87,17 @@ export default function Accordion({
                     "p-3 rounded cursor-pointer transition",
                     "cursor-default text-[var(--text-secondary)]"
                   )}
-                  onClick={() =>
+                  onClick={() => {
+                      pushToDataLayer({
+                      event: gtmEvents.tutorial_video_link_click,
+                      id: "tutorial_video_link_id",
+                      title: item.title
+                      
+                    });
                     item.videoLink
                       ? setSelectedVideo(item.videoLink)
                       : undefined
+                  }
                   }
                 >
                   <h6

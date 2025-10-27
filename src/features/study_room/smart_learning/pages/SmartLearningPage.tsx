@@ -161,7 +161,7 @@ const SmartLearningPage = () => {
                 onClickHandler={(t) => {
                   setSelectedTopicId(t ? t?.topicId : null);
                   pushToDataLayer({
-                    event: gtmEvents[`Smart_learning_topic_button_click`],
+                    event: gtmEvents.Smart_learning_topic_button_click,
                     id: `Smart_learning_topic_button_id`,
                     topic_nameopic_name: t?.topicName,
                     topic_id: t?.topicId,

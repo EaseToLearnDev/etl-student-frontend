@@ -9,6 +9,8 @@ import Button from "../../../components/Button";
 import { PiPaperPlaneTiltFill } from "react-icons/pi";
 import { submitStudentFeedback } from "../../../global/services/submitStudentFeedback";
 import { useToastStore } from "../../../global/hooks/useToastStore";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 const FeedbackModal = () => {
   const showFeedbackModal = useFeedbackStore((s) => s.showFeedbackModal);
@@ -23,6 +25,7 @@ const FeedbackModal = () => {
   const setFeedbackTypes = useFeedbackStore((s) => s.setFeedbackTypes);
   const setShowFeedbackModal = useFeedbackStore((s) => s.setShowFeedbackModal);
   const resetToast = useToastStore((s) => s.resetToast);
+  const Send_feedback_button_id = "send_feedback_button_id";
 
   const [isTypeSelectionOpen, setIsTypeSelectionOpen] =
     useState<boolean>(false);
@@ -44,7 +47,13 @@ const FeedbackModal = () => {
   return (
     <Modal
       isOpen={showFeedbackModal}
-      onClose={() => setShowFeedbackModal(false)}
+      onClose={() => {
+        pushToDataLayer({
+          event: gtmEvents.cancel_feedback_modal_click,
+          id: "cancel_feedback_modal_id",
+        });
+        setShowFeedbackModal(false);
+      }}
       size="md"
       className="p-4"
     >
@@ -110,8 +119,12 @@ const FeedbackModal = () => {
         <div className="flex justify-end mt-7">
           <div className="flex gap-4 items-center">
             <Button
+            id= {Send_feedback_button_id}
               disabled={!subject.trim()}
               onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.send_feedback_button_click,
+                });
                 submitStudentFeedback({
                   type: feedbackTypes ? feedbackTypes[typeIdx].title : "",
                   subject: subject,
@@ -125,7 +138,13 @@ const FeedbackModal = () => {
             </Button>
             <Button
               style="secondary"
-              onClick={() => setShowFeedbackModal(false)}
+              onClick={() => {
+                pushToDataLayer({
+                  event: gtmEvents.cancel_feedback_modal_click,
+                  id: "cancel_feedback_modal_id",
+                });
+                setShowFeedbackModal(false);
+              }}
             >
               Cancel
             </Button>
