@@ -16,13 +16,16 @@ import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import ActivityListData from "../components/ActivityListData";
 import { LuLoader } from "react-icons/lu";
-import { useLocation } from "react-router-dom";
 import useIsMobile from "../../../hooks/useIsMobile";
-import { getGhActivityByDay, type IGhActivityByDayResults } from "../services/getGhActivityByDay";
+import {
+  getGhActivityByDay,
+  type IGhActivityByDayResults,
+} from "../services/getGhActivityByDay";
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
+import FirstTimeUserModal from "../components/FirstTimeUser";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -30,9 +33,12 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
+  const studentData = useStudentStore((s) => s.studentData);
   const isMobile = useIsMobile();
-  const [color, setColor] = useState("green");
 
+  const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
+
+  const [color, setColor] = useState("green");
   const [year, setYear] = useState(null);
   const [apiData, setAPIData] = useState<ITransformedGhData[][] | null>(year);
   const [yearsOptions, setYearsOptions] = useState<number[] | null>(null);
@@ -156,6 +162,7 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
         <WidgetCard
           title="Tests activity "
+          description={date}
           className="min-h-[400px] relative "
         >
           {loadingGhActivityByDay ? (
@@ -184,7 +191,10 @@ const DashboardPage = () => {
           </>
         )}
       </div>
-
+      <FirstTimeUserModal
+        isOpen={showFirstTimeModal}
+        onClose={() => setShowFirstTimeModal(false)}
+      />
       {/* Toast */}
       {showToast && toastData && (
         <Toast

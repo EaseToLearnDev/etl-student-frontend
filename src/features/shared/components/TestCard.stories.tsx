@@ -1,3 +1,4 @@
+/*
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import TestCard from "./TestCard";
 import type { Test } from "../types";
@@ -72,3 +73,5 @@ export const MobileInfoClickable: Story = {
     infoClickHandler: () => alert("Info clicked"),
   },
 };
+*/
+export default null;

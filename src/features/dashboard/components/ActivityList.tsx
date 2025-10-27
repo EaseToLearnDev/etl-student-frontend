@@ -60,7 +60,7 @@ export const ActivityList = ({
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
-      const containerWidth = scrollRef.current.scrollWidth;
+      const containerWidth = scrollRef.current.scrollWidth - 1;
       scrollRef.current.scrollBy({
         left: direction === "left" ? -containerWidth : containerWidth,
         behavior: "smooth",
@@ -77,19 +77,6 @@ export const ActivityList = ({
 
   const [c0, c1, c2, c3, c4, c5] = getLegendColors();
   const legendColors = [c0, c1, c2, c3, c4, c5];
-
-
-
-  if (!renderableData) {
-    return (
-      <EmptyState
-        title='No activity data available'
-        description='No activity data available yet. Start giving tests, and your activity will appear here!'
-        icon={<LuActivity className='w-20 h-20' />}
-        className='max-w-md'
-      />
-    )
-  }
 
   return (
     <>
@@ -141,7 +128,7 @@ export const ActivityList = ({
       </div>
 
       {loadingGhActivity ? (
-        <Skeleton width="100%" height="55%" className="rounded-lg mb-3" />
+        <Skeleton width="100%" height="40%" className="rounded-lg mb-3" />
       ) : (
         <ContributionChart
           color={color}

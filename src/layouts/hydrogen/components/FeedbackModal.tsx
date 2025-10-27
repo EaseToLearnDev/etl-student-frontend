@@ -88,7 +88,7 @@ const FeedbackModal = () => {
               name="subject"
               className={cn(
                 "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
               )}
               placeholder="Enter subject"
               value={subject}
@@ -108,7 +108,7 @@ const FeedbackModal = () => {
               rows={4}
               className={cn(
                 "resize-none flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base",
-                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
+                "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
               )}
               value={details}
               onChange={(e) => setDetails(e.target.value)}
@@ -154,7 +154,7 @@ const FeedbackModal = () => {
           onClick={() => setShowFeedbackModal(false)}
           className={cn(
             "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
           )}
         >
           <MdClose size={20} />

@@ -78,7 +78,7 @@ const TopicProgressChart = ({
   };
 
   return (
-    <div className="w-full max-w-[250px] mx-auto aspect-[2/1] relative">
+    <div className="w-full max-w-[200px] sm:max-w-[250px] mx-auto aspect-[2/1] relative">
       <Doughnut
         key={progress}
         data={data}

@@ -27,7 +27,7 @@ import { gtmEvents } from "../../../../utils/gtm-events";
 const begin_mock_test_button_id = "begin_mock_test_button_id"
 
 const getSectionFields = (
-  section: NonNullable<MockTest["sectionSet"]>[number]
+  section: NonNullable<MockTest["sectionSet"]>[number],
 ) => [
   {
     field: "Correct Answer",
@@ -100,9 +100,10 @@ const StartMockTestModalContent = ({
   const isOdd = validFields.length % 2 !== 0;
 
   return (
-    <div className="relative max-h-[70vh] p-2">
+    <div className="relative h-full min-h-[70vh] max-h-[70vh] p-2">
       {/* Header */}
-      <div className="flex justify-between gap-2">
+
+      <div className="absolute top-0 left-0 w-full h-full max-h-[90px] bg-[var(--surface-bg-secondary)] flex justify-between gap-2 px-4 py-2">
         <div className="flex flex-col gap-1">
           <h4>Mock Test</h4>
           <h6>{test.testName}</h6>
@@ -111,7 +112,7 @@ const StartMockTestModalContent = ({
           onClick={onClose}
           className={cn(
             "fixed top-3 right-3 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
           )}
         >
           <MdClose size={20} />
@@ -119,91 +120,93 @@ const StartMockTestModalContent = ({
       </div>
 
       {/* Test Overview Fields */}
-      <div className="mt-7 flex flex-col gap-4">
-        <div className="flex gap-2 items-center">
-          <FiTarget size={20} />
-          <h5>Test Overview</h5>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          {validFields.map((f, i) => {
-            const isLast = i === validFields.length - 1;
-            return (
-              <div
-                key={f.field}
-                className={cn(
-                  "flex flex-col md:flex-row items-center gap-2 p-2 md:gap-4 md:p-4",
-                  "w-full bg-[var(--surface-bg-tertiary)] rounded-lg shadow-sm",
-                  isMobile && isLast && isOdd ? "col-span-2" : ""
-                )}
-              >
+
+      <div className="mt-[90px] h-[calc(70vh-190px)] py-2 overflow-y-auto">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2 items-center">
+            <FiTarget size={20} />
+            <h5>Test Overview</h5>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+            {validFields.map((f, i) => {
+              const isLast = i === validFields.length - 1;
+              return (
                 <div
+                  key={f.field}
                   className={cn(
-                    "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
-                    darkMode
-                      ? "bg-[var(--sb-neutral-bg-disabled)]/50"
-                      : "bg-[var(--sb-neutral-bg-disabled)]"
+                    "flex flex-col md:flex-row items-center gap-2 p-2 md:gap-4 md:p-4",
+                    "w-full bg-[var(--surface-bg-tertiary)] rounded-lg shadow-sm",
+                    isMobile && isLast && isOdd ? "col-span-2" : "",
                   )}
                 >
-                  {f.icon}
+                  <div
+                    className={cn(
+                      "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
+                      darkMode
+                        ? "bg-[var(--sb-neutral-bg-disabled)]/50"
+                        : "bg-[var(--sb-neutral-bg-disabled)]",
+                    )}
+                  >
+                    {f.icon}
+                  </div>
+                  <div className="flex flex-col text-center md:text-left">
+                    <span>{f.field}</span>
+                    <h6>{f.value}</h6>
+                  </div>
                 </div>
-                <div className="flex flex-col text-center md:text-left">
-                  <span>{f.field}</span>
-                  <h6>{f.value}</h6>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
+        {/* Test Sections */}
+        {test.sectionSet && test.sectionSet.length > 0 && (
+          <div className="mt-7 flex flex-col gap-4">
+            <div className="flex gap-2 items-center">
+              <FiUsers size={20} />
+              <h5>Test Sections</h5>
+            </div>
+            <div className="flex flex-col gap-4 pr-2">
+              {test.sectionSet?.map((section) => (
+                <div
+                  key={section.sectionName}
+                  className="w-full bg-[var(--surface-bg-tertiary)] rounded-lg"
+                >
+                  <div className="flex justify-between items-center p-4 border-b border-[var(--border-primary)]">
+                    <h6>{section.sectionName}</h6>
+                    <p>{`Questions ${section.questionRange}`}</p>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 p-2">
+                    {getSectionFields(section).map((f) => (
+                      <div
+                        key={f.field}
+                        className="flex flex-col md:flex-row items-center gap-2 p-2 text-center md:text-left md:gap-4 md:p-4 w-full"
+                      >
+                        <div
+                          className={cn(
+                            "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
+                            darkMode
+                              ? "bg-[var(--sb-neutral-bg-disabled)]/50"
+                              : "bg-[var(--sb-neutral-bg-disabled)]",
+                          )}
+                        >
+                          {f.icon}
+                        </div>
+                        <div>
+                          <span>{f.field}</span>
+                          <h6>{f.value}</h6>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Test Sections */}
-      {test.sectionSet && test.sectionSet.length > 0 && (
-        <div className="mt-7 flex flex-col gap-4">
-          <div className="flex gap-2 items-center">
-            <FiUsers size={20} />
-            <h5>Test Sections</h5>
-          </div>
-          <div className="flex flex-col gap-4 max-h-[200px] pr-2 overflow-y-auto">
-            {test.sectionSet?.map((section) => (
-              <div
-                key={section.sectionName}
-                className="w-full bg-[var(--surface-bg-tertiary)] rounded-lg"
-              >
-                <div className="flex justify-between items-center p-4 border-b border-[var(--border-primary)]">
-                  <h6>{section.sectionName}</h6>
-                  <p>{`Questions ${section.questionRange}`}</p>
-                </div>
-                <div className="grid grid-cols-3 gap-2 p-2">
-                  {getSectionFields(section).map((f) => (
-                    <div
-                      key={f.field}
-                      className="flex flex-col md:flex-row items-center gap-2 p-2 text-center md:text-left md:gap-4 md:p-4 w-full"
-                    >
-                      <div
-                        className={cn(
-                          "flex w-[30px] h-[30px] justify-center items-center rounded-md text-",
-                          darkMode
-                            ? "bg-[var(--sb-neutral-bg-disabled)]/50"
-                            : "bg-[var(--sb-neutral-bg-disabled)]"
-                        )}
-                      >
-                        {f.icon}
-                      </div>
-                      <div>
-                        <span>{f.field}</span>
-                        <h6>{f.value}</h6>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Action Buttons */}
-      <div className="flex justify-end mt-7 pb-5 sm:pb-0">
+      <div className="flex justify-end items-center absolute bottom-0 left-0 w-full h-full px-4 py-2 max-h-[80px] bg-[var(--surface-bg-secondary)]">
         <div className="flex gap-4 items-center">
           <Button 
           id={begin_mock_test_button_id}

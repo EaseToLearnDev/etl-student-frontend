@@ -67,13 +67,30 @@ export const gtmEvents: Record<string, any> = {
   report_overview_page_visit: "report_overview_page_visit",
   detail_report_mock_test_page_visit: "detail_report_mock_test_page_visit",
   detail_report_class_test_page_visit: "detail_report_class_test_page_visit",
-  detail_report_class_mock_test_page_visit:
-    "detail_report_class_mock_test_page_visit",
-  detail_report_learning_session_page_visit:
-    "detail_report_learning_session_page_visit",
-  detail_report_competitive_session_page_visit:
-    "detail_report_competitive_session_page_visit",
+  detail_report_class_mock_test_page_visit:"detail_report_class_mock_test_page_visit",
+  detail_report_learning_session_page_visit:"detail_report_learning_session_page_visit",
+  detail_report_competitive_session_page_visit:"detail_report_competitive_session_page_visit",
   all_courses_page_visit: "all_courses_page_visit",
 
 
+  Smart_learning_topic_button_click: "Smart_learning_topic_button_click",
+  competitive_session_button_click: "competitive_session_button_click",
+  learning_session_button_click: "learning_session_button_click",
+  cancel_competitive_session_button_click: "cancel_competitive_session_button_click",
+  cancel_learning_session_button_click: "cancel_learning_session_button_click",
+  start_learning_session_button_click: "start_learning_session_button_click",
+  start_competitive_session_button_click: "start_competitive_session_button_click",
+  next_competitive_session_button_click: "next_competitive_session_button_click",
+  next_learning_session_button_click: "next_learning_session_button_click",
+  competitive_session_Options_button_click: "competitive_session_Options_button_click",
+  competitive_session_Instructions_button_click: "competitive_session_Instructions_button_click",
+  Study_material_topic_button_click: "Study_material_topic_button_click",
+  Study_material_content_item_click: "Study_material_content_item_click",
+  close_content_modal_button_click: "close_content_modal_button_click",
+  study_material_filter_button_click: "study_material_filter_button_click",
+  topic_tree_expand_click: "topic_tree_expand_click",
+
+
+  
+  
 };

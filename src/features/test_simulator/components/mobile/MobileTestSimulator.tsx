@@ -20,9 +20,6 @@ import StatusGroup from "../StatusGroup";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "../ActiveQuestionPanel";
-import useTestTimerStore from "../../store/useTestTimerStore";
-import { getTimeFromSeconds } from "../../../../utils";
-import useTestStore from "../../store/useTestStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
@@ -31,10 +28,6 @@ const MobileTestSimulator = () => {
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const closeDrawer = useDrawerStore((state) => state.closeDrawer);
-  const remainingSec = useTestTimerStore((state) => state.remainingSec);
-  const isExpired = useTestTimerStore((state) => state.isExpired);
-  const isRunning = useTestTimerStore((state) => state.isRunning);
-  const timerEnabled = useTestStore((state) => state.features.timerEnabled);
   // Hooks
   // const {
   //   isSecondaryHidden,
@@ -44,25 +37,10 @@ const MobileTestSimulator = () => {
   //   handleSecondaryHide,
   // } = useChildLayout(!isAiChatOpen, () => setIsAiChatOpen(false), 0.9);
 
-  const formattedTime = getTimeFromSeconds(remainingSec);
-
   return (
     <div className="relative flex flex-col h-[100dvh]">
       {/* Header */}
       <TestHeader />
-      {/* Timer */}
-      {timerEnabled && (
-        <div className="flex flex-col items-center mt-4">
-          {isRunning ? (
-            <span className="text-center">Time Remaining</span>
-          ) : (
-            <></>
-          )}
-          <div className="text-center">
-            <h3>{isExpired ? "Time's Up" : isRunning ? formattedTime : ""}</h3>
-          </div>
-        </div>
-      )}
 
       <div className="flex flex-col w-full h-full gap-2 p-2">
         {/* Horizontal Section-wise Question List */}
