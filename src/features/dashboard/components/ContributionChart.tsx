@@ -49,14 +49,14 @@ function ContributionChart({
   renderableData,
   darkMode,
   scrollRef,
-  scroll
+  scroll,
 }: {
   color?: string;
   onDayClick: (day: ITransformedGhData) => void;
   renderableData: any;
   darkMode: boolean;
   scrollRef?: React.RefObject<HTMLDivElement | null>;
-  scroll: (data: 'left' | 'right') => void
+  scroll: (data: "left" | "right") => void;
 }) {
   if (!renderableData) {
     return (
@@ -70,7 +70,12 @@ function ContributionChart({
   }
 
   useEffect(() => {
-    scroll("right")
+    // small delay allows Safari to finalize layout before scrolling
+    const timeout = setTimeout(() => {
+      scroll("right");
+    }, 100);
+
+    return () => clearTimeout(timeout);
   }, [scrollRef]);
 
   return (
