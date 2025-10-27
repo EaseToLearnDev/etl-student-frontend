@@ -72,12 +72,12 @@ const TopicTestPage = () => {
   const showPreviousTestModal = useTTStore((s) => s.showPreviousTestModal);
   const setShowStartTestModal = useTTStore((s) => s.setShowStartTestModal);
   const setShowPreviousTestModal = useTTStore(
-    (s) => s.setShowPreviousTestModal
+    (s) => s.setShowPreviousTestModal,
   );
 
   const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
   const setIsUpgradeModalOpen = useUpgradeModalStore(
-    (s) => s.setIsUpgradeModalOpen
+    (s) => s.setIsUpgradeModalOpen,
   );
 
   const toastData = useToastStore(s => s.toastData)
@@ -87,10 +87,15 @@ const TopicTestPage = () => {
 
   // States
   const [hideSecondary, setHideSecondary] = useState<boolean>(
-    isMobile ? true : false
+    isMobile ? true : false,
   );
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
+<<<<<<< Updated upstream
+=======
+  usePageTracking(gtmEvents.topic_test_page_visit);
+
+>>>>>>> Stashed changes
   // useEffects
   useEffect(() => {
     const fetchTopicTree = async () => {

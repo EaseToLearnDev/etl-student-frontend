@@ -28,9 +28,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
   const openedCourse = useStudentStore((s) => s.studentData?.openedCourse);
 
   const course = courses?.[openedCourse ?? 0];
-  const status = course
-    ? getActiveCourseAccessStatus()
-    : "accessible";
+  const status = course ? getActiveCourseAccessStatus() : "accessible";
 
   return (
     <div className="flex items-center gap-2">
@@ -41,8 +39,8 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
         onToggle={onToggle}
         selectedIndex={openedCourse ?? 0}
         type="Course"
-        className="w-[120px] sm:w-[200px]"
-        dropdownClassName="w-[120px] sm:w-[200px]"
+        className="w-[140px] sm:w-[200px]"
+        dropdownClassName="w-[140px] sm:w-[200px]"
         getItemLabel={(item) => item.organisationName}
         renderItem={(item, _, isSelected) => (
           <div className="w-full flex items-center gap-2 justify-between">
@@ -52,7 +50,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
                 {getValidityFormatted(
                   item.validTillDate,
                   item.packTypeTitle,
-                  item.organisationName
+                  item.organisationName,
                 )}
               </span>
             </div>

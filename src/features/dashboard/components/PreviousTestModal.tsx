@@ -25,12 +25,9 @@ const PreviousTestModal = ({
         <h3 className="font-semibold text-lg mb-2">Resume Previous Test</h3>
         <div className="flex flex-col gap-2 mt-6">
           <div className="flex flex-col gap-1">
-            <span className="text-[var(--text-secondary)] font-medium">
-              Test:
-            </span>
-            <p>{prevRunningTest?.testName}</p>
+            <h5>{prevRunningTest?.testName}</h5>
           </div>
-          <p className="text-[var(--text-secondary)] mt-1">
+          <p className="text-[var(--text-secondary)]">
             You have an unfinished test session. Would you like to continue
             where you left off?
           </p>
@@ -49,6 +46,7 @@ const PreviousTestModal = ({
             >
               Continue Test
             </Button>
+<<<<<<< Updated upstream
             <Button 
             id={cancel_previous_test_modal_id}
             style="secondary" 
@@ -58,8 +56,19 @@ const PreviousTestModal = ({
               });   
             
               onClose()
+=======
+            <Button
+              // id={cancel_previous_test_modal_id}
+              style="secondary"
+              onClick={() => {
+                // pushToDataLayer({
+                //   event: gtmEvents.cancel_previous_test_modal_click,
+                // });
+
+                onClose();
+>>>>>>> Stashed changes
               }}
-              >
+            >
               Cancel
             </Button>
           </div>
@@ -69,7 +78,7 @@ const PreviousTestModal = ({
         onClick={onClose}
         className={cn(
           "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-          " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+          " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full",
         )}
       >
         <MdClose size={20} />

@@ -24,6 +24,13 @@ import {
 } from "../services/getGhActivityByDay";
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
+<<<<<<< Updated upstream
+=======
+import { usePageTracking } from "../../../hooks/usePageTracking";
+import { gtmEvents } from "../../../utils/gtm-events";
+import { Modal } from "../../../components/Modal";
+import FirstTimeUserModal from "../components/FirstTimeUser";
+>>>>>>> Stashed changes
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -31,9 +38,12 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
+  const studentData = useStudentStore((s) => s.studentData);
   const isMobile = useIsMobile();
-  const [color, setColor] = useState("green");
 
+  const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
+
+  const [color, setColor] = useState("green");
   const [year, setYear] = useState(null);
   const [apiData, setAPIData] = useState<ITransformedGhData[][] | null>(year);
   const [yearsOptions, setYearsOptions] = useState<number[] | null>(null);
@@ -46,7 +56,7 @@ const DashboardPage = () => {
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
-    null
+    null,
   );
 
   const createDate = (_date: Date) => {
@@ -63,6 +73,16 @@ const DashboardPage = () => {
   };
 
   const isClassTest = activeCourse?.tabs?.classTest;
+
+  useEffect(() => {
+    const firstTimeUser = localStorage.getItem("firstTimeUser");
+    if (!firstTimeUser && studentData?.firstTimeUser === 1) {
+      setShowFirstTimeModal(true);
+
+      // set in local storage so modal only open once
+      localStorage.setItem("firstTimeUser", "1");
+    }
+  }, [studentData?.firstTimeUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -153,11 +173,15 @@ const DashboardPage = () => {
 
       {/* Bottom Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2  gap-5 min-h-[250px] max-h-[250px]">
+<<<<<<< Updated upstream
         <WidgetCard
           title="Tests activity "
           description={date}
           className="min-h-[400px] relative "
         >
+=======
+        <WidgetCard title="Tests activity " className="min-h-[400px] relative ">
+>>>>>>> Stashed changes
           {loadingGhActivityByDay ? (
             <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
           ) : (
@@ -184,7 +208,10 @@ const DashboardPage = () => {
           </>
         )}
       </div>
-
+      <FirstTimeUserModal
+        isOpen={showFirstTimeModal}
+        onClose={() => setShowFirstTimeModal(false)}
+      />
       {/* Toast */}
       {showToast && toastData && (
         <Toast
