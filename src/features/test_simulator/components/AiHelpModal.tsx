@@ -90,10 +90,10 @@ const Main = () => {
 
       {/* Secondary Actions */}
       {!testStatus || testStatus !== 1 ? (
-        <div className="flex items-center gap-2 mt-4">
+        <div className="flex flex-col sm:flex-row w-full items-center justify-center gap-2 mt-2">
           <Button
             style="secondary"
-            className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
+            className="hover:bg-[var(--surface-bg-tertiary)] w-full"
             onClick={() =>
               goGoogle({
                 questionText: currentQuestion?.questionBody,
@@ -106,7 +106,7 @@ const Main = () => {
           </Button>
           <Button
             style="secondary"
-            className="flex-1 hover:bg-[var(--surface-bg-tertiary)]"
+            className="hover:bg-[var(--surface-bg-tertiary)] w-full"
             onClick={() =>
               setCurrentModalView(AIModalView.StudyMaterialContent)
             }

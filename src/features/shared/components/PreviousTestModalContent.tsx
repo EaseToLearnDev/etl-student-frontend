@@ -41,9 +41,9 @@ const PreviousTestModalContent = ({
         <div className="flex gap-4 items-center">
           <Button onClick={onStart}>Start New</Button>
           <Button onClick={onResume} style="secondary">Resume</Button>
-          <Button style="secondary" onClick={onClose}>
+          {/* <Button style="secondary" onClick={onClose}>
             Cancel
-          </Button>
+          </Button> */}
         </div>
       </div>
       <div
