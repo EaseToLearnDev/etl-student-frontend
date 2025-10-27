@@ -65,8 +65,6 @@ export const ActivityList = ({
 
     const { right } = scrollChildRef.current.getBoundingClientRect();
 
-    console.log("right: ", right);
-
     scrollRef.current.scrollBy({
       left: right,
       behavior: "smooth",
