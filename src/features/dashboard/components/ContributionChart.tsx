@@ -60,6 +60,9 @@ scrollChildRef,
   scrollChildRef?: React.RefObject<HTMLDivElement | null>;
   scroll: (data: "left" | "right") => void;
 }) {
+  useEffect(() => {
+    scroll('right');
+  }, [scrollRef, scrollChildRef])
 
   return (
     <div
