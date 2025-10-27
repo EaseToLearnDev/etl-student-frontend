@@ -3,6 +3,8 @@ import { getColor } from "../utils/getColor";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import EmptyState from "../../../components/EmptyState";
 import { LuActivity } from "react-icons/lu";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 export interface ActivityData {
   count: number;
@@ -32,7 +34,14 @@ const DayCell = memo(
         } attempted on ${day.date}`}
         onMouseEnter={(e) => onHover(e, day)}
         onMouseLeave={onLeave}
-        onClick={() => onDayClick(day)}
+        onClick={() =>{
+          pushToDataLayer({
+            event: gtmEvents.activity_chart_day_click,
+            id:"activity_chart_day_id"
+          })
+
+        
+           onDayClick(day)}}
         className={`w-[clamp(1rem,1.2vw,1rem)] h-[clamp(1rem,1.2vw,1rem)] transition-transform transform hover:scale-110 child cursor-pointer rounded-sm ${getColor(
           day.contribution,
           color,

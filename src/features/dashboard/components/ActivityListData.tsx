@@ -6,6 +6,8 @@ import Button from "../../../components/Button";
 import { useNavigate } from "react-router";
 import { LuArrowRight, LuFilePenLine } from "react-icons/lu";
 import TestEndedModalContent from "../../test_simulator/components/TestEndedModalContent";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 function Test({
   testData,
@@ -79,9 +81,16 @@ function Test({
       </div>
 
       <Button
+        id="activity_view_test_modal_id"
         style="secondary"
         type="button"
-        onClick={() => onNavigate(testData.testSession, testData.testMode, testData.testType)}
+        onClick={() => {
+          pushToDataLayer({
+            event: gtmEvents.activity_view_test_modal_click,
+            test_mode: testData.testMode,
+            test_title: testData.testTitle,
+          })
+          onNavigate(testData.testSession, testData.testMode, testData.testType)}}
         className="text-xs rounded-full py-2"
       >
         View test

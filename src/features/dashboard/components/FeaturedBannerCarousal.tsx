@@ -47,6 +47,12 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
   // const setShowTutorialModal = useTutorialStore((s) => s.setShowTutorialModal);
   const EXPLORE_FEATURES_BUTTON_ID = "explore_features_button_id";
   const COMPLETE_PROFILE_BUTTON_ID = "complete_profile_button_id";
+  const handleCloseModal = () => {
+    pushToDataLayer({
+      event: gtmEvents.feature_banner_close_button_click,
+      id: "feature_banner_close_button_id",
+    });
+  };
 
   const mobile = useIsMobile();
 
@@ -75,7 +81,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
                 event: gtmEvents.explore_features_button_click,
               });
               // setShowTutorialModal(true);
-              setSelectedSlideIndex(1)
+              setSelectedSlideIndex(1);
             }}
           >
             Explore Features
@@ -112,8 +118,15 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
         {tutorialCards.map((card, i) => (
           <div
             key={i}
-            onClick={() => setSelectedContent(card.content as TutorialContent)}
-            className="border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
+            onClick={() => {
+              pushToDataLayer({
+                event: gtmEvents.feature_banner_tutorial_cards_click,
+                id: "feature_banner_tutorial_cards_id",
+                card_title : card.title
+              });
+              setSelectedContent(card.content as TutorialContent);
+            }}
+            className=" border cursor-pointer border-white/40 p-4 rounded-lg flex flex-col gap-2 items-center justify-start text-white text-center hover:bg-white/10 transition"
           >
             <div className="w-8 h-8 flex bg-white/10 rounded-md justify-center items-center text-2xl">
               {card.icon}
@@ -163,7 +176,6 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           <ChevronRightIcon className="size-4" />
         </button>
       </div>
-
       {/* Dots */}
       <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 flex gap-2">
         {slides.map((_, i) => (
@@ -177,7 +189,6 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           />
         ))}
       </div>
-
       {/* Slides wrapper */}
       <div
         className="flex w-full h-full transition-transform duration-500 ease-in-out"
@@ -185,11 +196,14 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       >
         {slides}
       </div>
-
+      {/* Video List Modal */}
       {selectedContent && !selectedVideo && (
         <Modal
           isOpen={selectedContent !== null}
-          onClose={() => setSelectedContent(null)}
+          onClose={() => {
+            handleCloseModal();
+            setSelectedContent(null);
+          }}
           className="p-6 lg:p-10"
           size="lg"
         >
@@ -200,7 +214,13 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               {selectedContent.data.map((item: TutorialVideo, idx: number) => (
                 <div
                   key={idx}
-                  onClick={() => setSelectedVideo(item)}
+                  onClick={() => {
+                    pushToDataLayer({
+                      id: "feature_banner_video_link_id",
+                      event: gtmEvents.feature_banner_video_link_click,
+                      video_title: item.title
+                    });
+                    setSelectedVideo(item)}}
                   className="flex flex-col p-5 border border-[var(--border-primary)] rounded-xl shadow-sm hover:shadow-lg hover:bg-[var(--surface-bg-tertiary)] transition-all duration-300 cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
@@ -215,9 +235,12 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               ))}
             </div>
             <div
-              onClick={() => setSelectedContent(null)}
+              onClick={() => {
+                handleCloseModal();
+                setSelectedContent(null);
+              }}
               className={cn(
-                "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+                " fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
                 " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
               )}
             >
@@ -226,12 +249,16 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           </div>
         </Modal>
       )}
+      // Video Modal (Full screen)
       {selectedVideo && (
         <Modal
           isOpen={selectedVideo !== null}
-          onClose={() => setSelectedVideo(null)}
+          onClose={() => {
+            handleCloseModal();
+            setSelectedVideo(null);
+          }}
           className="p-4"
-          containerClassName="!h-full !w-full !max-w-full"
+          containerClassName=" !h-full !w-full !max-w-full"
         >
           <MediaContentModalView
             content={{
@@ -242,7 +269,10 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
             }}
           />
           <div
-            onClick={() => setSelectedVideo(null)}
+            onClick={() => {
+              handleCloseModal();
+              setSelectedVideo(null);
+            }}
             className={cn(
               "fixed top-5 right-5 w-[40px] h-[40px] flex justify-center items-center cursor-pointer",
               "text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border border-[var(--border-primary)] rounded-full"
