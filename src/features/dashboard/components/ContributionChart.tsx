@@ -48,25 +48,15 @@ function ContributionChart({
   onDayClick,
   renderableData,
   darkMode,
-  scrollRef,
-scrollChildRef,
-  scroll,
 }: {
   color?: string;
   onDayClick: (day: ITransformedGhData) => void;
   renderableData: any;
   darkMode: boolean;
-  scrollRef?: React.RefObject<HTMLDivElement | null>;
-  scrollChildRef?: React.RefObject<HTMLDivElement | null>;
-  scroll: (data: "left" | "right") => void;
 }) {
-  useEffect(() => {
-    scroll('right');
-  }, [scrollRef, scrollChildRef])
 
   return (
     <div
-      ref={scrollRef}
       className="flex flex-col justify-start items-start gap-2 w-full overflow-x-auto pb-4 h-[180px] mb-3"
     >
       {/* <div
@@ -85,7 +75,7 @@ scrollChildRef,
           );
         })}
       </div> */}
-      <div ref={scrollChildRef} className="flex flex-col justify-start gap-4">
+      <div className="flex flex-col justify-start gap-4">
         <div className="flex items-start justify-start gap-2 h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)] ">
           <div className="flex flex-col justify-between items-start mt-7  h-[calc(7*clamp(1rem,1.2vw,1rem)+6*0.25rem)]  text-xs text-[var(--text-tertiary)] text-bold">
             {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d, i) => (
@@ -114,19 +104,32 @@ scrollChildRef,
                         <div
                           key={weekIdx}
                           className="flex flex-col gap-1 parent "
+                          ref={(el) => {
+                          if (!el) return;
+                          if (
+                            monthIdx === renderableData.length - 1 &&
+                            weekIdx === month.weeks.length - 1
+                          ) {
+                            el.scrollIntoView({
+                            behavior: "auto",
+                            block: "nearest",
+                            inline: "end",
+                            });
+                          }
+                          }}
                         >
                           {week.map((day: any, dayIdx: any) => {
-                            return (
-                              <DayCell
-                                key={dayIdx}
-                                day={day}
-                                color={color}
-                                onHover={() => {}}
-                                onLeave={() => {}}
-                                onDayClick={onDayClick}
-                                darkMode={darkMode}
-                              />
-                            );
+                          return (
+                            <DayCell
+                            key={dayIdx}
+                            day={day}
+                            color={color}
+                            onHover={() => {}}
+                            onLeave={() => {}}
+                            onDayClick={onDayClick}
+                            darkMode={darkMode}
+                            />
+                          );
                           })}
                         </div>
                       );
