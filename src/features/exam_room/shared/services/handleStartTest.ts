@@ -19,7 +19,7 @@ export const handleStartTest = async ({
     testId: String(testId),
     testType: String(testType),
   };
-  if (classTestId !== undefined) params.classTestId = classTestId;
+  if (classTestId) params.classTestId = classTestId;
   const queryString = toQueryString(params);
   navigate(`/test-simulator?${queryString}`);
 };

@@ -141,7 +141,8 @@ const ClassTestPage = () => {
                 handleStartTest({
                   navigate,
                   testId: selectedTest?.testId ?? null,
-                  testType: 3,
+                  testType: selectedTest?.testType,
+                  classTestId: selectedTest?.scheduleId,
                 }),
             });
           }}

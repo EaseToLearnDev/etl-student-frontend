@@ -4,18 +4,23 @@ import { MdClose } from "react-icons/md";
 // Utils
 import cn from "../../../utils/classNames";
 import Button from "../../../components/Button";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import { LuLoader } from "react-icons/lu";
 
 interface SubmissionModalContentProps {
   onSubmit: () => void;
   onContinueLater: () => void;
   onClose: () => void;
+  hideOnContinueLater?: boolean;
 }
 
 const SubmissionModalContent = ({
   onSubmit,
   onContinueLater,
   onClose,
+  hideOnContinueLater = false,
 }: SubmissionModalContentProps) => {
+  const loading = useLoadingStore((s) => s.loading);
   return (
     <div className="relative p-2 px-4">
       <div className="flex flex-col gap-4">
@@ -23,16 +28,37 @@ const SubmissionModalContent = ({
         <h6 className="text-[var(--text-secondary)]">
           Click <b className="text-[var(--text-secondary)]">Submit Now</b> to
           finalize your session and view results, or{" "}
-          <b className="text-[var(--text-secondary)]">Save & Continue Later</b> if
-          you wish to pause and resume it later.
+          <b className="text-[var(--text-secondary)]">Save & Continue Later</b>{" "}
+          if you wish to pause and resume it later.
         </h6>
       </div>
       <div className="w-full flex justify-end mt-7">
         <div className="w-full flex flex-col test_submit_modal_action_buttons gap-4 items-center">
-          <Button onClick={onSubmit} className="w-full">Submit Now</Button>
-          <Button onClick={onContinueLater} style="secondary" className="w-full">
-            Save & Continue Later
-          </Button>
+          {loading ? (
+            <Button className="w-full" disabled>
+              <div className="flex justify-center items-center gap-2">
+                <LuLoader className="animate-spin size-4" />
+                <p className="text-[var(--text-secondary)]">Loading...</p>
+              </div>
+            </Button>
+          ) : (
+            <>
+              <Button onClick={onSubmit} className="w-full max-w-[300px]">
+                Submit Now
+              </Button>
+              {!hideOnContinueLater ? (
+                <Button
+                  onClick={onContinueLater}
+                  style="secondary"
+                  className="w-full max-w-[300px]"
+                >
+                  Save & Continue Later
+                </Button>
+              ) : (
+                <></>
+              )}
+            </>
+          )}
         </div>
       </div>
       <div

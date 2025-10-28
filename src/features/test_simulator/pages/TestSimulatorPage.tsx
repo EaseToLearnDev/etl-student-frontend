@@ -207,6 +207,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           onSubmit={() => handleTestSubmit(navigate)}
           onContinueLater={() => handleContinueLater(navigate)}
           onClose={() => setIsSubmissionModalOpen(false)}
+          hideOnContinueLater={
+            testData?.testType === 4 || testData?.testType === 5 ? true : false
+          }
         />
       </Modal>
 

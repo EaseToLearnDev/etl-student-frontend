@@ -13,6 +13,7 @@ import {
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
 import { serializeStudentSubjectiveResponse } from "./studentResponseHandler";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -29,6 +30,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   const { studentData, activeCourse } = useStudentStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
   const { setToast } = useToastStore.getState();
+  const { setLoading } = useLoadingStore.getState();
+
   const currentQuestionIndex = useTestStore
     .getState()
     .getCurrentQuestionIndex();
@@ -36,6 +39,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   if (!studentData) return;
 
   let testMode = "";
+  setLoading(true);
 
   if (testConfig?.assessmentMode && testConfig?.assessmentMode === "beginner") {
     testMode = "Learning Session";
@@ -139,8 +143,10 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       title: "Failed to Submit Continue Test",
       type: ToastType.DANGER,
     });
+    setLoading(false);
     return;
   }
+  setLoading(false);
 
   let returnPage = "";
   switch (testData?.testType) {
