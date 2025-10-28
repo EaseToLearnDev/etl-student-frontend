@@ -1,6 +1,10 @@
 import { useGuestStore } from "../../../global/hooks/useGuestStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import type { Course, StudentData, StudentDataResponse } from "../../shared/types";
+import type {
+  Course,
+  StudentData,
+  StudentDataResponse,
+} from "../../shared/types";
 import { guestVerifyOtpSignup } from "../api/guestVerifyOtpSignup.api";
 
 interface LoadVerifyOtpProps {
@@ -32,41 +36,13 @@ export const loadVerifyOtp = async ({
     data.append("device", "web");
 
     const res = await guestVerifyOtpSignup(data);
-    
+
     if (res.responseTxt === "invalid_otp") {
       setError("Invalid Otp");
       return null;
     }
 
     const responseData: StudentDataResponse = res.obj;
-    const courses = responseData.courses.map((c) => {
-      const tabs: Record<string, boolean> = {
-        dashboard: !!c.dashboard,
-        report: !!c.report,
-        studyMaterial: !!c.studyMaterial,
-        selfTest: !!c.selfTest,
-        topicTest: !!c.topicTest,
-        mockTest: !!c.mockTest,
-        dynamicMockTest: !!c.dynamicMockTest,
-        classTest: !!c.classTest,
-        teacherHelp: !!c.teacherHelp,
-        tonyHelp: !!c.tonyHelp,
-        otherCourses: !!c.otherCourses,
-      };
-      const course: Course = {
-        templateId: c.templateId,
-        validityId: c.validityId,
-        courseId: c.courseId,
-        packTypeId: c.packTypeId,
-        benchmark: c.benchmark,
-        organisationName: c.organisationName,
-        validTillDate: c.validTillDate,
-        packTypeTitle: c.packTypeTitle,
-        tabs: tabs,
-      };
-      return course;
-    });
-
     const studentData: StudentData = {
       openedCourse: responseData.openedCourse,
       firstTimeUser: responseData.firstTimeUser,
@@ -79,18 +55,12 @@ export const loadVerifyOtp = async ({
       status: responseData.status,
       loginId: responseData.loginId,
       schools: responseData.schools,
-      courses: courses ?? [],
+      courses: [],
       profilePic: responseData.profilePic,
       deleteFlag: responseData.deleteFlag,
     };
 
     setStudentData(studentData);
-    //  if(courses.length === 0) {
-    //   setOpenCourseCardsModal(true);
-    //   return null;
-    //  }
-
-    return res;
   } catch (error) {
     console.log("Error Submitting Test: ", error);
     return null;

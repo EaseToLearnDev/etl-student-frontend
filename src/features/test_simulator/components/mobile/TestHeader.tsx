@@ -5,6 +5,7 @@ import useTestStore from "../../store/useTestStore";
 import Button from "../../../../components/Button";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
+import { useGuestStore } from "../../../../global/hooks/useGuestStore";
 
 /**
  * Renders the header section for the test simulator on mobile devices.
@@ -12,7 +13,7 @@ import { getTimeFromSeconds } from "../../../../utils";
 const TestHeader = () => {
   // const testTitle = useTestStore((state) => state.testData?.testName) || "";
   const setIsSubmissionModalOpen = useTestStore(
-    (state) => state.setIsSubmissionModalOpen
+    (state) => state.setIsSubmissionModalOpen,
   );
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   const isExpired = useTestTimerStore((state) => state.isExpired);
@@ -20,6 +21,11 @@ const TestHeader = () => {
   const timerEnabled = useTestStore((state) => state.features.timerEnabled);
   const remainingSec = useTestTimerStore((state) => state.remainingSec);
   const formattedTime = getTimeFromSeconds(remainingSec);
+
+  const setShowGuestTestSubmitModal = useGuestStore(
+    (s) => s.setShowGuestTestSubmitModal,
+  );
+  const testMode = useTestStore((s) => s.testMode);
 
   return (
     <div className="flex items-center justify-between gap-4 py-2 px-4">
@@ -43,7 +49,15 @@ const TestHeader = () => {
       {/* Submit Button */}
       {!correctResponseEnabled && (
         <div className="flex items-center gap-2">
-          <Button onClick={() => setIsSubmissionModalOpen(true)}>Submit</Button>
+          <Button
+            onClick={() =>
+              testMode === "guest"
+                ? setShowGuestTestSubmitModal(true)
+                : setIsSubmissionModalOpen(true)
+            }
+          >
+            Submit
+          </Button>
         </div>
       )}
     </div>
