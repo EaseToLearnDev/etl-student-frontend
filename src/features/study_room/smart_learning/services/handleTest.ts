@@ -15,7 +15,7 @@ export const handleStartTest = async (
   navigate: NavigateFunction,
   mode: ModeType,
   selectedTopic: Topic | null,
-  selectedTestOption: TestOption,
+  selectedTestOption: TestOption
 ) => {
   const { studentData, activeCourse } = useStudentStore.getState();
   if (!studentData || !activeCourse) return;
@@ -50,17 +50,20 @@ export const handleStartTest = async (
  */
 export const handleResumeTest = async (
   navigate: NavigateFunction,
-  previousRunningTest: PrevRunningTest | null,
+  previousRunningTest: PrevRunningTest | null
 ) => {
   if (previousRunningTest) {
-    let params = {
+    let params: Record<string, any> = {
       testSession: String(previousRunningTest.testSession),
       testType: String(previousRunningTest.testType),
-      assessmentMode:
+    };
+
+    if (previousRunningTest.testType == 1) {
+      params.assessmentMode =
         previousRunningTest.testMode === "Learning Session"
           ? "beginner"
-          : "advance",
-    };
+          : "advance";
+    }
 
     const queryString = toQueryString(params);
     navigate(`/test-simulator?${queryString}`);
