@@ -376,7 +376,7 @@ math {
 }
 
 .table_responsive table {
-  width: 100%;
+  width: 100% !important;
   background: var(--surface-bg-tertiary);
   border-collapse: collapse;
   border-spacing: 0;
@@ -385,12 +385,12 @@ math {
 
 /* If <thead> exists, apply styles to the first row in the <thead> */
 .table_responsive table thead > tr {
-  background-color: var(--surface-bg-tertiary);
+  background-color: var(--surface-bg-tertiary) !important;
 }
 
 .table_responsive > table > tbody > tr > td {
-  padding: 16px;
-  border-bottom: 1px solid var(--border-primary);
+  padding: 8px !important;
+  border: 1px solid var(--border-primary) !important;
 }
 
 .table_responsive p {
@@ -400,7 +400,7 @@ math {
 /* If <thead> does not exist, apply styles to the first <tr> in the tbody */
 .table_responsive table tbody:has(thead) tr:first-child,
 .table_responsive table:not(:has(thead)) tr:first-child {
-  background-color: var(--surface-bg-secondary);
+  background-color: var(--surface-bg-secondary) !important;
 }
 
 /* Table Response End */
@@ -420,8 +420,8 @@ math {
 }
 .test_simulator_table table tbody > tr > td,
 .test_simulator_table table thead > tr > th {
-  border: 1px solid var(--border-primary);
-  background: var(--surface-bg-secondary);
+  border: 1px solid var(--border-primary) !important;
+  background: var(--surface-bg-secondary) !important;
   border-radius: 6px;
   width: 30px;
   height: 30px;
