@@ -11,17 +11,17 @@ export const getWeekClasses = async ({
   token,
   classId,
 }: GetWeekClassesRequest) => {
-  const res = await makeRequest("get", "get-week-classes", null, {
+  const res = await makeRequest("get", "/get-week-classes", null, {
     params: {
       classId: classId,
     },
     headers: {
       loginId: loginId,
       token: token,
+      device: "web"
     },
   });
 
-  console.log(res)
 
-  return res?.data?.obj ?? null;
+  return res?.data ?? null;
 };
