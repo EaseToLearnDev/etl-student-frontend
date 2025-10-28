@@ -19,7 +19,7 @@ import EmptyState from "../../../components/EmptyState";
 import ReportTablePage from "../components/ReportTablePage";
 import { useNavigate } from "react-router";
 import { loadTablsForReports } from "../services/loadTabsForReports";
-import { LuFileSearch, LuFileUser } from "react-icons/lu";
+import { LuFileUser } from "react-icons/lu";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 const REPORT_CATEGORY_TAB_ID = "report-category-tabs";

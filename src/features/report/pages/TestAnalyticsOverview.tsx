@@ -42,6 +42,7 @@ import EmptyState from "../../../components/EmptyState";
 import { useNavigate, useSearchParams } from "react-router";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
+import { pushToDataLayer } from "../../../utils/gtm";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
 import Button from "../../../components/Button";
@@ -1048,10 +1049,27 @@ export const TestAnalyticsOverview = () => {
           tabs={visibleTabs.map((t) => t.label)}
           selectedIndex={selectedIndex}
           onSelect={(index) => {
+            const tabLabel = visibleTabs[index]?.label || `tab_${index}`;
+
+            // create sanitized name for event/id
+            const sanitized = tabLabel.toLowerCase().replace(/\s+/g, "_");
+            const eventName = `${sanitized}_button_click`;
+
+            // push event with id and testType (only include if not null)
+            try {
+              pushToDataLayer({
+                event: eventName,
+                id: sanitized,
+                test_id: testType ?? undefined,
+                test_title: tabLabel
+              });
+            } catch (err) {
+              console.warn("GTM pushToDataLayer failed:", err);
+            }
+
             if (index === 1) {
               navigate(
-                `/testview?testSession=${testType === 3 ? "mt" : "st"
-                }${testSession}`
+                `/testview?testSession=${testType === 3 ? "mt" : "st"}${testSession}`
               );
             }
             setSelectedIndex(index);
