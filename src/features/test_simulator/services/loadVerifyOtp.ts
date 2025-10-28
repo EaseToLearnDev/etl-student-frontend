@@ -61,6 +61,7 @@ export const loadVerifyOtp = async ({
     };
 
     setStudentData(studentData);
+    return true;
   } catch (error) {
     console.log("Error Submitting Test: ", error);
     return null;
