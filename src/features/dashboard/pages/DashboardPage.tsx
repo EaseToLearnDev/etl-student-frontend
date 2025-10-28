@@ -24,6 +24,10 @@ import {
 import { getGhActivityYears } from "../services/getGhActivityYears";
 import { getGhActivity } from "../services/getGhActivity";
 import FirstTimeUserModal from "../components/FirstTimeUser";
+import { loadWeekScheduledClasses } from "../services/loadWeekScheduledClasses";
+import ScheduledClassesList from "../components/ScheduledClassesList";
+import type { WeekClassScheduleList } from "../dashboard.types";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
@@ -32,9 +36,13 @@ const DashboardPage = () => {
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const studentData = useStudentStore((s) => s.studentData);
+  const loading = useLoadingStore((s) => s.loading);
   const isMobile = useIsMobile();
 
   const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
+  const [scheduledClasses, setScheduledClasses] = useState<
+    WeekClassScheduleList[] | null
+  >(null);
 
   const [color, setColor] = useState("green");
   const [year, setYear] = useState(null);
@@ -81,9 +89,11 @@ const DashboardPage = () => {
     const fetchData = async () => {
       const classTestList = await loadClassTestList();
       const prevRunningTest = await loadPreviousRunningTest();
+      const scheduledClasses = await loadWeekScheduledClasses();
 
       if (classTestList) setTestList(classTestList);
       if (prevRunningTest) setPrevRunningTest(prevRunningTest);
+      if (scheduledClasses) setScheduledClasses(scheduledClasses);
     };
     fetchData();
 
@@ -145,8 +155,11 @@ const DashboardPage = () => {
               <>
                 <WidgetCard
                   title="Class Tests"
-                  className="h-full min-h-[300px]"
+                  className="h-full max-h-[250px]"
                 >
+                  <ScheduledClassesList data={scheduledClasses} loading={loading} />
+                </WidgetCard>
+                <WidgetCard title="Class Tests" className="h-full">
                   <ClassTestList />
                 </WidgetCard>
               </>
@@ -182,9 +195,14 @@ const DashboardPage = () => {
         </WidgetCard>
 
         {isMobile && isClassTest && (
-          <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
-            <ClassTestList />
-          </WidgetCard>
+          <>
+            <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
+              <ClassTestList />
+            </WidgetCard>
+            <WidgetCard title="Class Tests" className="h-full max-h-[250px]">
+              <ScheduledClassesList data={scheduledClasses} loading={loading} />
+            </WidgetCard>
+          </>
         )}
         {(isClassTest || isMobile) && (
           <>

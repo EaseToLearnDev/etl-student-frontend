@@ -3,7 +3,7 @@ export interface JumpBackInCardType {
   topicTitle: string;
 }
 
-export interface WeekClassTestsList {
+export interface WeekClassScheduleList {
   id: number;
   topicTitle: string;
   topicId: number;

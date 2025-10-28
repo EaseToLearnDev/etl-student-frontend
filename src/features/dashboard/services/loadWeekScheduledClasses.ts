@@ -1,8 +1,10 @@
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 import { getWeekClasses } from "../apis/getWeekClassses.api";
 
-export const getWeekScheduledClasses = async () => {
+export const loadWeekScheduledClasses = async () => {
   const { studentData } = useStudentStore.getState();
+  const {setLoading} = useLoadingStore.getState()
 
   if (!studentData) return null;
 
@@ -14,11 +16,17 @@ export const getWeekScheduledClasses = async () => {
 
   if (!classId) return null;
 
+  setLoading(true)
   try {
-    const data = await getWeekClasses({ loginId, token, classId });
-    return data;
+    const res = await getWeekClasses({ loginId, token, classId });
+    if(res.message === "Classes not found"){
+      return null
+    }
+    return res.obj;
   } catch (error) {
     console.error("Failed to fetch Week Class Tests", error);
     return null;
+  } finally {
+    setLoading(false)
   }
 };
