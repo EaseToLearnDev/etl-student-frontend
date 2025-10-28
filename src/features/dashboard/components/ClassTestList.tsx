@@ -26,18 +26,20 @@ const ClassTestList = () => {
   return (
     <>
       {testList && testList?.length > 0 ? (
-        testList?.map((t, idx) => (
-          <div className="flex flex-row 2xl:flex-col max-h-full overflow-x-auto 2xl:overflow-y-auto pt-4">
-            <ClassTestCard
-              key={idx}
-              test={t}
-              onStart={(test: ClassTest) => {
-                setSelectedTest(test);
-                setShowStartTestModal(true);
-              }}
-            />
-          </div>
-        ))
+        <div className="max-h-[220px] sm:max-h-[300px] mt-1 overflow-x-auto 2xl:overflow-y-auto px-2">
+          {testList?.map((t, idx) => (
+            <div className="flex flex-row 2xl:flex-col  pt-4">
+              <ClassTestCard
+                key={idx}
+                test={t}
+                onStart={(test: ClassTest) => {
+                  setSelectedTest(test);
+                  setShowStartTestModal(true);
+                }}
+              />
+            </div>
+          ))}
+        </div>
       ) : (
         <EmptyState
           title='No scheduled test available'
