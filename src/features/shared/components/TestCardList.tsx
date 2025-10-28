@@ -33,7 +33,7 @@ const TestCardList = ({
   )
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 pb-15">
       {tests?.map((test, index) => {
         const normalized = normalizeTestData(test);
         return (

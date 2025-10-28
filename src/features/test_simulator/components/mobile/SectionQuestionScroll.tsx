@@ -11,11 +11,7 @@ import QuestionCard from "../Question";
 const SectionQuestionScroll = () => {
   const currentQuestion = useTestStore((state) => state.getCurrentQuestion());
   const testData = useTestStore((s) => s.testData);
-  const currentSection = useTestStore((state) =>
-    state
-      .getActiveSectionsUI()
-      .find((s) => s.sectionName === currentQuestion?.sectionName),
-  );
+  const questionList = testData?.questionSet;
   const currentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -26,23 +22,19 @@ const SectionQuestionScroll = () => {
     });
   }, [currentQuestion]);
 
-  if (!currentSection?.questionList) return null;
+  if (!questionList || questionList?.length === 0) return null;
   return (
     <div className="w-full bg-[var(--surface-bg-primary)] rounded-[20px] p-5">
-      <div className="flex flex-col justify-center gap-3 items-center">
-        <h3 className="text-center">{currentQuestion?.sectionName}</h3>
         <div className="w-full overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 max-w-max px-2">
-            {currentSection.questionList.map((q, i: number) => {
+            {questionList.map((q, i: number) => {
               const isCurrent = q.questionId === currentQuestion?.questionId;
               return (
                 <div key={q.questionId} ref={isCurrent ? currentRef : null}>
                   <QuestionCard
                     question={q}
                     questionNumber={
-                      (testData?.sectionSet.find(
-                        (s) => s.sectionName === currentSection.sectionName,
-                      )?.questionNumbers[i].questionIndex ?? 0) + 1
+                      i+1
                     }
                   />
                 </div>
@@ -51,7 +43,6 @@ const SectionQuestionScroll = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 

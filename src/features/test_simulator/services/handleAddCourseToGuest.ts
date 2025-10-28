@@ -86,8 +86,8 @@ export const handleAddCourseToGuest = async (navigate: NavigateFunction) => {
       });
       return res;
     }
-  } catch (error) {
-    console.log("Error Adding Courses: ");
+  } catch (error: any) {
+    console.log("Error Adding Courses: " + error.message);
     return null;
   }
 };

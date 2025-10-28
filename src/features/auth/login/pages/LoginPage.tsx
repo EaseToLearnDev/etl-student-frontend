@@ -26,7 +26,7 @@ import { gtmEvents } from "../../../../utils/gtm-events";
 const LOGIN_BUTTON_CLICK_ID = "login_button_click";
 const GET_OTP_BUTTON_CLICK_ID = "get_otp_button_click";
 const Login_signup_click = "login_signup_click";
-const forget_password_button_id = "forget_password_button_click"
+const forget_password_button_id = "forget_password_button_click";
 
 /**
  * Login page component for user authentication (Password + OTP).
@@ -84,10 +84,12 @@ const LoginPage = () => {
             <a
               href={`${import.meta.env.VITE_FRONTEND_URL}/create-account`}
               className="!font-bold text-[var(--sb-ocean-bg-active)]"
-              id = {Login_signup_click}
-              onClick={() => pushToDataLayer({
-                event: gtmEvents.login_signup_click
-              })}
+              id={Login_signup_click}
+              onClick={() =>
+                pushToDataLayer({
+                  event: gtmEvents.login_signup_click,
+                })
+              }
             >
               Sign Up
             </a>
@@ -106,8 +108,10 @@ const LoginPage = () => {
             {/* OTP Verification Section */}
             {token ? (
               <VerifyOtpContent
-                onCancel={() => {setToken(null)}}
-                onVerify={handleVerifyOtp}
+                onCancel={() => {
+                  setToken(null);
+                }}
+                onVerify={(otp) => handleVerifyOtp(otp, navigate)}
                 onResend={() => HandleLogin(navigate, loginWith, deviceType)}
                 error={errorMessage}
                 type={loginWith === "password" ? "Email" : "Mobile"}
@@ -219,7 +223,11 @@ const LoginPage = () => {
                   {/* Submit Button */}
                   {/* Login CTA - push different GTM clickId/event for 'Login' vs 'Get OTP' */}
                   <Button
-                    id={loginWith === "password" ? LOGIN_BUTTON_CLICK_ID : GET_OTP_BUTTON_CLICK_ID}
+                    id={
+                      loginWith === "password"
+                        ? LOGIN_BUTTON_CLICK_ID
+                        : GET_OTP_BUTTON_CLICK_ID
+                    }
                     style="primary"
                     type="submit"
                     className="mt-8 w-full"
@@ -228,8 +236,12 @@ const LoginPage = () => {
                         ? undefined
                         : () => {
                             const isPassword = loginWith === "password";
-                            const clickId = isPassword ? LOGIN_BUTTON_CLICK_ID : GET_OTP_BUTTON_CLICK_ID;
-                            const eventName = isPassword ? gtmEvents.login_button_click : gtmEvents.get_otp_button_click;
+                            const clickId = isPassword
+                              ? LOGIN_BUTTON_CLICK_ID
+                              : GET_OTP_BUTTON_CLICK_ID;
+                            const eventName = isPassword
+                              ? gtmEvents.login_button_click
+                              : gtmEvents.get_otp_button_click;
 
                             // Push click id to GTM dataLayer so GTM triggers can use the 'clickId' variable
                             pushToDataLayer({
@@ -260,13 +272,14 @@ const LoginPage = () => {
                   {loginWith === "password" && (
                     <div className="flex justify-center mt-10 gap-[2px]">
                       <Link
-                      id={forget_password_button_id}
+                        id={forget_password_button_id}
                         to={"/forget-password"}
                         className="text-[var(--sb-ocean-bg-active)]"
                         onClick={() =>
                           pushToDataLayer({
-                            event: gtmEvents.forget_password_button_click
-                          })}
+                            event: gtmEvents.forget_password_button_click,
+                          })
+                        }
                       >
                         <h6 className="!font-bold hover:underline">
                           Forget Password?

@@ -13,6 +13,7 @@ import {
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { ToastType } from "../../shared/types";
 import { serializeStudentSubjectiveResponse } from "./studentResponseHandler";
+import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 /**
  * Handles the logic for continuing the test session later by saving the current test state.
@@ -24,11 +25,13 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
     questionStatusMap,
     testConfig,
     questionTimeMap,
-    helpCount,
+    questionHelpMap,
   } = useTestStore.getState();
   const { studentData, activeCourse } = useStudentStore.getState();
   const { timeSpent } = useTestTimerStore.getState();
   const { setToast } = useToastStore.getState();
+  const { setLoading } = useLoadingStore.getState();
+
   const currentQuestionIndex = useTestStore
     .getState()
     .getCurrentQuestionIndex();
@@ -36,6 +39,7 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   if (!studentData) return;
 
   let testMode = "";
+  setLoading(true);
 
   if (testConfig?.assessmentMode && testConfig?.assessmentMode === "beginner") {
     testMode = "Learning Session";
@@ -95,6 +99,13 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
             bloomId: item.bloomId,
           };
 
+          if (testMode === "Learning Session") {
+            const helpTaken = questionHelpMap[item.questionId];
+            if (helpTaken) {
+              baseObj.help = +helpTaken;
+            }
+          }
+
           if (testData?.testType === 3) {
             baseObj.sectionId = item.sectionId;
             baseObj.sectionName = item.sectionName;
@@ -112,6 +123,8 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
   ];
 
   const { loginId, token } = studentData;
+  // count of all truthy values
+  const helpCount = Object.values(questionHelpMap).filter(Boolean).length;
 
   const data = new FormData();
   data.append("courseId", String(activeCourse?.courseId));
@@ -130,8 +143,10 @@ export const handleContinueLater = async (navigate: NavigateFunction) => {
       title: "Failed to Submit Continue Test",
       type: ToastType.DANGER,
     });
+    setLoading(false);
     return;
   }
+  setLoading(false);
 
   let returnPage = "";
   switch (testData?.testType) {

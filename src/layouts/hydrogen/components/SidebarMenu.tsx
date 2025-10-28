@@ -3,7 +3,6 @@ import { Fragment } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 // Icons
-import { MdChevronRight } from "react-icons/md";
 import AiIcon from "../../../components/icons/ai-icon";
 
 // Store
@@ -26,7 +25,7 @@ export function SidebarMenu() {
   const location = useLocation();
   const activeCourse = useStudentStore((state) => state.activeCourse);
   const setIsReleaseNotesModalOpen = useReleaseNotesStore(
-    (s) => s.setIsReleaseNotesModalOpen
+    (s) => s.setIsReleaseNotesModalOpen,
   );
   const closeDrawer = useDrawerStore((state) => state.closeDrawer);
 
@@ -47,7 +46,7 @@ export function SidebarMenu() {
                     "group relative mx-3 my-0.5 flex items-center justify-between rounded-md px-3 py-4 font-medium capitalize lg:my-1 2xl:mx-5 2xl:my-2 hover:bg-[var(--surface-bg-secondary)]",
                     isActive
                       ? "text-[var(--sb-ocean-bg-active)] before:absolute before:-start-3 before:block before:h-4/5 before:w-1 before:rounded-ee-md before:rounded-se-md before:bg-[var(--sb-ocean-bg-active)] 2xl:before:-start-5"
-                      : "transition-colors duration-200 text-[var(--text-secondary)]"
+                      : "transition-colors duration-200 text-[var(--text-secondary)]",
                   )}
                   onClick={() => {
                     // Track sidebar menu clicks based on item name
@@ -75,7 +74,7 @@ export function SidebarMenu() {
                           "me-2 inline-flex size-5 items-center justify-center rounded-md [&>svg]:size-5",
                           isActive
                             ? "text-[var(--sb-ocean-bg-active)]"
-                            : "text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]"
+                            : "text-[var(--text-tertiary)] group-hover:text-[var(--text-primary)]",
                         )}
                       >
                         {item?.icon}
@@ -88,7 +87,7 @@ export function SidebarMenu() {
                 <h6
                   className={cn(
                     "mb-2 truncate px-6 text-xs font-normal uppercase tracking-widest text-gray-500 2xl:px-8",
-                    index !== 0 && "mt-6 3xl:mt-7"
+                    index !== 0 && "mt-6 3xl:mt-7",
                   )}
                 >
                   {item.name}
@@ -121,13 +120,6 @@ export function SidebarMenu() {
                 <AiIcon fontSize={16} />
                 <h6 className="font-semibold">What's New</h6>
               </div>
-              <Badge
-                className="w-fit !px-2 !py-1 !text-white !border-white"
-                style="outline"
-                theme={Theme.Neutral}
-              >
-                <span>BETA</span>
-              </Badge>
             </div>
             <p className="text-neutral-100 mt-2 mb-1">
               Discover the latest features and improvements

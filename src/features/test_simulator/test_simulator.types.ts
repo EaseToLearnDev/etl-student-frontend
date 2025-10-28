@@ -18,6 +18,7 @@ export interface Question {
   incorrectAnswerMarks?: number;
   notAnswerMarks?: number;
   marks?: number;
+  help?: boolean;
   studentResponse?: string;
   correctResponse?: string;
   explanations?: string;

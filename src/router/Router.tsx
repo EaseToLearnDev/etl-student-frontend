@@ -39,6 +39,8 @@ import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCourse
 import LogoutPage from "../features/auth/logout/pages/LogoutPage";
 import { Spinner } from "../components/Spinner";
 import { InAppPayment } from "../features/in_app_payment/InAppPayment";
+import PgResponse from "../global/pages/PgResponse";
+import PgCancelled from "../global/pages/PgCancelled";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -178,7 +180,8 @@ const Router = () => {
       <Route path="guest-testbegin" element={<TestWizard />} />
       <Route path="selectyourcourse" element={<SelectYourCoursePage />} />
       <Route path="/logout" element={<LogoutPage />} />
-      <Route path="/pgcancelled" element={<Spinner />} />
+      <Route path="/pgcancelled" element={<PgCancelled />} />
+      <Route path="/pgresponse" element={<PgResponse />} />
       <Route path="/inapppayment" element={<InAppPayment />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

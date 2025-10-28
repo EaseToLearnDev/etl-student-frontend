@@ -22,7 +22,11 @@ import EmptyState from "../../../../components/EmptyState";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
-import { LuBookX, LuCalendarX } from "react-icons/lu";
+import { LuCalendarX } from "react-icons/lu";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
+import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
+import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
+import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
 
 /**
  * Displays a paginated table of class tests for students.
@@ -40,6 +44,13 @@ const ClassTestPage = () => {
   const setIsUpgradeModalOpen = useUpgradeModalStore(
     (s) => s.setIsUpgradeModalOpen
   );
+  const showPreviousTestModal = useCTStore((s) => s.showPreviousTestModal);
+  const setShowPreviousTestModal = useCTStore(
+    (s) => s.setShowPreviousTestModal
+  );
+  const previousRunningTest = usePrevTestStore((s) => s.prevRunningTest);
+  const setPreviousRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
+  const reset = useCTStore((s) => s.reset);
 
   const columns: Column<any>[] = [
     {
@@ -94,6 +105,8 @@ const ClassTestPage = () => {
       }
     };
     fetchData();
+
+    return reset;
   }, []);
 
   return loading ? (
@@ -118,16 +131,20 @@ const ClassTestPage = () => {
         className="p-4"
       >
         <StartTopicTestModalContent
-        customTitle={'Class Test'}
+          customTitle={"Class Test"}
           testName={selectedTest?.testTitle || ""}
           onStart={() => {
-            handleStartTest({
-              navigate,
-              testId: selectedTest?.testId ?? null,
-              classTestId: selectedTest?.scheduleId,
-              testType: selectedTest?.testType,
+            handleShowPreviousOrStartTest({
+              setPreviousRunningTest,
+              setShowPreviousTestModal,
+              startTestCallback: () =>
+                handleStartTest({
+                  navigate,
+                  testId: selectedTest?.testId ?? null,
+                  testType: selectedTest?.testType,
+                  classTestId: selectedTest?.scheduleId,
+                }),
             });
-            setShowStartTestModal(false);
           }}
           onClose={() => setShowStartTestModal(false)}
           details={{
@@ -146,6 +163,27 @@ const ClassTestPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
+      {/* Previous Test Modal */}
+      <Modal
+        isOpen={showPreviousTestModal}
+        onClose={() => setShowPreviousTestModal(false)}
+        size="lg"
+        className="p-4"
+      >
+        <PreviousTestModalContent
+          onStart={() =>
+            handleStartTest({
+              navigate,
+              testId: selectedTest?.testId ?? null,
+              testType: selectedTest?.testType,
+              classTestId: selectedTest?.scheduleId,
+            })
+          }
+          onResume={() => handleResumeTest(navigate, previousRunningTest)}
+          onClose={() => setShowPreviousTestModal(false)}
+          testName={previousRunningTest?.testName || ""}
+        />
+      </Modal>
     </div>
   ) : (
     // <div className="w-full h-full grid place-items-center text-[var(--text-tertiary)] pb-50">
@@ -154,12 +192,12 @@ const ClassTestPage = () => {
     //     <p>No Class Tests Available</p>
     //   </div>
     // </div>
-      <EmptyState
-        title="No class test data available"
-        description="No class tests have been scheduled yet. Check back later to see upcoming tests from your teacher!"
-        icon={<LuCalendarX className="w-24 h-24" />}
-        className="max-w-md "
-      />
+    <EmptyState
+      title="No class test data available"
+      description="No class tests have been scheduled yet. Check back later to see upcoming tests from your teacher!"
+      icon={<LuCalendarX className="w-24 h-24" />}
+      className="max-w-md "
+    />
   );
 };
 
