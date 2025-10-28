@@ -17,7 +17,7 @@ import { login } from "../apis/login";
 
 export const loginDirect = async (
   params: URLSearchParams,
-  navigate: NavigateFunction
+  navigate: NavigateFunction,
 ) => {
   const { setStudentData } = useStudentStore.getState();
   try {
@@ -47,7 +47,7 @@ export const loginDirect = async (
         studentName: data?.studentName ?? "",
         mobile: data?.phoneNo ?? "",
         email: data?.emailId ?? "",
-      })
+      }),
     );
     Cookies.set("token", data?.token);
 
@@ -103,7 +103,7 @@ export const loginDirect = async (
       studentData.deviceType = "android";
     }
 
-    if (courses?.length > 0) {
+    if (courses.length > 0) {
       studentData.courses = courses;
       if (redirectTo && redirectTo?.length > 0) {
         navigate(decodeURIComponent(redirectTo));

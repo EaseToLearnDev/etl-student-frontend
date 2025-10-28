@@ -17,13 +17,13 @@ import { type NavigateFunction } from "react-router-dom";
 import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
 import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
-
 export const HandleLogin = async (
   navigate: NavigateFunction,
   loginWith: string,
-  deviceType: string | null
+  deviceType: string | null,
 ) => {
-  const { userId, password, setError, setLoading, setToken } = useLoginStore.getState();
+  const { userId, password, setError, setLoading, setToken } =
+    useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
   if (loginWith === "password") {
     try {
@@ -49,40 +49,43 @@ export const HandleLogin = async (
           studentName: data?.studentName ?? "",
           mobile: data?.phoneNo ?? "",
           email: data?.emailId ?? "",
-        })
+        }),
       );
       Cookies.set("token", `"${data?.token}"`);
 
       setLoading(false);
 
-      // Map courses
-      const courses = data.courses.map((c) => {
-        const tabs: Record<string, boolean> = {
-          dashboard: !!c.dashboard,
-          report: !!c.report,
-          studyMaterial: !!c.studyMaterial,
-          selfTest: !!c.selfTest,
-          topicTest: !!c.topicTest,
-          mockTest: !!c.mockTest,
-          dynamicMockTest: !!c.dynamicMockTest,
-          classTest: !!c.classTest,
-          teacherHelp: !!c.teacherHelp,
-          tonyHelp: !!c.tonyHelp,
-          otherCourses: !!c.otherCourses,
-        };
-        const course: Course = {
-          templateId: c.templateId,
-          validityId: c.validityId,
-          courseId: c.courseId,
-          packTypeId: c.packTypeId,
-          benchmark: c.benchmark,
-          organisationName: c.organisationName,
-          validTillDate: c.validTillDate,
-          packTypeTitle: c.packTypeTitle,
-          tabs: tabs,
-        };
-        return course;
-      });
+      // Map courses if available
+      let courses: Course[] = [];
+      if (data?.courses && data?.courses?.length > 0) {
+        courses = data.courses.map((c) => {
+          const tabs: Record<string, boolean> = {
+            dashboard: !!c.dashboard,
+            report: !!c.report,
+            studyMaterial: !!c.studyMaterial,
+            selfTest: !!c.selfTest,
+            topicTest: !!c.topicTest,
+            mockTest: !!c.mockTest,
+            dynamicMockTest: !!c.dynamicMockTest,
+            classTest: !!c.classTest,
+            teacherHelp: !!c.teacherHelpcourse,
+            tonyHelp: !!c.tonyHelp,
+            otherCourses: !!c.otherCourses,
+          };
+          const course: Course = {
+            templateId: c.templateId,
+            validityId: c.validityId,
+            courseId: c.courseId,
+            packTypeId: c.packTypeId,
+            benchmark: c.benchmark,
+            organisationName: c.organisationName,
+            validTillDate: c.validTillDate,
+            packTypeTitle: c.packTypeTitle,
+            tabs: tabs,
+          };
+          return course;
+        });
+      }
 
       const studentData: StudentData = {
         openedCourse: data.openedCourse,
@@ -110,7 +113,11 @@ export const HandleLogin = async (
       setStudentData(studentData);
 
       // Navigate to dashboard
-      navigate("/dashboard");
+      if (courses.length > 0) {
+        navigate("/dashboard");
+      } else {
+        navigate("/selectyourcourse");
+      }
     } catch (error) {
       if (error instanceof Error) {
         if (error.message === "invalid_credentials") {
@@ -139,16 +146,20 @@ export const HandleLogin = async (
         setError("Invalid Number", Severity.Alert);
         setStudentData(null);
       }
-    } catch (error) {
+    } catch (error: any) {
       setError("Something went wrong. Please try again.", Severity.Alert);
       setStudentData(null);
+      console.log("Error: " + error);
     } finally {
       setLoading(false);
     }
   }
 };
 
-export const handleVerifyOtp = async (otp: string) => {
+export const handleVerifyOtp = async (
+  otp: string,
+  navigate: NavigateFunction,
+) => {
   const { token, setError } = useLoginStore.getState();
   const { setStudentData } = useStudentStore.getState();
   if (!token) {
@@ -168,38 +179,41 @@ export const handleVerifyOtp = async (otp: string) => {
         studentName: res?.studentName ?? "",
         mobile: res?.phoneNo ?? "",
         email: res?.emailId ?? "",
-      })
+      }),
     );
     Cookies.set("token", `"${res?.token}"`);
 
-    const courses = res.courses.map((c) => {
-      const tabs: Record<string, boolean> = {
-        dashboard: !!c.dashboard,
-        report: !!c.report,
-        studyMaterial: !!c.studyMaterial,
-        selfTest: !!c.selfTest,
-        topicTest: !!c.topicTest,
-        mockTest: !!c.mockTest,
-        dynamicMockTest: !!c.dynamicMockTest,
-        classTest: !!c.classTest,
-        teacherHelp: !!c.teacherHelp,
-        tonyHelp: !!c.tonyHelp,
-        otherCourses: !!c.otherCourses,
-      };
-      const course: Course = {
-        templateId: c.templateId,
-        validityId: c.validityId,
-        courseId: c.courseId,
-        packTypeId: c.packTypeId,
-        benchmark: c.benchmark,
-        organisationName: c.organisationName,
-        validTillDate: c.validTillDate,
-        packTypeTitle: c.packTypeTitle,
-        tabs: tabs,
-      };
-      return course;
-    });
-
+    // Map courses if available
+    let courses: Course[] = [];
+    if (res?.courses && res?.courses?.length > 0) {
+      courses = res?.courses.map((c) => {
+        const tabs: Record<string, boolean> = {
+          dashboard: !!c.dashboard,
+          report: !!c.report,
+          studyMaterial: !!c.studyMaterial,
+          selfTest: !!c.selfTest,
+          topicTest: !!c.topicTest,
+          mockTest: !!c.mockTest,
+          dynamicMockTest: !!c.dynamicMockTest,
+          classTest: !!c.classTest,
+          teacherHelp: !!c.teacherHelpcourse,
+          tonyHelp: !!c.tonyHelp,
+          otherCourses: !!c.otherCourses,
+        };
+        const course: Course = {
+          templateId: c.templateId,
+          validityId: c.validityId,
+          courseId: c.courseId,
+          packTypeId: c.packTypeId,
+          benchmark: c.benchmark,
+          organisationName: c.organisationName,
+          validTillDate: c.validTillDate,
+          packTypeTitle: c.packTypeTitle,
+          tabs: tabs,
+        };
+        return course;
+      });
+    }
     const studentData: StudentData = {
       openedCourse: res.openedCourse,
       firstTimeUser: res.firstTimeUser,
@@ -218,6 +232,13 @@ export const handleVerifyOtp = async (otp: string) => {
     };
 
     setStudentData(studentData);
+
+    // Navigate to dashboard
+    if (courses.length > 0) {
+      navigate("/dashboard");
+    } else {
+      navigate("/selectyourcourse");
+    }
     setError("Login Successful!", Severity.None);
   } catch (error) {
     console.log("verification :", error);
