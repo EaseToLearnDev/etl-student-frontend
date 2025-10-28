@@ -8,6 +8,7 @@ import { useStudentStore } from "../features/shared/hooks/useStudentStore";
 const logout = () => {
   const { reset } = useStudentStore.getState();
   Cookies.remove("accountDetails");
+  Cookies.remove("courseDetails");
   Cookies.remove("token");
   reset();
   window.location.href = "/student";
