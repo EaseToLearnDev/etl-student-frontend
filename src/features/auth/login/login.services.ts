@@ -88,17 +88,17 @@ export const HandleLogin = async (
       }
 
       const studentData: StudentData = {
-        openedCourse: data.openedCourse,
-        firstTimeUser: data.firstTimeUser,
-        websiteId: data.websiteId,
-        token: data.token,
-        studentId: data.studentId,
+        openedCourse: data?.openedCourse,
+        firstTimeUser: data?.firstTimeUser,
+        websiteId: data?.websiteId,
+        token: data?.token,
+        studentId: data?.studentId,
         studentName: data?.studentName ?? "",
         emailId: data?.emailId ?? "",
         phoneNo: data?.phoneNo ?? "",
         status: data?.status,
         loginId: data?.loginId,
-        schools: data?.schools,
+        schools: data?.schools || [],
         courses: courses,
         profilePic: data?.profilePic ?? "",
         deleteFlag: data?.deleteFlag,
@@ -215,20 +215,20 @@ export const handleVerifyOtp = async (
       });
     }
     const studentData: StudentData = {
-      openedCourse: res.openedCourse,
-      firstTimeUser: res.firstTimeUser,
-      websiteId: res.websiteId,
-      token: res.token,
-      studentId: res.studentId,
+      openedCourse: res?.openedCourse,
+      firstTimeUser: res?.firstTimeUser,
+      websiteId: res?.websiteId,
+      token: res?.token,
+      studentId: res?.studentId,
       studentName: res?.studentName ?? "",
       emailId: res?.emailId ?? "",
       phoneNo: res?.phoneNo ?? "",
-      status: res.status,
-      loginId: res.loginId,
-      schools: res.schools,
+      status: res?.status,
+      loginId: res?.loginId,
+      schools: res?.schools || [],
       courses: courses,
-      profilePic: res.profilePic,
-      deleteFlag: res.deleteFlag,
+      profilePic: res?.profilePic,
+      deleteFlag: res?.deleteFlag,
     };
 
     setStudentData(studentData);

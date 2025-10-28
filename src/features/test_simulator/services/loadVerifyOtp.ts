@@ -44,20 +44,20 @@ export const loadVerifyOtp = async ({
 
     const responseData: StudentDataResponse = res.obj;
     const studentData: StudentData = {
-      openedCourse: responseData.openedCourse,
-      firstTimeUser: responseData.firstTimeUser,
-      websiteId: responseData.websiteId,
-      token: responseData.token,
-      studentId: responseData.studentId,
-      studentName: responseData.studentName,
-      emailId: responseData.emailId,
-      phoneNo: responseData.phoneNo,
-      status: responseData.status,
-      loginId: responseData.loginId,
-      schools: responseData.schools,
+      openedCourse: responseData?.openedCourse,
+      firstTimeUser: responseData?.firstTimeUser,
+      websiteId: responseData?.websiteId,
+      token: responseData?.token,
+      studentId: responseData?.studentId,
+      studentName: responseData?.studentName,
+      emailId: responseData?.emailId,
+      phoneNo: responseData?.phoneNo,
+      status: responseData?.status,
+      loginId: responseData?.loginId,
+      schools: responseData?.schools || [],
       courses: [],
-      profilePic: responseData.profilePic,
-      deleteFlag: responseData.deleteFlag,
+      profilePic: responseData?.profilePic,
+      deleteFlag: responseData?.deleteFlag,
     };
 
     setStudentData(studentData);
