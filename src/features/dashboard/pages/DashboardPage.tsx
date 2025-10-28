@@ -154,7 +154,7 @@ const DashboardPage = () => {
             {isClassTest ? (
               <>
                 <WidgetCard
-                  title="Class Tests"
+                  title="Scheduled Classes"
                   className="h-full max-h-[250px]"
                 >
                   <ScheduledClassesList data={scheduledClasses} loading={loading} />
@@ -199,7 +199,7 @@ const DashboardPage = () => {
             <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
               <ClassTestList />
             </WidgetCard>
-            <WidgetCard title="Class Tests" className="h-full max-h-[250px]">
+            <WidgetCard title="Scheduled Classes" className="h-full max-h-[250px]">
               <ScheduledClassesList data={scheduledClasses} loading={loading} />
             </WidgetCard>
           </>
