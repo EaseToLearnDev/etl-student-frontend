@@ -259,15 +259,33 @@ const TopicTestPage = () => {
               id: cancel_topic_test_button_id,
             });
           }}
-          details={{
-            marksCorrect: selectedTest?.patternDetails?.markCorrectAns,
-            marksIncorrect: selectedTest?.patternDetails?.markIncorrectAns,
-            marksUnattempted: selectedTest?.patternDetails?.markNotAttempt,
-            questionType: selectedTest?.patternDetails?.questionType,
-            totalMarks: selectedTest?.patternDetails?.totalMark,
-            totalQuestions: selectedTest?.patternDetails?.totalQuestion,
-            totalTime: selectedTest?.patternDetails?.totalTime,
-          }}
+          details={
+            selectedTest?.patternDetails?.criteriaList &&
+            selectedTest?.patternDetails?.criteriaList.length > 0
+              ? {
+                  totalMarks: selectedTest?.patternDetails?.totalMark,
+                  totalQuestions: selectedTest?.patternDetails?.totalQuestion,
+                  totalTime: selectedTest?.patternDetails?.totalTime,
+                  marksCorrect:
+                    selectedTest?.patternDetails?.criteriaList[0]
+                      ?.marksCorrectAns,
+                  marksIncorrect:
+                    selectedTest?.patternDetails?.criteriaList[0]
+                      ?.marksIncorrectAns,
+                  marksUnattempted:
+                    selectedTest?.patternDetails?.criteriaList[0]?.marksNotAns,
+                }
+              : {
+                  totalMarks: selectedTest?.patternDetails?.totalMark,
+                  totalQuestions: selectedTest?.patternDetails?.totalQuestion,
+                  totalTime: selectedTest?.patternDetails?.totalTime,
+                  marksCorrect: selectedTest?.patternDetails?.markCorrectAns,
+                  marksIncorrect:
+                    selectedTest?.patternDetails?.markIncorrectAns,
+                  marksUnattempted:
+                    selectedTest?.patternDetails?.markNotAttempt,
+                }
+          }
         />
       </Modal>
       {/* Previous Test Modal */}

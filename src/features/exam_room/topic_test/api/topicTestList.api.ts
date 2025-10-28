@@ -15,7 +15,7 @@ export const getTopicTestList = async ({
   loginId,
   token,
 }: GetTopicTestListParams): Promise<TopicTest[] | null> => {
-  const res = await makeRequest("get", "/topictestlist", null, {
+  const res = await makeRequest("get", "/topictestlist/v3", null, {
     params: {
       templateId,
       topicName,

@@ -30,7 +30,8 @@ dist-ssr
 # removing package-lock.json
 package-lock.json
 
-
+# remove stats.html
+stats.html
 
 
 
