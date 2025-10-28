@@ -67,10 +67,19 @@ export interface PatternDetails {
   totalQuestion: number;
   totalTime: number;
   totalMark: number;
-  markCorrectAns: number;
-  markIncorrectAns: number;
-  markNotAttempt: number;
-  questionType: string;
+  markCorrectAns?: number;
+  markIncorrectAns?: number;
+  markNotAttempt?: number;
+  questionType?: string;
+  criteriaList?: CriteriaList[];
+}
+
+export interface CriteriaList {
+  noOfQuestion: number;
+  questionTypes: string;
+  marksCorrectAns: number;
+  marksIncorrectAns: number;
+  marksNotAns: number;
 }
 
 export interface StudentDataResponse {
@@ -196,14 +205,18 @@ export interface PriceDetailsList {
   description: string;
   discount: number;
   packId: number;
-  retailPrice: number | {
-    source: string;
-    parsedValue: number;
-  };
-  salePrice: number | {
-    source: string;
-    parsedValue: number;
-  };
+  retailPrice:
+    | number
+    | {
+        source: string;
+        parsedValue: number;
+      };
+  salePrice:
+    | number
+    | {
+        source: string;
+        parsedValue: number;
+      };
   title: string;
   validityDate: string;
   validityDuration: number;
