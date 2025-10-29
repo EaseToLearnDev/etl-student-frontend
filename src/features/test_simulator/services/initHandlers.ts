@@ -1,5 +1,9 @@
 // Types
-import { QuestionStatus, QuestionStatusMap } from "../test_simulator.types";
+import {
+  QuestionStatus,
+  QuestionStatusMap,
+  subjectiveTypes,
+} from "../test_simulator.types";
 import type {
   TestData,
   Pointer,
@@ -19,6 +23,7 @@ export interface InitializeTestDataResult {
   sectionsUI: SectionUI[];
   subjectiveSectionsUI: SectionUI[];
   initialPointer: Pointer;
+  isSubjectiveTest: boolean;
 }
 
 /**
@@ -34,13 +39,14 @@ export const initializeTestData = ({
   const timeMap: Record<number, number> = {};
   const marksMap: Record<number, MarksType> = {};
   const helpMap: Record<number, boolean> = {};
+  let isSubjectiveTest: boolean = false;
 
   testData?.questionSet?.forEach((q) => {
     statusMap[q.questionId] =
       QuestionStatusMap[q.backgroundImg ?? ""] ?? QuestionStatus.NOT_VISITED;
 
     const response = deserializeStudentSubjecitveResponse(
-      q.studentResponse || ""
+      q.studentResponse || "",
     );
     responseMap[q.questionId] = response;
 
@@ -62,6 +68,10 @@ export const initializeTestData = ({
 
       marksMap[q.questionId] = marksObj;
     }
+
+    if (subjectiveTypes.includes(q?.questionType ?? "")) {
+      isSubjectiveTest = true;
+    }
   });
 
   const sectionsUI = convertDataToSections(testData);
@@ -75,7 +85,7 @@ export const initializeTestData = ({
           "Subjective-Type-Short-Answer-I",
           "Subjective-Type-Short-Answer-II",
           "Subjective-Type-Long",
-        ].includes(q.questionType)
+        ].includes(q.questionType),
       ),
     }))
     .filter((section) => section.questionList.length > 0);
@@ -88,7 +98,7 @@ export const initializeTestData = ({
 
   // Mark first question as visited
   const firstSection = testData?.sectionSet?.find(
-    (sec) => sec.questionNumbers.length > 0
+    (sec) => sec.questionNumbers.length > 0,
   );
   if (firstSection) {
     initialPointer = {
@@ -105,6 +115,7 @@ export const initializeTestData = ({
     sectionsUI,
     subjectiveSectionsUI,
     initialPointer,
+    isSubjectiveTest,
   };
 };
 

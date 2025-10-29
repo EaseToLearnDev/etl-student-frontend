@@ -24,6 +24,7 @@ export const setupTest = async (
   setMode: (mode: SimulatorMode) => void,
   setLoading: (loading: boolean) => void,
   setCurrentQuestion: (question: Question | null) => void,
+  isSubjectiveTest: boolean,
   isMobile: boolean,
 ) => {
   // Test Configuration Setup
@@ -118,11 +119,17 @@ export const setupTest = async (
       setIsAiFeatureEnabled(true);
     }
 
+    // I WILL REWRITE THIS SOON, PLEASE DON'T JUDGE :)
+    /*
+     * Enable full screen if smart learning competitive session or (topic,mock,class) test.
+     * (Only if not subjective and not in mobile.)
+     * */
     if (
       (mode !== "review" && testConfig?.assessmentMode === "advance") ||
       (testConfig?.testType && testConfig?.testType !== 1)
     ) {
-      features.fullScreenEnabled = !isMobile ? true : false;
+      features.fullScreenEnabled =
+        !isMobile && !isSubjectiveTest ? true : false;
     }
 
     // Is subjective marking is enabled, try to load first subjective question
