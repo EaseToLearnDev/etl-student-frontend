@@ -21,6 +21,8 @@ import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
+import { RiEyeLine } from "react-icons/ri";
+import InputField from "../../../../components/InputField";
 
 // GTM click id constants
 const LOGIN_BUTTON_CLICK_ID = "login_button_click";
@@ -55,7 +57,7 @@ const LoginPage = () => {
         "w-full min-h-[100dvh]",
         darkMode
           ? "bg-[var(--sb-ocean-bg-on-press)]"
-          : "bg-[var(--sb-ocean-bg-active)]"
+          : "bg-[var(--sb-ocean-bg-active)]",
       )}
     >
       <div className="flex flex-col lg:flex-row w-full min-h-[100dvh]">
@@ -65,7 +67,7 @@ const LoginPage = () => {
             "h-[100px] md:h-[120px] lg:h-[100dvh] lg:w-1/2 p-4 lg:p-10 flex flex-col gap-2 lg:gap-5 justify-center items-center flex-shrink-0",
             darkMode
               ? "dark:bg-[var(--sb-ocean-bg-on-press)]"
-              : "bg-[var(--sb-ocean-bg-active)]"
+              : "bg-[var(--sb-ocean-bg-active)]",
           )}
         >
           <img
@@ -173,13 +175,13 @@ const LoginPage = () => {
                               : "you@company.com"
                           }
                           className={cn(
-                            "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base placeholder:text-[var(--text-tertiary)]"
+                            "flex-1 px-4 py-3 bg-transparent outline-none rounded-r-lg text-base placeholder:text-[var(--text-tertiary)]",
                           )}
                           required
                           value={userId}
                           maxLength={loginWith === "otp" ? 10 : 100}
                           onChange={(e) => {
-                            let inputValue = e.target.value.trim();
+                            const inputValue = e.target.value.trim();
                             if (loginWith === "otp") {
                               if (!/^\d*$/.test(inputValue)) return;
                             }
@@ -191,27 +193,14 @@ const LoginPage = () => {
 
                     {/* Password Input (only for password login) */}
                     {loginWith === "password" && (
-                      <div className="flex flex-col gap-1">
-                        <label
-                          htmlFor="password"
-                          className="!font-medium text-[var(--text-secondary)]"
-                        >
-                          Password
-                        </label>
-                        <input
-                          type="password"
-                          placeholder="**********"
-                          className={cn(
-                            "flex px-4 py-3 items-center gap-2 self-stretch rounded-lg border-1 border-[var(--border-secondary)] text-base placeholder:text-[var(--text-tertiary)]",
-                            "focus:outline-none focus:ring-2 focus:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
-                          )}
-                          required
-                          value={password}
-                          onChange={(e) =>
-                            setCredentials(userId, e.target.value)
-                          }
-                        />
-                      </div>
+                      <InputField
+                        label="Password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setCredentials(userId, e.target.value)}
+                        placeholder="**********"
+                        required
+                      />
                     )}
                   </div>
 
@@ -263,8 +252,8 @@ const LoginPage = () => {
                       {loading
                         ? "Loading"
                         : loginWith === "password"
-                        ? "Login"
-                        : "Get OTP"}
+                          ? "Login"
+                          : "Get OTP"}
                     </h6>
                   </Button>
 
@@ -282,7 +271,7 @@ const LoginPage = () => {
                         }
                       >
                         <h6 className="!font-bold hover:underline">
-                          Forget Password?
+                          Forgot Password?
                         </h6>
                       </Link>
                     </div>
