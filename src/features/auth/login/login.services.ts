@@ -24,7 +24,7 @@ export const HandleLogin = async (
 ) => {
   const { userId, password, setError, setLoading, setToken } =
     useLoginStore.getState();
-  const { setStudentData } = useStudentStore.getState();
+  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
   if (loginWith === "password") {
     try {
       // validateCredentials(email, password);
@@ -111,6 +111,7 @@ export const HandleLogin = async (
       }
 
       setStudentData(studentData);
+      setShowFtuModal(data?.firstTimeUser == 1);
 
       // Navigate to dashboard
       if (courses.length > 0) {
@@ -161,7 +162,7 @@ export const handleVerifyOtp = async (
   navigate: NavigateFunction,
 ) => {
   const { token, setError } = useLoginStore.getState();
-  const { setStudentData } = useStudentStore.getState();
+  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
   if (!token) {
     setError("Invalid Number", Severity.Alert);
     return;
@@ -232,6 +233,7 @@ export const handleVerifyOtp = async (
     };
 
     setStudentData(studentData);
+    setShowFtuModal(res?.firstTimeUser == 1);
 
     // Navigate to dashboard
     if (courses.length > 0) {

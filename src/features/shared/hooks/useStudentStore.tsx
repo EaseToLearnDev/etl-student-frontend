@@ -5,9 +5,11 @@ import { persist } from "zustand/middleware";
 export interface StudentStore {
   studentData: StudentData | null;
   activeCourse: Course | null;
+  showFtuModal: boolean;
 
   setStudentData: (data: StudentData | null) => void;
   setActiveCourse: (index: number) => void;
+  setShowFtuModal: (v: boolean) => void;
   reset: () => void;
 }
 
@@ -19,9 +21,12 @@ export const useStudentStore = create<StudentStore>()(
     (set, get) => ({
       studentData: null,
       activeCourse: null,
+      showFtuModal: false,
 
       setStudentData: (data) => {
-        const activeCourse = data?.courses ? data?.courses[data?.openedCourse] : null;
+        const activeCourse = data?.courses
+          ? data?.courses[data?.openedCourse]
+          : null;
         set({ studentData: data, activeCourse });
       },
 
@@ -31,13 +36,15 @@ export const useStudentStore = create<StudentStore>()(
         set({ activeCourse: courses ? courses[index] : null });
       },
 
+      setShowFtuModal: (v) => set({ showFtuModal: v }),
+
       reset: () => {
-        set({ studentData: null, activeCourse: null });
+        set({ studentData: null, activeCourse: null, showFtuModal: false });
         localStorage.removeItem("student-storage");
       },
     }),
     {
       name: "student-storage",
-    }
-  )
+    },
+  ),
 );

@@ -35,11 +35,11 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
-  const studentData = useStudentStore((s) => s.studentData);
+  const showFtuModal = useStudentStore((s) => s.showFtuModal);
+  const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
   const loading = useLoadingStore((s) => s.loading);
   const isMobile = useIsMobile();
 
-  const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
   const [scheduledClasses, setScheduledClasses] = useState<
     WeekClassScheduleList[] | null
   >(null);
@@ -57,7 +57,7 @@ const DashboardPage = () => {
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
-    null
+    null,
   );
 
   const createDate = (_date: Date) => {
@@ -74,16 +74,6 @@ const DashboardPage = () => {
   };
 
   const isClassTest = activeCourse?.tabs?.classTest;
-
-  useEffect(() => {
-    const firstTimeUser = localStorage.getItem("firstTimeUser");
-    if (!firstTimeUser && studentData?.firstTimeUser === 1) {
-      setShowFirstTimeModal(true);
-
-      // set in local storage so modal only open once
-      localStorage.setItem("firstTimeUser", "1");
-    }
-  }, [studentData?.firstTimeUser]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,7 +147,10 @@ const DashboardPage = () => {
                   title="Scheduled Classes"
                   className="h-full max-h-[250px]"
                 >
-                  <ScheduledClassesList data={scheduledClasses} loading={loading} />
+                  <ScheduledClassesList
+                    data={scheduledClasses}
+                    loading={loading}
+                  />
                 </WidgetCard>
                 <WidgetCard title="Class Tests" className="h-full">
                   <ClassTestList />
@@ -199,7 +192,10 @@ const DashboardPage = () => {
             <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
               <ClassTestList />
             </WidgetCard>
-            <WidgetCard title="Scheduled Classes" className="h-full max-h-[250px]">
+            <WidgetCard
+              title="Scheduled Classes"
+              className="h-full max-h-[250px]"
+            >
               <ScheduledClassesList data={scheduledClasses} loading={loading} />
             </WidgetCard>
           </>
@@ -216,8 +212,8 @@ const DashboardPage = () => {
         )}
       </div>
       <FirstTimeUserModal
-        isOpen={showFirstTimeModal}
-        onClose={() => setShowFirstTimeModal(false)}
+        isOpen={showFtuModal}
+        onClose={() => setShowFtuModal(false)}
       />
       {/* Toast */}
       {showToast && toastData && (

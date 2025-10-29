@@ -19,7 +19,7 @@ export const loginDirect = async (
   params: URLSearchParams,
   navigate: NavigateFunction,
 ) => {
-  const { setStudentData } = useStudentStore.getState();
+  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
   try {
     const token = params.get("token");
     const loginId = params.get("loginId");
@@ -115,6 +115,7 @@ export const loginDirect = async (
     }
 
     setStudentData(studentData);
+    setShowFtuModal(data?.firstTimeUser == 1);
   } catch (error: any) {
     console.log("Failed to handle logindirect: ", error);
     if (error.message === "invalid_credentials") {
