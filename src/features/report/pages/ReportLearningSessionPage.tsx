@@ -4,12 +4,18 @@ import EmptyState from "../../../components/EmptyState";
 import Button from "../../../components/Button";
 import { MdArrowRight } from "react-icons/md";
 import { LuFileChartColumnIncreasing } from "react-icons/lu";
+import useIsMobile from "../../../hooks/useIsMobile";
+import ReportCard from "../components/ReportCard";
 
 export interface LearningSessionData {
   testTitle: string;
   testType: string;
   examType: string;
   date: string;
+  marksObtain: number;
+  fullMarks: number;
+  timeSpent: string;
+  testTypeId: number;
   totalQuestions: number;
   helpCounter: number;
   correct: number;
@@ -27,6 +33,7 @@ const ReportLearningSessionPage = ({
   data,
   onViewMore,
 }: ReportLearningSessionPageProps) => {
+  const isMobile = useIsMobile();
   const columns: Column<any>[] = [
     {
       header: "Test Title",
@@ -67,12 +74,31 @@ const ReportLearningSessionPage = ({
     },
   ];
   const learningSessionData = data.filter(
-    (item) => item.testType === "Learning Session",
+    (item) => item.testType === "Learning Session"
   );
+
+  if (learningSessionData.length === 0) {
+    return (
+      <EmptyState
+        title="No learning session data available"
+        description="No learning session data is available yet. Start engaging with courses or lessons to see your sessions appear here!"
+        icon={<LuFileChartColumnIncreasing className="w-24 h-24" />}
+        className="max-w-md"
+      />
+    );
+  }
 
   return (
     <>
-      {learningSessionData.length > 0 ? (
+      {isMobile ? (
+        <div className="flex flex-col gap-3 mt-3 p-2">
+          {learningSessionData.map((item, idx) => (
+            <div key={idx}>
+              <ReportCard data={item} onClick={(row) => onViewMore(row as LearningSessionData)} />
+            </div>
+          ))}
+        </div>
+      ) : (
         <div className="flex">
           <PaginatedTable
             columns={columns}
@@ -81,13 +107,6 @@ const ReportLearningSessionPage = ({
             onRowClick={(row) => onViewMore(row)}
           />
         </div>
-      ) : (
-        <EmptyState
-          title="No learning session data available"
-          description="No learning session data is available yet. Start engaging with courses or lessons to see your sessions appear here!"
-          icon={<LuFileChartColumnIncreasing className="w-24 h-24" />}
-          className="max-w-md"
-        />
       )}
     </>
   );
