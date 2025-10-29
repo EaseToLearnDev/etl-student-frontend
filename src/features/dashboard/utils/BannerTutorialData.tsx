@@ -85,7 +85,7 @@ export const tutorialCards: TutorialCard[] = [
       contentType: "Video",
       data: [
         {
-          title: "Discover Emerging Trends",
+          title: "Report & Analytics Guide",
           videoLink: "https://www.youtube.com/embed/0KAYPfpnTbg",
         },
       ],
