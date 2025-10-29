@@ -108,7 +108,13 @@ const ActiveQuestionPanel = () => {
           </Badge>
         </div>
 
-        <div className="max-h-[calc(100%-130px)] pr-2 overflow-y-auto">
+        <div
+          className={`${
+            mode === "review"
+              ? "max-h-[calc(100%-430px)]"
+              : "max-h-[calc(100%-130px)]"
+          } pr-2 overflow-y-auto`}
+        >
           {/* Common Data Description  */}
           <div className="flex flex-col gap-4">
             {currentQuestion?.commonDataDescription &&
@@ -453,7 +459,13 @@ const ActiveQuestionPanel = () => {
           "Subjective-Type-Short-Answer-II",
           "Subjective-Type-Long",
         ].includes(currentQuestion?.questionType || "") && mode === "review" ? (
-          <div className="w-full max-h-[400px] sm:max-h-[500px] border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto">
+          <div
+            className={`w-full max-h-[300px] sm:${
+              currentQuestion?.questionType === "Subjective-Type-Long"
+                ? "max-h-[250px]"
+                : "max-h-[500px]"
+            } border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto`}
+          >
             {/* Answer Container */}
             <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
               <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
@@ -592,7 +604,20 @@ const ActiveQuestionPanel = () => {
                 className="!min-w-10 px-2 sm:px-4"
                 onClick={() => setIsTeacherSupportModalOpen(true)}
               >
-                Teacher Support
+                Support
+              </Button>
+            )}
+
+            {/* Tony AI Floating Button */}
+            {isAiFeatureEnabled && (
+              <Button
+                style="secondary"
+                className="!min-w-10 px-2 sm:px-4"
+                onClick={() => {
+                  setIsHelpModalOpen(true);
+                }}
+              >
+                Ask Tony
               </Button>
             )}
 
@@ -623,26 +648,6 @@ const ActiveQuestionPanel = () => {
           <MdChevronRight size={22} />
         </div>
       </div>
-
-      {/* Tony AI Floating Button */}
-      {isAiFeatureEnabled && (
-        <div
-          className={cn(
-            "flex flex-col items-center gap-1",
-            isMobile
-              ? "fixed bottom-[75px] right-[32px]"
-              : "absolute bottom-2 right-8"
-          )}
-          onClick={() => {
-            setIsHelpModalOpen(true);
-          }}
-        >
-          <div className="cursor-pointer size-10 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
-            <AiIcon width={28} height={28} />
-          </div>
-          <span className="font-semibold !text-xs">ASK TONY</span>
-        </div>
-      )}
     </div>
   );
 };

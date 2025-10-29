@@ -20,6 +20,7 @@ import StatusGroup from "../StatusGroup";
 import SectionWiseQuestionList from "../SectionWiseQuestionList";
 import SectionQuestionScroll from "./SectionQuestionScroll";
 import ActiveQuestionPanel from "../ActiveQuestionPanel";
+import useTestStore from "../../store/useTestStore";
 
 /**
  * MobileTestSimulator is the main component for rendering the mobile view of the test simulator.
@@ -28,6 +29,7 @@ const MobileTestSimulator = () => {
   // Stores
   const openDrawer = useDrawerStore((state) => state.openDrawer);
   const closeDrawer = useDrawerStore((state) => state.closeDrawer);
+  const mode = useTestStore((state) => state.testMode);
   // Hooks
   // const {
   //   isSecondaryHidden,
@@ -40,7 +42,7 @@ const MobileTestSimulator = () => {
   return (
     <div className="relative flex flex-col h-[100dvh]">
       {/* Header */}
-      <TestHeader />
+      {mode !== "review" ? <TestHeader /> : null}
 
       <div className="flex flex-col w-full h-full gap-2 p-2">
         {/* Horizontal Section-wise Question List */}
