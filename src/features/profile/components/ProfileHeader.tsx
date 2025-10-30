@@ -152,7 +152,7 @@ const ProfileHeader = () => {
         </div>
 
         {editProfile ? null : (
-          <Button style="primary" onClick={() => setEditProfile(true)}>
+          <Button style="primary" className="mt-2 sm:mt-0" onClick={() => setEditProfile(true)}>
             Edit Profile
           </Button>
         )}

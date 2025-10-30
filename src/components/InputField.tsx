@@ -14,6 +14,7 @@ interface InputFieldProps {
   placeholder?: string;
   pattern?: string;
   maxLength?: number;
+  renderItem?: () => React.ReactNode;
 }
 
 const InputField = ({
@@ -27,6 +28,7 @@ const InputField = ({
   placeholder = "",
   maxLength,
   pattern = "",
+  renderItem,
 }: InputFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -44,12 +46,15 @@ const InputField = ({
   return (
     <div className="flex flex-col gap-2 relative">
       {label && (
-        <label
-          htmlFor={label.split(" ").join("-")}
-          className="!font-medium text-[var(--text-secondary)]"
-        >
-          {label}
-        </label>
+        <div className="flex items-center gap-2">
+          <label
+            htmlFor={label.split(" ").join("-")}
+            className="!font-medium text-[var(--text-secondary)]"
+          >
+            {label}
+          </label>
+          {renderItem && renderItem()}
+        </div>
       )}
 
       {info?.msg && (
@@ -59,7 +64,7 @@ const InputField = ({
       <div
         className={cn(
           "flex items-center border border-[var(--border-secondary)] rounded-lg relative",
-          "focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out",
+          "focus-within:ring-2 focus-within:ring-[var(--sb-ocean-bg-active)] transition-all duration-200 ease-in-out"
         )}
       >
         <input

@@ -63,37 +63,39 @@ const Topic = <T,>({
         )}
       >
         <div className="flex items-center gap-3">
-          {/* Expand Button */}
-          <div
-            onClick={handleExpand}
-            className={cn(
-              "w-[24px] h-[24px] aspect-square flex justify-center items-center rounded-md cursor-pointer",
-              children?.length ? "visible" : "invisible",
-              isActive
-                ? "border-1 border-[var(--sb-ocean-bg-active)]"
-                : "border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)]"
-            )}
-          >
-            <PiCaretUpBold
-              size={18}
-              className={cn(
-                "h-3.5 w-3.5 rotate-90 text-[var(--text-tertiary)] transition-transform duration-200 rtl:-rotate-90",
-                expanded && "rotate-180 rtl:-rotate-180",
-                isActive && "text-[var(--sb-ocean-bg-active)]"
-              )}
-            />
-          </div>
-
           {/* Dot (Leaf) */}
-          {!children?.length && (
+          {!children?.length ? (
             <div
               className={cn(
-                "w-[8px] h-[8px] aspect-square rounded-full",
+                "w-[8px] h-[8px] ml-2 aspect-square rounded-full",
                 isActive
                   ? "bg-[var(--sb-ocean-bg-active)]"
                   : "bg-[var(--text-tertiary)]"
               )}
             />
+          ) : (
+            <>
+              {/* Expand Button */}
+              <div
+                onClick={handleExpand}
+                className={cn(
+                  "w-[24px] h-[24px] aspect-square flex justify-center items-center rounded-md cursor-pointer",
+                  children?.length ? "visible" : "invisible",
+                  isActive
+                    ? "border-1 border-[var(--sb-ocean-bg-active)]"
+                    : "border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)]"
+                )}
+              >
+                <PiCaretUpBold
+                  size={18}
+                  className={cn(
+                    "h-3.5 w-3.5 rotate-90 text-[var(--text-tertiary)] transition-transform duration-200 rtl:-rotate-90",
+                    expanded && "rotate-180 rtl:-rotate-180",
+                    isActive && "text-[var(--sb-ocean-bg-active)]"
+                  )}
+                />
+              </div>
+            </>
           )}
 
           {/* Label */}
