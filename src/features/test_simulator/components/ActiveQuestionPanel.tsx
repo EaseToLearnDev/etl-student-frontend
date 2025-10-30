@@ -608,19 +608,6 @@ const ActiveQuestionPanel = () => {
               </Button>
             )}
 
-            {/* Tony AI Floating Button */}
-            {isAiFeatureEnabled && (
-              <Button
-                style="secondary"
-                className="!min-w-10 px-2 sm:px-4"
-                onClick={() => {
-                  setIsHelpModalOpen(true);
-                }}
-              >
-                Ask Tony
-              </Button>
-            )}
-
             <Button
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
@@ -648,6 +635,26 @@ const ActiveQuestionPanel = () => {
           <MdChevronRight size={22} />
         </div>
       </div>
+
+      {/* Tony AI Floating Button */}
+      {isAiFeatureEnabled && (
+        <div
+          className={cn(
+            "flex flex-col items-center gap-1",
+            isMobile
+              ? "fixed bottom-[75px] right-[32px]"
+              : "absolute bottom-2 right-8"
+          )}
+          onClick={() => {
+            setIsHelpModalOpen(true);
+          }}
+        >
+          <div className="cursor-pointer size-10 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
+            <AiIcon width={28} height={28} />
+          </div>
+          <span className="font-semibold !text-xs">ASK TONY</span>
+        </div>
+      )}
     </div>
   );
 };
