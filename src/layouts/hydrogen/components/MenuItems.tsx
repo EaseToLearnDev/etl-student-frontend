@@ -125,7 +125,7 @@ export const menuItems: MenuItem[] = [
   },
   {
     id: "otherCourses",
-    name: "All Courses",
+    name: "All Exams",
     href: "/selectcourse",
     static: false,
     icon: <PiBooksFill />,
