@@ -151,6 +151,7 @@ export interface CourseResponse {
   studyMaterial: number;
   selfTest: number;
   topicTest: number;
+  adaptiveTest?: number;
   mockTest: number;
   dynamicMockTest: number;
   classTest: number;
@@ -281,3 +282,5 @@ export interface ToastData {
   duration?: number;
   redirect?: string;
 }
+
+export type Option<T> = T | null | undefined;

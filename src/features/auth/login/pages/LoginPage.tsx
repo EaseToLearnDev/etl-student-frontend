@@ -11,6 +11,8 @@ import { useLoginStore } from "../hooks/useLoginStore";
 
 // Utils
 import cn from "../../../../utils/classNames";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 // Services
 import { HandleLogin, handleVerifyOtp } from "../login.services";
@@ -19,9 +21,6 @@ import { HandleLogin, handleVerifyOtp } from "../login.services";
 import Button from "../../../../components/Button";
 import Tabs from "../../../../components/Tabs";
 import VerifyOtpContent from "../../../profile/components/VerifyOtpContent";
-import { pushToDataLayer } from "../../../../utils/gtm";
-import { gtmEvents } from "../../../../utils/gtm-events";
-import { RiEyeLine } from "react-icons/ri";
 import InputField from "../../../../components/InputField";
 
 // GTM click id constants
@@ -113,7 +112,7 @@ const LoginPage = () => {
                 onCancel={() => {
                   setToken(null);
                 }}
-                onVerify={(otp) => handleVerifyOtp(otp, navigate)}
+                onVerify={(otp) => handleVerifyOtp(otp, navigate, deviceType)}
                 onResend={() => HandleLogin(navigate, loginWith, deviceType)}
                 error={errorMessage}
                 type={loginWith === "password" ? "Email" : "Mobile"}
@@ -199,7 +198,6 @@ const LoginPage = () => {
                         value={password}
                         onChange={(e) => setCredentials(userId, e.target.value)}
                         placeholder="**********"
-                        required
                       />
                     )}
                   </div>

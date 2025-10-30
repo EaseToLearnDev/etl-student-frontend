@@ -1,7 +1,13 @@
-import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
+// Apis
 import { studentSelectedCourses } from "../api/studentSelectedCourses.api";
-import type { Course, CourseResponse } from "../../features/shared/types";
 
+// Hooks
+import { useStudentStore } from "../../features/shared/hooks/useStudentStore";
+import { generateCoursesData } from "../../features/shared/services/generateCoursesData";
+
+/**
+ * Loads student purchased/taken courses
+ */
 export const loadStudentSelectedCourses = async () => {
   try {
     const { studentData, setStudentData } = useStudentStore.getState();
@@ -13,29 +19,7 @@ export const loadStudentSelectedCourses = async () => {
     const data = await studentSelectedCourses({ loginId, token });
     if (!data || !data?.obj || !data?.obj?.length) return;
 
-    const courses: Course[] = data?.obj?.map((c: CourseResponse) => ({
-      templateId: c.templateId,
-      validityId: c.validityId,
-      courseId: c.courseId,
-      packTypeId: c.packTypeId,
-      benchmark: c.benchmark,
-      organisationName: c.organisationName,
-      validTillDate: c.validTillDate,
-      packTypeTitle: c.packTypeTitle,
-      tabs: {
-        dashboard: !!c.dashboard,
-        report: !!c.report,
-        studyMaterial: !!c.studyMaterial,
-        selfTest: !!c.selfTest,
-        topicTest: !!c.topicTest,
-        mockTest: !!c.mockTest,
-        dynamicMockTest: !!c.dynamicMockTest,
-        classTest: !!c.classTest,
-        teacherHelp: !!c.teacherHelp,
-        tonyHelp: !!c.tonyHelp,
-        otherCourses: !!c.otherCourses,
-      },
-    }));
+    const courses = generateCoursesData(data?.obj);
     setStudentData({ ...studentData, courses });
   } catch (error: any) {
     console.log("Failed to handle student selected courses:", error.message);

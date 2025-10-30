@@ -1,10 +1,8 @@
-import Cookies from "js-cookie";
 // Types
 import {
   Severity,
-  type Course,
   type StudentDataResponse,
-  type StudentData,
+  type Option,
 } from "../../shared/types";
 
 // Store
@@ -17,14 +15,17 @@ import { type NavigateFunction } from "react-router-dom";
 import { verifyMobileSendOtp } from "./apis/verifyMobileSendOtp";
 import { verifyOtpLogin } from "./apis/verifyOtpLogin";
 
+// services
+import { saveStudentData } from "../../shared/services/saveStudentData";
+
 export const HandleLogin = async (
   navigate: NavigateFunction,
   loginWith: string,
-  deviceType: string | null,
+  deviceType: Option<string>
 ) => {
   const { userId, password, setError, setLoading, setToken } =
     useLoginStore.getState();
-  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
+  const { setStudentData } = useStudentStore.getState();
   if (loginWith === "password") {
     try {
       // validateCredentials(email, password);
@@ -39,102 +40,24 @@ export const HandleLogin = async (
 
       const data: StudentDataResponse = await login(formData);
 
-      Cookies.set(
-        "accountDetails",
-        JSON.stringify({
-          sid: data?.studentId,
-          studentId: data?.studentId,
-          loginId: data?.loginId,
-          token: data?.token,
-          studentName: data?.studentName ?? "",
-          mobile: data?.phoneNo ?? "",
-          email: data?.emailId ?? "",
-        }),
-      );
-      Cookies.set("token", `"${data?.token}"`);
+      // Save cookies and student data
+      saveStudentData(data, deviceType);
 
+      // Stop loading
       setLoading(false);
 
-      // Map courses if available
-      let courses: Course[] = [];
-      if (data?.courses && data?.courses?.length > 0) {
-        courses = data.courses.map((c) => {
-          const tabs: Record<string, boolean> = {
-            dashboard: !!c.dashboard,
-            report: !!c.report,
-            studyMaterial: !!c.studyMaterial,
-            selfTest: !!c.selfTest,
-            topicTest: !!c.topicTest,
-            mockTest: !!c.mockTest,
-            dynamicMockTest: !!c.dynamicMockTest,
-            classTest: !!c.classTest,
-            teacherHelp: !!c.teacherHelpcourse,
-            tonyHelp: !!c.tonyHelp,
-            otherCourses: !!c.otherCourses,
-          };
-          const course: Course = {
-            templateId: c.templateId,
-            validityId: c.validityId,
-            courseId: c.courseId,
-            packTypeId: c.packTypeId,
-            benchmark: c.benchmark,
-            organisationName: c.organisationName,
-            validTillDate: c.validTillDate,
-            packTypeTitle: c.packTypeTitle,
-            tabs: tabs,
-          };
-          return course;
-        });
-      }
-
-      const studentData: StudentData = {
-        openedCourse: data?.openedCourse,
-        firstTimeUser: data?.firstTimeUser,
-        websiteId: data?.websiteId,
-        token: data?.token,
-        studentId: data?.studentId,
-        studentName: data?.studentName ?? "",
-        emailId: data?.emailId ?? "",
-        phoneNo: data?.phoneNo ?? "",
-        status: data?.status,
-        loginId: data?.loginId,
-        schools: data?.schools || [],
-        courses: courses,
-        profilePic: data?.profilePic ?? "",
-        deleteFlag: data?.deleteFlag,
-      };
-
-      if (deviceType && deviceType.length > 0) {
-        studentData.deviceType = deviceType;
-      } else {
-        studentData.deviceType = "android";
-      }
-
-      setStudentData(studentData);
-      setShowFtuModal(data?.firstTimeUser == 1);
-
       // Navigate to dashboard
-      if (courses.length > 0) {
+      if (data?.courses && data?.courses.length > 0) {
         navigate("/dashboard");
       } else {
         navigate("/selectyourcourse");
       }
-    } catch (error) {
-      if (error instanceof Error) {
-        if (error.message === "invalid_credentials") {
-          setError("Invalid User-Id or password", Severity.Alert);
-          setLoading(false);
-        }
-        if (error.message === "invalid_email") {
-          setError("Please enter your email address", Severity.Alert);
-          setLoading(false);
-        }
-        if (error.message === "invalid_password") {
-          setError("Please enter your password", Severity.Alert);
-          setLoading(false);
-        }
-      }
+    } catch (error: any) {
+      setError("Invalid User-Id or password", Severity.Alert);
       setStudentData(null);
+      console.log("Error: " + error);
+    } finally {
+      setLoading(false);
     }
   } else {
     setError("", Severity.None);
@@ -150,7 +73,7 @@ export const HandleLogin = async (
     } catch (error: any) {
       setError("Something went wrong. Please try again.", Severity.Alert);
       setStudentData(null);
-      console.log("Error: " + error);
+      console.log("Error: " + error?.message);
     } finally {
       setLoading(false);
     }
@@ -160,87 +83,27 @@ export const HandleLogin = async (
 export const handleVerifyOtp = async (
   otp: string,
   navigate: NavigateFunction,
+  deviceType: Option<string>
 ) => {
   const { token, setError } = useLoginStore.getState();
-  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
+  const { setStudentData } = useStudentStore.getState();
   if (!token) {
     setError("Invalid Number", Severity.Alert);
     return;
   }
   try {
-    const res: StudentDataResponse = await verifyOtpLogin(otp, token);
+    const data: StudentDataResponse = await verifyOtpLogin(otp, token);
 
-    Cookies.set(
-      "accountDetails",
-      JSON.stringify({
-        sid: res?.studentId,
-        studentId: res?.studentId,
-        loginId: res?.loginId,
-        token: res?.token,
-        studentName: res?.studentName ?? "",
-        mobile: res?.phoneNo ?? "",
-        email: res?.emailId ?? "",
-      }),
-    );
-    Cookies.set("token", `"${res?.token}"`);
-
-    // Map courses if available
-    let courses: Course[] = [];
-    if (res?.courses && res?.courses?.length > 0) {
-      courses = res?.courses.map((c) => {
-        const tabs: Record<string, boolean> = {
-          dashboard: !!c.dashboard,
-          report: !!c.report,
-          studyMaterial: !!c.studyMaterial,
-          selfTest: !!c.selfTest,
-          topicTest: !!c.topicTest,
-          mockTest: !!c.mockTest,
-          dynamicMockTest: !!c.dynamicMockTest,
-          classTest: !!c.classTest,
-          teacherHelp: !!c.teacherHelpcourse,
-          tonyHelp: !!c.tonyHelp,
-          otherCourses: !!c.otherCourses,
-        };
-        const course: Course = {
-          templateId: c.templateId,
-          validityId: c.validityId,
-          courseId: c.courseId,
-          packTypeId: c.packTypeId,
-          benchmark: c.benchmark,
-          organisationName: c.organisationName,
-          validTillDate: c.validTillDate,
-          packTypeTitle: c.packTypeTitle,
-          tabs: tabs,
-        };
-        return course;
-      });
-    }
-    const studentData: StudentData = {
-      openedCourse: res?.openedCourse,
-      firstTimeUser: res?.firstTimeUser,
-      websiteId: res?.websiteId,
-      token: res?.token,
-      studentId: res?.studentId,
-      studentName: res?.studentName ?? "",
-      emailId: res?.emailId ?? "",
-      phoneNo: res?.phoneNo ?? "",
-      status: res?.status,
-      loginId: res?.loginId,
-      schools: res?.schools || [],
-      courses: courses,
-      profilePic: res?.profilePic,
-      deleteFlag: res?.deleteFlag,
-    };
-
-    setStudentData(studentData);
-    setShowFtuModal(res?.firstTimeUser == 1);
+    // Save cookies and student data
+    saveStudentData(data, deviceType);
 
     // Navigate to dashboard
-    if (courses.length > 0) {
+    if (data?.courses && data?.courses.length > 0) {
       navigate("/dashboard");
     } else {
       navigate("/selectyourcourse");
     }
+    
     setError("Login Successful!", Severity.None);
   } catch (error) {
     console.log("verification :", error);
