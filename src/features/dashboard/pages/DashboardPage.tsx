@@ -57,7 +57,7 @@ const DashboardPage = () => {
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
-    null,
+    null
   );
 
   const createDate = (_date: Date) => {
@@ -79,7 +79,11 @@ const DashboardPage = () => {
     const fetchData = async () => {
       const classTestList = await loadClassTestList();
       const prevRunningTest = await loadPreviousRunningTest();
-      const scheduledClasses = await loadWeekScheduledClasses();
+      let scheduledClasses = null
+      // Checks if Student have any Class then calls the week classes api
+      if (isClassTest) {
+        scheduledClasses = await loadWeekScheduledClasses();
+      }
 
       if (classTestList) setTestList(classTestList);
       if (prevRunningTest) setPrevRunningTest(prevRunningTest);

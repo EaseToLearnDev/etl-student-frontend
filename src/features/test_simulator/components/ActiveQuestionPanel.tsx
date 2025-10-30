@@ -443,105 +443,107 @@ const ActiveQuestionPanel = () => {
           ) : (
             <></>
           )}
-        </div>
-
-        {/* TODO: REDO SUBJECTIVE UI IN REVIEW MODE (DOES NOT LOOK GOOD) */}
-        {/* Subjective Review Mode */}
-        {[
-          "Subjective-Type-Very-Short",
-          "Subjective-Type-Short-Answer-I",
-          "Subjective-Type-Short-Answer-II",
-          "Subjective-Type-Long",
-        ].includes(currentQuestion?.questionType || "") && mode === "review" ? (
-          <div
-            className={`w-full max-h-[300px] sm:${
-              currentQuestion?.questionType === "Subjective-Type-Long"
-                ? "max-h-[250px]"
-                : "max-h-[500px]"
-            } border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto`}
-          >
-            {/* Answer Container */}
-            <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
-              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
-                <p className="font-semibold">Your Answer</p>
-                <input
-                  type="text"
-                  disabled={!features.subjectiveMarksEditEnabled}
-                  value={currentMarksObj?.totalMark}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (isNaN(val)) return;
-                    updateCurrentTotalMarks(val);
-                  }}
-                  className="text-center w-full max-w-[50px] border rounded-md text-base bg-[var(--surface-bg-primary)] disabled:bg-[var(--surface-bg-tertiary)] disabled:text-[var(--text-tertiary)]"
-                />
-                <p className="font-semibold">
-                  /{" "}
-                  {currentQuestion?.responseChoice?.reduce(
-                    (sum, c) => sum + (Number(c.partMarks) || 0),
-                    0
-                  )}
-                </p>
-              </div>
-              <div className="w-full h-full flex flex-col gap-4 p-4">
-                <p>{currentResponse?.text || ""}</p>
-                {currentResponse?.url ? (
-                  <img
-                    onClick={() => setIsSubjectiveMediaModalOpen(true)}
-                    src={currentResponse?.url}
-                    className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
+          
+          {/* Subjective Review Mode */}
+          {[
+            "Subjective-Type-Very-Short",
+            "Subjective-Type-Short-Answer-I",
+            "Subjective-Type-Short-Answer-II",
+            "Subjective-Type-Long",
+          ].includes(currentQuestion?.questionType || "") &&
+          mode === "review" ? (
+            <div
+              className={`w-full max-h-[300px] sm:${
+                currentQuestion?.questionType === "Subjective-Type-Long"
+                  ? "max-h-[250px]"
+                  : "max-h-[500px]"
+              } border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto`}
+            >
+              {/* Answer Container */}
+              <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
+                <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
+                  <p className="font-semibold">Your Answer</p>
+                  <input
+                    type="text"
+                    disabled={!features.subjectiveMarksEditEnabled}
+                    value={currentMarksObj?.totalMark}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (isNaN(val)) return;
+                      updateCurrentTotalMarks(val);
+                    }}
+                    className="text-center w-full max-w-[50px] border rounded-md text-base bg-[var(--surface-bg-primary)] disabled:bg-[var(--surface-bg-tertiary)] disabled:text-[var(--text-tertiary)]"
                   />
-                ) : (
-                  <></>
-                )}
+                  <p className="font-semibold">
+                    /{" "}
+                    {currentQuestion?.responseChoice?.reduce(
+                      (sum, c) => sum + (Number(c.partMarks) || 0),
+                      0
+                    )}
+                  </p>
+                </div>
+                <div className="w-full h-full flex flex-col gap-4 p-4">
+                  <p>{currentResponse?.text || ""}</p>
+                  {currentResponse?.url ? (
+                    <img
+                      onClick={() => setIsSubjectiveMediaModalOpen(true)}
+                      src={currentResponse?.url}
+                      className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Solution Container */}
-            <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
-              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
-                <p className="font-semibold">Solution</p>
-              </div>
+              {/* Solution Container */}
+              <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
+                <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
+                  <p className="font-semibold">Solution</p>
+                </div>
 
-              <div className="w-full h-full p-2 flex flex-col gap-2">
-                {currentQuestion?.responseChoice?.map((choice, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex border-b border-b-[var(--border-secondary)]"
-                  >
-                    <MathJax dynamic className="flex-1 p-2">
-                      <div
-                        className="math-container text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: checkForTable(
-                            choice?.responseText.trim().replace(/[\r\n]+/g, "")
-                          ),
-                        }}
-                      />
-                    </MathJax>
-                    <div className="min-w-[80px] min-h-full flex justify-center items-center border-l border-l-[var(--border-secondary)]">
-                      <Checkbox
-                        label={choice?.partMarks || ""}
-                        value={choice?.partMarks || ""}
-                        disabled={!features.subjectiveMarksEditEnabled}
-                        checked={
-                          currentMarksObj?.options[index] === "yes"
-                            ? true
-                            : false
-                        }
-                        onChange={(e) =>
-                          updateCurrentMarksObj(index, e.target.checked)
-                        }
-                      />
+                <div className="w-full h-full p-2 flex flex-col gap-2">
+                  {currentQuestion?.responseChoice?.map((choice, index) => (
+                    <div
+                      key={index}
+                      className="w-full flex border-b border-b-[var(--border-secondary)]"
+                    >
+                      <MathJax dynamic className="flex-1 p-2">
+                        <div
+                          className="math-container text-sm"
+                          dangerouslySetInnerHTML={{
+                            __html: checkForTable(
+                              choice?.responseText
+                                .trim()
+                                .replace(/[\r\n]+/g, "")
+                            ),
+                          }}
+                        />
+                      </MathJax>
+                      <div className="min-w-[80px] min-h-full flex justify-center items-center border-l border-l-[var(--border-secondary)]">
+                        <Checkbox
+                          label={choice?.partMarks || ""}
+                          value={choice?.partMarks || ""}
+                          disabled={!features.subjectiveMarksEditEnabled}
+                          checked={
+                            currentMarksObj?.options[index] === "yes"
+                              ? true
+                              : false
+                          }
+                          onChange={(e) =>
+                            updateCurrentMarksObj(index, e.target.checked)
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
       {/* Navigation Buttons */}
       <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">

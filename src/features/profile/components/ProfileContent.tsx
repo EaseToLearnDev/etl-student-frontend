@@ -20,6 +20,8 @@ import { useToastStore } from "../../../global/hooks/useToastStore";
 import { Toast } from "../../../components/Toast";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import ProfileInformationPopover from "./ProfileInformationPopover";
 
 /**
  * Renders the main profile content section for viewing and editing student profile details.
@@ -161,6 +163,15 @@ const ProfileContent = () => {
         <div className="flex flex-col gap-2">
           <InputField
             label="Mobile Number"
+            renderItem={() => (
+              <ProfileInformationPopover type="mobile">
+                <InformationCircleIcon
+                  width={20}
+                  height={20}
+                  className="text-[var(--text-primary)] cursor-pointer"
+                />
+              </ProfileInformationPopover>
+            )}
             value={phoneNo.data}
             disabled={!editProfile}
             onChange={(e) => {
@@ -195,6 +206,15 @@ const ProfileContent = () => {
         <div className="flex flex-col gap-2">
           <InputField
             label="Email Address"
+            renderItem={() => (
+              <ProfileInformationPopover type="email">
+                <InformationCircleIcon
+                  width={20}
+                  height={20}
+                  className="text-[var(--text-primary)] cursor-pointer"
+                />
+              </ProfileInformationPopover>
+            )}
             type="email"
             value={emailId.data}
             disabled={!editProfile}
@@ -231,7 +251,7 @@ const ProfileContent = () => {
             style="primary"
             onClick={() => {
               pushToDataLayer({
-                event: gtmEvents.save_profile_button_click
+                event: gtmEvents.save_profile_button_click,
               });
               handleSave();
             }}
