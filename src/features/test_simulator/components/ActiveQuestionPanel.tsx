@@ -108,13 +108,7 @@ const ActiveQuestionPanel = () => {
           </Badge>
         </div>
 
-        <div
-          className={`${
-            mode === "review"
-              ? "max-h-[calc(100%-430px)]"
-              : "max-h-[calc(100%-130px)]"
-          } pr-2 overflow-y-auto`}
-        >
+        <div className={`max-h-[calc(100%-130px)] pr-2 overflow-y-auto`}>
           {/* Common Data Description  */}
           <div className="flex flex-col gap-4">
             {currentQuestion?.commonDataDescription &&
