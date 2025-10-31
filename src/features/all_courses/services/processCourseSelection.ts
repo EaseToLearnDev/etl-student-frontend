@@ -35,7 +35,7 @@ export const processCourseSelection = async ({
   code?: string;
   navigate: (path: string) => void;
   payableAmount?: Option<number>;
-  email: string;
+  email?: string;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
   const { setIsUpdateEmailModalOpen } = useCoursesStore.getState();
