@@ -39,6 +39,7 @@ import EmptyState from "../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 import { LuLock } from "react-icons/lu";
 import SubjectiveMediaModal from "../components/SubjectiveMediaModal";
+import AdaptiveTestSimulator from "../components/AdaptiveTestSimulator";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -64,14 +65,14 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   const isSubmissionModalOpen = useTestStore((s) => s.isSubmissionModalOpen);
   const setIsSubmissionModalOpen = useTestStore(
-    (s) => s.setIsSubmissionModalOpen,
+    (s) => s.setIsSubmissionModalOpen
   );
 
   const isSwitchSectionModalOpen = useTestStore(
-    (s) => s.isSwitchSectionModalOpen,
+    (s) => s.isSwitchSectionModalOpen
   );
   const setIsSwitchSectionModalOpen = useTestStore(
-    (s) => s.setIsSwitchSectionModalOpen,
+    (s) => s.setIsSwitchSectionModalOpen
   );
   const pendingQuestion = useTestStore((s) => s.pendingQuestion);
   const setPendingQuestion = useTestStore((s) => s.setPendingQuestion);
@@ -90,7 +91,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const resetAi = useAiStore((s) => s.reset);
 
   const setShowGuestTestSubmitModal = useGuestStore(
-    (s) => s.setShowGuestTestSubmitModal,
+    (s) => s.setShowGuestTestSubmitModal
   );
   const testData = useTestStore((s) => s.testData);
 
@@ -104,7 +105,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const setLoading = useLoadingStore((s) => s.setLoading);
 
   const { hasExited, reEnter, exit } = useFullscreenProtection(
-    features?.fullScreenEnabled ?? false,
+    features?.fullScreenEnabled ?? false
   );
 
   const status = getActiveCourseAccessStatus();
@@ -124,7 +125,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       setLoading,
       setCurrentQuestion,
       isSubjectiveTest,
-      isMobile,
+      isMobile
     );
     return () => {
       if (features?.timerEnabled) {
@@ -142,19 +143,25 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       event.preventDefault();
       event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
     };
+    if (mode !== "adaptive") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [mode]);
 
   const ManageTestSubmit = () => {
-    if (testMode === "guest") {
-      setShowGuestTestSubmitModal(true);
-    } else {
-      handleTestSubmit(navigate);
+    switch (mode) {
+      case "guest":
+        setShowGuestTestSubmitModal(true);
+        break;
+      case "registered":
+        handleTestSubmit(navigate);
+        break;
+      default:
+        break;
     }
   };
 
@@ -173,7 +180,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           navigate(
             status === "upgrade"
               ? `/selectcourse?cid=${activeCourse?.courseId}`
-              : "/",
+              : "/"
           )
         }
         className="min-h-screen"
@@ -198,7 +205,16 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   return (
     <>
-      {!isMobile ? <DesktopTestSimulator /> : <MobileTestSimulator />}
+      {/* Conditional rendering based on mode */}
+      {mode === "adaptive" ? (
+        <AdaptiveTestSimulator />
+      ) : !isMobile ? (
+        <DesktopTestSimulator />
+      ) : (
+        <MobileTestSimulator />
+      )}
+
+      {/* Submission Modal */}
       <Modal
         isOpen={isSubmissionModalOpen}
         onClose={() => setIsSubmissionModalOpen(false)}
@@ -215,6 +231,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         />
       </Modal>
 
+      {/* Auto Submission Modal */}
       <Modal
         isOpen={isTestEndedModalOpen}
         onClose={() => undefined}
@@ -224,6 +241,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         <TestEndedModalContent onSubmit={ManageTestSubmit} />
       </Modal>
 
+      {/* Fullscreen Exit Modal */}
       <Modal
         size="lg"
         className="p-4"
@@ -236,11 +254,16 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         />
       </Modal>
 
+      {/* AI help Modal */}
       <AiHelpModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
+
+      {/* Teacher Support Modal */}
       <TeacherSupportModal />
+
+      {/* Switch Section Modal */}
       <SwitchSectionModal
         isOpen={isSwitchSectionModalOpen}
         onClose={() => setIsSwitchSectionModalOpen(false)}
@@ -252,10 +275,13 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         }}
       />
 
+      {/* Subjective Media Modal */}
       <SubjectiveMediaModal />
 
+      {/* Guest Submit Modal */}
       <GuestTestSubmitModal />
 
+      {/* Toast  */}
       {testError?.message && (
         <Toast
           title={testError?.severity}

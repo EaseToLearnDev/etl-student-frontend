@@ -35,6 +35,7 @@ import Checkbox from "../../../components/Checkbox";
 import { handelFileUpload } from "../services/handleFileUpload";
 import { handelFileRemove } from "../services/handleFileRemove";
 import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
+import { handleUpdateAdaptiveTestAnswer } from "../services/handleUpdateAdaptiveTestAnswer";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -45,7 +46,9 @@ import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
 const ActiveQuestionPanel = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const { correctResponseEnabled } = useTestStore((s) => s.features);
+  const { correctResponseEnabled, markForReviewEnabled } = useTestStore(
+    (s) => s.features
+  );
   const setIsTeacherSupportModalOpen = useTeacherSupportStore(
     (s) => s.setIsTeacherSupportModalOpen
   );
@@ -443,7 +446,7 @@ const ActiveQuestionPanel = () => {
           ) : (
             <></>
           )}
-          
+
           {/* Subjective Review Mode */}
           {[
             "Subjective-Type-Very-Short",
@@ -545,43 +548,53 @@ const ActiveQuestionPanel = () => {
           )}
         </div>
       </div>
-      {/* Navigation Buttons */}
+
+      {/* Buttons */}
       <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
-        <div
-          className={cn(
-            "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
-          )}
-          onClick={() => {
-            if (features.subjectiveMarksEditEnabled) {
-              handleUpdateMarksTest()?.then(goToPrev);
-            } else goToPrev();
-          }}
-        >
-          <MdChevronLeft size={22} />
-        </div>
-        {!correctResponseEnabled ? (
+        {/* Previous Button */}
+        {mode !== "adaptive" && (
+          <div
+            className={cn(
+              "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
+              "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
+            )}
+            onClick={() => {
+              if (features.subjectiveMarksEditEnabled) {
+                handleUpdateMarksTest()?.then(goToPrev);
+              } else goToPrev();
+            }}
+          >
+            <MdChevronLeft size={22} />
+          </div>
+        )}
+
+        {/* Mark For Review Actions */}
+        {!correctResponseEnabled && (
+          <Button
+            style="secondary"
+            className="!min-w-10 px-2 sm:px-4"
+            onClick={clearCurrentResponse}
+          >
+            Clear
+          </Button>
+        )}
+        {markForReviewEnabled && (
+          <Button
+            style="secondary"
+            className="!min-w-10 px-2 sm:px-4"
+            onClick={markCurrentFoReview}
+          >
+            {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
+            currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
+              ? "Unmark Review"
+              : "Mark for Review"}
+          </Button>
+        )}
+
+        {/* Action Buttons for Review Mode */}
+        {correctResponseEnabled && (
           <>
-            <Button
-              style="secondary"
-              className="!min-w-10 px-2 sm:px-4"
-              onClick={clearCurrentResponse}
-            >
-              Clear
-            </Button>
-            <Button
-              style="secondary"
-              className="!min-w-10 px-2 sm:px-4"
-              onClick={markCurrentFoReview}
-            >
-              {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
-              currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
-                ? "Unmark Review"
-                : "Mark for Review"}
-            </Button>
-          </>
-        ) : (
-          <>
+            {/* Only show finish test if user is on subjective marking page */}
             {features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
@@ -594,7 +607,8 @@ const ActiveQuestionPanel = () => {
               </Button>
             )}
 
-            {!features.subjectiveMarksEditEnabled && (
+            {/* Only show support if support is enabled */}
+            {features.supportEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
@@ -603,7 +617,6 @@ const ActiveQuestionPanel = () => {
                 Support
               </Button>
             )}
-
             <Button
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
@@ -617,15 +630,26 @@ const ActiveQuestionPanel = () => {
             </Button>
           </>
         )}
+
+        {/* Adaptive Mode Buttons */}
+        {mode === "adaptive" && <Button style="secondary" onClick={() => navigate(-1)}>Finish Test</Button>}
+
+        {/* Next Button */}
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={() => {
-            if (features.subjectiveMarksEditEnabled) {
-              handleUpdateMarksTest()?.then(goToNext);
-            } else goToNext();
+            if (mode === "adaptive") {
+              handleUpdateAdaptiveTestAnswer(navigate);
+            } else {
+              if (features.subjectiveMarksEditEnabled) {
+                handleUpdateMarksTest()?.then(goToNext);
+              } else {
+                goToNext();
+              }
+            }
           }}
         >
           <MdChevronRight size={22} />
@@ -638,7 +662,7 @@ const ActiveQuestionPanel = () => {
           className={cn(
             "flex flex-col items-center gap-1",
             isMobile
-              ? "fixed bottom-[75px] right-[32px]"
+              ? "fixed bottom-[75px] right-[40px]"
               : "absolute bottom-2 right-8"
           )}
           onClick={() => {

@@ -16,10 +16,10 @@ const InformationPopoverContent = ({ type }: { type: string }) => {
     </div>
   ) : (
     <div className="flex flex-col items-center gap-2 w-[200px] sm:w-sm">
-      <span>
+      <p>
         Your email helps us connect with you for timely and personalized teacher
         support.
-      </span>
+      </p>
     </div>
   );
 };

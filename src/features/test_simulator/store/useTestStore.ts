@@ -160,6 +160,8 @@ const useTestStore = create<TestStore>((set, get) => ({
     showDynamicStatusEnabled: false,
     fullScreenEnabled: false,
     subjectiveMarksEditEnabled: false,
+    markForReviewEnabled: false,
+    supportEnabled: false,
   },
   setFeatures: (features) =>
     set({
@@ -767,6 +769,8 @@ const useTestStore = create<TestStore>((set, get) => ({
         timerEnabled: false,
         fullScreenEnabled: false,
         subjectiveMarksEditEnabled: false,
+        markForReviewEnabled: false,
+        supportEnabled: false,
       },
     });
   },

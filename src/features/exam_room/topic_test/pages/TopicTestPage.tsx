@@ -211,7 +211,7 @@ const TopicTestPage = () => {
             showTestList ? () => setHideSecondary(true) : undefined
           }
         />
-      </div>{" "}
+      </div>
       {/* Start Test Modal */}
       <Modal
         isOpen={showStartTestModal}

@@ -15,6 +15,7 @@ interface SelectProps<T = string> {
   dropdownItemClassName?: string;
   renderItem?: (item: T, index: number, isSelected: boolean) => React.ReactNode;
   getItemLabel?: (item: T) => string;
+  renderAtEnd?: React.ReactNode;
 }
 
 const Select = <T,>({
@@ -29,6 +30,7 @@ const Select = <T,>({
   dropdownItemClassName = "",
   renderItem,
   getItemLabel,
+  renderAtEnd,
 }: SelectProps<T>) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -126,6 +128,7 @@ const Select = <T,>({
               </div>
             );
           })}
+          {renderAtEnd ? renderAtEnd : null}
         </div>
       )}
     </div>
