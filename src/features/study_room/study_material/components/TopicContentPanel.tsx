@@ -56,7 +56,7 @@ const TopicContentPanel = ({
           </FilterDropdown>
         </div>
       </div>
-      <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3 scrollbar-hide">
+      <div className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden pr-3">
         {filteredContentList?.length && filteredContentList?.length > 0 ? (
           filteredContentList?.map((content, index) => (
             <TopicContentItem

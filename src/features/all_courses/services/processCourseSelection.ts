@@ -5,6 +5,7 @@ import {
   ToastType,
   type Course,
   type CourseResponse,
+  type Option,
 } from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useCoursesStore } from "../hooks/useCoursesStore";
@@ -24,6 +25,8 @@ export const processCourseSelection = async ({
   selectedPlanId,
   code,
   navigate,
+  payableAmount,
+  email,
 }: {
   option?: number;
   courseId?: number;
@@ -31,6 +34,8 @@ export const processCourseSelection = async ({
   selectedPlanId?: number | null;
   code?: string;
   navigate: (path: string) => void;
+  payableAmount?: Option<number>;
+  email: string;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
   const { setIsUpdateEmailModalOpen } = useCoursesStore.getState();
@@ -72,9 +77,7 @@ export const processCourseSelection = async ({
   // ---------------- Paid course flow ----------------
   if (!selectedPlanId) return console.warn("Please select a plan first");
 
-  const { emailId } = studentData;
-
-  if (!emailId) {
+  if (!email && payableAmount && payableAmount > 0) {
     setIsUpdateEmailModalOpen(true);
     return;
   }
@@ -131,7 +134,7 @@ export const processCourseSelection = async ({
         description: data?.productinfo,
         prefill: {
           name: studentData.studentName,
-          email: studentData.emailId,
+          email: email,
           contact: studentData.phoneNo,
         },
         notes: {

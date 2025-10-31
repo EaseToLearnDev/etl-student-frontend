@@ -15,6 +15,7 @@ interface InputFieldProps {
   pattern?: string;
   maxLength?: number;
   renderItem?: () => React.ReactNode;
+  className?: string;
 }
 
 const InputField = ({
@@ -29,6 +30,7 @@ const InputField = ({
   maxLength,
   pattern = "",
   renderItem,
+  className = ""
 }: InputFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -44,7 +46,7 @@ const InputField = ({
   const isPassword = type === "password";
 
   return (
-    <div className="flex flex-col gap-2 relative">
+    <div className={cn("flex flex-col gap-2 relative", className)}>
       {label && (
         <div className="flex items-center gap-2">
           <label
@@ -72,7 +74,7 @@ const InputField = ({
           name={label?.split(" ").join("-")}
           type={isPassword && showPassword ? "text" : type}
           placeholder={placeholder}
-          className="w-full focus:outline-none text-base rounded-lg px-4 py-2 !bg-transparent pr-10"
+          className="w-full focus:outline-none text-base rounded-lg px-4 py-3 !bg-transparent pr-10"
           required={required}
           disabled={disabled}
           value={value}
