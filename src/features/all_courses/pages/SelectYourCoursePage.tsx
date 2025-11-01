@@ -17,9 +17,6 @@ import AllCoursesHeader from "../components/AllCoursesHeader";
 import CoursesCards from "../components/CoursesCards";
 import { FilterCourses } from "../components/FilterCourses";
 import CoursesCardSkeleton from "../components/CoursesCardSkeleton";
-import { useToastStore } from "../../../global/hooks/useToastStore";
-import { Toast } from "../../../components/Toast";
-import { ToastType } from "../../shared/types";
 import { processCourseSelection } from "../services/processCourseSelection";
 import { useNavigate } from "react-router";
 
@@ -38,8 +35,7 @@ const SelectYourCoursePage = () => {
   const setSelectedCategory = useCoursesStore((s) => s.setSelectedCategory);
   const selectedCourse = useCoursesStore((s) => s.selectedCourse);
   const setSelectedCourse = useCoursesStore((s) => s.setSelectedCourse);
-  const toastData = useToastStore((s) => s.toastData);
-
+  
   const [hideSecondary, setHideSecondary] = useState<boolean>(
     isMobile ? true : false
   );
@@ -132,16 +128,6 @@ const SelectYourCoursePage = () => {
         }}
         secondaryInitialHeight={0.6}
       />
-
-      {toastData && toastData?.title ? (
-        <Toast
-          title={toastData?.title}
-          description={toastData?.description ?? ""}
-          type={toastData?.type ?? ToastType.WARNING}
-        />
-      ) : (
-        <></>
-      )}
     </div>
   );
 };

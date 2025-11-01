@@ -89,7 +89,7 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <div
       className={cn(
-        "z-[9999] fixed top-3 right-3 max-w-[300px] w-full sm:w-md flex items-start gap-3 border rounded-xl shadow-lg p-4",
+        "z-[9999] fixed top-3 right-3 max-w-[300px] sm:max-w-md flex items-start gap-3 border rounded-xl shadow-lg p-4",
         colorMap[type],
         className
       )}

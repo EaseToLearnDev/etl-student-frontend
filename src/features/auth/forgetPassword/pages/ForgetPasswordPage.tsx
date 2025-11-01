@@ -8,7 +8,6 @@ import useDarkModeStore from "../../../../store/useDarkModeStore";
 import cn from "../../../../utils/classNames";
 
 // Hooks
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { useForgetPassStore } from "../hooks/useForgetPassStore";
 
 // Components
@@ -16,7 +15,6 @@ import VerifyOtpPhase from "../components/VerifyOtpPhase";
 import EnterUserIdPhase from "../components/EnterUserIdPhase";
 import { ForgetPasswordPhase } from "../forgetPassword.types";
 import SuccessPhase from "../components/SuccessPhase";
-import { Toast } from "../../../../components/Toast";
 
 /**
  * Login page component for user authentication (Password + OTP).
@@ -26,9 +24,6 @@ const ForgetPasswordPage = () => {
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const reset = useForgetPassStore((state) => state.reset);
   const currentPhase = useForgetPassStore((state) => state.currentPhase);
-  const showToast = useToastStore((state) => state.showToast);
-  const toastData = useToastStore((state) => state.toastData);
-  const resetToast = useToastStore((state) => state.resetToast);
   const phases: Record<ForgetPasswordPhase, ReactNode> = {
     [ForgetPasswordPhase.EnterUserId]: <EnterUserIdPhase />,
     [ForgetPasswordPhase.VerifyOTP]: <VerifyOtpPhase />,
@@ -74,15 +69,6 @@ const ForgetPasswordPage = () => {
           </div>
         </div>
       </div>
-      {showToast && (
-        <Toast
-          title={toastData?.title || ""}
-          description={toastData?.description}
-          onExpire={resetToast}
-          duration={2000}
-          type={toastData?.type}
-        />
-      )}
     </div>
   );
 };
