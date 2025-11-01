@@ -7,12 +7,15 @@ import {
 
 // Store
 import useTestStore from "../store/useTestStore";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 // Utils
 import cn from "../../../utils/classNames";
 import { colors, getActiveBg, Theme } from "../../../utils/colors";
 import useDrawerStore from "../../../store/useDrawerStore";
 import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 /* ---------------------------- Theme Mappings ---------------------------- */
 const statusThemeMap: Record<string, Theme> = {
@@ -55,6 +58,11 @@ const QuestionCard = ({
   const features = useTestStore((s) => s.features);
   const testMode = useTestStore((s) => s.testMode);
   const closeDrawer = useDrawerStore((s) => s.closeDrawer);
+  const activeCourse = useStudentStore((s) => s.activeCourse);
+  const testdata = useTestStore((s) => s.testData);
+  const testConfig = useTestStore((s) => s.testConfig);
+
+
 
   const isActive = question.questionId === activeQuestion?.questionId;
 
@@ -71,6 +79,13 @@ const QuestionCard = ({
   return (
     <button
       onClick={() => {
+        pushToDataLayer({event: gtmEvents.test_simulator_question_palette_click,
+        id: `question_palette_click`,
+        testType: testdata?.testType,
+        quesType: activeQuestion?.questionType,
+        examType: testConfig?.examType,
+        packType: activeCourse?.packTypeId
+        })
         if (features.subjectiveMarksEditEnabled) {
           handleUpdateMarksTest()?.then(() => jumpToQuestion(question));
         } else jumpToQuestion(question);

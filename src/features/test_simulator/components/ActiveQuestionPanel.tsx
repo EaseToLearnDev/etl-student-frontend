@@ -36,6 +36,8 @@ import { handelFileUpload } from "../services/handleFileUpload";
 import { handelFileRemove } from "../services/handleFileRemove";
 import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
 import { handleUpdateAdaptiveTestAnswer } from "../services/handleUpdateAdaptiveTestAnswer";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -559,6 +561,16 @@ const ActiveQuestionPanel = () => {
               "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
             )}
             onClick={() => {
+              // push GTM event for previous button
+              try {
+                pushToDataLayer({
+                  event: gtmEvents.test_simulator_previous_button_click,
+                  id: "previous_button",
+                });
+              } catch (err) {
+                console.warn("Failed to push previous button event", err);
+              }
+
               if (features.subjectiveMarksEditEnabled) {
                 handleUpdateMarksTest()?.then(goToPrev);
               } else goToPrev();
@@ -573,7 +585,10 @@ const ActiveQuestionPanel = () => {
           <Button
             style="secondary"
             className="!min-w-10 px-2 sm:px-4"
-            onClick={clearCurrentResponse}
+            onClick={() => {clearCurrentResponse;
+              pushToDataLayer({event: gtmEvents.  test_simulator_clear_response_button_click,
+              id: "clear_response_button_click"})
+            }}
           >
             Clear
           </Button>
@@ -582,7 +597,11 @@ const ActiveQuestionPanel = () => {
           <Button
             style="secondary"
             className="!min-w-10 px-2 sm:px-4"
-            onClick={markCurrentFoReview}
+            onClick={()=>{markCurrentFoReview;
+              pushToDataLayer({event: gtmEvents.test_simulator_mark_for_review_button_click,
+              id: "mark_for_review_button_click"
+              })
+            }}
           >
             {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
             currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
@@ -599,9 +618,12 @@ const ActiveQuestionPanel = () => {
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
-                onClick={() =>
+                onClick={() =>{
+                  pushToDataLayer({event: gtmEvents.test_simulator_finish_test_button_click,
+                  id: "finish_test_button_click"
+                  })
                   handleUpdateMarksTest(true)?.then(() => navigate("/report"))
-                }
+                }}
               >
                 Finish Test
               </Button>
@@ -612,7 +634,11 @@ const ActiveQuestionPanel = () => {
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
-                onClick={() => setIsTeacherSupportModalOpen(true)}
+                onClick={() => {
+                  pushToDataLayer({event: gtmEvents.test_view_support_button_click,
+                  id: "support_button_click"
+                  })
+                  setIsTeacherSupportModalOpen(true)}}
               >
                 Support
               </Button>
@@ -620,11 +646,14 @@ const ActiveQuestionPanel = () => {
             <Button
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
-              onClick={() =>
+              onClick={() =>{
+                pushToDataLayer({event: gtmEvents.test_view_exit_button_click,
+                id: "exit_button_click"
+                })
                 features.subjectiveMarksEditEnabled
                   ? navigate("/report")
                   : navigate(-1)
-              }
+              }}
             >
               Exit
             </Button>
@@ -641,6 +670,16 @@ const ActiveQuestionPanel = () => {
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={() => {
+            // push GTM event for next button
+            try {
+              pushToDataLayer({
+                event: gtmEvents.test_simulator_next_button_click,
+                id: "next_button"
+              });
+            } catch (err) {
+              console.warn("Failed to push next button event", err);
+            }
+
             if (mode === "adaptive") {
               handleUpdateAdaptiveTestAnswer(navigate);
             } else {
@@ -667,6 +706,9 @@ const ActiveQuestionPanel = () => {
           )}
           onClick={() => {
             setIsHelpModalOpen(true);
+            pushToDataLayer({event: gtmEvents.test_simulator_ask_tony_button_click,
+              id: "ask_tony_button_click"
+            })
           }}
         >
           <div className="cursor-pointer size-10 aspect-square rounded-full bg-[var(--surface-bg-tertiary)] flex justify-center items-center">
