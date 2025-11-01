@@ -210,7 +210,7 @@ const DashboardPage = () => {
         )}
         {(isClassTest || isMobile) && (
           <>
-            <WidgetCard>
+            <WidgetCard id="dash-download-card">
               <DownloadAppCard />
             </WidgetCard>
             <WidgetCard>

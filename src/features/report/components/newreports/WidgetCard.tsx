@@ -23,6 +23,7 @@ const widgetCardClasses = {
 };
 
 type WidgetCardProps = {
+  id?: string;
   title?: React.ReactNode;
   description?: React.ReactNode;
   action?: React.ReactNode;
@@ -40,6 +41,7 @@ const WidgetCard = forwardRef<HTMLDivElement, React.PropsWithChildren<WidgetCard
       title,
       description,
       action,
+      id = "",
       rounded = "DEFAULT",
       className = "",
       headerClassName = "",
@@ -52,6 +54,7 @@ const WidgetCard = forwardRef<HTMLDivElement, React.PropsWithChildren<WidgetCard
   ) => {
     return (
       <div
+        id={id}
         ref={ref}
         className={`${widgetCardClasses.base} ${widgetCardClasses.rounded[rounded]} ${className}`}
       >

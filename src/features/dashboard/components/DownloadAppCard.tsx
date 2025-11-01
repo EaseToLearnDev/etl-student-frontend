@@ -30,7 +30,6 @@ export default function DownloadAppCard({
     <aside
       className={`w-full flex flex-col gap-4 ${className}`}
       aria-labelledby="download-card-title"
-      id="dash-download-card"
     >
       <div className="flex flex-col gap-1">
         <h5>{title}</h5>
