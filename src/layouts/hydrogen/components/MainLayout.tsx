@@ -5,6 +5,7 @@ import Header from "./Header";
 import Sidebar from "./Sidebar";
 import TopMenu from "./TopMenu";
 import TutorialsModal from "../../../features/tutorials/pages/TutorialsModal";
+import GlobalToast from "../../../components/GlobalToast";
 
 export default function HydrogenLayout() {
   return (
@@ -28,6 +29,7 @@ export default function HydrogenLayout() {
       </main>
       <GlobalDrawer />
       <GlobalModal />
+      <GlobalToast />
       <TutorialsModal />
     </>
   );

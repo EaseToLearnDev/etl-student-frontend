@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 
 // Hooks
 import { useSLStore } from "../hooks/useSLStore";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
@@ -40,7 +39,6 @@ import { pushToDataLayer } from "../../../../utils/gtm";
 import { openStartTestModal } from "../services/openStartTestModal";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../../utils/gtm-events";
-import { Toast } from "../../../../components/Toast";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -86,9 +84,6 @@ const SmartLearningPage = () => {
   );
   const testOptions = useSLStore((s) => s.testOptions);
   const selectedTestOption = useSLStore((s) => s.selectedTestOption);
-
-  const showToast = useToastStore((s) => s.showToast);
-  const toastData = useToastStore((s) => s.toastData);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -316,15 +311,6 @@ const SmartLearningPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

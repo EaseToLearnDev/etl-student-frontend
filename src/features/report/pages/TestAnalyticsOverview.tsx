@@ -1,3 +1,4 @@
+// React
 import {
   ResponsiveContainer,
   PieChart as RechartsPieChart,
@@ -14,7 +15,6 @@ import {
   RadialBar,
 } from "recharts";
 import { useEffect, useState } from "react";
-import { Widget } from "../components/newreports/Widget";
 import {
   ArrowLeftIcon,
   BoltIcon,
@@ -25,34 +25,39 @@ import {
   NoSymbolIcon,
   PresentationChartLineIcon,
   StarIcon,
-  // TrophyIcon,
   UserGroupIcon,
   XCircleIcon,
 } from "@heroicons/react/24/outline";
-import { tintHexColor } from "../libs/reduceColorsContrast";
 import { FiTarget } from "react-icons/fi";
+import { useNavigate, useSearchParams } from "react-router";
+import { LuFileChartColumn } from "react-icons/lu";
+
+// Components
+import { Widget } from "../components/newreports/Widget";
 import CircleProgressBar from "../components/newreports/circularProgressBar";
 import Tabs from "../../../components/Tabs";
 import DrillDownComponents from "../components/newreports/DrillDownComponents";
+import EmptyState from "../../../components/EmptyState";
+import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
+import Button from "../../../components/Button";
+import FirstTimeUserModal from "../../dashboard/components/FirstTimeUser";
+
+// Service
 import {
   LoadStudentAnalyticsData,
   type AnalyticsResponseData,
 } from "../services/loadStudentAnalyticsData";
-import EmptyState from "../../../components/EmptyState";
-import { useNavigate, useSearchParams } from "react-router";
+
+// Store & Utils
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
+import { tintHexColor } from "../libs/reduceColorsContrast";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
-import { TestAnalyticsSkeleton } from "./TestAnalyticsSkeleton";
-import Button from "../../../components/Button";
 import { formatMinutesToHHMMSS, parseTimeString } from "../libs/utils";
-import { Toast } from "../../../components/Toast";
-import { useToastStore } from "../../../global/hooks/useToastStore";
 import { getTimeFromSeconds } from "../../../utils";
-import { LuFileChartColumn } from "react-icons/lu";
-import FirstTimeUserModal from "../../dashboard/components/FirstTimeUser";
-import { useStudentStore } from "../../shared/hooks/useStudentStore";
+
 
 interface TabItem {
   label: string;
@@ -72,8 +77,6 @@ export const TestAnalyticsOverview = () => {
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
 
   const loading = useLoadingStore((s) => s.loading);
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDelayedFtuModal, setShowDelayedFtuModal] =
@@ -1106,13 +1109,13 @@ export const TestAnalyticsOverview = () => {
       />
 
       {/* Toast */}
-      {showToast && toastData && (
+      {/* {showToast && toastData && (
         <Toast
           {...toastData}
           key={toastData.title}
           duration={toastData.duration}
         />
-      )}
+      )} */}
     </div>
   );
 };
