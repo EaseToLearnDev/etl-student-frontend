@@ -140,7 +140,7 @@ const LoginPage = () => {
                 </div>
 
                 {/* Login Form */}
-                <form onSubmit={(e) => e.preventDefault()}>
+                <form onSubmit={(e) => e.preventDefault()} noValidate>
                   <div className="flex flex-col gap-6">
                     {/* User ID / Mobile Input */}
                     <div className="flex flex-col gap-1">
