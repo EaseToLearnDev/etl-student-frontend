@@ -11,6 +11,8 @@ import Select from "../../../components/Select";
 import { MdCheck } from "react-icons/md";
 import getValidityFormatted from "../../../global/services/getValidityFormatted";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
+import { PiBookFill, PiBooksFill } from "react-icons/pi";
+import Button from "../../../components/Button";
 
 interface CourseMenuProps {
   isOpen: boolean;
@@ -50,7 +52,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
                 {getValidityFormatted(
                   item.validTillDate,
                   item.packTypeTitle,
-                  item.organisationName,
+                  item.organisationName
                 )}
               </span>
             </div>
@@ -63,6 +65,21 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
             </div>
           </div>
         )}
+        renderAtEnd={
+          <div className="w-full mt-1">
+            <Link
+              to={"/selectcourse"}
+              className="w-full !py-2 flex justify-center items-center gap-2 border border-[var(--border-secondary)] rounded-lg"
+              onClick={() => {
+                navigate("/selectcourse");
+                onToggle();
+              }}
+            >
+              <PiBooksFill size={16} className="text-[var(--text-secondary)]" />
+              <p className="font-semibold text-[var(--text-secondary)]">Other Exams</p>
+            </Link>
+          </div>
+        }
       />
       {deviceType !== "ios" && course && status !== "accessible" && (
         <Link

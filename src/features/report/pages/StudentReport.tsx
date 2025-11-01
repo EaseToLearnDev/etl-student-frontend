@@ -46,7 +46,7 @@ const StudentReport = () => {
   useLayoutEffect(() => {
     if (!menuRef.current) return;
     const activeElement = menuRef.current.querySelector(
-      `[data-index="${selectedTabIndex}"]`,
+      `[data-index="${selectedTabIndex}"]`
     ) as HTMLElement | null;
 
     if (activeElement) {
@@ -85,6 +85,8 @@ const StudentReport = () => {
 
           const mappedSessionData: LearningSessionData[] = data.map((item) => ({
             testTitle: item.mockTestName,
+            marksObtain: item.marksObtain,
+            fullMarks: item.fullMarks,
             testType: item.testType,
             examType: item.examType,
             date: item.submitDateTime,
@@ -93,7 +95,9 @@ const StudentReport = () => {
             correct: item.correctQuestions,
             incorrect: item.incorrectQuestions,
             unattempted: item.unattemptedQuestions,
+            testTypeId: item.testTypeId,
             testSession: item.testSession,
+            timeSpent: item.timeSpent,
           }));
 
           setReportData(mappedData);
@@ -133,7 +137,7 @@ const StudentReport = () => {
 
     if (testType === "Learning Session") {
       navigate(
-        `/learning-testanalytics?testSession=${testSession}&testType=${type}`,
+        `/learning-testanalytics?testSession=${testSession}&testType=${type}`
       );
     } else {
       navigate(`/testanalytics?testSession=${testSession}&testType=${type}`);
@@ -241,7 +245,7 @@ const StudentReport = () => {
                 }}
                 className={cn(
                   "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
-                  isActive && "text-[var(--sb-ocean-bg-active)]",
+                  isActive && "text-[var(--sb-ocean-bg-active)]"
                 )}
               >
                 {tab}

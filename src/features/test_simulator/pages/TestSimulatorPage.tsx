@@ -39,6 +39,7 @@ import EmptyState from "../../../components/EmptyState";
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 import { LuLock } from "react-icons/lu";
 import SubjectiveMediaModal from "../components/SubjectiveMediaModal";
+import AdaptiveTestSimulator from "../components/AdaptiveTestSimulator";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -77,6 +78,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const setPendingQuestion = useTestStore((s) => s.setPendingQuestion);
   const setCurrentQuestion = useTestStore((s) => s.setCurrentQuestion);
 
+  const isSubjectiveTest = useTestStore((s) => s.isSubjectiveTest);
   const isTestEndedModalOpen = useTestTimerStore((s) => s.isTestEndedModalOpen);
 
   const setIsHelpModalOpen = useAiStore((s) => s.setIsHelpModalOpen);
@@ -122,6 +124,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       setMode,
       setLoading,
       setCurrentQuestion,
+      isSubjectiveTest,
       isMobile
     );
     return () => {
@@ -140,19 +143,25 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       event.preventDefault();
       event.returnValue = ""; // Required for Chrome to trigger the confirmation dialog
     };
+    if (mode !== "adaptive") {
+      window.addEventListener("beforeunload", handleBeforeUnload);
 
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
+    }
+  }, [mode]);
 
   const ManageTestSubmit = () => {
-    if (testMode === "guest") {
-      setShowGuestTestSubmitModal(true);
-    } else {
-      handleTestSubmit(navigate);
+    switch (mode) {
+      case "guest":
+        setShowGuestTestSubmitModal(true);
+        break;
+      case "registered":
+        handleTestSubmit(navigate);
+        break;
+      default:
+        break;
     }
   };
 
@@ -196,7 +205,16 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
   return (
     <>
-      {!isMobile ? <DesktopTestSimulator /> : <MobileTestSimulator />}
+      {/* Conditional rendering based on mode */}
+      {mode === "adaptive" ? (
+        <AdaptiveTestSimulator />
+      ) : !isMobile ? (
+        <DesktopTestSimulator />
+      ) : (
+        <MobileTestSimulator />
+      )}
+
+      {/* Submission Modal */}
       <Modal
         isOpen={isSubmissionModalOpen}
         onClose={() => setIsSubmissionModalOpen(false)}
@@ -213,6 +231,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         />
       </Modal>
 
+      {/* Auto Submission Modal */}
       <Modal
         isOpen={isTestEndedModalOpen}
         onClose={() => undefined}
@@ -222,18 +241,29 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         <TestEndedModalContent onSubmit={ManageTestSubmit} />
       </Modal>
 
-      <Modal size="lg" className="p-4" isOpen={hasExited} onClose={reEnter}>
+      {/* Fullscreen Exit Modal */}
+      <Modal
+        size="lg"
+        className="p-4"
+        isOpen={mode !== "review" && hasExited}
+        onClose={reEnter}
+      >
         <FullScreenExitModalContent
           onSubmit={ManageTestSubmit}
           onReEnter={reEnter}
         />
       </Modal>
 
+      {/* AI help Modal */}
       <AiHelpModal
         isOpen={isHelpModalOpen}
         onClose={() => setIsHelpModalOpen(false)}
       />
+
+      {/* Teacher Support Modal */}
       <TeacherSupportModal />
+
+      {/* Switch Section Modal */}
       <SwitchSectionModal
         isOpen={isSwitchSectionModalOpen}
         onClose={() => setIsSwitchSectionModalOpen(false)}
@@ -245,10 +275,13 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         }}
       />
 
+      {/* Subjective Media Modal */}
       <SubjectiveMediaModal />
 
+      {/* Guest Submit Modal */}
       <GuestTestSubmitModal />
 
+      {/* Toast  */}
       {testError?.message && (
         <Toast
           title={testError?.severity}

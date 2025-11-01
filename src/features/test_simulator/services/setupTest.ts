@@ -24,7 +24,8 @@ export const setupTest = async (
   setMode: (mode: SimulatorMode) => void,
   setLoading: (loading: boolean) => void,
   setCurrentQuestion: (question: Question | null) => void,
-  isMobile: boolean,
+  isSubjectiveTest: boolean,
+  isMobile: boolean
 ) => {
   // Test Configuration Setup
   const { testConfig, error } = handleTestConfigSetup({ params: params });
@@ -88,6 +89,8 @@ export const setupTest = async (
             testConfig?.testType !== 1,
           fullScreenEnabled: false,
           subjectiveMarksEditEnabled: false,
+          markForReviewEnabled: true,
+          supportEnabled: data?.testStatus !== 2,
         };
 
         break;
@@ -97,9 +100,21 @@ export const setupTest = async (
           showDynamicStatusEnabled: false,
           timerEnabled: false,
           fullScreenEnabled: false,
-          subjectiveMarksEditEnabled: data?.testStatus === 2 ? true : false,
+          subjectiveMarksEditEnabled: data?.testStatus === 2,
+          markForReviewEnabled: false,
+          supportEnabled: data?.testStatus !== 2,
         };
         break;
+      case "adaptive":
+        features = {
+          correctResponseEnabled: false,
+          showDynamicStatusEnabled: false,
+          timerEnabled: false,
+          fullScreenEnabled: false,
+          subjectiveMarksEditEnabled: false,
+          markForReviewEnabled: false,
+          supportEnabled: data?.testStatus !== 2,
+        };
     }
 
     if (features?.timerEnabled) {
@@ -110,25 +125,32 @@ export const setupTest = async (
       }
     }
 
+    // Enable Ai if either smart learning - "learning session" or in review mode
     if (
       (testConfig?.testType === 1 &&
         testConfig?.assessmentMode === "beginner") ||
-      mode === "review"
+      ["review", "adaptive"].includes(mode)
     ) {
       setIsAiFeatureEnabled(true);
     }
 
+    // I WILL REWRITE THIS SOON, PLEASE DON'T JUDGE :)
+    /*
+     * Enable full screen if smart learning competitive session or (topic,mock,class) test.
+     * (Only if not subjective and not in mobile.)
+     * */
     if (
       (mode !== "review" && testConfig?.assessmentMode === "advance") ||
       (testConfig?.testType && testConfig?.testType !== 1)
     ) {
-      features.fullScreenEnabled = !isMobile ? true : false;
+      features.fullScreenEnabled =
+        !isMobile && !isSubjectiveTest ? true : false;
     }
 
     // Is subjective marking is enabled, try to load first subjective question
     if (features.subjectiveMarksEditEnabled) {
       const firstSubjective = data?.questionSet?.find((q) =>
-        subjectiveTypes.includes(q?.questionType),
+        subjectiveTypes.includes(q?.questionType)
       );
 
       if (firstSubjective) {
@@ -136,21 +158,23 @@ export const setupTest = async (
       } else {
         // fallback case
         setCurrentQuestion(
-          data?.questionSet[data?.lastQuestionIndex ?? 0] ?? null,
+          data?.questionSet[data?.lastQuestionIndex ?? 0] ?? null
         );
       }
     } else {
       // normal behaviour: start from lastQuestionIndex or zero
       setCurrentQuestion(
-        data?.questionSet[data?.lastQuestionIndex || 0] ?? null,
+        data?.questionSet[data?.lastQuestionIndex || 0] ?? null
       );
     }
 
     setFeatures(features);
-    setLoading(false);
 
+    // Start question timer only for guest and registered mode
     if (mode === "guest" || mode === "registered") {
       startQuestionTimer();
     }
+
+    setLoading(false);
   }
 };

@@ -69,7 +69,7 @@ export const useCoursesStore = create<CoursesState>((set) => ({
 
   setSearch: (search) => set({ search }),
 
-  setSearchData: (data) => set({searchData: data}),
+  setSearchData: (data) => set({ searchData: data }),
 
   setIsPlanModalOpen: (v) => set({ isPlanModalOpen: v }),
 

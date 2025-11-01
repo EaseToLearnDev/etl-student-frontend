@@ -437,6 +437,9 @@ math {
 .debug {
   border: 1px solid red;
 }
+.font-regular {
+  font-weight: 400 !important;
+}
 .font-medium {
   font-weight: 500 !important;
 }
@@ -519,6 +522,17 @@ img {
     hsl(239deg 72% 65%) 82%,
     hsl(214deg 90% 49%) 100%
   );
+}
+
+/* Reset Input */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0px 1000px var(--bg-primary) inset !important;
+  box-shadow: 0 0 0px 1000px var(--bg-primary) inset !important;
+  -webkit-text-fill-color: var(--text-primary) !important;
+  transition: background-color 9999s ease-in-out 0s;
 }
 
 /* RESPONSIVE */

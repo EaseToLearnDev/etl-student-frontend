@@ -19,7 +19,7 @@ export const loadVerifyOtp = async ({
   otp,
 }: LoadVerifyOtpProps) => {
   const { token, name, email, setError } = useGuestStore.getState();
-  const { setStudentData } = useStudentStore.getState();
+  const { setStudentData, setShowFtuModal } = useStudentStore.getState();
 
   try {
     const data = new FormData();
@@ -61,6 +61,8 @@ export const loadVerifyOtp = async ({
     };
 
     setStudentData(studentData);
+    setShowFtuModal(responseData?.firstTimeUser === 1);
+
     return true;
   } catch (error) {
     console.log("Error Submitting Test: ", error);

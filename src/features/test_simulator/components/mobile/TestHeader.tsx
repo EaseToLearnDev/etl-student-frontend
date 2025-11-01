@@ -6,6 +6,7 @@ import Button from "../../../../components/Button";
 import useTestTimerStore from "../../store/useTestTimerStore";
 import { getTimeFromSeconds } from "../../../../utils";
 import { useGuestStore } from "../../../../global/hooks/useGuestStore";
+import cn from "../../../../utils/classNames";
 
 /**
  * Renders the header section for the test simulator on mobile devices.
@@ -28,7 +29,12 @@ const TestHeader = () => {
   const testMode = useTestStore((s) => s.testMode);
 
   return (
-    <div className="flex items-center justify-between gap-4 py-2 px-4">
+    <div
+      className={cn(
+        "flex items-center gap-4 py-2 px-4",
+        timerEnabled ? "justify-between" : "justify-end",
+      )}
+    >
       {/* Test Title */}
       {/* <h5 className="!font-semibold text-ellipsis line-clamp-2 flex-1">{testTitle}</h5> */}
 

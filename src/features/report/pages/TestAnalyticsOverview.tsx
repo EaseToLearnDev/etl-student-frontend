@@ -51,6 +51,8 @@ import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { getTimeFromSeconds } from "../../../utils";
 import { LuFileChartColumn } from "react-icons/lu";
+import FirstTimeUserModal from "../../dashboard/components/FirstTimeUser";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 interface TabItem {
   label: string;
@@ -65,12 +67,17 @@ export const TestAnalyticsOverview = () => {
   const testType = params[0].get("testType")
     ? Number(params[0]?.get("testType"))
     : null;
+
+  const showFtuModal = useStudentStore((s) => s.showFtuModal);
+  const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
+
   const loading = useLoadingStore((s) => s.loading);
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const [showDelayedFtuModal, setShowDelayedFtuModal] =
+    useState<boolean>(false);
   const navigate = useNavigate();
 
   // Fire a page-view event depending on the test type.
@@ -115,6 +122,16 @@ export const TestAnalyticsOverview = () => {
     );
   }
 
+  // Open first time user modal after 30 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (showFtuModal) {
+        setShowDelayedFtuModal(true);
+      }
+    }, 30_000);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const fetchAnalyticData = async () => {
       try {
@@ -130,13 +147,14 @@ export const TestAnalyticsOverview = () => {
 
   if (loading) return <TestAnalyticsSkeleton />;
 
-  if (!data) return (
-    <EmptyState
-      icon={<NoSymbolIcon width={80} height={80} />}
-      title="Progress Not Available"
-      className="mb-2"
-    />
-  )
+  if (!data)
+    return (
+      <EmptyState
+        icon={<NoSymbolIcon width={80} height={80} />}
+        title="Progress Not Available"
+        className="mb-2"
+      />
+    );
 
   const SectionGraphData = [
     {
@@ -203,7 +221,7 @@ export const TestAnalyticsOverview = () => {
         name: item.name || "",
         value: (item.data || []).reduce(
           (sum: number, val: number) => sum + (val || 0),
-          0
+          0,
         ),
         color: item.color || "#8884d8",
       })) || [];
@@ -265,7 +283,7 @@ export const TestAnalyticsOverview = () => {
               icon={<LuFileChartColumn className="w-24 h-24" />}
               className="max-w-md"
               buttonText="Go Back"
-              onClick={() => navigate('/report')}
+              onClick={() => navigate("/report")}
             />
           )}
         </Widget>
@@ -889,8 +907,7 @@ export const TestAnalyticsOverview = () => {
     },
   ];
 
-  const visibleTabs = tabs.filter(t => !t.hidden);
-
+  const visibleTabs = tabs.filter((t) => !t.hidden);
 
   //   const handleTabChange = (index: number) => {
   //     console.log(`Switched to tab: ${tabs[index].label}`);
@@ -1079,6 +1096,14 @@ export const TestAnalyticsOverview = () => {
         />
       </div>
       <div className="mt-10">{visibleTabs[selectedIndex]?.content}</div>
+
+      <FirstTimeUserModal
+        isOpen={showDelayedFtuModal}
+        onClose={() => {
+          setShowDelayedFtuModal(false);
+          setShowFtuModal(false);
+        }}
+      />
 
       {/* Toast */}
       {showToast && toastData && (

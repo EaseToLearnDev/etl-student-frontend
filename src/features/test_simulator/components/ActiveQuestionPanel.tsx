@@ -35,6 +35,7 @@ import Checkbox from "../../../components/Checkbox";
 import { handelFileUpload } from "../services/handleFileUpload";
 import { handelFileRemove } from "../services/handleFileRemove";
 import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
+import { handleUpdateAdaptiveTestAnswer } from "../services/handleUpdateAdaptiveTestAnswer";
 
 /**
  * ActiveQuestionPanel component for desktop view.
@@ -45,7 +46,9 @@ import { handleUpdateMarksTest } from "../services/handleUpdateMarksTest";
 const ActiveQuestionPanel = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const { correctResponseEnabled } = useTestStore((s) => s.features);
+  const { correctResponseEnabled, markForReviewEnabled } = useTestStore(
+    (s) => s.features
+  );
   const setIsTeacherSupportModalOpen = useTeacherSupportStore(
     (s) => s.setIsTeacherSupportModalOpen
   );
@@ -108,7 +111,7 @@ const ActiveQuestionPanel = () => {
           </Badge>
         </div>
 
-        <div className="max-h-[calc(100%-130px)] pr-2 overflow-y-auto">
+        <div className={`max-h-[calc(100%-130px)] pr-2 overflow-y-auto`}>
           {/* Common Data Description  */}
           <div className="flex flex-col gap-4">
             {currentQuestion?.commonDataDescription &&
@@ -443,137 +446,155 @@ const ActiveQuestionPanel = () => {
           ) : (
             <></>
           )}
-        </div>
 
-        {/* TODO: REDO SUBJECTIVE UI IN REVIEW MODE (DOES NOT LOOK GOOD) */}
-        {/* Subjective Review Mode */}
-        {[
-          "Subjective-Type-Very-Short",
-          "Subjective-Type-Short-Answer-I",
-          "Subjective-Type-Short-Answer-II",
-          "Subjective-Type-Long",
-        ].includes(currentQuestion?.questionType || "") && mode === "review" ? (
-          <div className="w-full max-h-[400px] sm:max-h-[500px] border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto">
-            {/* Answer Container */}
-            <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
-              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
-                <p className="font-semibold">Your Answer</p>
-                <input
-                  type="text"
-                  disabled={!features.subjectiveMarksEditEnabled}
-                  value={currentMarksObj?.totalMark}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    if (isNaN(val)) return;
-                    updateCurrentTotalMarks(val);
-                  }}
-                  className="text-center w-full max-w-[50px] border rounded-md text-base bg-[var(--surface-bg-primary)] disabled:bg-[var(--surface-bg-tertiary)] disabled:text-[var(--text-tertiary)]"
-                />
-                <p className="font-semibold">
-                  /{" "}
-                  {currentQuestion?.responseChoice?.reduce(
-                    (sum, c) => sum + (Number(c.partMarks) || 0),
-                    0
-                  )}
-                </p>
-              </div>
-              <div className="w-full h-full flex flex-col gap-4 p-4">
-                <p>{currentResponse?.text || ""}</p>
-                {currentResponse?.url ? (
-                  <img
-                    onClick={() => setIsSubjectiveMediaModalOpen(true)}
-                    src={currentResponse?.url}
-                    className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
+          {/* Subjective Review Mode */}
+          {[
+            "Subjective-Type-Very-Short",
+            "Subjective-Type-Short-Answer-I",
+            "Subjective-Type-Short-Answer-II",
+            "Subjective-Type-Long",
+          ].includes(currentQuestion?.questionType || "") &&
+          mode === "review" ? (
+            <div
+              className={`w-full max-h-[300px] sm:${
+                currentQuestion?.questionType === "Subjective-Type-Long"
+                  ? "max-h-[250px]"
+                  : "max-h-[500px]"
+              } border border-[var(--border-primary)] rounded-lg grid lg:grid-cols-2 overflow-y-auto`}
+            >
+              {/* Answer Container */}
+              <div className="w-full h-full flex flex-col border-r border-r-[var(--border-secondary)]">
+                <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-b-[var(--border-secondary)]">
+                  <p className="font-semibold">Your Answer</p>
+                  <input
+                    type="text"
+                    disabled={!features.subjectiveMarksEditEnabled}
+                    value={currentMarksObj?.totalMark}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      if (isNaN(val)) return;
+                      updateCurrentTotalMarks(val);
+                    }}
+                    className="text-center w-full max-w-[50px] border rounded-md text-base bg-[var(--surface-bg-primary)] disabled:bg-[var(--surface-bg-tertiary)] disabled:text-[var(--text-tertiary)]"
                   />
-                ) : (
-                  <></>
-                )}
+                  <p className="font-semibold">
+                    /{" "}
+                    {currentQuestion?.responseChoice?.reduce(
+                      (sum, c) => sum + (Number(c.partMarks) || 0),
+                      0
+                    )}
+                  </p>
+                </div>
+                <div className="w-full h-full flex flex-col gap-4 p-4">
+                  <p>{currentResponse?.text || ""}</p>
+                  {currentResponse?.url ? (
+                    <img
+                      onClick={() => setIsSubjectiveMediaModalOpen(true)}
+                      src={currentResponse?.url}
+                      className="h-full w-full sm:h-50 sm:w-50 aspect-auto object-contain rounded-lg cursor-pointer"
+                    />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Solution Container */}
-            <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
-              <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
-                <p className="font-semibold">Solution</p>
-              </div>
+              {/* Solution Container */}
+              <div className="w-full h-full flex sm:flex-1 sm:overflow-y-auto flex-col">
+                <div className="w-full flex justify-center items-center gap-2 min-h-[40px] border-b border-[var(--border-secondary)] sticky top-0 bg-[var(--surface-bg-primary)] z-10">
+                  <p className="font-semibold">Solution</p>
+                </div>
 
-              <div className="w-full h-full p-2 flex flex-col gap-2">
-                {currentQuestion?.responseChoice?.map((choice, index) => (
-                  <div
-                    key={index}
-                    className="w-full flex border-b border-b-[var(--border-secondary)]"
-                  >
-                    <MathJax dynamic className="flex-1 p-2">
-                      <div
-                        className="math-container text-sm"
-                        dangerouslySetInnerHTML={{
-                          __html: checkForTable(
-                            choice?.responseText.trim().replace(/[\r\n]+/g, "")
-                          ),
-                        }}
-                      />
-                    </MathJax>
-                    <div className="min-w-[80px] min-h-full flex justify-center items-center border-l border-l-[var(--border-secondary)]">
-                      <Checkbox
-                        label={choice?.partMarks || ""}
-                        value={choice?.partMarks || ""}
-                        disabled={!features.subjectiveMarksEditEnabled}
-                        checked={
-                          currentMarksObj?.options[index] === "yes"
-                            ? true
-                            : false
-                        }
-                        onChange={(e) =>
-                          updateCurrentMarksObj(index, e.target.checked)
-                        }
-                      />
+                <div className="w-full h-full p-2 flex flex-col gap-2">
+                  {currentQuestion?.responseChoice?.map((choice, index) => (
+                    <div
+                      key={index}
+                      className="w-full flex border-b border-b-[var(--border-secondary)]"
+                    >
+                      <MathJax dynamic className="flex-1 p-2">
+                        <div
+                          className="math-container text-sm"
+                          dangerouslySetInnerHTML={{
+                            __html: checkForTable(
+                              choice?.responseText
+                                .trim()
+                                .replace(/[\r\n]+/g, "")
+                            ),
+                          }}
+                        />
+                      </MathJax>
+                      <div className="min-w-[80px] min-h-full flex justify-center items-center border-l border-l-[var(--border-secondary)]">
+                        <Checkbox
+                          label={choice?.partMarks || ""}
+                          value={choice?.partMarks || ""}
+                          disabled={!features.subjectiveMarksEditEnabled}
+                          checked={
+                            currentMarksObj?.options[index] === "yes"
+                              ? true
+                              : false
+                          }
+                          onChange={(e) =>
+                            updateCurrentMarksObj(index, e.target.checked)
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        ) : (
-          <></>
-        )}
-      </div>
-      {/* Navigation Buttons */}
-      <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
-        <div
-          className={cn(
-            "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
-            "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
+          ) : (
+            <></>
           )}
-          onClick={() => {
-            if (features.subjectiveMarksEditEnabled) {
-              handleUpdateMarksTest()?.then(goToPrev);
-            } else goToPrev();
-          }}
-        >
-          <MdChevronLeft size={22} />
         </div>
-        {!correctResponseEnabled ? (
+      </div>
+
+      {/* Buttons */}
+      <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
+        {/* Previous Button */}
+        {mode !== "adaptive" && (
+          <div
+            className={cn(
+              "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
+              "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
+            )}
+            onClick={() => {
+              if (features.subjectiveMarksEditEnabled) {
+                handleUpdateMarksTest()?.then(goToPrev);
+              } else goToPrev();
+            }}
+          >
+            <MdChevronLeft size={22} />
+          </div>
+        )}
+
+        {/* Mark For Review Actions */}
+        {!correctResponseEnabled && (
+          <Button
+            style="secondary"
+            className="!min-w-10 px-2 sm:px-4"
+            onClick={clearCurrentResponse}
+          >
+            Clear
+          </Button>
+        )}
+        {markForReviewEnabled && (
+          <Button
+            style="secondary"
+            className="!min-w-10 px-2 sm:px-4"
+            onClick={markCurrentFoReview}
+          >
+            {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
+            currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
+              ? "Unmark Review"
+              : "Mark for Review"}
+          </Button>
+        )}
+
+        {/* Action Buttons for Review Mode */}
+        {correctResponseEnabled && (
           <>
-            <Button
-              style="secondary"
-              className="!min-w-10 px-2 sm:px-4"
-              onClick={clearCurrentResponse}
-            >
-              Clear
-            </Button>
-            <Button
-              style="secondary"
-              className="!min-w-10 px-2 sm:px-4"
-              onClick={markCurrentFoReview}
-            >
-              {currentQuestionStatus === QuestionStatus.MARKED_FOR_REVIEW ||
-              currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW
-                ? "Unmark Review"
-                : "Mark for Review"}
-            </Button>
-          </>
-        ) : (
-          <>
+            {/* Only show finish test if user is on subjective marking page */}
             {features.subjectiveMarksEditEnabled && (
               <Button
                 style="secondary"
@@ -586,16 +607,16 @@ const ActiveQuestionPanel = () => {
               </Button>
             )}
 
-            {!features.subjectiveMarksEditEnabled && (
+            {/* Only show support if support is enabled */}
+            {features.supportEnabled && (
               <Button
                 style="secondary"
                 className="!min-w-10 px-2 sm:px-4"
                 onClick={() => setIsTeacherSupportModalOpen(true)}
               >
-                Teacher Support
+                Support
               </Button>
             )}
-
             <Button
               style="secondary"
               className="!min-w-10 px-2 sm:px-4"
@@ -609,15 +630,26 @@ const ActiveQuestionPanel = () => {
             </Button>
           </>
         )}
+
+        {/* Adaptive Mode Buttons */}
+        {mode === "adaptive" && <Button style="secondary" onClick={() => navigate(-1)}>Finish Test</Button>}
+
+        {/* Next Button */}
         <div
           className={cn(
             "size-8 aspect-square flex justify-center items-center rounded-full border-1 border-[var(--border-primary)] cursor-pointer",
             "hover:bg-[var(--surface-bg-secondary)] active:bg-[var(--surface-bg-tertiary)] transition-all duration-200 ease-in-out"
           )}
           onClick={() => {
-            if (features.subjectiveMarksEditEnabled) {
-              handleUpdateMarksTest()?.then(goToNext);
-            } else goToNext();
+            if (mode === "adaptive") {
+              handleUpdateAdaptiveTestAnswer(navigate);
+            } else {
+              if (features.subjectiveMarksEditEnabled) {
+                handleUpdateMarksTest()?.then(goToNext);
+              } else {
+                goToNext();
+              }
+            }
           }}
         >
           <MdChevronRight size={22} />
@@ -630,7 +662,7 @@ const ActiveQuestionPanel = () => {
           className={cn(
             "flex flex-col items-center gap-1",
             isMobile
-              ? "fixed bottom-[75px] right-[32px]"
+              ? "fixed bottom-[75px] right-[40px]"
               : "absolute bottom-2 right-8"
           )}
           onClick={() => {

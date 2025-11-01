@@ -152,10 +152,16 @@ export const isMaxQuestionLimitReached = ({
   const attemptedQuestionsCount = Object.values(questionStatusMap).filter(
     (status) =>
       status === QuestionStatus.ATTEMPTED ||
-      status === QuestionStatus.ANSWERED_AND_REVIEW,
+      status === QuestionStatus.ANSWERED_AND_REVIEW
   ).length;
 
-  // Check for global attempted limit
+  const currentQuestionStatus = questionStatusMap[question?.questionId];
+  const isCurrentAttempted =
+    currentQuestionStatus === QuestionStatus.ATTEMPTED ||
+    currentQuestionStatus === QuestionStatus.ANSWERED_AND_REVIEW;
+
+  if (isCurrentAttempted) return "NONE";
+
   if (
     question?.questionId &&
     !question?.sectionId &&
@@ -163,6 +169,7 @@ export const isMaxQuestionLimitReached = ({
     testData?.noQuestionAttempt > 0 &&
     attemptedQuestionsCount >= testData?.noQuestionAttempt
   ) {
+    // Check for global attempted limit
     return "GLOBAL";
   }
 
@@ -172,7 +179,7 @@ export const isMaxQuestionLimitReached = ({
   const currentSectionAttemptedCount = currentSectionQuestionList.filter(
     (q) =>
       questionStatusMap[q?.questionId] === QuestionStatus.ATTEMPTED ||
-      questionStatusMap[q?.questionId] === QuestionStatus.ANSWERED_AND_REVIEW,
+      questionStatusMap[q?.questionId] === QuestionStatus.ANSWERED_AND_REVIEW
   ).length;
   if (
     question?.questionId &&

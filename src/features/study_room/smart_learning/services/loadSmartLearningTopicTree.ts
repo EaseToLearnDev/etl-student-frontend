@@ -25,7 +25,7 @@ export const loadSmartLearningTopictree = async () => {
   setLoading(true);
   try {
     const data = (await getTopicTreeView({
-      type: "learning",
+      type: "topic",
       mode: 0,
       loginId,
       token,

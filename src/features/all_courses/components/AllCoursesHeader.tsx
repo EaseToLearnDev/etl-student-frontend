@@ -45,11 +45,11 @@ const AllCoursesHeader = ({
       )}
     >
       <div className="flex flex-col lg:flex-row gap-3 justify-between lg:items-center">
-        <h3>Select Course</h3>
+        <h3>Select Exams</h3>
         <div className="flex items-center gap-4">
           <GlobalSearch
             id={ALL_COURSES_SEARCHBAR_ID}
-            placeholder="Search courses..."
+            placeholder="Search exams..."
             // onSearch={(data) => setSearch(data)}
             data={searchData ?? []}
             onSelect={(course: any) => {

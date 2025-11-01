@@ -37,11 +37,11 @@ const DashboardPage = () => {
   const toastData = useToastStore((s) => s.toastData);
   const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
-  const studentData = useStudentStore((s) => s.studentData);
+  const showFtuModal = useStudentStore((s) => s.showFtuModal);
+  const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
   const loading = useLoadingStore((s) => s.loading);
   const isMobile = useIsMobile();
 
-  const [showFirstTimeModal, setShowFirstTimeModal] = useState(false);
   const [scheduledClasses, setScheduledClasses] = useState<
     WeekClassScheduleList[] | null
   >(null);
@@ -83,7 +83,11 @@ const DashboardPage = () => {
     const fetchData = async () => {
       const classTestList = await loadClassTestList();
       const prevRunningTest = await loadPreviousRunningTest();
-      const scheduledClasses = await loadWeekScheduledClasses();
+      let scheduledClasses = null
+      // Checks if Student have any Class then calls the week classes api
+      if (isClassTest) {
+        scheduledClasses = await loadWeekScheduledClasses();
+      }
 
       if (classTestList) setTestList(classTestList);
       if (prevRunningTest) setPrevRunningTest(prevRunningTest);
@@ -151,7 +155,10 @@ const DashboardPage = () => {
                   title="Scheduled Classes"
                   className="h-full max-h-[250px]"
                 >
-                  <ScheduledClassesList data={scheduledClasses} loading={loading} />
+                  <ScheduledClassesList
+                    data={scheduledClasses}
+                    loading={loading}
+                  />
                 </WidgetCard>
                 <WidgetCard title="Class Tests" className="h-full">
                   <ClassTestList />
@@ -193,7 +200,10 @@ const DashboardPage = () => {
             <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
               <ClassTestList />
             </WidgetCard>
-            <WidgetCard title="Scheduled Classes" className="h-full max-h-[250px]">
+            <WidgetCard
+              title="Scheduled Classes"
+              className="h-full max-h-[250px]"
+            >
               <ScheduledClassesList data={scheduledClasses} loading={loading} />
             </WidgetCard>
           </>
@@ -210,8 +220,8 @@ const DashboardPage = () => {
         )}
       </div>
       <FirstTimeUserModal
-        isOpen={showFirstTimeModal}
-        onClose={() => setShowFirstTimeModal(false)}
+        isOpen={showFtuModal}
+        onClose={() => setShowFtuModal(false)}
       />
       {/* Toast */}
       {showToast && toastData && (

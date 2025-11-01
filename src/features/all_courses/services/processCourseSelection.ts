@@ -5,10 +5,12 @@ import {
   ToastType,
   type Course,
   type CourseResponse,
+  type Option,
 } from "../../shared/types";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useCoursesStore } from "../hooks/useCoursesStore";
 import { removePaymentFlag } from "./removePaymentFlag";
+import { generateCoursesData } from "../../shared/services/generateCoursesData";
 
 declare global {
   interface Window {
@@ -23,6 +25,8 @@ export const processCourseSelection = async ({
   selectedPlanId,
   code,
   navigate,
+  payableAmount,
+  email,
 }: {
   option?: number;
   courseId?: number;
@@ -30,6 +34,8 @@ export const processCourseSelection = async ({
   selectedPlanId?: number | null;
   code?: string;
   navigate: (path: string) => void;
+  payableAmount?: Option<number>;
+  email?: string;
 }) => {
   const { studentData, setStudentData } = useStudentStore.getState();
   const { setIsUpdateEmailModalOpen } = useCoursesStore.getState();
@@ -51,29 +57,7 @@ export const processCourseSelection = async ({
         });
       }
 
-      const courses: Course[] = res.obj.map((c: CourseResponse) => ({
-        templateId: c.templateId,
-        validityId: c.validityId,
-        courseId: c.courseId,
-        packTypeId: c.packTypeId,
-        benchmark: c.benchmark,
-        organisationName: c.organisationName,
-        validTillDate: c.validTillDate,
-        packTypeTitle: c.packTypeTitle,
-        tabs: {
-          dashboard: !!c.dashboard,
-          report: !!c.report,
-          studyMaterial: !!c.studyMaterial,
-          selfTest: !!c.selfTest,
-          topicTest: !!c.topicTest,
-          mockTest: !!c.mockTest,
-          dynamicMockTest: !!c.dynamicMockTest,
-          classTest: !!c.classTest,
-          teacherHelp: !!c.teacherHelp,
-          tonyHelp: !!c.tonyHelp,
-          otherCourses: !!c.otherCourses,
-        },
-      }));
+      const courses = generateCoursesData(res?.obj);
       const purchasedCourse = courses?.find((c) => c.courseId === courseId);
       const openedCourse = purchasedCourse
         ? courses.indexOf(purchasedCourse)
@@ -93,9 +77,7 @@ export const processCourseSelection = async ({
   // ---------------- Paid course flow ----------------
   if (!selectedPlanId) return console.warn("Please select a plan first");
 
-  const { emailId } = studentData;
-
-  if (!emailId) {
+  if (!email && payableAmount && payableAmount > 0) {
     setIsUpdateEmailModalOpen(true);
     return;
   }
@@ -152,7 +134,7 @@ export const processCourseSelection = async ({
         description: data?.productinfo,
         prefill: {
           name: studentData.studentName,
-          email: studentData.emailId,
+          email: email,
           contact: studentData.phoneNo,
         },
         notes: {
@@ -171,33 +153,15 @@ export const processCourseSelection = async ({
       const rzp = new window.Razorpay(options);
       rzp.on("payment.failed", function () {
         removePaymentFlag();
-        setToast({ title: "Payment Failed!",description: "Something went wrong. Try Again Later.", type: ToastType.DANGER });
+        setToast({
+          title: "Payment Failed!",
+          description: "Something went wrong. Try Again Later.",
+          type: ToastType.DANGER,
+        });
       });
       rzp.open();
     } else if (data.organisations.length > 0) {
-      const courses: Course[] = data.organisations.map((c: CourseResponse) => ({
-        templateId: c.templateId,
-        validityId: c.validityId,
-        courseId: c.courseId,
-        packTypeId: c.packTypeId,
-        benchmark: c.benchmark,
-        organisationName: c.organisationName,
-        validTillDate: c.validTillDate,
-        packTypeTitle: c.packTypeTitle,
-        tabs: {
-          dashboard: !!c.dashboard,
-          report: !!c.report,
-          studyMaterial: !!c.studyMaterial,
-          selfTest: !!c.selfTest,
-          topicTest: !!c.topicTest,
-          mockTest: !!c.mockTest,
-          dynamicMockTest: !!c.dynamicMockTest,
-          classTest: !!c.classTest,
-          teacherHelp: !!c.teacherHelp,
-          tonyHelp: !!c.tonyHelp,
-          otherCourses: !!c.otherCourses,
-        },
-      }));
+      const courses = generateCoursesData(data.organisations);
 
       const purchasedCourse = courses?.find((c) => c.courseId === courseId);
       const openedCourse = purchasedCourse

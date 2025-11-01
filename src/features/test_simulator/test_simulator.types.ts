@@ -247,7 +247,7 @@ export interface LinkItem {
   children?: LinkItem[];
 }
 
-export type SimulatorMode = "guest" | "registered" | "review";
+export type SimulatorMode = "guest" | "registered" | "review" | "adaptive";
 
 export interface Features {
   timerEnabled: boolean;
@@ -255,6 +255,8 @@ export interface Features {
   showDynamicStatusEnabled: boolean;
   fullScreenEnabled: boolean;
   subjectiveMarksEditEnabled: boolean;
+  markForReviewEnabled: boolean;
+  supportEnabled: boolean;
 }
 
 export interface ResponseType {

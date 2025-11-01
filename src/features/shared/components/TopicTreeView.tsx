@@ -44,15 +44,17 @@ const TopicTreeView = <T,>({
   const allTopics = flattenTopics(topics);
 
   if (!topics || topics.length === 0) {
-    return  <EmptyState
-      title="No topic tree data available"
-      description="No topic tree data is available yet. Explore courses or lessons to see topics populate this section!"
-      icon={<LuListTree className="w-24 h-24" />}
-      className="max-w-md"
-    />
+    return (
+      <EmptyState
+        title="No topic tree data available"
+        description="No topic tree data is available yet. Explore courses or lessons to see topics populate this section!"
+        icon={<LuListTree className="w-24 h-24" />}
+        className="max-w-md"
+      />
+    );
   }
   return (
-    <div>
+    <div className="relative">
       <GlobalSearch
         placeholder="Search topics..."
         data={allTopics}
@@ -62,7 +64,7 @@ const TopicTreeView = <T,>({
         renderItem={(topic) => <div>{getLabel(topic)}</div>}
       />
 
-      <div className="mt-4">
+      <div className="mt-4 max-h-[calc(100dvh-350px)] overflow-y-auto">
         {topics?.map((topic) => (
           <Topic
             key={getId(topic)}

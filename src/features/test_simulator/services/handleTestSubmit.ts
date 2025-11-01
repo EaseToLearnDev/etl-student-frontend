@@ -20,6 +20,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   const {
     testData,
     testConfig,
+    isSubjectiveTest,
     questionResponseMap,
     questionTimeMap,
     questionHelpMap,
@@ -155,7 +156,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
   setLoading(false);
 
   // navigate to testview for subjective test
-  if (testData?.testType === 1 && testConfig?.examType === "subjective") {
+  if (isSubjectiveTest) {
     navigate(`/testview?testSession=st${resData?.obj?.testSession}`);
     setToast({
       title: "Test Submit Successfully",
@@ -167,7 +168,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     testConfig?.examType === "objective"
   ) {
     navigate(
-      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData.testType}`
+      `/learning-testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData.testType}`,
     );
     setToast({
       title: "Test Submit Successfully",
@@ -175,7 +176,7 @@ export const handleTestSubmit = async (navigate: NavigateFunction) => {
     });
   } else {
     navigate(
-      `/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`
+      `/testanalytics?testSession=${resData?.obj?.testSession}&testType=${testData?.testType}`,
     );
     setToast({
       title: "Test Submit Successfully",

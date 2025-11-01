@@ -41,6 +41,7 @@ import { Spinner } from "../components/Spinner";
 import { InAppPayment } from "../features/in_app_payment/InAppPayment";
 import PgResponse from "../global/pages/PgResponse";
 import PgCancelled from "../global/pages/PgCancelled";
+import AdaptiveLearningPage from "../features/study_room/adaptive_learning/pages/AdaptiveLearningPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -49,7 +50,7 @@ const Router = () => {
   const location = useLocation();
   useEffect(() => {
     const matchedKey = Object.keys(tabTitles).find((key) =>
-      location.pathname.includes(key),
+      location.pathname.includes(key)
     );
     if (!matchedKey) {
       // TODO: HANDLE WHITELABELING
@@ -131,6 +132,10 @@ const Router = () => {
           path="study-room/smart-learning"
           element={<SmartLearningPage />}
         />
+        <Route
+          path="study-room/adaptive-learning"
+          element={<AdaptiveLearningPage />}
+        />
 
         {/* Calculate exam room default route  */}
         <Route
@@ -162,13 +167,19 @@ const Router = () => {
       <Route
         path="test-simulator"
         element={
-          <TestSimulatorPage key={window.location.pathname} mode="registered" />
+          <TestSimulatorPage key={location.key} mode="registered" />
+        }
+      />
+       <Route
+        path="test-simulator-adaptive"
+        element={
+          <TestSimulatorPage key={location.key} mode="adaptive" />
         }
       />
       <Route
         path="guest-testsimulator"
         element={
-          <TestSimulatorPage key={window.location.pathname} mode="guest" />
+          <TestSimulatorPage key={location.key} mode="guest" />
         }
       />
       <Route
