@@ -230,17 +230,17 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           onSubmit={() =>{ 
             pushToDataLayer({event: gtmEvents.test_simulator_submit_now_button_click,
             id: "submit_now_button_click"
-            })
+            });
             handleTestSubmit(navigate)}}
           onContinueLater={() =>{ 
             pushToDataLayer({event: gtmEvents.test_simulator_save_and_continue_button_click,
             id: "continue_later_button_click"
-            })
+            });
             handleContinueLater(navigate)}}
           onClose={() => { 
             pushToDataLayer({event: gtmEvents.test_simulator_cancel_button_click,
             id: "cancel_button_click"
-            })
+            });
             setIsSubmissionModalOpen(false)}}
           hideOnContinueLater={
             testData?.testType === 4 || testData?.testType === 5 ? true : false
@@ -259,7 +259,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           pushToDataLayer({event: gtmEvents.test_simulator_auto_submit_button_click,
           id: "auto_submit_button_click"
           })
-          ManageTestSubmit}} />
+          ManageTestSubmit()}} />
       </Modal>
 
       {/* Fullscreen Exit Modal */}
@@ -273,13 +273,13 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
           onSubmit={()=>{
             pushToDataLayer({event: gtmEvents.test_simulator_fullscreen_submit_button_click,
             id: "fullscreen_submit_button_click"
-            })
-            ManageTestSubmit}}
+            });
+            ManageTestSubmit()}}
           onReEnter={()=>{
             pushToDataLayer({event: gtmEvents.test_simulator_fullscreen_reEnter_button_click,
             id: "fullscreen_reEnter_button_click"
-            })
-            reEnter}}
+            });
+            reEnter()}}
         />
       </Modal>
 
