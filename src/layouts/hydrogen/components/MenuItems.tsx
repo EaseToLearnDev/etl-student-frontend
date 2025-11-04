@@ -50,7 +50,7 @@ export const menuItems: MenuItem[] = [
         icon: <PiBooksFill />,
       },
       {
-        id: "adaptiveTest",
+        id: "adaptiveLearning",
         name: "Adaptive Learning",
         href: "/adaptive-learning",
         icon: <PiLightningFill />,

@@ -38,7 +38,7 @@ const ProfileInformationPopover = ({
       open={isOpen}
       setIsOpen={setIsOpen}
       shadow="sm"
-      placement={"bottom"}
+      placement={"bottom-start"}
     >
       <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent className="z-[9999] flex justify-center items-center px-4 py-4 bg-[var(--surface-bg-secondary)]">

@@ -59,7 +59,7 @@ const DashboardPage = () => {
   // In (YYYY-MM-DD) format
   const [date, setDate] = useState<string | null>(null);
   const [dataByDay, setDataByDay] = useState<IGhActivityByDayResults[] | null>(
-    null
+    null,
   );
 
   const createDate = (_date: Date) => {
@@ -83,7 +83,7 @@ const DashboardPage = () => {
     const fetchData = async () => {
       const classTestList = await loadClassTestList();
       const prevRunningTest = await loadPreviousRunningTest();
-      let scheduledClasses = null
+      let scheduledClasses = null;
       // Checks if Student have any Class then calls the week classes api
       if (isClassTest) {
         scheduledClasses = await loadWeekScheduledClasses();
@@ -166,7 +166,10 @@ const DashboardPage = () => {
               </>
             ) : (
               <>
-                <WidgetCard className="min-h-[250px] max-h-[250px]">
+                <WidgetCard
+                  id="dash-download-card"
+                  className="dash-download-card min-h-[250px] max-h-[250px]"
+                >
                   <DownloadAppCard />
                 </WidgetCard>
                 <WidgetCard className="h-full">
@@ -210,7 +213,7 @@ const DashboardPage = () => {
         )}
         {(isClassTest || isMobile) && (
           <>
-            <WidgetCard id="dash-download-card">
+            <WidgetCard id="dash-download-card" className="dash-download-card">
               <DownloadAppCard />
             </WidgetCard>
             <WidgetCard>
