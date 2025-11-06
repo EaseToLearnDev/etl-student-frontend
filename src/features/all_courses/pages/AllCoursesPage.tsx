@@ -22,6 +22,7 @@ import { useLocation } from "react-router";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
 import { usePageTracking } from "../../../hooks/usePageTracking";
+import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 const ALL_COURSES_CARD_CLICK_ID = "all_courses_card_id";
 
@@ -51,6 +52,9 @@ const AllCoursesPage = () => {
   const setSelectedCategory = useCoursesStore((s) => s.setSelectedCategory);
   const selectedCourse = useCoursesStore((s) => s.selectedCourse);
   const setSelectedCourse = useCoursesStore((s) => s.setSelectedCourse);
+  const studentData = useStudentStore((s) => s.studentData);
+
+  const deviceType = studentData?.deviceType;
 
   const [hideSecondary, setHideSecondary] = useState<boolean>(
     isMobile ? true : false
@@ -58,7 +62,7 @@ const AllCoursesPage = () => {
 
   const courseId = new URLSearchParams(location.search).get("cid");
 
-  usePageTracking( gtmEvents.all_courses_page_visit)
+  usePageTracking(gtmEvents.all_courses_page_visit);
 
   // fetch categories & courses on mount
   useEffect(() => {
@@ -126,7 +130,7 @@ const AllCoursesPage = () => {
                   event: gtmEvents.all_courses_card_click,
                   course_id: course.courseId,
                   course_name: course.courseTitle,
-                  id: ALL_COURSES_CARD_CLICK_ID
+                  id: ALL_COURSES_CARD_CLICK_ID,
                 });
                 setSelectedCourse(course);
                 setIsPlanModalOpen(true);
@@ -158,12 +162,14 @@ const AllCoursesPage = () => {
         className="p-4"
       >
         <PlanDetails
+          deviceType={deviceType}
           course={selectedCourse!}
           onClose={() => setIsPlanModalOpen(false)}
         />
       </Modal>
 
       <UpdateEmailModal
+        deviceType={deviceType}
         isOpen={isUpdateEmailModalOpen}
         onClose={() => setIsUpdateEmailModalOpen(false)}
       />

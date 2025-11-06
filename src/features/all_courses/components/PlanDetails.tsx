@@ -5,13 +5,15 @@ import { PlanBody } from "./PlanBody";
 
 interface PlanDetailsProps {
   course: CourseType;
+  deviceType: string | undefined;
   onClose: () => void;
 }
-export const PlanDetails = ({ course, onClose }: PlanDetailsProps) => {
+export const PlanDetails = ({ deviceType, course, onClose }: PlanDetailsProps) => {
   const features = course?.featuresList;
   return (
     <div className="relative">
       <PlanBody
+        deviceType={deviceType}
         features={features}
         coursePlan={course?.twoPriceList}
         courseTitle={course?.courseTitle}
