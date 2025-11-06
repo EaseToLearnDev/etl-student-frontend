@@ -39,7 +39,7 @@ export const saveStudentData = (
   if (deviceType && deviceType.length > 0) {
     studentData.deviceType = deviceType;
   } else {
-    studentData.deviceType = "android";
+    studentData.deviceType = "web";
   }
 
   //   Persist student data in local storage

@@ -23,6 +23,7 @@ interface PlanBodyProps {
   features?: FeaturesList[];
   coursePlan?: PriceList[];
   courseTitle?: string;
+  deviceType?: string;
   courseId?: number;
 }
 
@@ -31,6 +32,7 @@ export const PlanBody = ({
   coursePlan,
   courseTitle,
   courseId,
+  deviceType,
 }: PlanBodyProps) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -217,7 +219,11 @@ export const PlanBody = ({
 
               {tabs[selectedTabIndex] !== "FREE" && isMobile ? (
                 <WidgetCard
-                  className="shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide !p-4"
+                  className={
+                    deviceType && deviceType == "ios"
+                      ? `hidden`
+                      : `shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide !p-4`
+                  }
                   title="Have a Promo Code?"
                 >
                   <form
@@ -345,7 +351,7 @@ export const PlanBody = ({
                 className="w-full lg:w-fit"
                 onClick={() => {
                   processCourseSelection({
-                    option: 3,
+                    option: deviceType === "ios" ? 2 : 3,
                     courseId,
                     courseTitle,
                     selectedPlanId,
