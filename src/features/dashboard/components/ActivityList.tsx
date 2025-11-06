@@ -122,7 +122,7 @@ export const ActivityList = ({
             )}
           </div>
         </div>
-        <div className="flex items-center gap-4 text-[var(--text-primary)]">
+        <div className="flex items-center gap-3 text-[var(--text-primary)]">
           <button
             onClick={() => scroll("left")}
             className="size-7 aspect-square hover:bg-[var(--surface-bg-secondary)] flex justify-center items-center border border-[var(--border-secondary)] rounded-md transition"

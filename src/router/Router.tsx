@@ -42,6 +42,7 @@ import { InAppPayment } from "../features/in_app_payment/InAppPayment";
 import PgResponse from "../global/pages/PgResponse";
 import PgCancelled from "../global/pages/PgCancelled";
 import AdaptiveLearningPage from "../features/study_room/adaptive_learning/pages/AdaptiveLearningPage";
+import DashboardV2Page from "../features/dashboard/pages/DashboardV2Page";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -111,7 +112,7 @@ const Router = () => {
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="dashboard" element={<DashboardV2Page />} />
 
         {/* Calculate study room default route  */}
         <Route

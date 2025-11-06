@@ -23,7 +23,7 @@ const DesktopChildLayout = ({
   secondaryClassName = "",
 }: DesktopChildLayoutProps) => {
   return (
-    <div className="flex w-full h-full gap-5 overflow-x-hidden">
+    <div className="flex w-full h-full gap-5 overflow-x-hidden max-w-[1440px] mx-auto">
       {/* Primary content (always visible, takes 75% width if secondary is shown) */}
       <div
         className={cn(

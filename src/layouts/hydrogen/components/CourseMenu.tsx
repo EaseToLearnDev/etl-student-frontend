@@ -72,7 +72,7 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
             <div className="w-full mt-1 sticky bottom-0 left-0 right-0 bg-[var(--surface-bg-secondary)] p-2">
               <Link
                 to={"/selectcourse"}
-                className="w-full !py-2 flex justify-center items-center gap-2 border border-[var(--border-secondary)] rounded-lg"
+                className="w-full !py-2 flex justify-center items-center gap-1 border border-[var(--border-secondary)] rounded-lg"
                 onClick={() => {
                   navigate("/selectcourse");
                   onToggle();
@@ -93,14 +93,17 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
       {deviceType !== "ios" && course && status !== "accessible" && (
         <Link
           to={`/selectcourse?cid=${course?.courseId}`}
-          className="relative group cursor-pointer"
+          className="relative group cursor-pointer upgrade_btn px-4 py-2 rounded-lg shadow-sm hover:shadow-md"
         >
-          <div className="absolute inset-0.5 gradient blur-sm rounded-lg opacity-80 transition duration-200 group-hover:opacity-100"></div>
+          {/* <div className="absolute inset-0.5 gradient blur-sm rounded-lg opacity-80 transition duration-200 group-hover:opacity-100"></div>
           <div className="relative px-4 py-2 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
             <p className="text-black">
               {status === "renew" ? "Renew" : "Upgrade"}
             </p>
-          </div>
+          </div> */}
+          <p className="text-black font-medium">
+            {status === "renew" ? "Renew" : "Upgrade"}
+          </p>
         </Link>
       )}
     </div>

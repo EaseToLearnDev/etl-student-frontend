@@ -121,13 +121,13 @@ const StartMockTestModalContent = ({
 
       {/* Test Overview Fields */}
 
-      <div className="mt-[90px] h-[calc(70vh-190px)] py-2 overflow-y-auto">
+      <div className={cn("mt-[90px] h-[calc(70vh-190px)] py-2 overflow-y-auto", isMobile ? "scrollbar-hide" : "")}>
         <div className="flex flex-col gap-4">
           <div className="flex gap-2 items-center">
             <FiTarget size={20} />
             <h5>Test Overview</h5>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             {validFields.map((f, i) => {
               const isLast = i === validFields.length - 1;
               return (

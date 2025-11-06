@@ -35,7 +35,6 @@ const TestCard = ({
   const isMobile = useIsMobile();
   const eventType = test.event;
 
-  console.log("Event Type:", eventType); // Debugging line
   return (
     <div className="relative flex flex-col lg:flex-row items-center justify-center gap-8 p-5 lg:justify-between border-1 border-[var(--border-secondary)] hover:bg-[var(--surface-bg-secondary)] rounded-lg transition-colors duration-100 ease-in">
       <div className="flex flex-col gap-5 w-full">

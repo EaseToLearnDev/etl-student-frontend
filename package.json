@@ -20,6 +20,7 @@
     "better-react-mathjax": "^2.3.0",
     "chart.js": "^4.1.1",
     "clsx": "^2.1.1",
+    "framer-motion": "^12.23.24",
     "js-cookie": "^3.0.5",
     "react": "^19.1.0",
     "react-activity-calendar": "^2.7.13",

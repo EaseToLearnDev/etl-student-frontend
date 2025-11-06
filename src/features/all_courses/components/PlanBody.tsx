@@ -144,8 +144,8 @@ export const PlanBody = ({
   return (
     <div
       className={cn(
-        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)]",
-        isMobile ? "overflow-y-auto" : "overflow-hidden scrollbar-hide"
+        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)] scrollbar-hide",
+        isMobile ? "overflow-y-auto" : "overflow-hidden"
       )}
     >
       <div className="w-full h-[120px] p-4">

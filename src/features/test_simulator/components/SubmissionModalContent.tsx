@@ -33,7 +33,7 @@ const SubmissionModalContent = ({
         </h6>
       </div>
       <div className="w-full flex justify-end mt-7">
-        <div className="w-full flex flex-col test_submit_modal_action_buttons gap-4 items-center">
+        <div className="w-full flex flex-col test_submit_modal_action_buttons gap-2 md:gap-4 items-center">
           {loading ? (
             <Button className="w-full" disabled>
               <div className="flex justify-center items-center gap-2">

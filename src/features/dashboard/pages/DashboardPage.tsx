@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ClassTestList from "../components/ClassTestList";
+// import ClassTestList from "../components/ClassTestList";
 import FeaturedBannerCarousal from "../components/FeaturedBannerCarousal";
 import { loadClassTestList } from "../../../global/services/loadClassTestList";
 import { useCTStore } from "../../../global/hooks/useCTStore";
@@ -27,8 +27,8 @@ import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
 import FirstTimeUserModal from "../components/FirstTimeUser";
 import { loadWeekScheduledClasses } from "../services/loadWeekScheduledClasses";
-import ScheduledClassesList from "../components/ScheduledClassesList";
-import type { WeekClassScheduleList } from "../dashboard.types";
+// import ScheduledClassesList from "../components/ScheduledClass";
+// import type { WeekClassScheduleList } from "../dashboard.types";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 
 const DashboardPage = () => {
@@ -39,12 +39,12 @@ const DashboardPage = () => {
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const showFtuModal = useStudentStore((s) => s.showFtuModal);
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
-  const loading = useLoadingStore((s) => s.loading);
+  // const loading = useLoadingStore((s) => s.loading);
   const isMobile = useIsMobile();
 
-  const [scheduledClasses, setScheduledClasses] = useState<
-    WeekClassScheduleList[] | null
-  >(null);
+  // const [scheduledClasses, setScheduledClasses] = useState<
+  //   WeekClassScheduleList[] | null
+  // >(null);
 
   const [color, setColor] = useState("green");
   const [year, setYear] = useState(null);
@@ -91,7 +91,7 @@ const DashboardPage = () => {
 
       if (classTestList) setTestList(classTestList);
       if (prevRunningTest) setPrevRunningTest(prevRunningTest);
-      if (scheduledClasses) setScheduledClasses(scheduledClasses);
+      // if (scheduledClasses) setScheduledClasses(scheduledClasses);
     };
     fetchData();
 
@@ -147,7 +147,7 @@ const DashboardPage = () => {
           </WidgetCard>
         </div>
 
-        {!isMobile && (
+        {/* {!isMobile && (
           <div className="flex flex-col gap-5 xl:col-span-1">
             {isClassTest ? (
               <>
@@ -156,7 +156,7 @@ const DashboardPage = () => {
                   className="h-full max-h-[250px]"
                 >
                   <ScheduledClassesList
-                    data={scheduledClasses}
+                    scheduleClass={scheduledClasses}
                     loading={loading}
                   />
                 </WidgetCard>
@@ -178,7 +178,7 @@ const DashboardPage = () => {
               </>
             )}
           </div>
-        )}
+        )} */}
       </div>
 
       {/* Bottom Section */}
@@ -197,7 +197,7 @@ const DashboardPage = () => {
         <WidgetCard title="Jump Back In" className="h-full min-h-[300px]">
           <JumpBackInList />
         </WidgetCard>
-
+{/* 
         {isMobile && isClassTest && (
           <>
             <WidgetCard title="Class Tests" className="h-full min-h-[300px]">
@@ -210,7 +210,7 @@ const DashboardPage = () => {
               <ScheduledClassesList data={scheduledClasses} loading={loading} />
             </WidgetCard>
           </>
-        )}
+        )} */}
         {(isClassTest || isMobile) && (
           <>
             <WidgetCard id="dash-download-card" className="dash-download-card">

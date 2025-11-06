@@ -57,7 +57,7 @@ const HeaderMenuRight = () => {
               />
             ) : (
               <p className="!font-bold">
-                {studentName?.split(" ")?.map((w) => w[0] || "")}
+                {studentName?.split(" ")?.map((w) => w[0]?.toUpperCase() || "")}
               </p>
             )}
           </div>

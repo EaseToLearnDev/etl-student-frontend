@@ -17,7 +17,7 @@ export const saveStudentData = (
   //   Early return if no data found
   if (!data) {
     setStudentData(null);
-    return;
+    throw new Error("invalid_detail");
   }
 
   //   Save Cookies

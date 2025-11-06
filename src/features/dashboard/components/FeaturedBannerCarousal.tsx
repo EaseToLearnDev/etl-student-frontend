@@ -61,7 +61,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     <div key="slide-1" className="relative w-full h-full flex-shrink-0">
       <img
         src="./dashboard_banner.png"
-        className="absolute top-0 left-0 w-full h-full object-cover select-none pointer-events-none z-10"
+        className="absolute top-0 left-0 bottom-0 right-0 w-full h-full object-cover select-none pointer-events-none z-10"
       />
 
       <div className="relative z-30 flex flex-col justify-between h-full w-full p-6 sm:p-10">
@@ -72,7 +72,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           </p>
         </div>
 
-        <div className="mt-2 flex flex-col sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
+        <div className="mt-2 flex flex-col max-w-[300px] sm:max-w-full sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
           <button
             id={EXPLORE_FEATURES_BUTTON_ID}
             className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
@@ -122,7 +122,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
               pushToDataLayer({
                 event: gtmEvents.feature_banner_tutorial_cards_click,
                 id: "feature_banner_tutorial_cards_id",
-                card_title : card.title
+                card_title: card.title,
               });
               setSelectedContent(card.content as TutorialContent);
             }}
@@ -191,7 +191,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
       </div>
       {/* Slides wrapper */}
       <div
-        className="flex w-full h-full transition-transform duration-500 ease-in-out"
+        className="flex w-full h-full transition-transform duration-500 ease-in-out min-h-[200px]"
         style={{ transform: `translateX(-${selectedSlideIndex * 100}%)` }}
       >
         {slides}
@@ -218,9 +218,10 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
                     pushToDataLayer({
                       id: "feature_banner_video_link_id",
                       event: gtmEvents.feature_banner_video_link_click,
-                      video_title: item.title
+                      video_title: item.title,
                     });
-                    setSelectedVideo(item)}}
+                    setSelectedVideo(item);
+                  }}
                   className="flex flex-col p-5 border border-[var(--border-primary)] rounded-xl shadow-sm hover:shadow-lg hover:bg-[var(--surface-bg-tertiary)] transition-all duration-300 cursor-pointer group"
                 >
                   <div className="flex items-center gap-3">
@@ -249,7 +250,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
           </div>
         </Modal>
       )}
-      // Video Modal (Full screen)
+      {/* // Video Modal (Full screen) */}
       {selectedVideo && (
         <Modal
           isOpen={selectedVideo !== null}
