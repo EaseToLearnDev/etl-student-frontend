@@ -557,7 +557,7 @@ const ActiveQuestionPanel = () => {
       </div>
 
       {/* Buttons */}
-      <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4 bg-white/20">
+      <div className="absolute bottom-0 left-0 right-0 h-[80px] flex flex-wrap gap-y-4 justify-center gap-2 items-center py-4">
         {/* Previous Button */}
         {mode !== "adaptive" && (
           <div
