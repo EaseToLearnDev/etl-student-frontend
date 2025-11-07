@@ -112,7 +112,7 @@ const FeaturedBannerCarousal = ({ className }: FeaturedBannerCarousalProps) => {
     // Slide 2 (mapped cards)
     <div
       key="slide-2"
-      className="relative w-full h-full flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center sm:p-10 py-10 px-2"
+      className="relative w-full h-inherit flex-shrink-0 bg-gradient-to-r from-violet-700 to-blue-700 flex items-center justify-center sm:p-10 py-10 px-2"
     >
       <div className="grid grid-cols-3 gap-2 sm:gap-5 w-full select-none">
         {tutorialCards.map((card, i) => (
