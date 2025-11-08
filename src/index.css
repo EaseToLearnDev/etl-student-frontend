@@ -762,6 +762,13 @@ input:-webkit-autofill:active {
     "three three six";
 }
 
+.dashboard-grid[data-variant="mobile-device-layout"] {
+  grid-template-areas:
+    "one one six"
+    "two two four"
+    "three three five";
+}
+
 .dashboard-grid > :nth-child(1) {
   grid-area: one;
 }

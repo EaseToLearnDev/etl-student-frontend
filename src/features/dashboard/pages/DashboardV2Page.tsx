@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
 import { ActivityList } from "../components/ActivityList";
 import FeaturedBannerCarousal from "../components/FeaturedBannerCarousal";
@@ -33,6 +33,7 @@ import { handleStartTest } from "../../exam_room/shared/services/handleStartTest
 import { useNavigate } from "react-router";
 
 const DashboardV2Page = () => {
+  const gridRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const setTestList = useCTStore((s) => s.setTestList);
   const selectedTest = useCTStore((s) => s.selectedTest);
@@ -45,6 +46,7 @@ const DashboardV2Page = () => {
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const showFtuModal = useStudentStore((s) => s.showFtuModal);
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
+  const deviceType = useStudentStore((s) => s.studentData?.deviceType);
 
   const [scheduledClasses, setScheduledClasses] = useState<
     WeekClassScheduleList[] | null
@@ -82,6 +84,14 @@ const DashboardV2Page = () => {
   const isClassTestFeatEnabled = activeCourse?.tabs?.classTest;
 
   usePageTracking(gtmEvents.dashboard_page_visit);
+
+  useEffect(() => {
+    if (!gridRef.current) return;
+
+    if (deviceType !== "web" && !isClassTestFeatEnabled) {
+      gridRef.current.setAttribute("data-variant", "mobile-device-layout");
+    }
+  }, [isClassTestFeatEnabled]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -130,6 +140,7 @@ const DashboardV2Page = () => {
   return (
     <div className="overflow-y-auto h-full scrollbar-hide">
       <div
+        ref={gridRef}
         className="pb-5 dashboard-grid"
         data-variant={isClassTestFeatEnabled ? "class-test" : "default"}
       >
