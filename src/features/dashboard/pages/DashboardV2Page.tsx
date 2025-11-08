@@ -16,8 +16,6 @@ import { gtmEvents } from "../../../utils/gtm-events";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import type { WeekClassScheduleList } from "../dashboard.types";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { useLoadingStore } from "../../../hooks/useLoadingStore";
-import useIsMobile from "../../../hooks/useIsMobile";
 import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useCTStore } from "../../../global/hooks/useCTStore";
 import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
@@ -38,7 +36,6 @@ const DashboardV2Page = () => {
   const navigate = useNavigate();
   const setTestList = useCTStore((s) => s.setTestList);
   const selectedTest = useCTStore((s) => s.selectedTest);
-  const setSelectedTest = useCTStore((s) => s.setSelectedTest);
   const showStartTestModal = useCTStore((s) => s.showStartTestModal);
   const setShowStartTestModal = useCTStore((s) => s.setShowStartTestModal);
 
@@ -48,8 +45,6 @@ const DashboardV2Page = () => {
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const showFtuModal = useStudentStore((s) => s.showFtuModal);
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
-  const loading = useLoadingStore((s) => s.loading);
-  const isMobile = useIsMobile();
 
   const [scheduledClasses, setScheduledClasses] = useState<
     WeekClassScheduleList[] | null
@@ -133,97 +128,102 @@ const DashboardV2Page = () => {
   }, [date]);
 
   return (
-    <div
-      className="pb-5 scrollbar-hide overflow-y-auto dashboard-grid"
-      data-variant={isClassTestFeatEnabled ? "class-test" : "default"}
-    >
-      <FeaturedBannerCarousal />
-      {isClassTestFeatEnabled && (
-        <WidgetCard title="Upcoming Classes & Tests">
-          <UpcomingClassesAndTests scheduledClasses={scheduledClasses} />
-        </WidgetCard>
-      )}
-      <WidgetCard
-        title="Activity Chart"
-        className="w-full min-h-[390px] max-h-full overflow-x-auto"
+    <div className="overflow-y-auto h-full scrollbar-hide">
+      <div
+        className="pb-5 dashboard-grid"
+        data-variant={isClassTestFeatEnabled ? "class-test" : "default"}
       >
-        <ActivityList
-          yearsOptions={yearsOptions}
-          apiData={apiData}
-          year={year}
-          setYear={setYear}
-          loadingGhActivity={loadingGhActivity}
-          loadingGhActivityYears={loadingGhActivityYears}
-          color={color}
-          setColor={setColor}
-          handleClickOnDay={handleClickOnDay}
-        />
-      </WidgetCard>
-      <WidgetCard
-        title="Tests activity "
-        description={date}
-        className="min-h-[400px] relative "
-      >
-        {loadingGhActivityByDay ? (
-          <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
-        ) : (
-          <ActivityListData dataByDay={dataByDay} />
+        <FeaturedBannerCarousal />
+        {isClassTestFeatEnabled && (
+          <WidgetCard title="Upcoming Classes & Tests">
+            <UpcomingClassesAndTests scheduledClasses={scheduledClasses} />
+          </WidgetCard>
         )}
-      </WidgetCard>
-      <WidgetCard title="Jump Back In" className="h-full min-h-[300px]">
-        <JumpBackInList />
-      </WidgetCard>
-      <WidgetCard id="dash-download-card" className="dash-download-card max-h-[300px]">
-        <DownloadAppCard />
-      </WidgetCard>
-      <WidgetCard>
-        <SupportSection />
-      </WidgetCard>
+        <WidgetCard
+          title="Activity Chart"
+          className="w-full min-h-[390px] max-h-full overflow-x-auto"
+        >
+          <ActivityList
+            yearsOptions={yearsOptions}
+            apiData={apiData}
+            year={year}
+            setYear={setYear}
+            loadingGhActivity={loadingGhActivity}
+            loadingGhActivityYears={loadingGhActivityYears}
+            color={color}
+            setColor={setColor}
+            handleClickOnDay={handleClickOnDay}
+          />
+        </WidgetCard>
+        <WidgetCard
+          title="Tests activity "
+          description={date}
+          className="min-h-[400px] relative "
+        >
+          {loadingGhActivityByDay ? (
+            <LuLoader className="animate-spin absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2  w-8 h-8" />
+          ) : (
+            <ActivityListData dataByDay={dataByDay} />
+          )}
+        </WidgetCard>
+        <WidgetCard title="Jump Back In" className="h-full min-h-[300px]">
+          <JumpBackInList />
+        </WidgetCard>
+        <WidgetCard
+          id="dash-download-card"
+          className="dash-download-card max-h-[300px]"
+        >
+          <DownloadAppCard />
+        </WidgetCard>
+        <WidgetCard>
+          <SupportSection />
+        </WidgetCard>
 
-      <FirstTimeUserModal
-        isOpen={showFtuModal}
-        onClose={() => setShowFtuModal(false)}
-      />
+        <FirstTimeUserModal
+          isOpen={showFtuModal}
+          onClose={() => setShowFtuModal(false)}
+        />
 
-      <Modal
-        isOpen={showStartTestModal}
-        onClose={() => setShowStartTestModal(false)}
-        size="lg"
-        className="p-4"
-      >
-        <StartTopicTestModalContent
-          customTitle={"Class Test"}
-          testName={selectedTest?.testTitle || ""}
-          onStart={() => {
-            handleStartTest({
-              navigate,
-              testId: selectedTest?.testId ?? null,
-              classTestId: selectedTest?.scheduleId,
-              testType: selectedTest?.testType,
-            });
-            setShowStartTestModal(false);
-          }}
+        <Modal
+          isOpen={showStartTestModal}
           onClose={() => setShowStartTestModal(false)}
-          details={{
-            marksCorrect: selectedTest?.markCorrectAns,
-            marksIncorrect: selectedTest?.markIncorrectAns,
-            marksUnattempted: selectedTest?.markNotAttempt,
-            questionType: selectedTest?.questionType,
-            totalMarks: selectedTest?.totalMark,
-            totalQuestions: selectedTest?.totalQuestion,
-            totalTime: selectedTest?.totalTime,
-          }}
-        />
-      </Modal>
+          size="lg"
+          className="p-4"
+        >
+          <StartTopicTestModalContent
+            customTitle={"Class Test"}
+            testName={selectedTest?.testTitle || ""}
+            onStart={() => {
+              handleStartTest({
+                navigate,
+                testId: selectedTest?.testId ?? null,
+                classTestId: selectedTest?.scheduleId,
+                testType: selectedTest?.testType,
+              });
+              setShowStartTestModal(false);
+            }}
+            onClose={() => setShowStartTestModal(false)}
+            details={{
+              marksCorrect: selectedTest?.markCorrectAns,
+              marksIncorrect: selectedTest?.markIncorrectAns,
+              marksUnattempted: selectedTest?.markNotAttempt,
+              questionType: selectedTest?.questionType,
+              totalMarks: selectedTest?.totalMark,
+              totalQuestions: selectedTest?.totalQuestion,
+              totalTime: selectedTest?.totalTime,
+            }}
+          />
+        </Modal>
 
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
+        {/* Toast */}
+        {showToast && toastData && (
+          <Toast
+            {...toastData}
+            key={toastData.title}
+            duration={toastData.duration}
+          />
+        )}
+      </div>
     </div>
   );
 };
