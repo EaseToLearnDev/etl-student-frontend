@@ -217,7 +217,7 @@ export const PlanBody = ({
                 </WidgetCard>
               )}
 
-              {tabs[selectedTabIndex] !== "FREE" && isMobile ? (
+              {tabs[selectedTabIndex] !== "FREE" && isMobile && deviceType !== 'ios' ? (
                 <WidgetCard
                   className={
                     deviceType && deviceType == "ios"
@@ -281,8 +281,8 @@ export const PlanBody = ({
         </div>
         {/* Actions Section*/}
         <div className="w-full py-4 flex items-center fixed bottom-0 min-h-[120px] bg-[var(--surface-bg-secondary)]">
-          <div className="w-full max-w-[1400px] mx-auto px-4 flex lg:justify-between gap-4 items-center">
-            {!isMobile && (
+          <div className={cn("w-full max-w-[1400px] mx-auto px-4 flex gap-4 items-center", deviceType === 'ios' ? 'lg:justify-end' : 'lg:justify-between')}>
+            {!isMobile && deviceType !== 'ios' && (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
