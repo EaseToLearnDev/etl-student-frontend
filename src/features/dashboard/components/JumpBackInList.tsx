@@ -66,7 +66,7 @@ const JumpBackInList = () => {
             />
           </div>
         ) : (
-          <div className="flex flex-col w-full items-center mt-12">
+          <div className="flex flex-col w-full items-center py-4">
             <EmptyState
               title="No previous tests available"
               description="No previous test data is available at the moment."

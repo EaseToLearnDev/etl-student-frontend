@@ -22,7 +22,9 @@ export interface WeekClassScheduleList {
 export interface DashBoardFilterMenuList {
   id: string;
   name: string;
-  href?: string;
+  href: string;
+  icon?: React.ReactNode;
   parentId?: string;
+  parentHref?: string;
   [key: string]: any;
 }
