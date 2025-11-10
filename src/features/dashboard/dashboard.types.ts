@@ -18,3 +18,11 @@ export interface WeekClassScheduleList {
   classDateName: Date;
   createdDateTime: Date;
 }
+
+export interface DashBoardFilterMenuList {
+  id: string;
+  name: string;
+  href?: string;
+  parentId?: string;
+  [key: string]: any;
+}
