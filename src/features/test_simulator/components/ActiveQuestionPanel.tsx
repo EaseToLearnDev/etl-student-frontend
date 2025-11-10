@@ -591,7 +591,7 @@ const ActiveQuestionPanel = () => {
             style="secondary"
             className="!min-w-10 px-2 sm:px-4"
             onClick={() => {
-              clearCurrentResponse;
+              clearCurrentResponse();
               pushToDataLayer({
                 event: gtmEvents.test_simulator_clear_response_button_click,
                 id: "clear_response_button_click",
@@ -606,7 +606,7 @@ const ActiveQuestionPanel = () => {
             style="secondary"
             className="!min-w-10 px-2 sm:px-4"
             onClick={() => {
-              markCurrentFoReview;
+              markCurrentFoReview()
               pushToDataLayer({
                 event: gtmEvents.test_simulator_mark_for_review_button_click,
                 id: "mark_for_review_button_click",
