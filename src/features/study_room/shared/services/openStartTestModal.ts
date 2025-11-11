@@ -1,4 +1,4 @@
-import { useSLStore } from "../hooks/useSLStore";
+import { useSharedLearningStore } from "../hooks/useSharedLearningStore";
 
 export const openStartTestModal = () => {
   const {
@@ -6,7 +6,7 @@ export const openStartTestModal = () => {
     selectedTestOption,
     setSelectedTestOption,
     setShowStartTestModal,
-  } = useSLStore.getState();
+  } = useSharedLearningStore.getState();
 
   // Ensure selectedTestOption is replaced with a copy of the matching testOptions entry
   const item =

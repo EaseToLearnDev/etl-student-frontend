@@ -156,13 +156,13 @@ const StudentReport = () => {
 
   const tabContentsMap: Record<string, JSX.Element> = {
     Overview: <ReportOverviewPage />,
-    "Learning Sessions": (
+    "Gap Fixer": (
       <ReportLearningSessionPage
         data={sessionData}
         onViewMore={handleViewMore}
       />
     ),
-    "Competitive Sessions": (
+    "PaceX": (
       <ReportTablePage
         data={reportData}
         onViewMore={handleViewMore}

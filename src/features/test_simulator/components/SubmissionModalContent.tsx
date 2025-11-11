@@ -53,7 +53,7 @@ const SubmissionModalContent = ({
                 <Button
                   onClick={onContinueLater}
                   style="secondary"
-                  className="w-full max-w-[300px]"
+                  className="w-full flex-1"
                 >
                   Save & Continue Later
                 </Button>

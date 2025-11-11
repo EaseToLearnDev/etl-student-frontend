@@ -44,6 +44,12 @@ export const menuItems: MenuItem[] = [
         icon: <PiBrainFill />,
       },
       {
+        id: "selfTest",
+        name: "PaceX",
+        href: "/pacex",
+        icon: <PiTimerFill />,
+      },
+      {
         id: "studyMaterial",
         name: "Study Material",
         href: "/study-material",

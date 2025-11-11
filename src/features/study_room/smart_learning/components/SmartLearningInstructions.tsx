@@ -1,6 +1,6 @@
 // Constants
 import { competitiveRules } from "../../../shared/constants";
-import type { ModeType } from "../sl.types";
+import type { ModeType } from "../../shared/shared_learning.types";
 import { LearningSessionInstructions } from "./LearningSessionInstructions";
 
 type SmartLearningInstructionsProps = {

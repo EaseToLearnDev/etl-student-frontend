@@ -4,12 +4,12 @@ import { Theme } from "../../../utils/colors";
 interface JumpBackInCardProps {
   id?: string;
   topicTitle: string;
-  testType: string;
+  testMode: string;
   onClick: () => void;
 }
 const JumpBackInCard = ({
   id,
-  testType,
+  testMode,
   topicTitle,
   onClick,
 }: JumpBackInCardProps) => {
@@ -19,14 +19,14 @@ const JumpBackInCard = ({
       className="w-full h-full rounded-lg overflow-hidden bg-[var(--surface-bg-primary)] cursor-pointer"
       onClick={onClick}
     >
-      <img src="./jump_in_card.png" className="w-full h-[120px] object-cover" />
+      <img src={testMode === "Learning Session" ? "./gap-fixer-previous.jpg" : "./pacex-previous.jpg"} className="w-full h-[120px] object-cover" />
       <div className="flex flex-col gap-2 p-4">
         <Badge
           theme={Theme.Neutral}
           style="outline"
           className="w-fit !rounded-lg py-1 px-2 border !border-[var(--border-secondary)]"
         >
-          <p>{testType}</p>
+          <p>{testMode === "Learning Session" ? "Gap Fixer" : "PaceX"}</p>
         </Badge>
         <p className="font-medium">{topicTitle}</p>
       </div>

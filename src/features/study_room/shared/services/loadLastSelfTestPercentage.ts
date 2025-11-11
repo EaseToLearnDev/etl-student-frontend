@@ -4,7 +4,7 @@ import { useStudentStore } from "../../../shared/hooks/useStudentStore";
 
 // Api
 import { getLastSelfTestPercentage } from "../api/lastSelfTestPercentage.api";
-import type { ModeType } from "../sl.types";
+import type { ModeType } from "../shared_learning.types";
 
 /**
  * Loads the last self-test percentage for a given topic for the current student.
