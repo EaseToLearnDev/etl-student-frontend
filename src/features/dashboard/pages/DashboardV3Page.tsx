@@ -9,16 +9,23 @@ import type { WeekClassScheduleList } from "../dashboard.types";
 import { loadClassTestList } from "../../../global/services/loadClassTestList";
 import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
 import { loadWeekScheduledClasses } from "../services/loadWeekScheduledClasses";
+import FirstTimeUserModal from "../components/FirstTimeUser";
+import { useToastStore } from "../../../global/hooks/useToastStore";
+import { Toast } from "../../../components/Toast";
 
 const DashboardV3Page = () => {
   const isMobile = useIsMobile();
-
+  const toastData = useToastStore((s) => s.toastData);
+  const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((state) => state.activeCourse);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
   const setTestList = useCTStore((s) => s.setTestList);
   const [scheduledClasses, setScheduledClasses] = useState<
     WeekClassScheduleList[] | null
   >(null);
+
+  const showFtuModal = useStudentStore((s) => s.showFtuModal);
+  const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
 
   const isClassTestFeatEnabled = activeCourse?.tabs?.classTest;
 
@@ -38,16 +45,33 @@ const DashboardV3Page = () => {
     };
     fetchData();
   }, []);
-  return isMobile ? (
-    <MobileDashboardLayout
-      isClassTestFeatEnabled={isClassTestFeatEnabled}
-      scheduledClasses={scheduledClasses}
-    />
-  ) : (
-    <DesktopDashboardLayout
-      isClassTestFeatEnabled={isClassTestFeatEnabled}
-      scheduledClasses={scheduledClasses}
-    />
+  return (
+    <>
+      {isMobile ? (
+        <MobileDashboardLayout
+          isClassTestFeatEnabled={isClassTestFeatEnabled}
+          scheduledClasses={scheduledClasses}
+        />
+      ) : (
+        <DesktopDashboardLayout
+          isClassTestFeatEnabled={isClassTestFeatEnabled}
+          scheduledClasses={scheduledClasses}
+        />
+      )}
+
+      <FirstTimeUserModal
+        isOpen={showFtuModal}
+        onClose={() => setShowFtuModal(false)}
+      />
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
+    </>
   );
 };
 
