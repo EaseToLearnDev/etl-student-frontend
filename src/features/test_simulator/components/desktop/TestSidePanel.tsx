@@ -21,6 +21,7 @@ const TestSidePanel = () => {
     (s) => s.setShowGuestTestSubmitModal,
   );
   const testMode = useTestStore((s) => s.testMode);
+  const testType = useTestStore((s) => s.testConfig?.assessmentMode)
   const { correctResponseEnabled } = useTestStore((s) => s.features);
   return (
     <div className="relative h-full flex flex-col gap-5 overflow-y-hidden">
@@ -43,7 +44,7 @@ const TestSidePanel = () => {
                     : setIsSubmissionModalOpen(true)
                 }
               >
-                Submit
+                {testType === "beginner"? "End Session": "Submit"}
               </Button>
             </div>
           )}

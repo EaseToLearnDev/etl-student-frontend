@@ -240,6 +240,7 @@ const useTestStore = create<TestStore>((set, get) => ({
       questionStatusMap,
       startQuestionTimer,
       stopQuestionTimer,
+      setIsSubmissionModalOpen
     } = get();
     if (!testData) return;
 
@@ -284,7 +285,8 @@ const useTestStore = create<TestStore>((set, get) => ({
     if (!result.reachedEnd) {
       startQuestionTimer();
     } else {
-      // TODO: open submit modal
+      // open submit modal
+      setIsSubmissionModalOpen(true)
     }
   },
 
