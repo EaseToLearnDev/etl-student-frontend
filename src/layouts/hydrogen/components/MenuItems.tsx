@@ -46,6 +46,7 @@ export const menuItems: MenuItem[] = [
       {
         id: "selfTest",
         name: "PaceX",
+        desc: "Timed Practice",
         href: "/pacex",
         icon: <PiTimerFill />,
       },
