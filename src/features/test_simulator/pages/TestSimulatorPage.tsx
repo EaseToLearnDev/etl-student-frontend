@@ -43,6 +43,7 @@ import AdaptiveTestSimulator from "../components/AdaptiveTestSimulator";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { pushToDataLayer } from "../../../utils/gtm";
 import { gtmEvents } from "../../../utils/gtm-events";
+import CourseAlreadyExistModal from "../components/CourseAlreadyExistModal";
 
 /**
  * TestSimulatorPage component for rendering the test simulator UI.
@@ -98,7 +99,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   );
   const testData = useTestStore((s) => s.testData);
 
-  const AssessmentMode = useTestStore(s => s.testConfig?.assessmentMode)
+  const AssessmentMode = useTestStore((s) => s.testConfig?.assessmentMode);
 
   const testMode = useTestStore((s) => s.testMode);
   const setMode = useTestStore((s) => s.setMode);
@@ -116,7 +117,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const status = getActiveCourseAccessStatus();
 
   usePageTracking(`${mode}_test_page_visit`);
-  
+
   useEffect(() => {
     setupTest(
       params,
@@ -229,21 +230,27 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         className="p-4"
       >
         <SubmissionModalContent
-          onSubmit={() =>{ 
-            pushToDataLayer({event: gtmEvents.test_simulator_submit_now_button_click,
-            id: "submit_now_button_click"
+          onSubmit={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_submit_now_button_click,
+              id: "submit_now_button_click",
             });
-            handleTestSubmit(navigate)}}
-          onContinueLater={() =>{ 
-            pushToDataLayer({event: gtmEvents.test_simulator_save_and_continue_button_click,
-            id: "continue_later_button_click"
+            handleTestSubmit(navigate);
+          }}
+          onContinueLater={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_save_and_continue_button_click,
+              id: "continue_later_button_click",
             });
-            handleContinueLater(navigate)}}
-          onClose={() => { 
-            pushToDataLayer({event: gtmEvents.test_simulator_cancel_button_click,
-            id: "cancel_button_click"
+            handleContinueLater(navigate);
+          }}
+          onClose={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_cancel_button_click,
+              id: "cancel_button_click",
             });
-            setIsSubmissionModalOpen(false)}}
+            setIsSubmissionModalOpen(false);
+          }}
           AssessmentMode={AssessmentMode}
           hideOnContinueLater={
             testData?.testType === 4 || testData?.testType === 5 ? true : false
@@ -258,11 +265,15 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         size="lg"
         className="p-4"
       >
-        <TestEndedModalContent onSubmit={()=>{
-          pushToDataLayer({event: gtmEvents.test_simulator_auto_submit_button_click,
-          id: "auto_submit_button_click"
-          })
-          ManageTestSubmit()}} />
+        <TestEndedModalContent
+          onSubmit={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_auto_submit_button_click,
+              id: "auto_submit_button_click",
+            });
+            ManageTestSubmit();
+          }}
+        />
       </Modal>
 
       {/* Fullscreen Exit Modal */}
@@ -273,16 +284,20 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
         onClose={reEnter}
       >
         <FullScreenExitModalContent
-          onSubmit={()=>{
-            pushToDataLayer({event: gtmEvents.test_simulator_fullscreen_submit_button_click,
-            id: "fullscreen_submit_button_click"
+          onSubmit={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_fullscreen_submit_button_click,
+              id: "fullscreen_submit_button_click",
             });
-            ManageTestSubmit()}}
-          onReEnter={()=>{
-            pushToDataLayer({event: gtmEvents.test_simulator_fullscreen_reEnter_button_click,
-            id: "fullscreen_reEnter_button_click"
+            ManageTestSubmit();
+          }}
+          onReEnter={() => {
+            pushToDataLayer({
+              event: gtmEvents.test_simulator_fullscreen_reEnter_button_click,
+              id: "fullscreen_reEnter_button_click",
             });
-            reEnter()}}
+            reEnter();
+          }}
         />
       </Modal>
 
@@ -312,6 +327,9 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
       {/* Guest Submit Modal */}
       <GuestTestSubmitModal />
+
+      {/* Course Already Exist MOdal */}
+      <CourseAlreadyExistModal />
 
       {/* Toast  */}
       {testError?.message && (
