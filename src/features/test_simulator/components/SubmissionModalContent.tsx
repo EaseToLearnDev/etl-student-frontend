@@ -6,11 +6,13 @@ import cn from "../../../utils/classNames";
 import Button from "../../../components/Button";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
 import { LuLoader } from "react-icons/lu";
+import type { AssessmentMode } from "../test_simulator.types";
 
 interface SubmissionModalContentProps {
   onSubmit: () => void;
   onContinueLater: () => void;
   onClose: () => void;
+  AssessmentMode?:AssessmentMode;
   hideOnContinueLater?: boolean;
 }
 
@@ -18,6 +20,7 @@ const SubmissionModalContent = ({
   onSubmit,
   onContinueLater,
   onClose,
+  AssessmentMode,
   hideOnContinueLater = false,
 }: SubmissionModalContentProps) => {
   const loading = useLoadingStore((s) => s.loading);
@@ -43,8 +46,8 @@ const SubmissionModalContent = ({
             </Button>
           ) : (
             <>
-              <Button onClick={onSubmit} className="w-full max-w-[300px]">
-                Submit Now
+              <Button onClick={onSubmit} className="w-full flex-1">
+                {AssessmentMode === "beginner"? "End Session": "Submit Now"}
               </Button>
               {!hideOnContinueLater ? (
                 <Button
