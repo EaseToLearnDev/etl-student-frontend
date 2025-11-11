@@ -126,7 +126,7 @@ const Topic = <T,>({
       <div
         className={cn(
           "overflow-hidden transition-all duration-300 ease-in-out",
-          expanded ? "max-h-[1000px]" : "max-h-0"
+          expanded ? "max-h-[2000px]" : "max-h-0"
         )}
       >
         {children?.map((child) => (

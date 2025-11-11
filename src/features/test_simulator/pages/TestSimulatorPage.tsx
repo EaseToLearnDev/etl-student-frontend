@@ -98,6 +98,8 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   );
   const testData = useTestStore((s) => s.testData);
 
+  const AssessmentMode = useTestStore(s => s.testConfig?.assessmentMode)
+
   const testMode = useTestStore((s) => s.testMode);
   const setMode = useTestStore((s) => s.setMode);
 
@@ -242,6 +244,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
             id: "cancel_button_click"
             });
             setIsSubmissionModalOpen(false)}}
+          AssessmentMode={AssessmentMode}
           hideOnContinueLater={
             testData?.testType === 4 || testData?.testType === 5 ? true : false
           }
