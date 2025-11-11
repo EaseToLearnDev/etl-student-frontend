@@ -39,12 +39,12 @@ const FeaturedBanner = ({ className }: FeaturedBannerProps) => {
   );
   const mobile = useIsMobile();
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSelectedSlideIndex((prev) => (prev + 1) % slides.length);
-    }, AUTO_SLIDE_INTERVAL);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     setSelectedSlideIndex((prev) => (prev + 1) % slides.length);
+  //   }, AUTO_SLIDE_INTERVAL);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleCloseModal = () => {
     pushToDataLayer({ event: gtmEvents.feature_banner_close_button_click });
@@ -71,13 +71,6 @@ const FeaturedBanner = ({ className }: FeaturedBannerProps) => {
               </p>
             </div>
             <div className="mt-2 flex flex-col max-w-[300px] sm:max-w-full sm:flex-row items-stretch sm:items-center mb-4 md:mb-0 gap-3 sm:gap-5">
-              <button
-                id="explore_features_button_id"
-                className="bg-white hover:bg-gray-300 px-4 py-2 sm:px-6 sm:py-3 text-black font-medium rounded-lg sm:rounded-xl transition-all duration-200 ease"
-                onClick={() => setSelectedSlideIndex(1)}
-              >
-                Explore Features
-              </button>
               {!isProfileComplete() && (
                 <Link
                   id="complete_profile_button_id"
@@ -111,24 +104,24 @@ const FeaturedBanner = ({ className }: FeaturedBannerProps) => {
           key={card.title}
           className="relative w-full h-full bg-gradient-to-r from-violet-700 to-blue-700 p-6 text-white flex justify-center items-center"
         >
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 w-full">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 w-full">
             {/* Details */}
-            <div className="flex flex-col items-start max-w-[60%]">
-              <div className="flex items-center gap-2 mb-3">
+            <div className="flex flex-col items-start sm:max-w-[60%]">
+              <div className="flex items-center gap-2 mb-2">
                 <div className="w-8 h-8 flex justify-center items-center text-2xl bg-white/10 rounded-lg">
                   {card.icon}
                 </div>
                 <h4 className="text-lg font-semibold">{card.title}</h4>
               </div>
-              <p className="text-gray-200 text-sm sm:text-base max-w-[40ch]">
+              <p className="text-gray-200 text-sm sm:text-base w-full sm:max-w-[40ch]">
                 {card.description}
               </p>
             </div>
 
             {/* Button */}
-            <div className="sm:ml-auto">
+            <div className="w-full sm:w-fit sm:ml-auto mb-3 sm:mb-0">
               <button
-                className="border border-white/40 hover:bg-white/10 px-6 py-2 sm:px-8 sm:py-3 rounded-lg transition font-medium"
+                className="w-full sm:w-fit border border-white/40 hover:bg-white/10 px-6 py-2 rounded-lg transition font-medium text-nowrap"
                 onClick={() => setSelectedContent(card.content)}
               >
                 Watch Tutorials

@@ -84,8 +84,8 @@ const DashboardLayout = ({
           </WidgetCard>
         </div>
       }
-      primaryClassName="bg-[var(--surface-secondary)] py-2 px-0"
-      secondaryClassName="bg-[var(--surface-secondary)] py-2 px-0"
+      primaryClassName="bg-[var(--surface-secondary)] py-2 px-0 scrollbar-hide"
+      secondaryClassName="bg-[var(--surface-secondary)] py-2 px-0 scrollbar-hide"
     />
   );
 };
