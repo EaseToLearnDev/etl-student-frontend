@@ -1,13 +1,24 @@
+import { BiHomeAlt, BiHomeAlt2, BiSolidHomeAlt2 } from "react-icons/bi";
+import { HiBookOpen, HiChartBar, HiChartPie, HiHome, HiMiniHome, HiOutlineBookOpen, HiOutlineChartBar, HiOutlineChartPie, HiOutlineHome, HiOutlineRectangleStack, HiRectangleStack } from "react-icons/hi2";
 import {
   PiBooksFill,
+  PiBooks,
   PiBrainFill,
+  PiBrain,
   PiChartLineFill,
+  PiChartLine,
   PiClipboardTextFill,
+  PiClipboardText,
   PiHouseFill,
+  PiHouse,
   PiLightningFill,
+  PiLightning,
   PiNotebookFill,
+  PiNotebook,
   PiPencilSimpleFill,
+  PiPencilSimple,
   PiTimerFill,
+  PiTimer,
 } from "react-icons/pi";
 
 interface MenuItem {
@@ -17,6 +28,7 @@ interface MenuItem {
   href: string;
   static?: boolean;
   icon?: React.ReactNode;
+  iconOutline?: React.ReactNode;
   menuItems?: MenuItem[];
   hideTitle?: boolean;
 }
@@ -27,14 +39,16 @@ export const menuItems: MenuItem[] = [
     name: "Dashboard",
     href: "/dashboard",
     static: false,
-    icon: <PiHouseFill />,
+    icon: <HiHome />,
+    iconOutline: <HiOutlineHome />,
   },
   {
     id: "studyRoom",
     name: "Study Room",
     href: "/study-room",
     static: true,
-    icon: <PiNotebookFill />,
+    icon: <HiBookOpen />,
+    iconOutline: <HiOutlineBookOpen />,
     menuItems: [
       {
         id: "selfTest",
@@ -42,18 +56,21 @@ export const menuItems: MenuItem[] = [
         desc: "Smart Learning",
         href: "/smart-learning",
         icon: <PiBrainFill />,
+        iconOutline: <PiBrain />,
       },
       {
         id: "studyMaterial",
         name: "Study Material",
         href: "/study-material",
         icon: <PiBooksFill />,
+        iconOutline: <PiBooks />,
       },
       {
         id: "adaptiveLearning",
         name: "Adaptive Learning",
         href: "/adaptive-learning",
         icon: <PiLightningFill />,
+        iconOutline: <PiLightning />,
       },
     ],
   },
@@ -63,24 +80,28 @@ export const menuItems: MenuItem[] = [
     href: "/exam-room",
     static: true,
     icon: <PiTimerFill />,
+    iconOutline: <PiTimer />,
     menuItems: [
       {
         id: "topicTest",
         name: "Topic Test",
         href: "/topic-test",
         icon: <PiClipboardTextFill />,
+        iconOutline: <PiClipboardText />,
       },
       {
         id: "mockTest",
         name: "Mock Test",
         href: "/mock-test",
         icon: <PiTimerFill />,
+        iconOutline: <PiTimer />,
       },
       {
         id: "classTest",
         name: "Class Test",
         href: "/class-test",
         icon: <PiPencilSimpleFill />,
+        iconOutline: <PiPencilSimple />,
       },
     ],
   },
@@ -89,7 +110,8 @@ export const menuItems: MenuItem[] = [
     name: "Reports",
     href: "/report",
     static: false,
-    icon: <PiChartLineFill />,
+    icon: <HiChartPie />,
+    iconOutline: <HiOutlineChartPie />,
     // menuItems: [
     //   {
     //     id: "reportOverview",
@@ -135,7 +157,8 @@ export const menuItems: MenuItem[] = [
     name: "All Exams",
     href: "/selectcourse",
     static: false,
-    icon: <PiBooksFill />,
+    icon: <HiRectangleStack />,
+    iconOutline: <HiOutlineRectangleStack />,
     hideTitle: true,
   },
 ];
