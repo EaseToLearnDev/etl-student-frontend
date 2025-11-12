@@ -10,6 +10,7 @@ import JumpBackInList from "../JumpBackInList";
 import QuickAccessSection from "../QuickAccessSection";
 import SupportSection from "../SupportSection";
 import UpcomingClassesAndTests from "../UpcomingClassesAndTests";
+import QuickStart from "../QuickStart";
 
 interface DashboardLayoutProps {
   isClassTestFeatEnabled: Option<boolean>;
@@ -26,6 +27,8 @@ const DashboardLayout = ({
   return (
     <div className="flex flex-col gap-5">
       <FeaturedBanner />
+      {/* Quick Start */}
+            <QuickStart />
       <QuickAccessSection />
       {isClassTestFeatEnabled && (
         <UpcomingClassesAndTests scheduledClasses={scheduledClasses} />

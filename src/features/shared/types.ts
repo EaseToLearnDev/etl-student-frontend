@@ -101,7 +101,7 @@ export interface StudentDataResponse {
 
 export interface StudentData {
   openedCourse: number;
-  firstTimeUser: number;
+  firstTimeUser: number | null;
   websiteId: number;
   studentId: number;
   token: string;

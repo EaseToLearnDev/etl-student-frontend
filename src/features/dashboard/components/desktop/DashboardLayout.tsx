@@ -10,6 +10,7 @@ import SupportSection from "../SupportSection";
 import FeaturedBanner from "../FeaturedBanner";
 import QuickAccessSection from "../QuickAccessSection";
 import type { Option } from "../../../shared/types";
+import QuickStart from "../QuickStart";
 
 interface DashboardLayoutProps {
   isClassTestFeatEnabled: Option<boolean>;
@@ -68,6 +69,8 @@ const DashboardLayout = ({
       }
       secondaryContent={
         <div className="flex flex-col gap-4">
+           {/* Quick Start */}
+            <QuickStart />
           {/* Class Test & UpComing Classes Container */}
           {isClassTestFeatEnabled && (
             <WidgetCard title="Upcoming Classes & Tests">
