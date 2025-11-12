@@ -39,12 +39,12 @@ const FeaturedBanner = ({ className }: FeaturedBannerProps) => {
   );
   const mobile = useIsMobile();
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     setSelectedSlideIndex((prev) => (prev + 1) % slides.length);
-  //   }, AUTO_SLIDE_INTERVAL);
-  //   return () => clearInterval(interval);
-  // }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSelectedSlideIndex((prev) => (prev + 1) % slides.length);
+    }, AUTO_SLIDE_INTERVAL);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleCloseModal = () => {
     pushToDataLayer({ event: gtmEvents.feature_banner_close_button_click });
