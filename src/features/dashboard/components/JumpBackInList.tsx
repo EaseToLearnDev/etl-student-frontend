@@ -11,7 +11,7 @@ import JumpBackInCard from "./JumpBackInCard";
 import EmptyState from "../../../components/EmptyState";
 import EmptyGhostIcon from "../../../components/icons/empty-ghost-icon";
 import PreviousTestModal from "./PreviousTestModal";
-import { handleResumeTest } from "../../study_room/smart_learning/services/handleTest";
+import { handleResumeTest } from "../../shared/services/handleTest";
 import { useNavigate } from "react-router";
 import {
   LuClipboardX,
@@ -61,7 +61,7 @@ const JumpBackInList = () => {
 
                 setIsPreviousTestModalOpen(true);
               }}
-              testType={prevRunningTest?.testMode || ""}
+              testMode={prevRunningTest?.testMode || ""}
               topicTitle={prevRunningTest?.testName || ""}
             />
           </div>
@@ -82,8 +82,7 @@ const JumpBackInList = () => {
         onClose={() => {
           pushToDataLayer({
             event: gtmEvents.cancel_previous_test_modal_click,
-            id: cancel_previous_test_modal_id
-          
+            id: cancel_previous_test_modal_id,
           });
           setIsPreviousTestModalOpen(false);
         }}

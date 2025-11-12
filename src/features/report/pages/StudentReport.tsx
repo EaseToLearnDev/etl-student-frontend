@@ -156,13 +156,13 @@ const StudentReport = () => {
 
   const tabContentsMap: Record<string, JSX.Element> = {
     Overview: <ReportOverviewPage />,
-    "Learning Sessions": (
+    "Gap Fixer": (
       <ReportLearningSessionPage
         data={sessionData}
         onViewMore={handleViewMore}
       />
     ),
-    "Competitive Sessions": (
+    "PaceX": (
       <ReportTablePage
         data={reportData}
         onViewMore={handleViewMore}
@@ -203,7 +203,7 @@ const StudentReport = () => {
   return (
     <div className="flex flex-col h-full">
       {/* Tabs */}
-      <div className="relative mt-3">
+      <div className="relative">
         <div
           ref={menuRef}
           className="relative flex gap-3 items-center border-b border-b-[var(--border-tertiary)] overflow-x-auto scrollbar-hide"
@@ -244,7 +244,7 @@ const StudentReport = () => {
                   }, 3000);
                 }}
                 className={cn(
-                  "px-5 py-2 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
+                  "px-5 py-4 text-[var(--text-secondary)] rounded-md transition-colors duration-200 whitespace-nowrap",
                   isActive && "text-[var(--sb-ocean-bg-active)]"
                 )}
               >
