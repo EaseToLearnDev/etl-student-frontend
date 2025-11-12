@@ -1,6 +1,8 @@
-// Constants
+// Types
+import type { ModeType } from "../../../shared/types";
+
+// Components
 import { competitiveRules } from "../../../shared/constants";
-import type { ModeType } from "../sl.types";
 import { LearningSessionInstructions } from "./LearningSessionInstructions";
 
 type SmartLearningInstructionsProps = {

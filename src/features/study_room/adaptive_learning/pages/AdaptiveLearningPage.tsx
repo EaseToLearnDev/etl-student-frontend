@@ -18,7 +18,7 @@ import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Services
 import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
-import { handleResumeTest } from "../../smart_learning/services/handleTest";
+import { handleResumeTest } from "../../../shared/services/handleTest";
 import { loadAdaptiveLearningTree } from "../services/loadAdaptiveLearningTree";
 
 // Components
@@ -42,7 +42,6 @@ const AdaptiveLearningPage = () => {
   const reset = useALStore((s) => s.reset);
   const topicTree = useALStore((s) => s.topicTree);
   const setTopicTree = useALStore((s) => s.setTopicTree);
-  const selectedTopicId = useALStore((s) => s.selectedTopicId);
   const setSelectedTopicId = useALStore((s) => s.setSelectedTopicId);
 
   const getSelectedTopic = useALStore((s) => s.getSelectedTopic);
@@ -52,7 +51,6 @@ const AdaptiveLearningPage = () => {
   const previousRunningTest = usePrevTestStore((s) => s.prevRunningTest);
   const setPreviousRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
 
-  const showStartTestModal = useALStore((s) => s.showStartTestModal);
   const setShowStartTestModal = useALStore((s) => s.setShowStartTestModal);
 
   const showPreviousTestModal = useALStore((s) => s.showPreviousTestModal);

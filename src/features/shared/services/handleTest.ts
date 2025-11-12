@@ -1,12 +1,13 @@
-// Types
 import type { NavigateFunction } from "react-router-dom";
-import type { Topic } from "../../../shared/types";
-import type { ModeType, TestOption } from "../sl.types";
-import { type PrevRunningTest } from "../../../shared/types";
+// Types
+import type { ModeType, TestOption, Topic } from "../types";
+import { type PrevRunningTest } from "../types";
 
 // Utils
-import { toQueryString } from "../../../../utils";
-import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import { toQueryString } from "../../../utils";
+
+// Hooks
+import { useStudentStore } from "../hooks/useStudentStore";
 
 /**
  * Starts a new test session and navigates to the test simulator.
@@ -39,7 +40,6 @@ export const handleStartTest = async (
       templateId: String(activeCourse?.templateId),
       packTypeTitle: activeCourse?.packTypeTitle,
     };
-
     const queryString = toQueryString(params);
     navigate(`/test-simulator?${queryString}`);
   }

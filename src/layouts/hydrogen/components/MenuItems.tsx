@@ -59,6 +59,13 @@ export const menuItems: MenuItem[] = [
         iconOutline: <PiBrain />,
       },
       {
+        id: "selfTest",
+        name: "PaceX",
+        desc: "Timed Practice",
+        href: "/pacex",
+        icon: <PiTimerFill />,
+      },
+      {
         id: "studyMaterial",
         name: "Study Material",
         href: "/study-material",
