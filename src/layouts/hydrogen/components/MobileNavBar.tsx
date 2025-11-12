@@ -69,7 +69,7 @@ const MobileNavBar = () => {
               {/* Design 2 */}
               <div
                 className={cn(
-                  "app-navbar-px-fix h-full px-2 sm:px-4 py-2 flex flex-col items-center gap-1",
+                  "app-navbar-px-fix h-full sm:px-4 py-2 flex flex-col items-center gap-1",
                   isActive
                     ? "text-[var(--text-primary)]"
                     : "text-[var(--text-secondary)]"
