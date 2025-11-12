@@ -2,28 +2,35 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-// Icons
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-
 // Types
 import { type Topic } from "../../../shared/types";
+
+// Icons
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { LuArchive, LuCalendarX, LuInfo } from "react-icons/lu";
+
+// Utils
+import { capitalizeWords } from "../../../../utils";
+import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
 
 // Store & Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 import { useTTStore } from "../store/useTTStore";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
-
-// Utils
-import { capitalizeWords } from "../../../../utils";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import { useToastStore } from "../../../../global/hooks/useToastStore";
 
 // Services
 import { loadTopicTree } from "../services/loadTopicTree";
 import { loadTopicTestList } from "../services/loadTopicTestList";
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
 import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
-import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
 import { handleStartTest } from "../../shared/services/handleStartTest";
+import { handleResumeTest } from "../../../shared/services/handleTest";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -36,15 +43,8 @@ import StartTopicTestModalContent from "../../shared/components/StartTopicTestMo
 import Button from "../../../../components/Button";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
-import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
-import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { Toast } from "../../../../components/Toast";
-import { LuArchive, LuCalendarX, LuInfo } from "react-icons/lu";
-import { pushToDataLayer } from "../../../../utils/gtm";
-import { gtmEvents } from "../../../../utils/gtm-events";
-import { usePageTracking } from "../../../../hooks/usePageTracking";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.
@@ -75,12 +75,12 @@ const TopicTestPage = () => {
   const showPreviousTestModal = useTTStore((s) => s.showPreviousTestModal);
   const setShowStartTestModal = useTTStore((s) => s.setShowStartTestModal);
   const setShowPreviousTestModal = useTTStore(
-    (s) => s.setShowPreviousTestModal,
+    (s) => s.setShowPreviousTestModal
   );
 
   const isUpgradeModalOpen = useUpgradeModalStore((s) => s.isUpgradeModalOpen);
   const setIsUpgradeModalOpen = useUpgradeModalStore(
-    (s) => s.setIsUpgradeModalOpen,
+    (s) => s.setIsUpgradeModalOpen
   );
 
   const toastData = useToastStore((s) => s.toastData);
@@ -93,11 +93,11 @@ const TopicTestPage = () => {
 
   // States
   const [hideSecondary, setHideSecondary] = useState<boolean>(
-    isMobile ? true : false,
+    isMobile ? true : false
   );
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
-  usePageTracking(gtmEvents.topic_test_page_visit)
+  usePageTracking(gtmEvents.topic_test_page_visit);
 
   // useEffects
   useEffect(() => {

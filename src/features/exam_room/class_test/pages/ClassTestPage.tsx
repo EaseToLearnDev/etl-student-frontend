@@ -25,8 +25,8 @@ import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade
 import { LuCalendarX } from "react-icons/lu";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
-import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
 import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
+import { handleResumeTest } from "../../../shared/services/handleTest";
 
 /**
  * Displays a paginated table of class tests for students.

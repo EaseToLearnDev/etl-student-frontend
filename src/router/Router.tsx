@@ -43,6 +43,7 @@ import PgResponse from "../global/pages/PgResponse";
 import PgCancelled from "../global/pages/PgCancelled";
 import AdaptiveLearningPage from "../features/study_room/adaptive_learning/pages/AdaptiveLearningPage";
 import DashboardV2Page from "../features/dashboard/pages/DashboardV2Page";
+import PaceXPage from "../features/study_room/pace_x/pages/PaceXPage";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -133,6 +134,7 @@ const Router = () => {
           path="study-room/smart-learning"
           element={<SmartLearningPage />}
         />
+        <Route path="study-room/pacex" element={<PaceXPage />} />
         <Route
           path="study-room/adaptive-learning"
           element={<AdaptiveLearningPage />}
@@ -167,21 +169,15 @@ const Router = () => {
       </Route>
       <Route
         path="test-simulator"
-        element={
-          <TestSimulatorPage key={location.key} mode="registered" />
-        }
+        element={<TestSimulatorPage key={location.key} mode="registered" />}
       />
-       <Route
+      <Route
         path="test-simulator-adaptive"
-        element={
-          <TestSimulatorPage key={location.key} mode="adaptive" />
-        }
+        element={<TestSimulatorPage key={location.key} mode="adaptive" />}
       />
       <Route
         path="guest-testsimulator"
-        element={
-          <TestSimulatorPage key={location.key} mode="guest" />
-        }
+        element={<TestSimulatorPage key={location.key} mode="guest" />}
       />
       <Route
         path="testview"
