@@ -4,6 +4,7 @@ interface GuestStore {
   showGuestTestSubmitModal: boolean;
   openVerifyOtp: boolean;
   openCourseCardsModal: boolean;
+  openCourseAlreadyExistModal:boolean;
   name: string;
   mobile: number;
   email: string;
@@ -13,6 +14,7 @@ interface GuestStore {
   setShowGuestTestSubmitModal: (value: boolean) => void;
   setOpenVerifyOtp: (value: boolean) => void;
   setOpenCourseCardsModal: (value: boolean) => void;
+  setOpenCourseAlreadyExistModal: (value: boolean) => void;
   setName: (name: string) => void;
   setMobile: (mobile: number) => void;
   setEmail: (email: string) => void;
@@ -25,6 +27,7 @@ export const useGuestStore = create<GuestStore>((set) => ({
   showGuestTestSubmitModal: false,
   openVerifyOtp: false,
   openCourseCardsModal: false,
+  openCourseAlreadyExistModal:false,
   token: "",
   name: "",
   mobile: 0,
@@ -35,6 +38,7 @@ export const useGuestStore = create<GuestStore>((set) => ({
     set({ showGuestTestSubmitModal: value }),
   setOpenVerifyOtp: (value) => set({ openVerifyOtp: value }),
   setOpenCourseCardsModal: (value) => set({ openCourseCardsModal: value }),
+  setOpenCourseAlreadyExistModal: (value) => set({ openCourseAlreadyExistModal: value }), 
   setName: (name) => set({ name }),
   setEmail: (email) => set({ email }),
   setMobile: (mobile) => set({ mobile }),

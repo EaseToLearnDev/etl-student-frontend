@@ -39,8 +39,36 @@ export const loadVerifyOtp = async ({
 
     if (res.responseTxt === "invalid_otp") {
       setError("Invalid Otp");
-      return null;
+      return res;
     }
+
+    const courses: Course[] = res.obj.courses.map((c: any) => {
+        const tabs: Record<string, boolean> = {
+          dashboard: !!c.dashboard,
+          report: !!c.report,
+          studyMaterial: !!c.studyMaterial,
+          selfTest: !!c.selfTest,
+          topicTest: !!c.topicTest,
+          mockTest: !!c.mockTest,
+          dynamicMockTest: !!c.dynamicMockTest,
+          classTest: !!c.classTest,
+          teacherHelp: !!c.teacherHelp,
+          tonyHelp: !!c.tonyHelp,
+          otherCourses: !!c.otherCourses,
+        };
+        const course: Course = {
+          templateId: c.templateId,
+          validityId: c.validityId,
+          courseId: c.courseId,
+          packTypeId: c.packTypeId,
+          benchmark: c.benchmark,
+          organisationName: c.organisationName,
+          validTillDate: c.validTillDate,
+          packTypeTitle: c.packTypeTitle,
+          tabs: tabs,
+        };
+        return course;
+      });
 
     const responseData: StudentDataResponse = res.obj;
     const studentData: StudentData = {
@@ -55,7 +83,7 @@ export const loadVerifyOtp = async ({
       status: responseData?.status,
       loginId: responseData?.loginId,
       schools: responseData?.schools || [],
-      courses: [],
+      courses: courses,
       profilePic: responseData?.profilePic,
       deleteFlag: responseData?.deleteFlag,
     };
@@ -63,7 +91,7 @@ export const loadVerifyOtp = async ({
     setStudentData(studentData);
     setShowFtuModal(responseData?.firstTimeUser === 1);
 
-    return true;
+    return res;
   } catch (error) {
     console.log("Error Submitting Test: ", error);
     return null;
