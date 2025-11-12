@@ -16,6 +16,8 @@ import { getPriceValue } from "../utils/getPrice";
 import { getSelectedPlan } from "../utils/getSelectedPlan";
 import { resetPromocode } from "../services/resetPromocode";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 // Constants
 
@@ -350,6 +352,10 @@ export const PlanBody = ({
                 style="primary"
                 className="w-full lg:w-fit"
                 onClick={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.proceed_to_pay_button_click,
+                    id: "proceed_to_pay_button_click",
+                  });
                   processCourseSelection({
                     option: deviceType === "ios" ? 2 : 3,
                     courseId,

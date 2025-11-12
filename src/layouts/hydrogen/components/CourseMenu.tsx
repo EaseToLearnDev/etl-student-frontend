@@ -13,6 +13,8 @@ import getValidityFormatted from "../../../global/services/getValidityFormatted"
 import { getActiveCourseAccessStatus } from "../../../global/services/upgrade";
 import { PiBookFill, PiBooksFill } from "react-icons/pi";
 import Button from "../../../components/Button";
+import { pushToDataLayer } from "../../../utils/gtm";
+import {gtmEvents} from "../../../utils/gtm-events";
 
 interface CourseMenuProps {
   isOpen: boolean;
@@ -90,21 +92,30 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
           )
         }
       />
-      {deviceType !== "ios" && course && status !== "accessible" && (
-        <Link
-          to={`/selectcourse?cid=${course?.courseId}`}
-          className="relative group cursor-pointer upgrade_btn px-4 py-2 rounded-lg shadow-sm hover:shadow-md"
-        >
-          {/* <div className="absolute inset-0.5 gradient blur-sm rounded-lg opacity-80 transition duration-200 group-hover:opacity-100"></div>
-          <div className="relative px-4 py-2 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
-            <p className="text-black">
+        {deviceType !== "ios" && course && status !== "accessible" && (
+          <Link
+            to={`/selectcourse?cid=${course?.courseId}`}
+            className="relative group cursor-pointer upgrade_btn px-4 py-2 rounded-lg shadow-sm hover:shadow-md"
+            onClick={() => {
+              const eventname = status === "renew" ? gtmEvents.renew_button_click : gtmEvents.upgrade_button_click ;
+              const eventId =  status === "renew" ? "renew_button_click" : "upgrade_button_click";
+              console.log("Clicked", status, eventId, eventname);
+              pushToDataLayer({
+                event: eventname,
+                id: eventId,
+              });
+            }}
+          >
+            {/* <div className="absolute inset-0.5 gradient blur-sm rounded-lg opacity-80 transition duration-200 group-hover:opacity-100"></div>
+            <div className="relative px-4 py-2 bg-white ring-1 ring-gray-900/5 rounded-lg leading-none flex items-top justify-start space-x-6">
+              <p className="text-black">
+                {status === "renew" ? "Renew" : "Upgrade"}
+              </p>
+            </div> */}
+            <p className="text-black font-medium">
               {status === "renew" ? "Renew" : "Upgrade"}
             </p>
-          </div> */}
-          <p className="text-black font-medium">
-            {status === "renew" ? "Renew" : "Upgrade"}
-          </p>
-        </Link>
+          </Link>
       )}
     </div>
   );

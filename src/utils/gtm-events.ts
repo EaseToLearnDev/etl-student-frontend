@@ -107,6 +107,10 @@ export const gtmEvents: Record<string, any> = {
 
   //need to do guest test sbmit modal events
 
+  proceed_to_pay_button_click: "proceed_to_pay_button_click",
+  upgrade_button_click: "upgrade_button_click",
+  renew_button_click: "renew_button_click",
+
 
   
   
