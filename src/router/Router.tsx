@@ -44,6 +44,7 @@ import PgCancelled from "../global/pages/PgCancelled";
 import AdaptiveLearningPage from "../features/study_room/adaptive_learning/pages/AdaptiveLearningPage";
 import DashboardV2Page from "../features/dashboard/pages/DashboardV2Page";
 import PaceXPage from "../features/study_room/pace_x/pages/PaceXPage";
+import DashboardV3Page from "../features/dashboard/pages/DashboardV3Page";
 
 /**
  * Main application router component that defines all routes and their layouts.
@@ -113,7 +114,7 @@ const Router = () => {
         }
       >
         <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<DashboardV2Page />} />
+        <Route path="dashboard" element={<DashboardV3Page />} />
 
         {/* Calculate study room default route  */}
         <Route
