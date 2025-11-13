@@ -9,11 +9,16 @@ import { useState } from "react";
 import { processCourseSelection } from "../services/processCourseSelection";
 
 interface UpdateEmailModalProps {
+  deviceType: string | undefined;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const UpdateEmailModal = ({ isOpen, onClose }: UpdateEmailModalProps) => {
+const UpdateEmailModal = ({
+  deviceType,
+  isOpen,
+  onClose,
+}: UpdateEmailModalProps) => {
   const navigate = useNavigate();
   const selectedCourse = useCoursesStore((s) => s.selectedCourse);
   const selectedPlanId = useCoursesStore((s) => s.selectedPlanId);
@@ -65,7 +70,7 @@ const UpdateEmailModal = ({ isOpen, onClose }: UpdateEmailModalProps) => {
               }
               onClick={() => {
                 processCourseSelection({
-                  option: 3,
+                  option: deviceType === "ios" ? 2 : 3,
                   courseId: selectedCourse?.courseId,
                   courseTitle: selectedCourse?.courseTitle,
                   selectedPlanId,

@@ -151,7 +151,8 @@ export interface CourseResponse {
   studyMaterial: number;
   selfTest: number;
   topicTest: number;
-  adaptiveTest?: number;
+  adaptiveLearning?: number;
+  adaptiveAssess?: number;
   mockTest: number;
   dynamicMockTest: number;
   classTest: number;

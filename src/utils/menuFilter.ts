@@ -9,7 +9,9 @@ export const getFilteredMenuItems = (activeCourse: Course | null) => {
 
   return menuItems.filter((item) => {
     // Always show static items
-    if (item.static) return true;
+    if (item.static) {
+      return getFilteredSubMenuItems(item.id, activeCourse).length > 0;
+    };
 
     // For non-static items, check tabs
     return activeCourse.tabs[item.id];

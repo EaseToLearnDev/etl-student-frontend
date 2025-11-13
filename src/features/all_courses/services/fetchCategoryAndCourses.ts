@@ -6,10 +6,10 @@ export const fetchCategoryAndCourses = () => {
 
   if (!studentData) return null;
 
-  const { loginId, token } = studentData;
+  const { loginId, token, deviceType } = studentData;
 
   try {
-    const data = categoryAndCourses({ loginId, token });
+    const data = categoryAndCourses({ loginId, token, deviceType });
     return data ?? null;  
   } catch (error) {
     return null;

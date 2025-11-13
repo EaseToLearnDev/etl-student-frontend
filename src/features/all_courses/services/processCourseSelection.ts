@@ -91,18 +91,18 @@ export const processCourseSelection = async ({
       packId: selectedPlanId,
       promoCode: code ?? "",
     });
-    // OPTION 3 FLOW
-    // if (option === 3) {
-    //   // mobile in-app flow
-    //   window.location.href =
-    //     `inapppayment?orderId=${data.orderId}&token=${data.token}` +
-    //     `&amount=${data.amount}&firstname=${studentData.studentName}` +
-    //     `&email=${studentData.emailId}&phone=${studentData.phoneNo}` +
-    //     `&productinfo=${data.productinfo}`;
-    //   return;
-    // }
+    // OPTION 2 FLOW FOR IOS
+    if (option === 2 && data.amount > 0) {
+      // mobile in-app flow
+      window.location.href =
+        `inapppayment?orderId=${data.orderId}&token=${data.token}` +
+        `&amount=${data.amount}&firstname=${studentData.studentName}` +
+        `&email=${studentData.emailId}&phone=${studentData.phoneNo}` +
+        `&productinfo=${data.productinfo}`;
+      return
+    }
 
-    // OPTION 2 FLOW
+    // OPTION 3 FLOW
     if (option === 3 && data.amount > 0) {
       // PayU form flow
       // let form = document.forms.namedItem("pgform") as HTMLFormElement | null;

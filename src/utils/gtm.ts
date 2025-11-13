@@ -16,10 +16,8 @@ declare global {
  */
 export const pushToDataLayer = (eventData: GTMEvent): void => {
   if (typeof window !== "undefined") {
-    console.log("Preparing to push:", eventData);
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push(eventData);
-    console.log("After push, current dataLayer:", window.dataLayer);
   } else {
     console.warn("GTM dataLayer not found or not in browser context");
   }

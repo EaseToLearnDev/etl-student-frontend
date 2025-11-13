@@ -16,6 +16,8 @@ import { getPriceValue } from "../utils/getPrice";
 import { getSelectedPlan } from "../utils/getSelectedPlan";
 import { resetPromocode } from "../services/resetPromocode";
 import useIsMobile from "../../../hooks/useIsMobile";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 // Constants
 
@@ -23,6 +25,7 @@ interface PlanBodyProps {
   features?: FeaturesList[];
   coursePlan?: PriceList[];
   courseTitle?: string;
+  deviceType?: string;
   courseId?: number;
 }
 
@@ -31,6 +34,7 @@ export const PlanBody = ({
   coursePlan,
   courseTitle,
   courseId,
+  deviceType,
 }: PlanBodyProps) => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
@@ -142,8 +146,8 @@ export const PlanBody = ({
   return (
     <div
       className={cn(
-        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)]",
-        isMobile ? "overflow-y-auto" : "overflow-hidden scrollbar-hide"
+        "relative w-full h-[90dvh] lg:h-[calc(100dvh-5rem)] scrollbar-hide",
+        isMobile ? "overflow-y-auto" : "overflow-hidden"
       )}
     >
       <div className="w-full h-[120px] p-4">
@@ -215,9 +219,13 @@ export const PlanBody = ({
                 </WidgetCard>
               )}
 
-              {tabs[selectedTabIndex] !== "FREE" && isMobile ? (
+              {tabs[selectedTabIndex] !== "FREE" && isMobile && deviceType !== 'ios' ? (
                 <WidgetCard
-                  className="shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide !p-4"
+                  className={
+                    deviceType && deviceType == "ios"
+                      ? `hidden`
+                      : `shadow-none h-auto lg:flex-none lg:overflow-y-auto scrollbar-hide !p-4`
+                  }
                   title="Have a Promo Code?"
                 >
                   <form
@@ -275,8 +283,8 @@ export const PlanBody = ({
         </div>
         {/* Actions Section*/}
         <div className="w-full py-4 flex items-center fixed bottom-0 min-h-[120px] bg-[var(--surface-bg-secondary)]">
-          <div className="w-full max-w-[1400px] mx-auto px-4 flex lg:justify-between gap-4 items-center">
-            {!isMobile && (
+          <div className={cn("w-full max-w-[1400px] mx-auto px-4 flex gap-4 items-center", deviceType === 'ios' ? 'lg:justify-end' : 'lg:justify-between')}>
+            {!isMobile && deviceType !== 'ios' && (
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -344,8 +352,12 @@ export const PlanBody = ({
                 style="primary"
                 className="w-full lg:w-fit"
                 onClick={() => {
+                  pushToDataLayer({
+                    event: gtmEvents.proceed_to_pay_button_click,
+                    id: "proceed_to_pay_button_click",
+                  });
                   processCourseSelection({
-                    option: 3,
+                    option: deviceType === "ios" ? 2 : 3,
                     courseId,
                     courseTitle,
                     selectedPlanId,

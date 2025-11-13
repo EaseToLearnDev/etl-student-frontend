@@ -16,7 +16,7 @@ const ClassTestCard = ({ test, onStart }: ClassTestCardProps) => {
       <div>
         <p className="font-semibold">{test.testTitle}</p>
         <span className="text-[var(--text-secondary)]">
-          {test.subject} • Class {test.className}
+          {test.subject} • {test.className}
         </span>
       </div>
 
@@ -46,7 +46,7 @@ const ClassTestCard = ({ test, onStart }: ClassTestCardProps) => {
       <Button
         style="primary"
         onClick={() => onStart?.(test)}
-        className="mt-2"
+        className="mt-2 min-w-[200px] mx-auto"
       >
         Start Test
       </Button>

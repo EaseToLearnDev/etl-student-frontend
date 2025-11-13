@@ -7,7 +7,7 @@ const LogoutPage = () => {
     logout();
   }, []);
   return (
-    <div className="w-full h-screen debug grid place-items-center">
+    <div className="w-full h-screen grid place-items-center">
       <Spinner
         title="Logging out..."
         description="Please wait"

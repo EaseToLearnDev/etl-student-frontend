@@ -9,7 +9,7 @@ import TestSidePanel from "./TestSidePanel";
  */
 const DesktopTestSimulator = () => {
   return (
-    <div className="h-screen flex flex-col flex-grow gap-5 p-8">
+    <div className="h-screen flex flex-col flex-grow gap-5 p-8 max-desktop-width">
       <TestHeader />
       <div className="h-full overflow-y-auto relative">
         <DesktopChildLayout

@@ -62,62 +62,41 @@ const Main = () => {
         the reasons of the answer and not only the answer.
       </p>
 
-      <Button
-        className="mt-7 w-full"
-        disabled={loading}
-        onClick={() =>
-          handleOpenAI({
-            questionId: currentQuestion?.questionId,
-            itemId: currentQuestion?.itemId,
-          }).then((v) => {
-            setSolution(v ? v : "");
-            setCurrentModalView(AIModalView.AIContent);
-            setCurrentHelpStatus(true);
-          })
-        }
-      >
-        {!loading ? (
-          <>
-            <LuBot size={20} /> {"Ask TONY (Your AI Teacher)"}
-          </>
-        ) : (
-          <div className="flex items-center gap-2">
-            <RiLoader4Fill size={20} className="animate-spin" />
-            <p>Please Wait...</p>
-          </div>
-        )}
-      </Button>
-
-      {/* Secondary Actions */}
-      {!testStatus || testStatus !== 1 ? (
-        <div className="flex flex-col sm:flex-row w-full items-center justify-center gap-2 mt-2">
-          <Button
-            style="secondary"
-            className="hover:bg-[var(--surface-bg-tertiary)] w-full"
-            onClick={() =>
-              goGoogle({
-                questionText: currentQuestion?.questionBody,
-                responseChoices: currentQuestion?.responseChoice,
-              })
-            }
-          >
-            <MagnifyingGlassIcon width={20} height={20} />
-            Search Google
-          </Button>
-          <Button
-            style="secondary"
-            className="hover:bg-[var(--surface-bg-tertiary)] w-full"
-            onClick={() =>
-              setCurrentModalView(AIModalView.StudyMaterialContent)
-            }
-          >
-            <BookOpenIcon width={20} height={20} />
-            Study Material
-          </Button>
-        </div>
-      ) : (
-        <></>
-      )}
+      <div className="flex flex-col sm:flex-row w-full items-center justify-center gap-2 mt-7">
+        <Button
+          className="w-full"
+          disabled={loading}
+          onClick={() =>
+            handleOpenAI({
+              questionId: currentQuestion?.questionId,
+              itemId: currentQuestion?.itemId,
+            }).then((v) => {
+              setSolution(v ? v : "");
+              setCurrentModalView(AIModalView.AIContent);
+              setCurrentHelpStatus(true);
+            })
+          }
+        >
+          {!loading ? (
+            <>
+              <LuBot size={20} /> {"Ask TONY (Your AI Teacher)"}
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <RiLoader4Fill size={20} className="animate-spin" />
+              <p>Please Wait...</p>
+            </div>
+          )}
+        </Button>
+        <Button
+          style="secondary"
+          className="hover:bg-[var(--surface-bg-tertiary)] w-full"
+          onClick={() => setCurrentModalView(AIModalView.StudyMaterialContent)}
+        >
+          <BookOpenIcon width={20} height={20} />
+          Study Material
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // maximum width for mobile devices
-const MOBILE_WIDTH = 480;
+const MOBILE_WIDTH = 768;
 
 /**
  * returns true if current view is mobile, else returns false.

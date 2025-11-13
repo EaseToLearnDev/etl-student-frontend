@@ -10,6 +10,7 @@ import { useState } from "react";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
 import { useSLStore } from "../hooks/useSLStore";
+import useIsMobile from "../../../../hooks/useIsMobile";
 
 interface SLTestModalContentProps {
   topicName: string;
@@ -21,6 +22,7 @@ const SLTestModalContent = ({
   onClose,
   onStart,
 }: SLTestModalContentProps) => {
+  const isMobile = useIsMobile();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const mode = useSLStore((s) => s.mode);
   const selectedTestOption = useSLStore((s) => s.selectedTestOption);
@@ -90,7 +92,7 @@ const SLTestModalContent = ({
       )}
 
       {/* Scrollable Content */}
-      <div className="mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4">
+      <div className={cn("mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4", isMobile ? "scrollbar-hide" : "")}>
         {selectedIndex === 0 && mode === "Competitive Session" ? (
           <form
             className="flex flex-col gap-5"

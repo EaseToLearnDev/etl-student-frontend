@@ -34,23 +34,22 @@ function Test({
   return (
     <div className="w-full pb-4 md:pb-2 pt-5  border-(--border-primary) flex flex-col gap-1 md:flex-row justify-between items-start md:items-start shadow-sm dark:shadow-white/10 border  rounded-lg  px-4">
       <div>
-        <div className="flex items-center">
-          <div className="flex flex-row gap-2 items-center justify-between">
-            <p title={testData?.testTitle}>
-              {testData?.testTitle.length > 20
-                ? testData?.testTitle?.slice(0, 20) + "..."
-                : testData?.testTitle}
-            </p>
-            <Badge
-              theme={Theme.Neutral}
-              className="text-xs py-2 !bg-amber-100 !border !border-amber-600 !text-amber-600"
-              style="filled"
-            >
-              {getTestType(testData?.testType, testData?.testMode)}
-            </Badge>
-          </div>
+        <div className="flex items-center gap-2">
+          <p
+            title={testData?.testTitle}
+            className="line-clamp-2 text-wrap text-ellipsis"
+          >
+            {testData?.testTitle}
+          </p>
+          <Badge
+            theme={Theme.Neutral}
+            className="w-fit !text-xs py-2 !bg-amber-100 !text-amber-600 text-nowrap"
+            style="filled"
+          >
+            {getTestType(testData?.testType, testData?.testMode)}
+          </Badge>
         </div>
-        <div className="flex gap-3 py-4 flex-wrap max-w-[80%] overflow-x-scroll">
+        <div className="flex gap-3 py-4 flex-wrap overflow-x-scroll">
           <Badge
             theme={Theme.Amethyst}
             className="text-xs h-8 opacity-80"
@@ -91,8 +90,13 @@ function Test({
             event: gtmEvents.activity_view_test_modal_click,
             test_mode: testData.testMode,
             test_title: testData.testTitle,
-          })
-          onNavigate(testData.testSession, testData.testMode, testData.testType)}}
+          });
+          onNavigate(
+            testData.testSession,
+            testData.testMode,
+            testData.testType
+          );
+        }}
         className="text-xs rounded-full py-2"
       >
         View test
@@ -113,7 +117,7 @@ function ActivityListData({
     return (
       <EmptyState
         title="No test data available"
-        description="It looks like there aren’t any tests available right now. Please select a valid day."
+        description="It looks like there aren't any tests available right now. Please select a valid day."
         icon={<LuFilePenLine className="w-20 h-20" />}
         className="max-w-md"
       />

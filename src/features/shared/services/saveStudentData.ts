@@ -17,7 +17,7 @@ export const saveStudentData = (
   //   Early return if no data found
   if (!data) {
     setStudentData(null);
-    return;
+    throw new Error("invalid_detail");
   }
 
   //   Save Cookies
@@ -39,7 +39,7 @@ export const saveStudentData = (
   if (deviceType && deviceType.length > 0) {
     studentData.deviceType = deviceType;
   } else {
-    studentData.deviceType = "android";
+    studentData.deviceType = "web";
   }
 
   //   Persist student data in local storage

@@ -12,6 +12,7 @@ import Button from "../../../../components/Button";
 import useDarkModeStore from "../../../../store/useDarkModeStore";
 import { gtmEvents } from "../../../../utils/gtm-events";
 import { pushToDataLayer } from "../../../../utils/gtm";
+import useIsMobile from "../../../../hooks/useIsMobile";
 
 interface TestDetails {
   totalQuestions?: number;
@@ -37,6 +38,7 @@ export default function StartTopicTestModalContent({
   details,
   customTitle,
 }: StartTopicTestModalContentProps) {
+  const isMobile = useIsMobile();
   const darkMode = useDarkModeStore((state) => state.darkMode);
   const rawFields = [
     {
@@ -108,8 +110,8 @@ export default function StartTopicTestModalContent({
       </div>
 
       {/* Test Fields */}
-      <div className="mt-[90px] h-[calc(70dvh-190px)] py-2 overflow-y-auto">
-        <div className="grid grid-cols-2 gap-5 overflow-y-auto">
+      <div className={cn("mt-[90px] h-[calc(70dvh-190px)] py-2 overflow-y-auto", isMobile ? "scrollbar-hide" : "")}>
+        <div className="grid grid-cols-2 gap-2 md:gap-5">
           {fields.map((f, i) => {
             const isLast = i === fields.length - 1;
             const isOdd = fields.length % 2 !== 0;
