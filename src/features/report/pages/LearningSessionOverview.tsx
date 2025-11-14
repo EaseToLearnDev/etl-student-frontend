@@ -1,28 +1,32 @@
+// Reacts
 import { useEffect, useState } from "react";
-import {
-  PieChart as RechartsPieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-} from "recharts";
+import { useNavigate, useSearchParams } from "react-router";
+
+// Components
 import { Widget } from "../components/newreports/Widget";
 import Tabs from "../../../components/Tabs";
-import { tintHexColor } from "../libs/reduceColorsContrast";
+import { LearningSessionOverviewSkeleton } from "../components/LearningSessonOverviewSkeleton";
+import EmptyState from "../../../components/EmptyState";
+import Button from "../../../components/Button";
+import { Toast } from "../../../components/Toast";
+import RenderablePieChart from "../../../components/RenderablePieChart";
+
+// Services
 import {
   loadLearningAnalyticData,
   type LearningAnalyticsData,
 } from "../services/loadLearningAnalyticData";
-import EmptyState from "../../../components/EmptyState";
-import { useNavigate, useSearchParams } from "react-router";
+
+// Hooks & Utils
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
-import { LearningSessionOverviewSkeleton } from "../components/LearningSessonOverviewSkeleton";
-import Button from "../../../components/Button";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
-import { Toast } from "../../../components/Toast";
 import { useToastStore } from "../../../global/hooks/useToastStore";
-import { LuFileChartColumn } from "react-icons/lu";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
+
+// Icons
+import { ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { LuFileChartColumn } from "react-icons/lu";
+
 
 export const LearningSessionOverview = () => {
   const params = useSearchParams();
@@ -85,91 +89,37 @@ export const LearningSessionOverview = () => {
     color: d.color,
   }));
 
-  const renderPieChart = (data: any[], total: number, label: string) => (
-    <div className="relative mx-auto w-[290px] h-[290px] sm:w-[340px] sm:h-[340px]">
-      <ResponsiveContainer width="100%" height="100%" className="relative z-0">
-        <RechartsPieChart>
-          <Pie
-            cx="50%"
-            cy="50%"
-            dataKey="value"
-            innerRadius="42%"
-            outerRadius="70%"
-            paddingAngle={4}
-            data={data}
-            cornerRadius={6}
-            label
-          >
-            {data.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={tintHexColor(entry.color, 0.4)}
-                stroke={tintHexColor(entry.color, 0.1)}
-              />
-            ))}
-          </Pie>
-        </RechartsPieChart>
-      </ResponsiveContainer>
-
-      <div className="absolute inset-0 flex items-center justify-center z-10">
-        <div className="w-[90px] h-[90px] sm:w-[100px] sm:h-[100px] flex flex-col items-center justify-center rounded-full shadow-[0px_4px_20px_0px_#00000029] bg-[var(--surface-bg-primary)]">
-          <p className="text-center text-[var(--text-secondary)] whitespace-pre-line px-4">
-            {label}
-          </p>
-          <h5 className="text-[var(--text-primary)]">{total}</h5>
-        </div>
-      </div>
-      <div className="flex flex-col justify-center space-y-4">
-        {data.map((item, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between p-3 bg-[var(--surface-bg-tertiary)] rounded-lg"
-          >
-            <div className="flex items-center gap-3">
-              <p
-                className="h-3 w-3 rounded-full flex-shrink-0"
-                style={{ backgroundColor: item.color }}
-              />
-              <p className="text-[var(--text-secondary)]">{item.name}</p>
-            </div>
-            <p className="text-[var(--text-primary)]">{item.value}%</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
   const tabs = [
     {
       label: "PERFORMANCE",
       content: (
         <div className="flex flex-col gap-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Widget title="Overall" className="h-[600px]">
+            <Widget title="Overall">
               <div className="flex items-center justify-center h-full">
-                {renderPieChart(
-                  overallPerformanceData,
-                  data.totalQuestion,
-                  "Total Questions",
-                )}
+                <RenderablePieChart
+                  data={overallPerformanceData}
+                  total={data.totalQuestion}
+                  label={"Total Questions"}
+                />
               </div>
             </Widget>
-            <Widget title="With Help" className="h-[600px]">
+            <Widget title="With Help">
               <div className="flex items-center justify-center h-full">
-                {renderPieChart(
-                  withHelpData,
-                  data.helpCounter,
-                  "Help in Questions",
-                )}
+                <RenderablePieChart
+                  data={withHelpData}
+                  total={data.helpCounter}
+                  label="Help in Questions"
+                />
               </div>
             </Widget>
-            <Widget title="Without Help" className="h-[600px]">
+            <Widget title="Without Help">
               <div className="flex items-center justify-center h-full">
-                {renderPieChart(
-                  withoutHelpData,
-                  data.totalQuestion - data.helpCounter,
-                  "Without Help",
-                )}
+                <RenderablePieChart
+                  data={withoutHelpData}
+                  total={data.totalQuestion - data.helpCounter}
+                  label="Without Help"
+                />
               </div>
             </Widget>
           </div>
