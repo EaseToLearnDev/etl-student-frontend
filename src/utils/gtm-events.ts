@@ -110,8 +110,10 @@ export const gtmEvents: Record<string, any> = {
   proceed_to_pay_button_click: "proceed_to_pay_button_click",
   upgrade_button_click: "upgrade_button_click",
   renew_button_click: "renew_button_click",
-
-
+  apply_promo_code_button_click: "apply_promo_code_button_click",
+  guest_verify_otp_button_click: "guest_verify_otp_button_click",
+  guest_cancel_otp_button_click: "guest_cancel_otp_button_click",
+  guest_otp_resend_button_click: "guest_otp_resend_button_click",
   
   
 };

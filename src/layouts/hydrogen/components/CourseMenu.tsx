@@ -99,7 +99,6 @@ const CourseMenu = ({ isOpen, onToggle }: CourseMenuProps) => {
             onClick={() => {
               const eventname = status === "renew" ? gtmEvents.renew_button_click : gtmEvents.upgrade_button_click ;
               const eventId =  status === "renew" ? "renew_button_click" : "upgrade_button_click";
-              console.log("Clicked", status, eventId, eventname);
               pushToDataLayer({
                 event: eventname,
                 id: eventId,

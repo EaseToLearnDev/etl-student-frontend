@@ -231,6 +231,13 @@ export const PlanBody = ({
                   <form
                     className="mt-4"
                     onSubmit={(e) => {
+                      pushToDataLayer({
+                        id: "apply_promo_code_button_click",
+                        event: gtmEvents.apply_promo_code_button_click,
+                        device_type: deviceType,
+                        coupon_code: code,
+                        payable_amount: payableAmount,
+                      });
                       e.preventDefault();
                       applied ? resetPromocode() : handlePromoSubmit();
                     }}
@@ -355,6 +362,11 @@ export const PlanBody = ({
                   pushToDataLayer({
                     event: gtmEvents.proceed_to_pay_button_click,
                     id: "proceed_to_pay_button_click",
+                    packType: tabs[selectedTabIndex],
+                    device_type: deviceType,
+                    plan_id: selectedPlanId,
+                    coupon_code: code,
+                    payable_amount: payableAmount,
                   });
                   processCourseSelection({
                     option: deviceType === "ios" ? 2 : 3,

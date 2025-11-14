@@ -10,6 +10,8 @@ import { handleSendOtp } from "../services/handleSendOtp";
 import { loadVerifyOtp } from "../services/loadVerifyOtp";
 import { handleAddCourseToGuest } from "../services/handleAddCourseToGuest";
 import { handleTestSubmit } from "../services/handleTestSubmit";
+import { pushToDataLayer } from "../../../utils/gtm";
+import { gtmEvents } from "../../../utils/gtm-events";
 
 export const GuestTestSubmitModal = () => {
   const [params] = useSearchParams();
@@ -127,7 +129,13 @@ export const GuestTestSubmitModal = () => {
 
           <div className="flex justify-end mt-4">
             <div className="flex gap-4 items-center">
-              <Button onClick={handleSendOtp}>Verify Otp</Button>
+              <Button onClick={()=>{
+                console.log("Verify Otp clicked");
+                pushToDataLayer({
+                  event:gtmEvents.guest_verify_otp_button_click ,
+                  id: "guest_verify_otp_button_click"
+                })
+                handleSendOtp}}>Verify Otp</Button>
               <Button
                 style="secondary"
                 onClick={() => setShowGuestTestSubmitModal(false)}

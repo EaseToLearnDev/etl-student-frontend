@@ -1,7 +1,7 @@
 // Generic record type for flexible event payloads
 export interface GTMEvent {
   event: string;
-  [key: string]: string | number | boolean | object | undefined;
+  [key: string]: string | number | boolean | object | undefined | null;
 }
 
 // Extend global Window type once — no more (window as any)
