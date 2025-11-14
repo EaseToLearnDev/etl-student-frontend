@@ -21,7 +21,6 @@ import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Services
 import { loadMockTestList } from "../services/loadMocktestList";
-import { handleResumeTest } from "../../../study_room/smart_learning/services/handleTest";
 import { selectAndShowStartTestModal } from "../services/selectAndShowStartTestModal";
 import { handleStartTest } from "../../shared/services/handleStartTest";
 import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
@@ -41,6 +40,7 @@ import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
+import { handleResumeTest } from "../../../shared/services/handleTest";
 
 /**
  * MockTestPage component displays a list of mock tests categorized into "Complete Mock Tests" and "Subject Wise Mock Tests".

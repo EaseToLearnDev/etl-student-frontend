@@ -3,7 +3,7 @@ import type { PrevRunningTest } from "../types";
 // Store
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 // Apis
-import { getTestCurrentRunning } from "../../study_room/smart_learning/api/testCurrentRunning.api";
+import { getTestCurrentRunning } from "../../study_room/shared/api/testCurrentRunning.api";
 
 /**
  * Retrieves the previous running test for the current student, or null if unavailable.

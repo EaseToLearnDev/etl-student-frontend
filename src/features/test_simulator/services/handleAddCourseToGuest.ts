@@ -12,7 +12,7 @@ export const handleAddCourseToGuest = async (navigate: NavigateFunction) => {
   const { testData } = useTestStore.getState();
   // const { setOpenCourseCardsModal } = useGuestStore.getState();
   const { setToast } = useToastStore.getState();
-  const { reset } = useGuestStore.getState();
+  const { reset, setOpenCourseAlreadyExistModal } = useGuestStore.getState();
 
   if (!studentData) return null;
   if (!testData) return null;
@@ -31,14 +31,15 @@ export const handleAddCourseToGuest = async (navigate: NavigateFunction) => {
     data.append("courseId", String(courseId));
     const res = await addCourseToGuest({ data, loginId, token });
     if (res.responseTxt === "CourseAlreadyExists") {
-      setToast({
-        title: "You have already attempted free trial test",
-        description: "You must Upgrade your account to give more tests",
-        button: "Upgrade",
-        onClick: () => navigate(`/selectcourse?cid=${courseId}`),
-        type: ToastType.PATCH,
-        duration: 10000,
-      });
+      // setToast({
+      //   title: "You have already attempted free trial test",
+      //   description: "You must Upgrade your account to give more tests",
+      //   button: "Upgrade",
+      //   onClick: () => navigate(`/selectcourse?cid=${courseId}`),
+      //   type: ToastType.PATCH,
+      //   duration: 10000,
+      // });
+      setOpenCourseAlreadyExistModal(true)
       reset();
       return;
     }

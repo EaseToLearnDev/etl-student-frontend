@@ -1,16 +1,28 @@
-import { MdClose } from "react-icons/md";
-import Badge from "../../../../components/Badge";
-import Button from "../../../../components/Button";
-import Tabs from "../../../../components/Tabs";
-import cn from "../../../../utils/classNames";
-import { Theme } from "../../../../utils/colors";
-import type { ModeType, TestOption, TestOptions } from "../sl.types";
-import SmartLearningInstructions from "./SmartLearningInstructions";
 import { useState } from "react";
+
+// Types
+import type { TestOption } from "../../../shared/types";
+
+// import type { ModeType, TestOption, TestOptions } from "../shared_learning.types";
+
+// Icons
+import { MdClose } from "react-icons/md";
+
+// Utils
+import cn from "../../../../utils/classNames";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
-import { useSLStore } from "../hooks/useSLStore";
+// import { Theme } from "../../../../utils/colors";
+
+// Hooks
 import useIsMobile from "../../../../hooks/useIsMobile";
+import { useSharedLearningStore } from "../hooks/useSharedLearningStore";
+
+// Components
+import SmartLearningInstructions from "../../smart_learning/components/SmartLearningInstructions";
+import Button from "../../../../components/Button";
+import Tabs from "../../../../components/Tabs";
+// import Badge from "../../../../components/Badge";
 
 interface SLTestModalContentProps {
   topicName: string;
@@ -24,9 +36,9 @@ const SLTestModalContent = ({
 }: SLTestModalContentProps) => {
   const isMobile = useIsMobile();
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
-  const mode = useSLStore((s) => s.mode);
-  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
-  const setSelectedTestOption = useSLStore((s) => s.setSelectedTestOption);
+  const mode = useSharedLearningStore((s) => s.mode);
+  const selectedTestOption = useSharedLearningStore((s) => s.selectedTestOption);
+  const setSelectedTestOption = useSharedLearningStore((s) => s.setSelectedTestOption);
 
   const fields: { id: keyof TestOption; label: string }[] = [
     {
@@ -56,17 +68,27 @@ const SLTestModalContent = ({
   return (
     <div className="relative p-2 px-4 max-h-[70vh] flex flex-col">
       {/* Header */}
-      <div className="w-full flex flex-col gap-2">
-        <Badge
+      <div className="w-full flex justify-between items-center gap-2">
+        {/* <Badge
           theme={Theme.Neutral}
           style="outline"
           className="w-fit border-1 !border-[var(--border-primary)] !font-semibold"
         >
           <span>{mode}</span>
-        </Badge>
+        </Badge> */}
         <h5 className="text-[var(--sb-ocean-bg-active)]">
           {topicName || "Characteristic of Living Organism"}
         </h5>
+        {/* Close Button */}
+        <div
+          onClick={onClose}
+          className={cn(
+            "w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
+            " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
+          )}
+        >
+          <MdClose size={20} />
+        </div>
       </div>
 
       {/* Tabs */}
@@ -92,7 +114,12 @@ const SLTestModalContent = ({
       )}
 
       {/* Scrollable Content */}
-      <div className={cn("mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4", isMobile ? "scrollbar-hide" : "")}>
+      <div
+        className={cn(
+          "mt-5 flex-1 overflow-y-auto border-1 border-[var(--border-primary)] rounded-lg p-4",
+          isMobile ? "scrollbar-hide" : ""
+        )}
+      >
         {selectedIndex === 0 && mode === "Competitive Session" ? (
           <form
             className="flex flex-col gap-5"
@@ -140,17 +167,6 @@ const SLTestModalContent = ({
             Cancel
           </Button>
         </div>
-      </div>
-
-      {/* Close Button */}
-      <div
-        onClick={onClose}
-        className={cn(
-          "fixed top-5 right-5 w-[40px] h-[40px] aspect-square flex justify-center items-center cursor-pointer",
-          " text-[var(--text-secondary)] bg-[var(--surface-bg-primary)] border-1 border-[var(--border-primary)] rounded-full"
-        )}
-      >
-        <MdClose size={20} />
       </div>
     </div>
   );

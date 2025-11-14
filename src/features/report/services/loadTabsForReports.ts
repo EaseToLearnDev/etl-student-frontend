@@ -5,7 +5,7 @@ export const loadTablsForReports = () => {
   const tabs: string[] = [];
 
   if (activeCourse?.tabs?.selfTest) {
-    tabs.push("Learning Sessions", "Competitive Sessions");
+    tabs.push("Gap Fixer", "PaceX");
   }
   if (activeCourse?.tabs?.topicTest) {
     tabs.push("Topic Tests");
