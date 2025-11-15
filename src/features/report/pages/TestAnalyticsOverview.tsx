@@ -63,8 +63,6 @@ export const TestAnalyticsOverview = () => {
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
 
   const loading = useLoadingStore((s) => s.loading);
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
   const [data, setData] = useState<AnalyticsResponseData | null>(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [showDelayedFtuModal, setShowDelayedFtuModal] =
@@ -553,13 +551,13 @@ export const TestAnalyticsOverview = () => {
       />
 
       {/* Toast */}
-      {showToast && toastData && (
+      {/* {showToast && toastData && (
         <Toast
           {...toastData}
           key={toastData.title}
           duration={toastData.duration}
         />
-      )}
+      )} */}
     </div>
   );
 };

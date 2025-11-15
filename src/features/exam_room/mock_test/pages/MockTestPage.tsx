@@ -35,8 +35,6 @@ import { Skeleton } from "../../../../components/SkeletonLoader";
 import TestCardList from "../../../shared/components/TestCardList";
 import PreviousTestModalContent from "../../../shared/components/PreviousTestModalContent";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
-import { Toast } from "../../../../components/Toast";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { pushToDataLayer } from "../../../../utils/gtm";
 import { gtmEvents } from "../../../../utils/gtm-events";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
@@ -64,9 +62,6 @@ const MockTestPage = () => {
   );
 
   const reset = useMTStore((s) => s.reset);
-
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -275,15 +270,6 @@ const MockTestPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

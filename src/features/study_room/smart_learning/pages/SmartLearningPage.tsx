@@ -341,15 +341,6 @@ const SmartLearningPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

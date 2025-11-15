@@ -26,7 +26,7 @@ import TopicTestPage from "../features/exam_room/topic_test/pages/TopicTestPage"
 import { PermissionRedirect } from "./PermissionRedirect";
 import ProfilePage from "../features/profile/pages/ProfilePage";
 import SettingsPage from "../features/settings/pages/SettingsPage";
-import DashboardPage from "../features/dashboard/pages/DashboardPage";
+// import DashboardPage from "../features/dashboard/pages/DashboardPage";
 import PaymentsPage from "../features/payments/pages/PaymentsPage";
 import AllCoursesPage from "../features/all_courses/pages/AllCoursesPage";
 import StudentReport from "../features/report/pages/StudentReport";
@@ -37,12 +37,11 @@ import ForgetPasswordPage from "../features/auth/forgetPassword/pages/ForgetPass
 import LoginDirectPage from "../features/auth/login/pages/LoginDirectPage";
 import SelectYourCoursePage from "../features/all_courses/pages/SelectYourCoursePage";
 import LogoutPage from "../features/auth/logout/pages/LogoutPage";
-import { Spinner } from "../components/Spinner";
 import { InAppPayment } from "../features/in_app_payment/InAppPayment";
 import PgResponse from "../global/pages/PgResponse";
 import PgCancelled from "../global/pages/PgCancelled";
 import AdaptiveLearningPage from "../features/study_room/adaptive_learning/pages/AdaptiveLearningPage";
-import DashboardV2Page from "../features/dashboard/pages/DashboardV2Page";
+// import DashboardV2Page from "../features/dashboard/pages/DashboardV2Page";
 import PaceXPage from "../features/study_room/pace_x/pages/PaceXPage";
 import DashboardV3Page from "../features/dashboard/pages/DashboardV3Page";
 

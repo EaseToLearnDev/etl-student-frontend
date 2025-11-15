@@ -1,22 +1,20 @@
+// React
 import { useEffect, useState } from "react";
 // import ClassTestList from "../components/ClassTestList";
 import FeaturedBannerCarousal from "../components/FeaturedBannerCarousal";
-import { loadClassTestList } from "../../../global/services/loadClassTestList";
-import { useCTStore } from "../../../global/hooks/useCTStore";
 import JumpBackInList from "../components/JumpBackInList";
-import DownloadAppCard from "../components/DownloadAppCard";
 import SupportSection from "../components/SupportSection";
+import DownloadAppCard from "../components/DownloadAppCard";
 import WidgetCard from "../../report/components/newreports/WidgetCard";
-import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
-import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
 import { ActivityList } from "../components/ActivityList";
-import { Toast } from "../../../components/Toast";
-import { useToastStore } from "../../../global/hooks/useToastStore";
-import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import ActivityListData from "../components/ActivityListData";
-import { LuLoader } from "react-icons/lu";
-import useIsMobile from "../../../hooks/useIsMobile";
+import FirstTimeUserModal from "../components/FirstTimeUser";
+import ScheduledClassesList from "../components/ScheduledClassesList";
+
+// Service
+import { loadPreviousRunningTest } from "../../shared/services/loadPreviousRunningTest";
+import { loadWeekScheduledClasses } from "../services/loadWeekScheduledClasses";
+import { loadClassTestList } from "../../../global/services/loadClassTestList";
 import {
   getGhActivityByDay,
   type IGhActivityByDayResults,
@@ -30,12 +28,14 @@ import { loadWeekScheduledClasses } from "../services/loadWeekScheduledClasses";
 // import ScheduledClassesList from "../components/ScheduledClass";
 // import type { WeekClassScheduleList } from "../dashboard.types";
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
+import useIsMobile from "../../../hooks/useIsMobile";
+
+// Types
+import type { WeekClassScheduleList } from "../dashboard.types";
 
 const DashboardPage = () => {
   const setTestList = useCTStore((s) => s.setTestList);
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const showFtuModal = useStudentStore((s) => s.showFtuModal);
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
@@ -226,14 +226,6 @@ const DashboardPage = () => {
         isOpen={showFtuModal}
         onClose={() => setShowFtuModal(false)}
       />
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

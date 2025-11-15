@@ -32,8 +32,6 @@ export const LearningSessionOverview = () => {
   const params = useSearchParams();
   const testSession = params[0].get("testSession");
   const loading = useLoadingStore((s) => s.loading);
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [data, setData] = useState<LearningAnalyticsData | null>(null);
 
@@ -208,15 +206,6 @@ export const LearningSessionOverview = () => {
       </Widget>
 
       <div className="mt-6 mb-4">{tabs[selectedIndex].content}</div>
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

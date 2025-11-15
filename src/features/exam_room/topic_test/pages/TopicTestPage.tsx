@@ -83,9 +83,6 @@ const TopicTestPage = () => {
     (s) => s.setIsUpgradeModalOpen
   );
 
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
-
   const loading = useLoadingStore((s) => s.loading);
 
   const GO_BACK_BUTTON_ID = "go_back_button_id";
@@ -313,14 +310,6 @@ const TopicTestPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

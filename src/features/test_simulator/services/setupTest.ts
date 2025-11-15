@@ -1,5 +1,5 @@
-import type { Error } from "../../shared/types";
-import { Severity } from "../../shared/types";
+import type { Error, ToastData } from "../../shared/types";
+import { Severity, ToastType } from "../../shared/types";
 import {
   subjectiveTypes,
   type Features,
@@ -23,6 +23,7 @@ export const setupTest = async (
   startQuestionTimer: () => void,
   setMode: (mode: SimulatorMode) => void,
   setLoading: (loading: boolean) => void,
+  setToast: (data: ToastData) => void,
   setCurrentQuestion: (question: Question | null) => void,
   isSubjectiveTest: boolean,
   isMobile: boolean
@@ -44,10 +45,10 @@ export const setupTest = async (
     });
 
     if (!result) {
-      setError({
-        id: "unknown_error",
-        message: "Failed to load test details.",
-        severity: Severity.Alert,
+      setToast({
+        title: "Failed to load test details",
+        description: "Try Again Later!!",
+        type: ToastType.DANGER,
       });
       setLoading(false);
       return null;
