@@ -2,7 +2,7 @@
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
 
 // Apis
-import { testRunningDelete } from "../../study_room/smart_learning/api/testRunningDelete";
+import { testRunningDelete } from "../../study_room/shared/api/testRunningDelete";
 
 /**
  * Deletes the previous running test for the current student, if available.

@@ -19,7 +19,7 @@ function Test({
   const getTestType = (testType: number, testMode: string) => {
     switch (testType) {
       case 1:
-        return testMode;
+        return testMode === "Learning Session" ? "Gap Fixer" : "PaceX";
       case 2:
         return "Topic Test";
       case 3:

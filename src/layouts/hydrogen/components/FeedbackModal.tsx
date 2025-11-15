@@ -74,7 +74,7 @@ const FeedbackModal = () => {
             onToggle={() => setIsTypeSelectionOpen((prev) => !prev)}
             selectedIndex={typeIdx}
             className="!w-full h-[50px] "
-            dropdownClassName="!bg-[var(--surface-bg-tertiary)] !w-[440px]"
+            dropdownClassName="!bg-[var(--surface-bg-tertiary)] sm:!w-[440px]"
             dropdownItemClassName="hover:bg-[var(--surface-bg-secondary)]"
           />
           <div className="flex flex-col gap-1">

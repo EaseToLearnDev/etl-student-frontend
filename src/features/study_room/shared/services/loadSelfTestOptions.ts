@@ -1,11 +1,14 @@
-import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+// Apis
 import selfTestFormOptions from "../api/selftestformoptions.api";
-import { useSLStore } from "../hooks/useSLStore";
+
+// Hooks
+import { useStudentStore } from "../../../shared/hooks/useStudentStore";
+import { useSharedLearningStore } from "../hooks/useSharedLearningStore";
 
 const loadSelfTestOptions = async () => {
   try {
     const { studentData, activeCourse } = useStudentStore.getState();
-    const { setTestOptions } = useSLStore.getState();
+    const { setTestOptions } = useSharedLearningStore.getState();
 
     if (!studentData || !activeCourse) return;
 

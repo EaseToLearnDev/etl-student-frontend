@@ -1,3 +1,4 @@
+// React
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -5,23 +6,21 @@ import { useNavigate } from "react-router";
 import type { Topic } from "../../../shared/types";
 
 // Icons
-import { FiTarget } from "react-icons/fi";
 import { LuArchive } from "react-icons/lu";
-
-// Hooks
-import { useToastStore } from "../../../../global/hooks/useToastStore";
-import { useSharedLearningStore } from "../../shared/hooks/useSharedLearningStore";
-import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
-import { useLoadingStore } from "../../../../hooks/useLoadingStore";
-import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
-import { usePageTracking } from "../../../../hooks/usePageTracking";
-
+import { FiTarget } from "react-icons/fi";
 
 // Utils
 import { flattenTopics } from "../../../shared/utils/flattenTopicTree";
-import { gtmEvents } from "../../../../utils/gtm-events";
 import { pushToDataLayer } from "../../../../utils/gtm";
+import { gtmEvents } from "../../../../utils/gtm-events";
+import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
+// Hooks
+import { useSharedLearningStore } from "../../shared/hooks/useSharedLearningStore";
+import { useToastStore } from "../../../../global/hooks/useToastStore";
+import { usePageTracking } from "../../../../hooks/usePageTracking";
+import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
+import { useLoadingStore } from "../../../../hooks/useLoadingStore";
 
 // Services
 import { loadSmartLearningTopictree } from "../../shared/services/loadSmartLearningTopicTree";
@@ -31,9 +30,9 @@ import {
   handleResumeTest,
   handleStartTest,
 } from "../../../shared/services/handleTest";
-import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 import { openStartTestModal } from "../../shared/services/openStartTestModal";
 import loadSelfTestOptions from "../../shared/services/loadSelfTestOptions";
+import { getActiveCourseAccessStatus } from "../../../../global/services/upgrade";
 
 // Layout and Components
 import ChildLayout from "../../../../layouts/child-layout/ChildLayout";
@@ -52,7 +51,7 @@ import { Toast } from "../../../../components/Toast";
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
  */
-const SmartLearningPage = () => {
+const PaceXPage = () => {
   // Hooks
   const navigate = useNavigate();
   const reset = useSharedLearningStore((s) => s.reset);
@@ -66,9 +65,6 @@ const SmartLearningPage = () => {
   const setSelectedTopicId = useSharedLearningStore(
     (s) => s.setSelectedTopicId
   );
-
-  const mode = useSharedLearningStore((s) => s.mode);
-  const setMode = useSharedLearningStore((s) => s.setMode);
 
   const lastSelfTestPercentage = useSharedLearningStore(
     (s) => s.lastSelfTestPercentage
@@ -101,7 +97,6 @@ const SmartLearningPage = () => {
   const setIsUpgradeModalOpen = useUpgradeModalStore(
     (s) => s.setIsUpgradeModalOpen
   );
-  const testOptions = useSharedLearningStore((s) => s.testOptions);
   const selectedTestOption = useSharedLearningStore(
     (s) => s.selectedTestOption
   );
@@ -112,10 +107,12 @@ const SmartLearningPage = () => {
   const loading = useLoadingStore((s) => s.loading);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const mode = useSharedLearningStore((s) => s.mode);
+  const setMode = useSharedLearningStore((s) => s.setMode);
 
   usePageTracking(gtmEvents.smart_learning_page_visit, 5000);
 
-  const eventType = "learning_session";
+  const eventType = "competitive_session";
 
   // ========== Initial Topic Tree ==========
   useEffect(() => {
@@ -128,8 +125,8 @@ const SmartLearningPage = () => {
       }
     };
 
-    // Set mode as learning
-    setMode("Learning Session");
+    // Set default mode as competitive
+    setMode("Competitive Session");
 
     // load topic tree on page load
     fetchTopicTree();
@@ -161,7 +158,7 @@ const SmartLearningPage = () => {
       }
     };
     fetchSelfSessionPercentage();
-  }, [mode, selectedTopic?.topicId]);
+  }, [selectedTopic?.topicId]);
 
   // ========== Render ==========
   return (
@@ -341,8 +338,17 @@ const SmartLearningPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
+
+      {/* Toast */}
+      {showToast && toastData && (
+        <Toast
+          {...toastData}
+          key={toastData.title}
+          duration={toastData.duration}
+        />
+      )}
     </div>
   );
 };
 
-export default SmartLearningPage;
+export default PaceXPage;

@@ -1,17 +1,17 @@
-// Store
-// import { useSLStore } from "../store/useSLStore";
+import { useEffect, useState } from "react";
+
+// Hooks
+import { useSharedLearningStore } from "../hooks/useSharedLearningStore";
 
 // Components
 import Button from "../../../../components/Button";
-import TopicProgressChart from "./topic-progress-chart/TopicProgressChart";
-import SmartLearningInstructions from "./SmartLearningInstructions";
-import type { ModeType } from "../sl.types";
-import Tabs from "../../../../components/Tabs";
-import { pushToDataLayer } from "../../../../utils/gtm";
-import { gtmEvents } from "../../../../utils/gtm-events";
+import TopicProgressChart from "../../smart_learning/components/topic-progress-chart/TopicProgressChart";
+import SmartLearningInstructions from "../../smart_learning/components/SmartLearningInstructions";
 import Select from "../../../../components/Select";
-import { useEffect, useState } from "react";
-import { useSLStore } from "../hooks/useSLStore";
+// import type { ModeType } from "../sl.types";
+// import Tabs from "../../../../components/Tabs";
+// import { pushToDataLayer } from "../../../../utils/gtm";
+// import { gtmEvents } from "../../../../utils/gtm-events";
 
 interface TopicModeSelectorProps {
   topicName: string;
@@ -30,12 +30,12 @@ const TopicModeSelector = ({
   onClickHandler,
 }: TopicModeSelectorProps) => {
   // const isLearning = mode === "learning";
-  const mode = useSLStore((s) => s.mode);
-  const setMode = useSLStore((s) => s.setMode);
-  const testOptions = useSLStore((s) => s.testOptions);
-  const selectedTestOption = useSLStore((s) => s.selectedTestOption);
-  const setSelectedTestOption = useSLStore((s) => s.setSelectedTestOption);
-  const selectedIndex = mode === "Learning Session" ? 0 : 1;
+  // const setMode = useSLStore((s) => s.setMode);
+  const mode = useSharedLearningStore((s) => s.mode);
+  const testOptions = useSharedLearningStore((s) => s.testOptions);
+  const selectedTestOption = useSharedLearningStore((s) => s.selectedTestOption);
+  const setSelectedTestOption = useSharedLearningStore((s) => s.setSelectedTestOption);
+  // const selectedIndex = mode === "Learning Session" ? 0 : 1;
   const [isExamTypeSelectionOpen, setIsExamTypeSelectionOpen] = useState(false);
   const [selectedExamTypeIndex, setSelectedExamTypeIndex] = useState(
     selectedTestOption
@@ -50,8 +50,6 @@ const TopicModeSelector = ({
     setSelectedTestOption({ ...testOptions[selectedExamTypeIndex] });
   }, [selectedExamTypeIndex]);
 
-  console.log("TopicModeSelector Rendered with mode:", mode);
-
   return (
     <div className="flex flex-col w-full h-full">
       {/* Mode selection section */}
@@ -60,7 +58,7 @@ const TopicModeSelector = ({
           {topicName}
         </h6>
       </div>
-      <div className="flex justify-center mt-3">
+      {/* <div className="flex justify-center mt-3">
         <Tabs
           tabs={["Learning", "Competitive"]}
           selectedIndex={selectedIndex}
@@ -83,7 +81,7 @@ const TopicModeSelector = ({
           tabClassName="px-3 py-2 text-[var(--text-secondary)] rounded-full hover:bg-[var(--sb-ocean-bg-disabled)] hover:text-[var(--sb-ocean-bg-active)] transition-all duration-200 nowrap"
           activeTabClassName="px-3 py-2 text-white bg-[var(--sb-ocean-bg-active)] rounded-full shadow-md"
         />
-      </div>
+      </div> */}
 
       {/* Progress section */}
       <div className="flex flex-col items-center gap-5 mt-4">

@@ -39,8 +39,8 @@ const PreviousTestModalContent = ({
       {/* Action Buttons */}
       <div className="flex justify-end mt-7">
         <div className="flex gap-4 items-center">
-          <Button onClick={onStart}>Start New</Button>
-          <Button onClick={onResume} style="secondary">Resume</Button>
+          <Button onClick={onResume} style="primary">Resume</Button>
+          <Button onClick={onStart} style="secondary">Start New</Button>
           {/* <Button style="secondary" onClick={onClose}>
             Cancel
           </Button> */}

@@ -1,5 +1,8 @@
+// Types
+import type { ModeType } from "../../../shared/types";
+
+// Utils
 import { makeRequest } from "../../../../utils/http";
-import type { ModeType } from "../sl.types";
 
 interface GetLastSelfTestPercentageParams {
   loginId: string;
