@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 // Utils
 import cn from "../utils/classNames";
-import { pushToDataLayer } from "../utils/gtm";
+
 
 interface ButtonProps {
   id?: string;
