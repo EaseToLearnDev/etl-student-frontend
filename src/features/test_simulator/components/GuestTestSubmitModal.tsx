@@ -132,10 +132,11 @@ export const GuestTestSubmitModal = () => {
               <Button onClick={()=>{
                 console.log("Verify Otp clicked");
                 pushToDataLayer({
-                  event:gtmEvents.guest_verify_otp_button_click ,
+                  event:gtmEvents.guest_verify_otp_button_click ,  
                   id: "guest_verify_otp_button_click"
                 })
-                handleSendOtp}}>Verify Otp</Button>
+                handleSendOtp()
+              }}>Verify Otp</Button>
               <Button
                 style="secondary"
                 onClick={() => setShowGuestTestSubmitModal(false)}
