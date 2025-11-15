@@ -91,8 +91,11 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
   const stopTestTimer = useTestTimerStore((s) => s.stopTestTimer);
   const setIsAiFeatureEnabled = useAiStore((s) => s.setIsAiFeatureEnabled);
 
+  const setToast = useToastStore((s) => s.setToast);
+
   const reset = useTestStore((s) => s.reset);
   const resetAi = useAiStore((s) => s.reset);
+  const resetGuestModal = useGuestStore((s) => s.reset);
 
   const setShowGuestTestSubmitModal = useGuestStore(
     (s) => s.setShowGuestTestSubmitModal
@@ -131,6 +134,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       startQuestionTimer,
       setMode,
       setLoading,
+      setToast,
       setCurrentQuestion,
       isSubjectiveTest,
       isMobile
@@ -142,6 +146,7 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
       stopQuestionTimer();
       reset();
       resetAi();
+      resetGuestModal();
       exit();
     };
   }, []);
@@ -330,20 +335,6 @@ const TestSimulatorPage = ({ mode }: { mode: SimulatorMode }) => {
 
       {/* Course Already Exist MOdal */}
       <CourseAlreadyExistModal />
-
-      {/* Toast  */}
-      {testError?.message && (
-        <Toast
-          title={testError?.severity}
-          description={testError?.message}
-          key={testError.id}
-          duration={2000}
-          type={ToastType.WARNING}
-          onExpire={() => setTestError(null)}
-        />
-      )}
-
-      {showToast && toastData && <Toast {...toastData} key={toastData.title} />}
     </>
   );
 };
