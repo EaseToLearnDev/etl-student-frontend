@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router";
 
 // Types
 import type { SimulatorMode } from "../test_simulator.types";
-import { ToastType } from "../../shared/types";
 
 // Services
 import { handleTestSubmit } from "../services/handleTestSubmit";
@@ -31,7 +30,6 @@ import AiHelpModal from "../components/AiHelpModal";
 import TestEndedModalContent from "../components/TestEndedModalContent";
 import FullScreenExitModalContent from "../components/FullSrcreenModal";
 import TeacherSupportModal from "../components/TeacherSupportModal";
-import { Toast } from "../../../components/Toast";
 import SwitchSectionModal from "../components/SwitchSectionModal";
 import { GuestTestSubmitModal } from "../components/GuestTestSubmitModal";
 import { Spinner } from "../../../components/Spinner";

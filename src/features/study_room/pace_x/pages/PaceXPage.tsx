@@ -17,7 +17,6 @@ import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 
 // Hooks
 import { useSharedLearningStore } from "../../shared/hooks/useSharedLearningStore";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
@@ -46,7 +45,6 @@ import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
-import { Toast } from "../../../../components/Toast";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -100,9 +98,6 @@ const PaceXPage = () => {
   const selectedTestOption = useSharedLearningStore(
     (s) => s.selectedTestOption
   );
-
-  const showToast = useToastStore((s) => s.showToast);
-  const toastData = useToastStore((s) => s.toastData);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -338,15 +333,6 @@ const PaceXPage = () => {
         isOpen={isUpgradeModalOpen}
         onClose={() => setIsUpgradeModalOpen(false)}
       />
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

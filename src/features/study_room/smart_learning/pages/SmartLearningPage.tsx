@@ -9,7 +9,6 @@ import { FiTarget } from "react-icons/fi";
 import { LuArchive } from "react-icons/lu";
 
 // Hooks
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 import { useSharedLearningStore } from "../../shared/hooks/useSharedLearningStore";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import { useLoadingStore } from "../../../../hooks/useLoadingStore";
@@ -47,7 +46,6 @@ import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
 import CircleProgressBar from "../../../report/components/newreports/circularProgressBar";
-import { Toast } from "../../../../components/Toast";
 
 /**
  * SmartLearning page component for topic selection and session management in the Smart Learning feature.
@@ -105,10 +103,6 @@ const SmartLearningPage = () => {
   const selectedTestOption = useSharedLearningStore(
     (s) => s.selectedTestOption
   );
-
-  const showToast = useToastStore((s) => s.showToast);
-  const toastData = useToastStore((s) => s.toastData);
-
   const loading = useLoadingStore((s) => s.loading);
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);

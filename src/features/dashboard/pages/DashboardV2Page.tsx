@@ -16,7 +16,6 @@ import { gtmEvents } from "../../../utils/gtm-events";
 import type { ITransformedGhData } from "../utils/transformNormalizeGhData";
 import type { WeekClassScheduleList } from "../dashboard.types";
 import { useStudentStore } from "../../shared/hooks/useStudentStore";
-import { useToastStore } from "../../../global/hooks/useToastStore";
 import { useCTStore } from "../../../global/hooks/useCTStore";
 import { usePrevTestStore } from "../../shared/hooks/usePrevTestStore";
 import { LuLoader } from "react-icons/lu";
@@ -25,7 +24,6 @@ import JumpBackInList from "../components/JumpBackInList";
 import DownloadAppCard from "../components/DownloadAppCard";
 import SupportSection from "../components/SupportSection";
 import FirstTimeUserModal from "../components/FirstTimeUser";
-import { Toast } from "../../../components/Toast";
 import UpcomingClassesAndTests from "../components/UpcomingClassesAndTests";
 import StartTopicTestModalContent from "../../exam_room/shared/components/StartTopicTestModalContent";
 import { Modal } from "../../../components/Modal";
@@ -41,8 +39,6 @@ const DashboardV2Page = () => {
   const setShowStartTestModal = useCTStore((s) => s.setShowStartTestModal);
 
   const setPrevRunningTest = usePrevTestStore((s) => s.setPrevRunningTest);
-  const toastData = useToastStore((s) => s.toastData);
-  const showToast = useToastStore((s) => s.showToast);
   const activeCourse = useStudentStore((s) => s.activeCourse);
   const showFtuModal = useStudentStore((s) => s.showFtuModal);
   const setShowFtuModal = useStudentStore((s) => s.setShowFtuModal);
@@ -225,15 +221,6 @@ const DashboardV2Page = () => {
             }}
           />
         </Modal>
-
-        {/* Toast */}
-        {showToast && toastData && (
-          <Toast
-            {...toastData}
-            key={toastData.title}
-            duration={toastData.duration}
-          />
-        )}
       </div>
     </div>
   );

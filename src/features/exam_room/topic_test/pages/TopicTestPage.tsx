@@ -21,7 +21,6 @@ import { useTTStore } from "../store/useTTStore";
 import { usePrevTestStore } from "../../../shared/hooks/usePrevTestStore";
 import { usePageTracking } from "../../../../hooks/usePageTracking";
 import useUpgradeModalStore from "../../../shared/hooks/useUpgradeModalStore";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
 
 // Services
 import { loadTopicTree } from "../services/loadTopicTree";
@@ -44,7 +43,6 @@ import Button from "../../../../components/Button";
 import { TreeViewSkeleton } from "../../../../components/TreeViewSkeleton";
 import EmptyState from "../../../../components/EmptyState";
 import UpgradeModal from "../../../shared/components/UpgradeModal";
-import { Toast } from "../../../../components/Toast";
 
 /**
  * page for displaying the topic test tree view, allowing users to select a topic and view related tests and instructions.

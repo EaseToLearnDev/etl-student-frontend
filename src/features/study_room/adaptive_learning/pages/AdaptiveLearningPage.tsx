@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
-
-// Types
-import type { Topic } from "../../../shared/types";
 
 // Icons
 import { LuArchive } from "react-icons/lu";
@@ -34,8 +31,6 @@ import AdaptiveSecondary from "../components/AdaptiveSecondary";
 import StartALModal from "../components/StartALModal";
 import { handleShowPreviousOrStartTest } from "../../../shared/services/handleShowPreviousOrStartTest";
 import { handleStartAdaptiveTest } from "../services/handleStartAdaptiveTest";
-import { useToastStore } from "../../../../global/hooks/useToastStore";
-import { Toast } from "../../../../components/Toast";
 
 const AdaptiveLearningPage = () => {
   const navigate = useNavigate();
@@ -62,9 +57,6 @@ const AdaptiveLearningPage = () => {
   const setIsUpgradeModalOpen = useUpgradeModalStore(
     (s) => s.setIsUpgradeModalOpen
   );
-
-  const showToast = useToastStore((s) => s.showToast);
-  const toastData = useToastStore((s) => s.toastData);
 
   const loading = useLoadingStore((s) => s.loading);
 
@@ -172,15 +164,6 @@ const AdaptiveLearningPage = () => {
           })
         }
       />
-
-      {/* Toast */}
-      {showToast && toastData && (
-        <Toast
-          {...toastData}
-          key={toastData.title}
-          duration={toastData.duration}
-        />
-      )}
     </div>
   );
 };

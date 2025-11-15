@@ -8,7 +8,6 @@ import Tabs from "../../../components/Tabs";
 import { LearningSessionOverviewSkeleton } from "../components/LearningSessonOverviewSkeleton";
 import EmptyState from "../../../components/EmptyState";
 import Button from "../../../components/Button";
-import { Toast } from "../../../components/Toast";
 import RenderablePieChart from "../../../components/RenderablePieChart";
 
 // Services
@@ -19,7 +18,6 @@ import {
 
 // Hooks & Utils
 import { useLoadingStore } from "../../../hooks/useLoadingStore";
-import { useToastStore } from "../../../global/hooks/useToastStore";
 import { usePageTracking } from "../../../hooks/usePageTracking";
 import { gtmEvents } from "../../../utils/gtm-events";
 
